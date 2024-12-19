@@ -34,10 +34,8 @@ require_relative 'smithy-client/plugins/net_http'
 
 # model
 
-require_relative 'smithy-client/api'
 require_relative 'smithy-client/base'
 require_relative 'smithy-client/errors'
-require_relative 'smithy-client/operation'
 require_relative 'smithy-client/shapes'
 require_relative 'smithy-client/shapes/prelude_shapes'
 require_relative 'smithy-client/structure'

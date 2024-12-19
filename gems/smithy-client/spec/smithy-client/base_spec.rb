@@ -51,7 +51,7 @@ module Smithy
         let(:input) { subject.build_input(:operation_name) }
 
         before(:each) do
-          service_shape.add_operation(:operation_name, Operation.new)
+          service_shape.add_operation(:operation_name, Shapes::OperationShape.new)
         end
 
         it 'returns an Input' do
