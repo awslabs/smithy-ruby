@@ -31,10 +31,6 @@ module Smithy
             @plan.options[:gem_version]
           end
 
-          def service_name
-            @model.service.name
-          end
-
           def operations
             service = Vise::ServiceIndex.new(@model).service
             Vise::OperationIndex.new(@model).for(service).map { |id, shape| Operation.new(id, shape) }
@@ -46,8 +42,6 @@ module Smithy
               @id = id
               @operation = operation
             end
-
-            attr_reader :id
 
             def documentation
               '# TODO!'

@@ -4,7 +4,7 @@
 
 module <%= namespace %>
   class Client < Smithy::Client::Base
-    self.service_shape = Shapes::<%= service_name.upcase %>
+    # self.api = API
 
     <%- plugins.each do |p| -%>
     add_plugin(<%= p %>)
@@ -18,18 +18,18 @@ module <%= namespace %>
     <%- operations.each do |operation| -%>
     <%= operation.documentation %>
     def <%= operation.name %>(params = {}, options = {})
-      input = build_input(:<%= operation.name %>, "<%= operation.id %>", params)
+      input = build_input(:<%= operation.name %>, params)
       input.send_request(options)
     end
 
     <%- end -%>
     private
 
-    def build_input(operation_name, operation_id, params)
+    def build_input(operation_name, params)
       handlers = @handlers.for(operation_name)
       context = Smithy::Client::HandlerContext.new(
         operation_name: operation_name,
-        operation: config.service_shape.operation(operation_id),
+        operation: config.api.operation(operation_name),
         client: self,
         params: params,
         config: config
