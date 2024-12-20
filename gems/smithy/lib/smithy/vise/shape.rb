@@ -13,63 +13,36 @@ module Smithy
     # └──────────────────────┬───────────────────────┘
     #               (Absolute shape ID)
     class Shape
-      # @param [String] id Absolute shape ID
-      # @param [Hash] shape Shape definition
-      def initialize(id, shape)
-        @id = id
-        @shape = shape
-        @type = shape['type']
-        @traits = parse_traits(shape)
-      end
-
-      # @return [String] Absolute shape ID
-      attr_reader :id
-
-      # @return [String] Shape data
-      attr_reader :shape
-
-      # @return [String] Shape type
-      attr_reader :type
-
-      # @return [Hash<String, Trait>] Shape traits
-      attr_reader :traits
-
       # Optional shape namespace
+      # @param [String] id Shape ID
       # @return [String, nil] Shape namespace
-      def namespace
-        return nil unless @id.include?('#')
+      def self.namespace(id)
+        return nil unless id.include?('#')
 
-        @id.split('#').first
+        id.split('#').first
       end
 
-      # @return [String] Relative shape ID
-      def relative_id
-        return nil if @id.empty?
-
-        @id.split('#').last
+      # Relative shape ID
+      # @param [String] id Shape ID
+      # @return [String, nil] Relative shape ID
+      def self.relative_id(id)
+        id.split('#').last
       end
 
-      # @return [String] Shape name
-      def name
-        return nil if @id.empty?
-
-        @id.split('#').last.split('$').first
+      # Shape name
+      # @param [String] id Shape ID
+      # @return [String, nil] Shape name
+      def self.name(id)
+        id.split('#').last&.split('$')&.first
       end
 
       # Optional member name
+      # @param [String] id Shape ID
       # @return [String, nil] Member name
-      def member_name
-        return nil unless @id.include?('$')
+      def self.member_name(id)
+        return nil unless id.include?('$')
 
-        @id.split('$').last
-      end
-
-      private
-
-      def parse_traits(shape)
-        return {} unless shape['traits']
-
-        shape['traits'].each_with_object({}) { |(id, data), h| h[id] = Trait.new(id, data) }
+        id.split('$').last
       end
     end
   end

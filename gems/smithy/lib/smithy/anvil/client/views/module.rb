@@ -25,7 +25,7 @@ module Smithy
           end
 
           def documentation
-            _id, service = @model.shapes.find { |_key, shape| shape.type == 'service' }
+            _id, service = @model.shapes.find { |_key, shape| shape.is_a?(Vise::ServiceShape) }
             _id, trait = service.traits.find { |_id, trait| trait.id == 'smithy.api#documentation' }
             "# #{trait.data}"
           end

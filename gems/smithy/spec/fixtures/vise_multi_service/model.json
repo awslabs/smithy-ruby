@@ -1,0 +1,11 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#Service1": {
+            "type": "service"
+        },
+        "smithy.ruby.tests#Service2": {
+            "type": "service"
+        }
+    }
+}
