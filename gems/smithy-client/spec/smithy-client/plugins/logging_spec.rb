@@ -5,10 +5,10 @@ module Smithy
     module Plugins
       describe Logging do
         let(:client_class) do
-          service_shape = Shapes::ServiceShape.new
-          service_shape.add_operation(:operation_name, Shapes::OperationShape.new)
+          schema = Schema.new
+          schema.add_operation(:operation_name, Schema.new)
           client_class = Class.new(Client::Base)
-          client_class.service_shape = service_shape
+          client_class.schema = schema
           client_class.clear_plugins
           client_class.add_plugin(Logging)
           client_class.add_plugin(DummySendPlugin)
