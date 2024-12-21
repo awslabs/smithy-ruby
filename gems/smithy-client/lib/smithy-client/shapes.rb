@@ -7,84 +7,49 @@ module Smithy
       # A base shape that all shapes inherits from
       class Shape
         def initialize(options = {})
-          @shape_id = options[:shape_id]
+          @id = options[:id]
           @traits = options[:traits] || {}
         end
 
         # @return [String, nil]
-        attr_reader :shape_id
+        attr_accessor :id
 
-        # @return [Hash<String, [Boolean, Hash, Integer, String]>]
-        attr_reader :traits
+        # @return [Hash<String, Object>]
+        attr_accessor :traits
       end
 
       # Represents a slim variation of the Service shape
       class ServiceShape < Shape
-        include Enumerable
-
         def initialize(options = {})
-          @operations = {}
-          @version = options[:version]
           super
-          yield self if block_given?
+          @version = options[:version]
         end
-
-        # @return [Hash<String, OperationShape>]
-        attr_accessor :operations
 
         # @return [String, nil]
-        attr_reader :version
-
-        # @return [OperationShape]
-        def add_operation(name, operation)
-          @operations[name] = operation
-        end
-
-        # @return [Hash<String, OperationShape>]
-        def each(&block)
-          @operations.each(&block)
-        end
-
-        # @param [String] name
-        # @return [Operation] smithy operation shape id
-        def operation(name)
-          raise ArgumentError, "unknown operation #{name.inspect}" unless @operations.key?(name)
-
-          @operations[name]
-        end
-
-        # @return [String]
-        def inspect
-          "#<#{self.class.name}>"
-        end
-
-        # @return [Array]
-        def operation_names
-          @operations.keys
-        end
+        attr_accessor :version
       end
 
       # Represents an Operation shape
       class OperationShape < Shape
         def initialize(options = {})
-          @errors = options[:errors] || []
+          super
           @input = options[:input]
           @output = options[:output]
-          super
+          @errors = options[:errors] || []
         end
 
+        # @return [StructureShape, nil]
+        attr_accessor :input
+
+        # @return [StructureShape, nil]
+        attr_accessor :output
+
         # @return [Array<StructureShape>]
-        attr_reader :errors
-
-        # @return [StructureShape, nil]
-        attr_reader :input
-
-        # @return [StructureShape, nil]
-        attr_reader :output
+        attr_accessor :errors
       end
 
       # Represents BigDecimal shape
-      class BigDecimal < Shape; end
+      class BigDecimalShape < Shape; end
 
       # Represents both Blob and Data Stream shapes
       class BlobShape < Shape; end
@@ -98,8 +63,8 @@ module Smithy
       # Represents an Enum shape
       class EnumShape < Shape
         def initialize(options = {})
-          @members = {}
           super
+          @members = {}
         end
 
         # @return [Hash<String, MemberShape>]
@@ -111,6 +76,10 @@ module Smithy
         end
       end
 
+      # Represents the following shapes:
+      # Byte, Short, Integer, Long, BigInteger
+      class IntegerShape < Shape; end
+
       # Represents an IntEnum shape
       class IntEnumShape < EnumShape; end
 
@@ -120,8 +89,8 @@ module Smithy
       # Represents a List shape
       class ListShape < Shape
         def initialize(options = {})
-          @member = nil
           super
+          @member = nil
         end
 
         # @return [MemberShape, nil]
@@ -136,9 +105,9 @@ module Smithy
       # Represents a Map shape
       class MapShape < Shape
         def initialize(options = {})
+          super
           @member_key = nil
           @member_value = nil
-          super
         end
 
         # @return [MemberShape, nil]
@@ -158,19 +127,15 @@ module Smithy
         end
       end
 
-      # Represents the following shapes:
-      # Byte, Short, Integer, Long, BigInteger
-      class IntegerShape < Shape; end
-
       # Represents the String shape
       class StringShape < Shape; end
 
       # Represents the Structure shape
       class StructureShape < Shape
         def initialize(options = {})
+          super
           @members = {}
           @type = options[:type]
-          super
         end
 
         # @return [Hash<String, MemberShape>]
@@ -200,14 +165,60 @@ module Smithy
         end
 
         # @return [String]
-        attr_reader :name
+        attr_accessor :name
 
         # @return [Shape]
-        attr_reader :shape
+        attr_accessor :shape
 
-        # @return [Hash<String, [Boolean, Hash, Integer, String]>]
-        attr_reader :traits
+        # @return [Hash<String, Object>]
+        attr_accessor :traits
       end
+
+      PreludeBigDecimal = IntegerShape.new(shape_id: 'smithy.api#BigDecimal')
+      PreludeBigInteger = IntegerShape.new(shape_id: 'smithy.api#BigInteger')
+      PreludeBlob = BlobShape.new(shape_id: 'smithy.api#Blob')
+      PreludeBoolean = BooleanShape.new(shape_id: 'smithy.api#Boolean')
+      PreludeByte = IntegerShape.new(shape_id: 'smithy.api#Byte')
+      PreludeDocument = DocumentShape.new(shape_id: 'smithy.api#Document')
+      PreludeDouble = FloatShape.new(shape_id: 'smithy.api#Double')
+      PreludeFloat = FloatShape.new(shape_id: 'smithy.api#Float')
+      PreludeInteger = IntegerShape.new(shape_id: 'smithy.api#Integer')
+      PreludeLong = IntegerShape.new(shape_id: 'smithy.api#Long')
+      PreludePrimitiveBoolean = BooleanShape.new(
+        shape_id: 'smithy.api#PrimitiveBoolean',
+        traits: { 'smithy.api#default' => false }
+      )
+      PreludePrimitiveByte = IntegerShape.new(
+        shape_id: 'smithy.api#PrimitiveByte',
+        traits: { 'smithy.api#default' => 0 }
+      )
+      PreludePrimitiveDouble = FloatShape.new(
+        shape_id: 'smithy.api#PrimitiveDouble',
+        traits: { 'smithy.api#default' => 0 }
+      )
+      PreludePrimitiveFloat = FloatShape.new(
+        shape_id: 'smithy.api#PrimitiveFloat',
+        traits: { 'smithy.api#default' => 0 }
+      )
+      PreludePrimitiveInteger = IntegerShape.new(
+        shape_id: 'smithy.api#PrimitiveInteger',
+        traits: { 'smithy.api#default' => 0 }
+      )
+      PreludePrimitiveShort = IntegerShape.new(
+        shape_id: 'smithy.api#PrimitiveShort',
+        traits: { 'smithy.api#default' => 0 }
+      )
+      PreludePrimitiveLong = IntegerShape.new(
+        shape_id: 'smithy.api#PrimitiveLong',
+        traits: { 'smithy.api#default' => 0 }
+      )
+      PreludeShort = IntegerShape.new(shape_id: 'smithy.api#Short')
+      PreludeString = StringShape.new(shape_id: 'smithy.api#String')
+      PreludeTimestamp = TimestampShape.new(shape_id: 'smithy.api#Timestamp')
+      PreludeUnit = StructureShape.new(
+        shape_id: 'smithy.api#Unit',
+        traits: { 'smithy.api#unitType' => {} }
+      )
     end
   end
 end

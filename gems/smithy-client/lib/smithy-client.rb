@@ -36,8 +36,8 @@ require_relative 'smithy-client/plugins/net_http'
 
 require_relative 'smithy-client/base'
 require_relative 'smithy-client/errors'
+require_relative 'smithy-client/schema'
 require_relative 'smithy-client/shapes'
-require_relative 'smithy-client/shapes/prelude_shapes'
 require_relative 'smithy-client/structure'
 
 module Smithy

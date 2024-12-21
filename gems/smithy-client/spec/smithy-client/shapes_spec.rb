@@ -7,8 +7,8 @@ module Smithy
         subject { Shape.new }
 
         describe '#initialize' do
-          it 'defaults shape_id to nil' do
-            expect(subject.shape_id).to be(nil)
+          it 'defaults id to nil' do
+            expect(subject.id).to be(nil)
           end
 
           it 'defaults traits to an empty hash' do
@@ -19,28 +19,12 @@ module Smithy
 
       describe ServiceShape do
         subject { ServiceShape.new }
-        let(:operation) { OperationShape.new }
-        let(:operation_name) { 'com.example#SomeOperation' }
-
-        it 'is enumerable' do
-          expect(subject).to be_kind_of(Enumerable)
-        end
 
         it 'is a subclass of Shape' do
           expect(subject).to be_kind_of(Shape)
         end
 
         describe '#initialize' do
-          it 'yields itself' do
-            yielded = nil
-            subject = ServiceShape.new { |service| yielded = service }
-            expect(yielded).to be(subject)
-          end
-
-          it 'defaults operations to empty hash' do
-            expect(subject.operations).to be_empty
-          end
-
           it 'defaults version to nil' do
             expect(subject.version).to be(nil)
           end
@@ -48,43 +32,6 @@ module Smithy
           it 'version can be read when set' do
             subject = ServiceShape.new(version: '2015-01-01')
             expect(subject.version).to eq('2015-01-01')
-          end
-        end
-
-        describe '#add_operations' do
-          it 'adds an operation' do
-            subject.add_operation(operation_name, operation)
-            expect(subject.operations[operation_name]).to be(operation)
-          end
-        end
-
-        describe '#each' do
-          it 'enumerates over operations' do
-            subject.add_operation(operation_name, operation)
-            expect { |b| subject.each(&b) }
-              .to yield_successive_args([operation_name, operation])
-          end
-        end
-
-        describe '#inspect' do
-          it 'returns the class name' do
-            expect(subject.inspect)
-              .to eq('#<Smithy::Client::Shapes::ServiceShape>')
-          end
-        end
-
-        describe '#operation_names' do
-          it 'defaults to an empty array' do
-            expect(subject.operation_names).to eq([])
-          end
-
-          it 'provides operation names' do
-            operation_name2 = 'com.example#AnotherOperation'
-
-            subject.add_operation(operation_name, operation)
-            subject.add_operation(operation_name2, OperationShape.new)
-            expect(subject.operation_names)
-              .to eq([operation_name, operation_name2])
           end
         end
       end
