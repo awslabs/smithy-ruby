@@ -123,7 +123,7 @@ module Smithy
 
         describe '#set_member' do
           it 'sets a member' do
-            member_name = 'com.example#StringMember'
+            member_name = 'string_member'
             subject.set_member(member_name, StringShape.new)
             expect(subject.member.name).to eq(member_name)
             expect(subject.member).to be_kind_of(MemberShape)
@@ -192,7 +192,7 @@ module Smithy
 
         describe '#add_member' do
           it 'adds a member' do
-            member_name = 'com.example#StringMember'
+            member_name = 'string_member'
             subject.add_member(member_name, StringShape.new)
             expect(subject.members[member_name])
               .to be_kind_of(MemberShape)
