@@ -1,23 +1,24 @@
 # frozen_string_literal: true
 
 describe 'Types: Welding' do
-  Class.new(Smithy::Weld) do
-    def preprocess(model)
-      model['shapes']['example.weather#Weld'] = { 'type' => 'structure', 'members' => {} }
-    end
-  end
 
-  Class.new(Smithy::Weld) do
-    def for?(_model)
-      false
-    end
-
-    def preprocess(model)
-      model['shapes']['example.weather#ShouldNotExist'] = { 'type' => 'structure', 'members' => {} }
-    end
-  end
 
   before(:all) do
+    Class.new(Smithy::Weld) do
+      def preprocess(model)
+        model['shapes']['example.weather#Weld'] = { 'type' => 'structure', 'members' => {} }
+      end
+    end
+
+    Class.new(Smithy::Weld) do
+      def for?(_model)
+        false
+      end
+
+      def preprocess(model)
+        model['shapes']['example.weather#ShouldNotExist'] = { 'type' => 'structure', 'members' => {} }
+      end
+    end
     @tmpdir = SpecHelper.generate(['Weather'], :types)
   end
 
