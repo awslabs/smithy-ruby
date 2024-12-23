@@ -39,7 +39,7 @@ module Smithy
             serializable_shapes = []
             operation_shapes = []
 
-            @model['shapes'].each do | id, shape|
+            @model['shapes'].each do |id, shape|
               case shape['type']
               when 'service', 'resource' then next
               when 'operation'

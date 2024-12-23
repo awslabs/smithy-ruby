@@ -10,6 +10,10 @@ AllCops:
 Gemspec/RequireMFA:
   Enabled: false
 
+Metrics/AbcSize:
+  Exclude:
+    - 'gems/smithy/lib/smithy/forge/client.rb'
+
 Metrics/BlockLength:
   Exclude:
     - '**/spec/**/*.rb'
