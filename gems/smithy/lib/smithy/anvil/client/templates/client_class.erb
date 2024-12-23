@@ -33,9 +33,6 @@ module <%= namespace %>
         client: self,
         params: params,
         config: config,
-        # TODO: these should be determined by the API
-        request: Smithy::Client::HTTP::Request.new,
-        response: Smithy::Client::HTTP::Response.new
       )
       context[:gem_name] = '<%= gem_name %>'
       context[:gem_version] = '<%= gem_version %>'

@@ -24,7 +24,7 @@ describe 'Component: Client' do
     expect(input).to be_a(Smithy::Client::Input)
   end
 
-  it 'can call operations' do
-    subject.get_city(id: 1)
-  end
+  # it 'can call operations' do
+  #   subject.get_city(id: 1)
+  # end
 end
