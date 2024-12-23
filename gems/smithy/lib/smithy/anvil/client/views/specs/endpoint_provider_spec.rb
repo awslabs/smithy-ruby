@@ -12,13 +12,14 @@ module Smithy
               @model = plan.model
               service = Vise::ServiceIndex.new(@model).service.values.first
               @endpoint_rules = service['traits']['smithy.rules#endpointRuleSet']
-              @endpoint_tests = service['traits']['smithy.rules#endpointTests']
+              @endpoint_tests = service['traits']['smithy.rules#endpointTests'] || {}
 
               @parameters = @endpoint_rules['parameters']
                             .map { |id, data| EndpointParameter.new(id, data, @plan) }
 
               @test_cases = @endpoint_tests['testCases']
-                            .map { |data| EndpointTestCase.new(data, @plan) }
+                            &.map { |data| EndpointTestCase.new(data, @plan) }
+              @test_cases ||= []
               super()
             end
 
