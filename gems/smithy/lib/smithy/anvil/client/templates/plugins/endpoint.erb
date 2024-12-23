@@ -28,7 +28,7 @@ The endpoint provider used to resolve endpoints. Any object that responds to
       <%- end -%>
 
       # @api private
-      class Handler < Seahorse::Client::Handler
+      class Handler < Smithy::Client::Handler
         def call(context)
           params = EndpointParameters.create(context.config)
           endpoint = context.config.endpoint_provider.resolve_endpoint(params)

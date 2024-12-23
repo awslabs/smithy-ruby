@@ -11,7 +11,7 @@ module Smithy
             @model = plan.model
             service = Vise::ServiceIndex.new(@model).service
             @endpoint_rules = service.values.first['traits']['smithy.rules#endpointRuleSet']
-            @operations = Vice::OperationInded.new(@model).for(service)
+            @operations = Vise::OperationIndex.new(@model).for(service)
             @parameters = @endpoint_rules['parameters']
                           .map { |id, data| EndpointParameter.new(id, data, @plan) }
 

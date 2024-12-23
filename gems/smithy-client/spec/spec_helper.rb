@@ -12,12 +12,14 @@ class DummySendPlugin < Smithy::Client::Plugin
     def call(context)
       Smithy::Client::Output.new(
         context: context,
-        data: context.config.response_data
+        data: context.config.response_data,
+        error: context.config.response_error
       )
     end
   end
 
   option(:response_data) { { result: 'success' } }
+  option(:response_error) { nil }
   handler Handler, step: :send
 end
 
