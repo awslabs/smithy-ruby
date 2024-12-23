@@ -62,7 +62,6 @@ operation GetCity {
 }
 
 // This structure is nested within GetCityOutput.
-@documentation("This *is* documentation about the shape.")
 structure CityCoordinates {
     @required
     latitude: Float
