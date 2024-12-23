@@ -112,7 +112,7 @@ module Smithy
 
           it 'emits done without arguments' do
             done = false
-            subject.on_done { |response| done = true }
+            subject.on_done { |_response| done = true }
             subject.signal_done
             expect(done).to be(true)
           end
@@ -147,7 +147,7 @@ module Smithy
         describe '#on_headers' do
           it 'yields the status code and headers' do
             headers = nil
-            subject.on_headers { |status_code, h| headers = h }
+            subject.on_headers { |_status_code, h| headers = h }
             subject.signal_headers(200, { 'content-length' => 4 })
             expect(headers['content-length']).to eq('4')
           end
@@ -203,7 +203,6 @@ module Smithy
             expect(error).to be_nil
           end
         end
-
       end
     end
   end

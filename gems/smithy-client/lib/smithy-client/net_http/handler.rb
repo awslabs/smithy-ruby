@@ -33,15 +33,7 @@ module Smithy
           Thread.current[:net_http_skip_default_content_type] = true
           session(config, req) do |http|
             http.request(build_net_request(req)) do |net_resp|
-              status_code = net_resp.code.to_i
-              headers = extract_headers(net_resp)
-
-              bytes_received = 0
-              resp.signal_headers(status_code, headers)
-              net_resp.read_body do |chunk|
-                bytes_received += chunk.bytesize
-                resp.signal_data(chunk)
-              end
+              bytes_received = signal_response(net_resp, resp)
               complete_response(req, resp, bytes_received)
             end
           end
@@ -55,6 +47,19 @@ module Smithy
         ensure
           # ensure we turn off monkey patch in case of error
           Thread.current[:net_http_skip_default_content_type] = nil
+        end
+
+        def signal_response(net_resp, resp)
+          status_code = net_resp.code.to_i
+          headers = extract_headers(net_resp)
+
+          bytes_received = 0
+          resp.signal_headers(status_code, headers)
+          net_resp.read_body do |chunk|
+            bytes_received += chunk.bytesize
+            resp.signal_data(chunk)
+          end
+          bytes_received
         end
 
         def complete_response(req, resp, bytes_received)

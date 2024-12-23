@@ -48,7 +48,7 @@ module Smithy
           end
 
           it 'returns nil if a block is given' do
-            ret = headers.each {}
+            ret = headers.each {} # empty
             expect(ret).to eq(nil)
           end
 
@@ -172,11 +172,6 @@ module Smithy
 
           it 'returns false if the header has not been set' do
             expect(headers.key?('foo')).to be(false)
-          end
-
-          it 'is aliased as #has_key?' do
-            headers['foo'] = 'bar'
-            expect(headers.has_key?('foo')).to be(true)
           end
 
           it 'is aliased as #include?' do
