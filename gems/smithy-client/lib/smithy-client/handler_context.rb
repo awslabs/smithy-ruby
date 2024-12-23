@@ -5,7 +5,7 @@ module Smithy
     # Context that is passed to handlers during execution.
     class HandlerContext
       # @option options [Symbol] :operation_name (nil)
-      # @option options [Operation] :operation (nil)
+      # @option options [OperationShape] :operation (nil)
       # @option options [Base] :client (nil)
       # @option options [Hash] :params ({})
       # @option options [Configuration] :config (nil)
@@ -26,7 +26,7 @@ module Smithy
       # @return [Symbol] Name of the API operation called.
       attr_accessor :operation_name
 
-      # @return [Operation]
+      # @return [OperationShape] Shape of the Operation called.
       attr_accessor :operation
 
       # @return [Base]

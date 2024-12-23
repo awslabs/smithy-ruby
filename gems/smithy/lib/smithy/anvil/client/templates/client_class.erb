@@ -4,7 +4,7 @@
 
 module <%= namespace %>
   class Client < Smithy::Client::Base
-    # self.api = API
+    self.schema = Shapes::SCHEMA
 
     <%- plugins.each do |p| -%>
     add_plugin(<%= p %>)
@@ -29,14 +29,17 @@ module <%= namespace %>
       handlers = @handlers.for(operation_name)
       context = Smithy::Client::HandlerContext.new(
         operation_name: operation_name,
-        operation: config.api.operation(operation_name),
+        operation: config.schema.operation(operation_name),
         client: self,
         params: params,
-        config: config
+        config: config,
+        # TODO: these should be determined by the API
+        request: Smithy::Client::HTTP::Request.new,
+        response: Smithy::Client::HTTP::Response.new
       )
       context[:gem_name] = '<%= gem_name %>'
       context[:gem_version] = '<%= gem_version %>'
-      Smithy::Client::Input.new(handlers, context)
+      Smithy::Client::Input.new(handlers: handlers, context: context)
     end
   end
 end
