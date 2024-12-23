@@ -27,3 +27,9 @@ IRB on `weather` gem:
 ```
 irb -I build/smithy/weather/smithy-ruby/lib -I gems/smithy-client/lib -r weather
 ```
+
+Create a Weather client:
+```
+client = Weather::Client.new(endpoint: 'https://example.com')
+client.get_current_time
+```
