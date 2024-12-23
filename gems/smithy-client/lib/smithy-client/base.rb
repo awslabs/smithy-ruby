@@ -11,7 +11,7 @@ module Smithy
         [
           Plugins::Endpoint,
           # Plugins::NetHTTP
-          Plugins::RaiseResponseErrors,
+          Plugins::RaiseResponseErrors
           # Plugins::ResponseTarget,
           # Plugins::RequestCallback
         ]

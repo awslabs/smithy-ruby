@@ -19,6 +19,7 @@ module Smithy
           def call(context)
             output = @handler.call(context)
             raise output.error if output.error
+
             output
           end
         end
