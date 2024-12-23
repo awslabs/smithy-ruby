@@ -3,10 +3,12 @@
 describe 'Types: Welding' do
   Class.new(Smithy::Weld) do
     def preprocess(model)
-      puts model.inspect
+      inspect = []
+      inspect << model.inspect
       model['shapes']['example.weather#Weld'] = { 'type' => 'structure', 'members' => {} }
       puts '----------'
-      puts model.inspect
+      inspect << model.inspect
+      raise StandardError, inspect
     end
   end
 
