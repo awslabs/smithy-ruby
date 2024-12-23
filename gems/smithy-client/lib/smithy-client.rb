@@ -30,6 +30,7 @@ require_relative 'smithy-client/net_http/handler'
 
 require_relative 'smithy-client/plugins/endpoint'
 require_relative 'smithy-client/plugins/logging'
+require_relative 'smithy-client/plugins/raise_response_errors'
 require_relative 'smithy-client/plugins/net_http'
 
 # model
