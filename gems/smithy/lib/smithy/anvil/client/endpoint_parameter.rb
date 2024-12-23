@@ -18,7 +18,7 @@ module Smithy
           @value, @source = endpoint_parameter_value(operation)
         end
 
-        attr_reader :id, :data, :name, :value
+        attr_reader :id, :data, :name, :value, :source
 
         def documentation
           '# TODO!'

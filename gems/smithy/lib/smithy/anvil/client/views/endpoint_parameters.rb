@@ -9,7 +9,9 @@ module Smithy
           def initialize(plan)
             @plan = plan
             @model = plan.model
-            @endpoint_rules = Vise::ServiceIndex.new(@model).service.values.first['traits']['smithy.rules#endpointRuleSet']
+            service = Vise::ServiceIndex.new(@model).service
+            @endpoint_rules = service.values.first['traits']['smithy.rules#endpointRuleSet']
+            @operations = Vice::OperationInded.new(@model).for(service)
             @parameters = @endpoint_rules['parameters']
                           .map { |id, data| EndpointParameter.new(id, data, @plan) }
 
@@ -17,6 +19,10 @@ module Smithy
           end
 
           attr_reader :parameters
+
+          def operation_specific_parameters?
+
+          end
 
           def namespace
             Tools::Namespace.namespace_from_gem_name(@plan.options[:gem_name])

@@ -31,15 +31,14 @@ module <%= namespace %>
     <%- end -%>
     end
 
-    def self.create(config, options={})
+    def self.create(config, operation_name=nil)
+
       new({
       <%- parameters.select(&:create_from_config?).each do |param| -%>
         <%= param.name %>: <%= param.value %>,
       <%- end -%>
-      }.compact.merge(options))
+      }.compact)
     end
-
-    # TODO: create per operation
   end
 end
 
