@@ -30,8 +30,16 @@ module Smithy
       describe '#data' do
         it 'returns the data' do
           data = double('data')
-          output = Output.new(data: data)
-          expect(output.data).to be(data)
+          subject.data = data
+          expect(subject.data).to be(data)
+        end
+      end
+
+      describe '#error' do
+        it 'returns the error' do
+          error = StandardError.new
+          subject.error = error
+          expect(subject.error).to be(error)
         end
       end
 

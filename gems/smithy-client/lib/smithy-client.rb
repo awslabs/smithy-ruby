@@ -13,13 +13,10 @@ require_relative 'smithy-client/plugin_list'
 require_relative 'smithy-client/handler_context'
 require_relative 'smithy-client/input'
 require_relative 'smithy-client/output'
-require_relative 'smithy-client/response'
-require_relative 'smithy-client/request'
 
 # client http
 
-require_relative 'smithy-client/http/field'
-require_relative 'smithy-client/http/fields'
+require_relative 'smithy-client/http/headers'
 require_relative 'smithy-client/http/response'
 require_relative 'smithy-client/http/request'
 

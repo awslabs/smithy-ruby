@@ -43,7 +43,7 @@ module Smithy
         end
 
         it 'returns the output from the handler stack #call method' do
-          output = Output.new
+          output = double('output')
           allow(handlers).to receive(:to_stack).and_return(->(_) { output })
           expect(subject.send_request).to be(output)
         end

@@ -88,10 +88,7 @@ module Smithy
           operation: config.api.operation(operation_name),
           client: self,
           params: params,
-          config: config,
-          # TODO: these should be determined by the API
-          request: HTTP::Request.new,
-          response: HTTP::Response.new
+          config: config
         )
       end
 

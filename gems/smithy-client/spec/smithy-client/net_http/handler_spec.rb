@@ -13,11 +13,8 @@ module Smithy
         end
 
         let(:context) do
-          context = HandlerContext.new(
-            config: client_class.new(endpoint: endpoint).config,
-            request: HTTP::Request.new,
-            response: HTTP::Response.new
-          )
+          client = client_class.new(endpoint: endpoint)
+          context = HandlerContext.new(config: client.config)
           context.request.endpoint = endpoint
           context
         end
@@ -73,9 +70,9 @@ module Smithy
             end
 
             it 'raises a helpful error if the request method is invalid' do
-              message = '`abc` is not a valid http verb'
               http_request.http_method = 'abc'
-              expect { make_request }.to raise_error(ArgumentError, message)
+              output = make_request
+              expect(output.error).to be_a(ArgumentError)
             end
           end
 
@@ -132,9 +129,9 @@ module Smithy
             end
 
             it 'populates the headers' do
-              stub_request(:any, endpoint).to_return(headers: { foo: 'bar' })
+              stub_request(:any, endpoint).to_return(headers: { 'Content-Length' => '0' })
               output = make_request
-              expect(output.context.response.headers['foo']).to eq('bar')
+              expect(output.context.response.headers['Content-Length']).to eq('0')
             end
 
             it 'populates the response body' do
