@@ -8,7 +8,7 @@ module <%= namespace %>
 
 <%# Shapes definition -%>
   <%- @shapes.each do |shape| -%>
-    <%- params = ["shape_id: \"#{shape.id}\""] -%>
+    <%- params = ["id: \"#{shape.id}\""] -%>
     <%- params << "type: Types::#{shape.name}" if shape.typed -%>
     <%- params << "traits: #{shape.traits}" unless shape.traits.empty? -%>
     <%= "#{shape.name} = #{shape.shape_type}.new(" %><%= params.join(', ') %>)
