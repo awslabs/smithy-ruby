@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 describe 'Types: Welding' do
-
-
   before(:all) do
+    # Define Weld classes (scoped to this block only)
     Class.new(Smithy::Weld) do
       def preprocess(model)
         model['shapes']['example.weather#Weld'] = { 'type' => 'structure', 'members' => {} }
@@ -19,6 +18,7 @@ describe 'Types: Welding' do
         model['shapes']['example.weather#ShouldNotExist'] = { 'type' => 'structure', 'members' => {} }
       end
     end
+
     @tmpdir = SpecHelper.generate(['Weather'], :types)
   end
 
