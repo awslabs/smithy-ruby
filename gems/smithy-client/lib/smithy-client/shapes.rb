@@ -36,6 +36,7 @@ module Smithy
           @input = options[:input]
           @output = options[:output]
           @errors = options[:errors] || []
+          yield self if block_given?
         end
 
         # @return [StructureShape, nil]
