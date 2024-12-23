@@ -23,11 +23,11 @@ describe 'Component: Shapes' do
       expect(subject::CityId.traits.keys).to include('smithy.api#pattern')
     end
 
-    it 'generates a shape with members with type and the members '\
+    it 'generates a shape with members with type and the members ' \
        'contains their own shape and traits' do
       expect(subject::CityCoordinates).to be_a(smithy_shapes::StructureShape)
       expect(subject::CityCoordinates.type).to be(Weather::Types::CityCoordinates)
-      expect(subject::CityCoordinates.members.keys).to include("latitude", "longitude")
+      expect(subject::CityCoordinates.members.keys).to include('latitude', 'longitude')
       expect(subject::CityCoordinates.members['latitude'].shape).to be(smithy_shapes::PreludeFloat)
       expect(subject::CityCoordinates.members['latitude'].traits.keys).to include('smithy.api#required')
     end
