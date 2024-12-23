@@ -24,7 +24,7 @@ module <%= namespace %>
 <%# Schema definition %>
     SCHEMA = Smithy::Client::Schema.new do |schema|
       schema.service = ServiceShape.new(
-        shape_id: "<%= @service_shape.id %>",
+        id: "<%= @service_shape.id %>",
         version: "<%= @service_shape.version %>",
         traits: <%= @service_shape.traits %>
       )
