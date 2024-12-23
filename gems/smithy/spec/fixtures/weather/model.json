@@ -40,9 +40,6 @@
                         "smithy.api#required": {}
                     }
                 }
-            },
-            "traits": {
-                "smithy.api#documentation": "This *is* documentation about the shape."
             }
         },
         "example.weather#CityId": {
