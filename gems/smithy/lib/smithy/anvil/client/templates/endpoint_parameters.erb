@@ -31,13 +31,25 @@ module <%= namespace %>
     <%- end -%>
     end
 
-    def self.create(config, operation_name=nil)
-
+    def self.create(config, operation_name=nil, params={})
+      operation_params =
+      case operation_name
+      <%- operation_params.each do |name, params| -%>
+      when :<%= name %>
+        {
+        <%- params.each do |param| -%>
+          <%= param.name %>: <%= param.value %>,
+        <%- end -%>
+        }
+      <%- end -%>
+      else
+        {}
+      end
       new({
       <%- parameters.select(&:create_from_config?).each do |param| -%>
         <%= param.name %>: <%= param.value %>,
       <%- end -%>
-      }.compact)
+      }.merge(operation_params).compact)
     end
   end
 end

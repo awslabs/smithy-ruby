@@ -19,7 +19,7 @@ module Smithy
             super()
           end
 
-          attr_reader :parameters
+          attr_reader :parameters, :operation_params
 
           def operation_specific_parameters?; end
 
@@ -34,10 +34,11 @@ module Smithy
           private
           def build_operation_params
             operation_params = {}
-            @operations.each do |name, operation|
+            @operations.each do |operation_id, operation|
+              name = operation_id.split('#').last.underscore
               params = @endpoint_rules['parameters']
-                      .map { |id, data| EndpointParameter.new(id, data, @plan,operation) }
-                      .select { |p| p.source == 'operation'}
+                       .map { |id, data| EndpointParameter.new(id, data, @plan, operation) }
+                       .select { |p| p.source == 'operation' }
               operation_params[name] = params unless params.empty?
             end
             operation_params

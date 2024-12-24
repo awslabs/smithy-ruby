@@ -18,7 +18,7 @@ module Smithy
           @value, @source = endpoint_parameter_value(operation)
         end
 
-        attr_reader :id, :data, :name, :value, :source
+        attr_reader :id, :data, :name, :source, :value
 
         def documentation
           '# TODO!'
@@ -108,9 +108,8 @@ module Smithy
 
         def context_param_member(members)
           members.detect do |(member_name, member_def)|
-            # TODO: We need a method to get member traits.
             context_param = member_def.fetch('traits', {}).fetch('smithy.rules#contextParam', {})
-            break "context.params[:#{member_name.underscore}]" if context_param.fetch('name', nil) == @id
+            break "params[:#{member_name.underscore}]" if context_param.fetch('name', nil) == @id
           end
         end
 
@@ -121,7 +120,7 @@ module Smithy
 
           return nil unless binding
 
-          "JMESPath.search(\"#{Tools::Underscore.underscore_jmespath(binding['path'])}\", context.params)"
+          "JMESPath.search(\"#{Tools::Underscore.underscore_jmespath(binding['path'])}\", params)"
         end
 
         def client_context_param_value
