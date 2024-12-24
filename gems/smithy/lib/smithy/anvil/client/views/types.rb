@@ -18,7 +18,7 @@ module Smithy
 
           def types
             @model['shapes']
-              .select { |_key, shape| shape['type'] == 'structure' }
+              .select { |_key, shape| %w[structure union].include?(shape['type']) }
               .map { |id, structure| Type.new(id, structure) }
           end
 
