@@ -111,16 +111,21 @@ module Smithy
           signal_done
         end
 
+        # @param [Integer, Range<Integer>] status_code_range
+        # @yield A block to be called when headers are received.
         def on_headers(status_code_range = nil, &block)
           @listeners[:headers] << listener(status_code_range, block)
         end
 
-        def on_data(&callback)
-          @listeners[:data] << callback
+        # @yield A block to be called when data is received.
+        def on_data(&block)
+          @listeners[:data] << block
         end
 
-        def on_done(status_code_range = nil, &callback)
-          listener = listener(status_code_range, callback)
+        # @param [Integer, Range<Integer>] status_code_range
+        # @yield A block to be called when the response is complete.
+        def on_done(status_code_range = nil, &block)
+          listener = listener(status_code_range, block)
           if @done
             listener.call
           else
@@ -128,12 +133,16 @@ module Smithy
           end
         end
 
+        # @param [Integer, Range<Integer>] status_code_range
+        # @yield A block to be called when the response is successful.
         def on_success(status_code_range = 200..599)
           on_done(status_code_range) do
             yield unless @error
           end
         end
 
+        # @yieldparam [StandardError] error
+        # @yield A block to be called when an error occurs.
         def on_error
           on_done(0..599) do
             yield(@error) if @error
@@ -150,14 +159,14 @@ module Smithy
 
         private
 
-        def listener(range, callback)
+        def listener(range, block)
           range = range..range if range.is_a?(Integer)
           if range
             lambda do |*args|
-              callback.call(*args) if range.include?(@status_code)
+              block.call(*args) if range.include?(@status_code)
             end
           else
-            callback
+            block
           end
         end
 
