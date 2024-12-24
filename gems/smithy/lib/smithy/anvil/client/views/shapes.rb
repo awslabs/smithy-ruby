@@ -127,7 +127,7 @@ module Smithy
 
           # Shape that contains relevant data that affects (de)serialization
           class SerializableShape
-            TYPED_SHAPES = %w[StructureShape EnumShape UnionShape].freeze
+            TYPED_SHAPES = %w[StructureShape UnionShape].freeze
 
             def initialize(options = {})
               @id = options[:id]
