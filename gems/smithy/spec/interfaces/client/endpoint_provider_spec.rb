@@ -11,7 +11,6 @@ describe 'Component: EndpointProvider' do
 
   subject { Defaults::EndpointProvider.new }
 
-
   describe '.resolve_endpoint' do
     it 'resolves the endpoint' do
       params = Defaults::EndpointParameters.new(bar: 'bar', baz: 'baz')
@@ -29,4 +28,3 @@ describe 'Component: EndpointProvider' do
     end
   end
 end
-

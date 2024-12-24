@@ -11,7 +11,8 @@ module Smithy
           def initialize(plan)
             @plan = plan
             @model = plan.model
-            @endpoint_rules = Vise::ServiceIndex.new(@model).service.values.first['traits']['smithy.rules#endpointRuleSet']
+            service = Vise::ServiceIndex.new(@model).service.values.first
+            @endpoint_rules = service['traits']['smithy.rules#endpointRuleSet']
             @parameters = @endpoint_rules['parameters']
                           .map { |id, data| EndpointParameter.new(id, data, @plan) }
 
@@ -99,7 +100,7 @@ module Smithy
             when Array
               value.map { |v| template_hash_value(v) }
             when String
-              template_str(value, false)
+              template_str(value, wrap: false)
             else
               value
             end
@@ -179,7 +180,7 @@ module Smithy
             end
           end
 
-          def template_str(string, wrap = true)
+          def template_str(string, wrap: true)
             string.scan(/\{.+?\}/).each do |capture|
               value = capture[1..-2] # strips curly brackets
               string = string.gsub(capture, "\#{#{template_replace(value)}}")

@@ -14,7 +14,7 @@ module Smithy
         [Vise::Endpoints::BuiltInBinding.new(
           id: 'SDK::Endpoint',
           render_config: proc do |_plan|
-            <<-ADD_OPTION 
+            <<-ADD_OPTION
       option(
         :endpoint,
         doc_type: String,

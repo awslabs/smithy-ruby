@@ -1,0 +1,462 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "endpointBindingsExample#ContextParamsOperation": {
+            "type": "operation",
+            "input": {
+                "target": "endpointBindingsExample#ContextParamsOperationInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            }
+        },
+        "endpointBindingsExample#ContextParamsOperationInput": {
+            "type": "structure",
+            "members": {
+                "bar": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.rules#contextParam": {
+                            "name": "bar"
+                        }
+                    }
+                },
+                "baz": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.rules#contextParam": {
+                            "name": "baz"
+                        }
+                    }
+                },
+                "booleanParam": {
+                    "target": "smithy.api#Boolean",
+                    "traits": {
+                        "smithy.rules#contextParam": {
+                            "name": "booleanParam"
+                        }
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "endpointBindingsExample#EndpointBindingService": {
+            "type": "service",
+            "version": "2022-01-01",
+            "operations": [
+                {
+                    "target": "endpointBindingsExample#ContextParamsOperation"
+                },
+                {
+                    "target": "endpointBindingsExample#NoBindingsOperation"
+                },
+                {
+                    "target": "endpointBindingsExample#OperationContextParamsOperation"
+                },
+                {
+                    "target": "endpointBindingsExample#StaticContextOperation"
+                }
+            ],
+            "traits": {
+                "smithy.api#suppress": [
+                    "UnstableTrait"
+                ],
+                "smithy.rules#clientContextParams": {
+                    "bar": {
+                        "type": "string",
+                        "documentation": "a client string parameter"
+                    },
+                    "baz": {
+                        "type": "string",
+                        "documentation": "another client string parameter"
+                    },
+                    "booleanParam": {
+                        "type": "boolean",
+                        "documentation": "a client boolean parameter"
+                    }
+                },
+                "smithy.rules#endpointRuleSet": {
+                    "version": "1.0",
+                    "parameters": {
+                        "bar": {
+                            "required": false,
+                            "documentation": "String parameter with no default value and client binding",
+                            "type": "String"
+                        },
+                        "baz": {
+                            "required": true,
+                            "default": "baz",
+                            "documentation": "String parameter with default value and client binding",
+                            "type": "String"
+                        },
+                        "booleanParam": {
+                            "required": true,
+                            "default": true,
+                            "documentation": "Boolean parameter with default value and client binding",
+                            "type": "Boolean"
+                        },
+                        "Endpoint": {
+                            "builtIn": "SDK::Endpoint",
+                            "required": false,
+                            "documentation": "Override the endpoint used to send this request",
+                            "type": "String"
+                        }
+                    },
+                    "rules": [
+                        {
+                            "conditions": [],
+                            "rules": [
+                                {
+                                    "conditions": [
+                                        {
+                                            "fn": "isSet",
+                                            "argv": [
+                                                {
+                                                    "ref": "Endpoint"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "endpoint": {
+                                        "url": {
+                                            "ref": "Endpoint"
+                                        },
+                                        "properties": {},
+                                        "headers": {}
+                                    },
+                                    "type": "endpoint"
+                                },
+                                {
+                                    "conditions": [],
+                                    "rules": [
+                                        {
+                                            "conditions": [
+                                                {
+                                                    "fn": "booleanEquals",
+                                                    "argv": [
+                                                        {
+                                                            "ref": "booleanParam"
+                                                        },
+                                                        true
+                                                    ]
+                                                }
+                                            ],
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "isSet",
+                                                            "argv": [
+                                                                {
+                                                                    "ref": "bar"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "endpoint": {
+                                                        "url": "https://{bar}.{baz}/set",
+                                                        "properties": {},
+                                                        "headers": {}
+                                                    },
+                                                    "type": "endpoint"
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "endpoint": {
+                                                        "url": "https://{baz}/set",
+                                                        "properties": {},
+                                                        "headers": {}
+                                                    },
+                                                    "type": "endpoint"
+                                                }
+                                            ],
+                                            "type": "tree"
+                                        },
+                                        {
+                                            "conditions": [],
+                                            "rules": [
+                                                {
+                                                    "conditions": [
+                                                        {
+                                                            "fn": "isSet",
+                                                            "argv": [
+                                                                {
+                                                                    "ref": "bar"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "endpoint": {
+                                                        "url": "https://{bar}.{baz}/unset",
+                                                        "properties": {},
+                                                        "headers": {}
+                                                    },
+                                                    "type": "endpoint"
+                                                },
+                                                {
+                                                    "conditions": [],
+                                                    "endpoint": {
+                                                        "url": "https://{baz}/unset",
+                                                        "properties": {},
+                                                        "headers": {}
+                                                    },
+                                                    "type": "endpoint"
+                                                }
+                                            ],
+                                            "type": "tree"
+                                        }
+                                    ],
+                                    "type": "tree"
+                                }
+                            ],
+                            "type": "tree"
+                        }
+                    ]
+                },
+                "smithy.rules#endpointTests": {
+                    "version": "1.0",
+                    "testCases": [
+                        {
+                            "documentation": "Custom Endpoint used",
+                            "params": {
+                                "Endpoint": "https://custom-endpoint.com"
+                            },
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://custom-endpoint.com"
+                                }
+                            },
+                            "operationInputs": [
+                                {
+                                    "operationName": "NoBindingsOperation",
+                                    "builtInParams": {
+                                        "SDK::Endpoint": "https://custom-endpoint.com"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "documentation": "Default values used",
+                            "params": {},
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://baz/set"
+                                }
+                            },
+                            "operationInputs": [
+                                {
+                                    "operationName": "NoBindingsOperation"
+                                }
+                            ]
+                        },
+                        {
+                            "documentation": "Client config used over default",
+                            "params": {
+                                "baz": "client-config"
+                            },
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://client-config/set"
+                                }
+                            },
+                            "operationInputs": [
+                                {
+                                    "operationName": "NoBindingsOperation",
+                                    "clientParams": {
+                                        "baz": "client-config"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "documentation": "StaticContextParam values used",
+                            "params": {
+                                "bar": "static-context",
+                                "booleanParam": false
+                            },
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://static-context.baz/unset"
+                                }
+                            },
+                            "operationInputs": [
+                                {
+                                    "operationName": "StaticContextOperation"
+                                }
+                            ]
+                        },
+                        {
+                            "documentation": "ContextParam values used over config and defaults",
+                            "params": {
+                                "bar": "context-bar",
+                                "baz": "context-baz",
+                                "booleanParam": false
+                            },
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://context-bar.context-baz/unset"
+                                }
+                            },
+                            "operationInputs": [
+                                {
+                                    "operationName": "ContextParamsOperation",
+                                    "operationParams": {
+                                        "bar": "context-bar",
+                                        "baz": "context-baz",
+                                        "booleanParam": false
+                                    },
+                                    "clientParams": {
+                                        "bar": "client-config"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "documentation": "OperationContextParam values used over config and defaults",
+                            "params": {
+                                "bar": "operation-context-bar",
+                                "baz": "operation-context-baz",
+                                "booleanParam": false
+                            },
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://operation-context-bar.operation-context-baz/unset"
+                                }
+                            },
+                            "operationInputs": [
+                                {
+                                    "operationName": "OperationContextParamsOperation",
+                                    "operationParams": {
+                                        "bar": "operation-context-bar",
+                                        "baz": "operation-context-baz",
+                                        "booleanParam": false
+                                    },
+                                    "clientParams": {
+                                        "bar": "client-config"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "endpointBindingsExample#ListOfObjects": {
+            "type": "list",
+            "member": {
+                "target": "endpointBindingsExample#ObjectMember"
+            }
+        },
+        "endpointBindingsExample#Map": {
+            "type": "map",
+            "key": {
+                "target": "smithy.api#String"
+            },
+            "value": {
+                "target": "smithy.api#String"
+            }
+        },
+        "endpointBindingsExample#Nested": {
+            "type": "structure",
+            "members": {
+                "bar": {
+                    "target": "smithy.api#String"
+                },
+                "baz": {
+                    "target": "smithy.api#String"
+                }
+            }
+        },
+        "endpointBindingsExample#NoBindingsOperation": {
+            "type": "operation",
+            "input": {
+                "target": "endpointBindingsExample#NoBindingsOperationInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            }
+        },
+        "endpointBindingsExample#NoBindingsOperationInput": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "endpointBindingsExample#ObjectMember": {
+            "type": "structure",
+            "members": {
+                "key": {
+                    "target": "smithy.api#String"
+                }
+            }
+        },
+        "endpointBindingsExample#OperationContextParamsOperation": {
+            "type": "operation",
+            "input": {
+                "target": "endpointBindingsExample#OperationContextParamsOperationInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "traits": {
+                "smithy.rules#operationContextParams": {
+                    "bar": {
+                        "path": "nested.bar"
+                    },
+                    "baz": {
+                        "path": "nested.baz"
+                    },
+                    "booleanParam": {
+                        "path": "booleanParam"
+                    }
+                }
+            }
+        },
+        "endpointBindingsExample#OperationContextParamsOperationInput": {
+            "type": "structure",
+            "members": {
+                "nested": {
+                    "target": "endpointBindingsExample#Nested"
+                },
+                "booleanParam": {
+                    "target": "smithy.api#Boolean"
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "endpointBindingsExample#StaticContextOperation": {
+            "type": "operation",
+            "input": {
+                "target": "endpointBindingsExample#StaticContextOperationInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "traits": {
+                "smithy.api#suppress": [
+                    "UnstableTrait"
+                ],
+                "smithy.rules#staticContextParams": {
+                    "bar": {
+                        "value": "static-context"
+                    },
+                    "booleanParam": {
+                        "value": false
+                    }
+                }
+            }
+        },
+        "endpointBindingsExample#StaticContextOperationInput": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
+        }
+    }
+}

@@ -48,7 +48,7 @@ module Smithy
                 @params ||= {}
               end
 
-              attr_reader :expect, :documentation, :params, :expect, :operation_inputs
+              attr_reader :expect, :documentation, :params, :operation_inputs
 
               def expect_error?
                 !@expect['error'].nil?

@@ -89,7 +89,7 @@ module Smithy
         end
 
         def static_context_param(operation)
-          value = operation.traits.fetch('smithy.rules#staticContextParams', {})
+          value = operation.fetch('traits', {}).fetch('smithy.rules#staticContextParams', {})
                            .fetch(@id, {}).fetch('value', nil)
           if !value.nil? && value.is_a?(String)
             "\"#{value}\""
@@ -99,25 +99,25 @@ module Smithy
         end
 
         def context_param_value(operation)
-          return nil unless operation.shape['input']
+          return nil unless operation['input']
 
-          input_shape = @model.shape[operation.shape['input']['target']]
-          members = input_shape.shape.fetch('members', {})
+          input_shape = @model['shapes'][operation['input']['target']]
+          members = input_shape.fetch('members', {})
           context_param_member(members)
         end
 
         def context_param_member(members)
           members.detect do |(member_name, member_def)|
-            member = @model.shape[member_def['target']]
-            context_param = member.fetch('smithy.rules#contextParam', {})
+            # TODO: We need a method to get member traits.
+            context_param = member_def.fetch('traits', {}).fetch('smithy.rules#contextParam', {})
             break "context.params[:#{member_name.underscore}]" if context_param.fetch('name', nil) == @id
           end
         end
 
         def operation_context_param_value(operation)
-          return nil unless operation.shape['input']
+          return nil unless operation['input']
 
-          binding = operation.traits('smithy.rules#staticContextParams', {})[@id]
+          binding = operation.fetch('traits', {}).fetch('smithy.rules#operationContextParams', {})[@id]
 
           return nil unless binding
 
