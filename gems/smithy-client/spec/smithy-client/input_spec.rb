@@ -56,8 +56,16 @@ module Smithy
           expect(passed).to be(context)
         end
 
-        context 'response target' do
-          it 'TODO'
+        it 'can set a response target with the target option' do
+          target = double('target')
+          expect(context).to receive(:[]=).with(:response_target, target)
+          subject.send_request(target: target)
+        end
+
+        it 'can set a response target with a block' do
+          target = proc {}
+          expect(context).to receive(:[]=).with(:response_target, target)
+          subject.send_request(&target)
         end
       end
     end
