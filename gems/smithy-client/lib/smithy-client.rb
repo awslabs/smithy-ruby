@@ -2,11 +2,13 @@
 
 # client
 
+require_relative 'smithy-client/block_io'
 require_relative 'smithy-client/configuration'
 require_relative 'smithy-client/handler'
 require_relative 'smithy-client/handler_builder'
 require_relative 'smithy-client/handler_list'
 require_relative 'smithy-client/handler_list_entry'
+require_relative 'smithy-client/managed_file'
 require_relative 'smithy-client/networking_error'
 require_relative 'smithy-client/plugin'
 require_relative 'smithy-client/plugin_list'
@@ -29,6 +31,7 @@ require_relative 'smithy-client/plugins/endpoint'
 require_relative 'smithy-client/plugins/logging'
 require_relative 'smithy-client/plugins/raise_response_errors'
 require_relative 'smithy-client/plugins/net_http'
+require_relative 'smithy-client/plugins/response_target'
 
 # model
 
