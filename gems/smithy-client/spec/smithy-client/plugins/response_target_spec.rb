@@ -25,7 +25,7 @@ module Smithy
           @tempfile.close
         end
 
-        context 'Block' do
+        context 'Block target' do
           let(:target) { proc { |chunk| } }
 
           it 'streams data' do
@@ -101,13 +101,30 @@ module Smithy
           end
         end
 
-        context 'IO object target' do
+        context 'StringIO target' do
           let(:target) { StringIO.new(String.new) }
 
           it 'writes to the given object' do
             client.operation_name({}, target: target)
             expected = client.config.response_body
             expect(target.string).to eq(expected)
+          end
+        end
+
+        context 'File target' do
+          let(:target) { @tempfile }
+
+          it 'writes to the file' do
+            client.operation_name({}, target: target)
+            expected = client.config.response_body
+            expect(File.read(@tempfile.path)).to eq(expected)
+          end
+
+          it 'does not unlink the file' do
+            error = StandardError.new('error')
+            client = client_class.new(response_error: error)
+            client.operation_name({}, target: target)
+            expect(File.unlink(@tempfile.path)).to eq(1)
           end
         end
       end
