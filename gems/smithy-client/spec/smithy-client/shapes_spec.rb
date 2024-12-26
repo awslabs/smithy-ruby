@@ -123,9 +123,8 @@ module Smithy
 
         describe '#set_member' do
           it 'sets a member' do
-            member_name = 'string_member'
-            subject.set_member(member_name, StringShape.new)
-            expect(subject.member.name).to eq(member_name)
+            subject.set_member(StringShape.new)
+            expect(subject.member.name).to eq('member')
             expect(subject.member).to be_kind_of(MemberShape)
           end
         end
