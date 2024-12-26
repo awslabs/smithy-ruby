@@ -13,6 +13,7 @@ Gemspec/RequireMFA:
 Metrics/AbcSize:
   Exclude:
     - 'gems/smithy/lib/smithy/forge/client.rb'
+    - 'gems/smithy/lib/smithy/anvil/client/views/shapes.rb'
 
 Metrics/BlockLength:
   Exclude:
