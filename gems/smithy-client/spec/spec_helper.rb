@@ -10,15 +10,23 @@ require 'smithy-client'
 class DummySendPlugin < Smithy::Client::Plugin
   class Handler < Smithy::Client::Handler
     def call(context)
-      Smithy::Client::Output.new(
-        context: context,
-        data: context.config.response_data,
-        error: context.config.response_error
-      )
+      response = context.response
+      config = context.config
+
+      response.signal_headers(config.response_status_code, config.response_headers)
+      if context.config.response_error
+        response.signal_error(config.response_error)
+      else
+        response.signal_data(config.response_body)
+      end
+      response.signal_done
+      Smithy::Client::Output.new(context: context)
     end
   end
 
-  option(:response_data) { { result: 'success' } }
+  option(:response_body) { 'success' }
+  option(:response_headers) { {} }
+  option(:response_status_code) { 200 }
   option(:response_error) { nil }
   handler Handler, step: :send
 end

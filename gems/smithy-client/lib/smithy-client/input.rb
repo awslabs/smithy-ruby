@@ -65,7 +65,7 @@ module Smithy
       #   a request that may return a large payload that you don't want to
       #   load into memory.
       #
-      # @return [Output]
+      # @return [Output, nil]
       #
       def send_request(options = {}, &block)
         @context[:response_target] = options[:target] || block

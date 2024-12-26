@@ -101,7 +101,7 @@ module Smithy
         def context_param_value(operation)
           return nil unless operation['input']
 
-          input_shape = @model['shapes'][operation['input']['target']]
+          input_shape = @model['shapes'].fetch(operation['input']['target'], {})
           members = input_shape.fetch('members', {})
           context_param_member(members)
         end
