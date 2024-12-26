@@ -18,9 +18,8 @@ module Smithy
         # @param [HandlerContext] context
         # @return [Output]
         def call(context)
-          output = Output.new(context: context)
-          transmit(context.config, context.request, context.response, output)
-          output
+          transmit(context.config, context.request, context.response)
+          Output.new(context: context)
         end
 
         private
@@ -28,56 +27,61 @@ module Smithy
         # @param [Configuration] config
         # @param [HTTP::Request] req
         # @param [HTTP::Response] resp
-        # @param [Output] output
         # @return [void]
-        def transmit(config, req, resp, output)
+        def transmit(config, req, resp)
           # Monkey patch default content-type set by Net::HTTP
           Thread.current[:net_http_skip_default_content_type] = true
           session(config, req) do |http|
             http.request(build_net_request(req)) do |net_resp|
-              bytes_received = unpack_response(net_resp, resp)
-              complete_response(req, resp, output, bytes_received)
+              bytes_received = signal_response(net_resp, resp)
+              complete_response(req, resp, bytes_received)
             end
           end
-        rescue ArgumentError
+        rescue ArgumentError => e
           # Invalid verb, ArgumentError is a StandardError
           # Not retryable.
-          raise
+          resp.signal_error(e)
         rescue StandardError => e
-          output.error = NetworkingError.new(e)
+          error = NetworkingError.new(e)
+          resp.signal_error(error)
         ensure
           # ensure we turn off monkey patch in case of error
           Thread.current[:net_http_skip_default_content_type] = nil
         end
 
-        # @param [Net::HTTPResponse] net_resp
-        # @param [HTTP::Response] resp
-        def unpack_response(net_resp, resp)
-          resp.status_code = net_resp.code.to_i
-          net_resp.each_header { |k, v| resp.headers[k] = v }
+        def signal_response(net_resp, resp)
+          status_code = net_resp.code.to_i
+          headers = extract_headers(net_resp)
+
           bytes_received = 0
+          resp.signal_headers(status_code, headers)
           net_resp.read_body do |chunk|
             bytes_received += chunk.bytesize
-            resp.body.write(chunk)
+            resp.signal_data(chunk)
           end
           bytes_received
         end
 
-        def complete_response(req, resp, output, bytes_received)
-          resp.body.rewind if resp.body.respond_to?(:rewind)
-          verify_bytes_received(resp, output, bytes_received) if should_verify_bytes?(req, resp)
+        def complete_response(req, resp, bytes_received)
+          if should_verify_bytes?(req, resp)
+            verify_bytes_received(resp, bytes_received)
+          else
+            resp.signal_done
+          end
         end
 
         def should_verify_bytes?(req, resp)
           req.http_method != 'HEAD' && resp.headers['content-length']
         end
 
-        def verify_bytes_received(resp, output, bytes_received)
+        def verify_bytes_received(resp, bytes_received)
           bytes_expected = resp.headers['content-length'].to_i
-          return if bytes_expected == bytes_received
-
-          error = TruncatedBodyError.new(bytes_expected, bytes_received)
-          output.error = NetworkingError.new(error)
+          if bytes_expected == bytes_received
+            resp.signal_done
+          else
+            error = TruncatedBodyError.new(bytes_expected, bytes_received)
+            resp.signal_error(NetworkingError.new(error))
+          end
         end
 
         # @param [Configuration] config
@@ -133,9 +137,6 @@ module Smithy
         # @param [HTTP::Request] request
         # @return [Hash<String, String>]
         def net_headers_for(request)
-          # Trailers are not supported in Net::HTTP
-          raise NotImplementedError, 'Trailers are not supported in Net::HTTP' if request.trailers.any?
-
           # Net::HTTP adds a default header for accept-encoding (2.0.0+).
           # Setting a default empty value defeats this.
           # Removing this is necessary for most services to not break request
@@ -148,6 +149,12 @@ module Smithy
             headers[key] = value
           end
           headers
+        end
+
+        # @param [Net::HTTP::Response] response
+        # @return [Hash<String, String>]
+        def extract_headers(response)
+          response.to_hash.transform_values(&:first)
         end
       end
     end

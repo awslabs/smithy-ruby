@@ -9,8 +9,8 @@ module Smithy
       # @option options [Base] :client (nil)
       # @option options [Hash] :params ({})
       # @option options [Configuration] :config (nil)
-      # @option options [Request] :request (nil)
-      # @option options [Response] :response (nil)
+      # @option options [Request] :request (HTTP::Request.new)
+      # @option options [Response] :response (HTTP::Response.new)
       # @options options [Hash] :metadata ({})
       def initialize(options = {})
         @operation_name = options[:operation_name]
@@ -18,8 +18,8 @@ module Smithy
         @client = options[:client]
         @params = options[:params] || {}
         @config = options[:config]
-        @request = options[:request]
-        @response = options[:response]
+        @request = options[:request] || HTTP::Request.new
+        @response = options[:response] || HTTP::Response.new
         @metadata = {}
       end
 
