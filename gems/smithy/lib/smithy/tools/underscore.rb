@@ -10,7 +10,7 @@ module Smithy
         def underscore_jmespath(expression)
           expression
             .gsub(' or ', '||')
-            .gsub(/(?<![`'])\b\w+\b(?![`'])/) { |str| str.underscore }
+            .gsub(/(?<![`'])\b\w+\b(?![`'])/, &:underscore)
         end
       end
     end

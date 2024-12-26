@@ -21,8 +21,6 @@ module Smithy
 
           attr_reader :parameters, :operation_params
 
-          def operation_specific_parameters?; end
-
           def namespace
             Tools::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
           end
@@ -30,8 +28,9 @@ module Smithy
           def documentation
             '# TODO: Documentation'
           end
-          
+
           private
+
           def build_operation_params
             operation_params = {}
             @operations.each do |operation_id, operation|

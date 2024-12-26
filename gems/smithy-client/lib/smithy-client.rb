@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'jmespath'
+
 # client
 
 require_relative 'smithy-client/block_io'
