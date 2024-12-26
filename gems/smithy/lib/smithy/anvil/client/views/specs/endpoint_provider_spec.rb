@@ -39,8 +39,7 @@ module Smithy
             def initialize_tests(service)
               @endpoint_tests = service['traits']['smithy.rules#endpointTests'] || {}
               @test_cases = @endpoint_tests['testCases']
-                            &.map { |data| EndpointTestCase.new(data, @plan) }
-              @initialize_tests ||= []
+                            &.map { |data| EndpointTestCase.new(data, @plan) } || []
             end
 
             # @api private

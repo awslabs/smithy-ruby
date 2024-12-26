@@ -11,6 +11,9 @@ module Smithy
     # The rules engine has a set of included functions that can be
     # invoked without additional dependencies, called the standard library.
     module EndpointRules
+      # Regex that extracts anything in square brackets
+      BRACKET_REGEX = /\[(.*?)\]/.freeze
+
       # An Endpoint resolved by an EndpointProvider
       class Endpoint
         # @param [String] :uri
