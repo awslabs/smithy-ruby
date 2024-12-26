@@ -24,10 +24,10 @@ namespace :smithy do
         model = JSON.load_file(model_path)
 
         plan = Smithy::Plan.new(model, :client, {
-          gem_name: gem_name,
-          gem_version: '1.0.0',
-          destination_root: tmp_dir
-        })
+                                  gem_name: gem_name,
+                                  gem_version: '1.0.0',
+                                  destination_root: tmp_dir
+                                })
         Smithy.smith(plan)
 
         sh("bundle exec rspec #{tmp_dir}/spec -I #{tmp_dir}/lib -I #{tmp_dir}/spec")

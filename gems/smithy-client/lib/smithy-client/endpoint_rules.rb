@@ -12,7 +12,7 @@ module Smithy
     # invoked without additional dependencies, called the standard library.
     module EndpointRules
       # Regex that extracts anything in square brackets
-      BRACKET_REGEX = /\[(.*?)\]/.freeze
+      BRACKET_REGEX = /\[(.*?)\]/
 
       # An Endpoint resolved by an EndpointProvider
       class Endpoint
