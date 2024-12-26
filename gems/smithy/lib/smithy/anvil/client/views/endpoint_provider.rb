@@ -54,19 +54,23 @@ module Smithy
 
           private
 
-          def indent(s, levels = 3)
-            ('  ' * levels) + s
+          def indent(str, levels = 3)
+            ('  ' * levels) + str
           end
 
           def endpoint_rule(rule, levels = 3)
-            res = StringIO.new
             if rule['conditions'] && !rule['conditions'].empty?
-              res << conditions(rule['conditions'], levels)
-              res << endpoint(rule['endpoint'], levels + 1)
-              res << indent("end\n", levels)
+              endpoint_rule_with_condition(levels, rule)
             else
-              res << endpoint(rule['endpoint'], levels)
+              endpoint(rule['endpoint'], levels)
             end
+          end
+
+          def endpoint_rule_with_condition(levels, rule)
+            res = StringIO.new
+            res << conditions(rule['conditions'], levels)
+            res << endpoint(rule['endpoint'], levels + 1)
+            res << indent("end\n", levels)
             res.string
           end
 
@@ -75,10 +79,6 @@ module Smithy
             res << "return Smithy::Client::EndpointRules::Endpoint.new(uri: #{str(endpoint['url'])}"
             res << ", headers: #{templated_hash_to_s(endpoint['headers'])}" if endpoint['headers']
             res << ", properties: #{templated_hash_to_s(endpoint['properties'])}" if endpoint['properties']
-            if @has_account_id_endpoint_mode
-              account_id_endpoint = endpoint['url'].include?('{AccountId}')
-              res << ", metadata: { account_id_endpoint: #{account_id_endpoint} }"
-            end
             res << ")\n"
             indent(res.string, levels)
           end
@@ -107,14 +107,18 @@ module Smithy
           end
 
           def error_rule(rule, levels = 3)
-            res = StringIO.new
             if rule['conditions'] && !rule['conditions'].empty?
-              res << conditions(rule['conditions'], levels)
-              res << error(rule['error'], levels + 1)
-              res << indent("end\n", levels)
+              error_rule_with_condition(levels, rule)
             else
-              res << error(rule['error'], levels)
+              error(rule['error'], levels)
             end
+          end
+
+          def error_rule_with_condition(levels, rule)
+            res = StringIO.new
+            res << conditions(rule['conditions'], levels)
+            res << error(rule['error'], levels + 1)
+            res << indent("end\n", levels)
             res.string
           end
 
@@ -123,14 +127,18 @@ module Smithy
           end
 
           def tree_rule(rule, levels = 3)
-            res = StringIO.new
             if rule['conditions'] && !rule['conditions'].empty?
-              res << conditions(rule['conditions'], levels)
-              res << tree_rules(rule['rules'], levels + 1)
-              res << indent("end\n", levels)
+              tree_rule_with_condition(levels, rule)
             else
-              res << tree_rules(rule['rules'], levels)
+              tree_rules(rule['rules'], levels)
             end
+          end
+
+          def tree_rule_with_condition(levels, rule)
+            res = StringIO.new
+            res << conditions(rule['conditions'], levels)
+            res << tree_rules(rule['rules'], levels + 1)
+            res << indent("end\n", levels)
             res.string
           end
 
@@ -160,23 +168,23 @@ module Smithy
 
           def condition(condition)
             if condition['assign']
-              "(#{condition['assign'].underscore} = #{fn(condition)})"
+              "(#{condition['assign'].underscore} = #{function(condition)})"
             else
-              fn(condition)
+              function(condition)
             end
           end
 
-          def str(s)
-            if s.is_a?(Hash)
-              if s['ref']
-                s['ref'].underscore
-              elsif s['fn']
-                fn(s)
+          def str(str)
+            if str.is_a?(Hash)
+              if str['ref']
+                str['ref'].underscore
+              elsif str['fn']
+                function(str)
               else
-                raise "Unknown string type: #{s}"
+                raise "Unknown string type: #{str}"
               end
             else
-              template_str(s)
+              template_str(str)
             end
           end
 
@@ -198,9 +206,9 @@ module Smithy
             res
           end
 
-          def fn(fn)
-            args = fn['argv'].map { |arg| fn_arg(arg) }.join(', ')
-            "#{fn_name(fn['fn'])}(#{args})"
+          def function(function)
+            args = function['argv'].map { |arg| fn_arg(arg) }.join(', ')
+            "#{fn_name(function['fn'])}(#{args})"
           end
 
           def fn_arg(arg)
@@ -208,7 +216,7 @@ module Smithy
               if arg['ref']
                 arg['ref'].underscore
               elsif arg['fn']
-                fn(arg)
+                function(arg)
               else
                 raise "Unexpected argument type: #{arg}"
               end
@@ -219,9 +227,9 @@ module Smithy
             end
           end
 
-          def fn_name(fn)
-            unless (binding = @plan.function_bindings[fn])
-              raise ArgumentError, "No endpoint function binding registered for #{fn}"
+          def fn_name(function)
+            unless (binding = @plan.function_bindings[function])
+              raise ArgumentError, "No endpoint function binding registered for #{function}"
             end
 
             binding.ruby_method

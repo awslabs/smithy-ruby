@@ -99,16 +99,7 @@ module Smithy
       def self.attr(value, path)
         parts = path.split('.')
 
-        val = if (index = parts.first[BRACKET_REGEX, 1])
-                # remove brackets and index from part before indexing
-                if (base = parts.first.gsub(BRACKET_REGEX, '')) && !base.empty?
-                  value[base][index.to_i]
-                else
-                  value[index.to_i]
-                end
-              else
-                value[parts.first]
-              end
+        val = attr_brackets(parts, value)
 
         if parts.size == 1
           val
@@ -174,6 +165,19 @@ module Smithy
           true
         rescue IPAddr::InvalidAddressError
           false
+        end
+      end
+
+      def self.attr_brackets(parts, value)
+        if (index = parts.first[BRACKET_REGEX, 1])
+          # remove brackets and index from part before indexing
+          if (base = parts.first.gsub(BRACKET_REGEX, '')) && !base.empty?
+            value[base][index.to_i]
+          else
+            value[index.to_i]
+          end
+        else
+          value[parts.first]
         end
       end
     end
