@@ -13,12 +13,21 @@ module <%= namespace %>
     <%- params << "traits: #{shape.traits}" unless shape.traits.empty? -%>
     <%= "#{shape.name} = #{shape.shape_type}.new(" %><%= params.join(', ') %>)
   <%- end -%>
-<%# Shapes members definition %>
+<%# Shape members definition %>
   <%- shapes_with_members.each do |shape| -%>
     <%- shape.members.each do |member| -%>
-    <%- params = ["\"#{member.name}\"", member.shape] -%>
+    <%- params = [] -%>
+    <%- params << ["\"#{member.name}\""] unless %w[ListShape MapShape].include? shape.shape_type -%>
+    <%- params << [member.shape] -%>
     <%- params << "traits: #{member.traits}" unless member.traits.empty? -%>
+    <%- case shape.shape_type -%>
+    <%- when 'ListShape' -%>
+    <%= "#{shape.name}.set_member(" %><%= params.join(', ') %>)
+    <%- when 'MapShape' -%>
+    <%= "#{shape.name}.set_member_#{member.name}(" %><%= params.join(', ') %>)
+    <%- else -%>
     <%= "#{shape.name}.add_member(" %><%= params.join(', ') %>)
+    <%- end -%>
     <%- end -%>
   <%- end -%>
 <%# Schema definition %>

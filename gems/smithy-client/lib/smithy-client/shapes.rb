@@ -98,8 +98,8 @@ module Smithy
         attr_accessor :member
 
         # @return [MemberShape]
-        def set_member(name, shape, traits: {})
-          @member = MemberShape.new(name, shape, traits: traits)
+        def set_member(shape, traits: {})
+          @member = MemberShape.new('member', shape, traits: traits)
         end
       end
 

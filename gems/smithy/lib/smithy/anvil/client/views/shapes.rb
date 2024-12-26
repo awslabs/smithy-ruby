@@ -77,20 +77,38 @@ module Smithy
               name: Vise::Shape.relative_id(id),
               shape_type: shape_type(shape['type']),
               traits: filter_traits(shape['traits']),
-              members: assemble_member_shapes(shape['members'])
+              members: assemble_member_shapes(shape)
             )
           end
 
-          def assemble_member_shapes(members)
-            return [] if members.nil?
-
-            members.each_with_object([]) do |(name, shape), a|
-              a << MemberShape.new(
-                name: name.underscore,
-                shape: assemble_shape_name(shape['target']),
-                traits: filter_traits(shape['traits'])
-              )
+          def assemble_member_shapes(shape)
+            members = []
+            case shape['type']
+            when 'structure', 'union', 'enum', 'intEnum'
+              shape['members'].each do |name, shape|
+                members <<
+                  assemble_member_shape(name, shape['target'], shape['traits'])
+              end
+            when 'list'
+              m_shape = shape['member']
+              members <<
+                assemble_member_shape('member', m_shape['target'], m_shape['traits'])
+            when 'map'
+              %w[key value].each do |m_name|
+                m_shape = shape[m_name]
+                members <<
+                  assemble_member_shape(m_name, m_shape['target'], m_shape['traits'])
+              end
             end
+            members
+          end
+
+          def assemble_member_shape(name, shape, traits)
+            MemberShape.new(
+              name: name.underscore,
+              shape: assemble_shape_name(shape),
+              traits: filter_traits(traits)
+            )
           end
 
           def assemble_shape_name(id)
