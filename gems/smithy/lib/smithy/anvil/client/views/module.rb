@@ -38,7 +38,7 @@ module Smithy
             if @plan.type == :types
               [:types]
             else
-              %i[client errors types]
+              %i[client customizations errors types]
             end
           end
         end
