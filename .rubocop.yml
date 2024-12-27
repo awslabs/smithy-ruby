@@ -20,11 +20,6 @@ Layout/EmptyLinesAroundModuleBody:
     - 'projections/**/*/errors.rb'
     - 'projections/**/*/types.rb'
 
-Metrics/AbcSize:
-  Exclude:
-    - 'gems/smithy/lib/smithy/forge/client.rb'
-    - 'gems/smithy/lib/smithy/anvil/client/views/shapes.rb'
-
 Metrics/BlockLength:
   Exclude:
     - '**/spec/**/*.rb'
