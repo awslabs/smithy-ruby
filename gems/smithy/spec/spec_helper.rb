@@ -19,7 +19,7 @@ module SpecHelper
     #  written to.
     def generate(modules, type, options = {})
       model = load_model(modules, options)
-      plan = create_plan(model, type, modules)
+      plan = create_plan(modules, model, type, options)
 
       Smithy.smith(plan)
       $LOAD_PATH << ("#{plan.options[:destination_root]}/lib")
@@ -52,11 +52,11 @@ module SpecHelper
       JSON.load_file(File.join(model_dir, 'model.json'))
     end
 
-    def create_plan(model, type, modules)
+    def create_plan(modules, model, type, options)
       plan_options = {
-        gem_name: Smithy::Tools::Namespace.gem_name_from_namespaces(modules),
-        gem_version: '1.0.0',
-        destination_root: Dir.mktmpdir
+        gem_name: options[:gem_name] || Smithy::Tools::Namespace.gem_name_from_namespaces(modules),
+        gem_version: options[:gem_version] || '1.0.0',
+        destination_root: options[:destination_root] || Dir.mktmpdir
       }
       Smithy::Plan.new(model, type, plan_options)
     end
