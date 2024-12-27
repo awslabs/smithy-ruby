@@ -34,17 +34,12 @@ module <%= namespace %>
 
     <%= error.documentation %>
     class <%= error.name %> < Smithy::Client::Errors::ServiceError
-      # @param [Smithy::Client::HandlerContext] context
-      # @param [String] message
-      # @param [<%= namespace %>::Types::<%= error.name %>] data
-      def initialize(context, message, data)
-        super(context, message, data)
-      end
-      <%- error.member_names.each do |member| -%>
 
+      <%- error.member_names.each do |member| -%>
       def <%= member %>
         @data[:<%= member %>]
       end
+
       <%- end -%>
     end
     <%- end -%>

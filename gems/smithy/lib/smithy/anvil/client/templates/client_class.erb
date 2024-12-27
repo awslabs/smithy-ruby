@@ -3,16 +3,17 @@
 # This is generated code!
 
 module <%= namespace %>
+  # TODO!
   class Client < Smithy::Client::Base
     # self.api = API
 
     <%- plugins.each do |p| -%>
     add_plugin(<%= p %>)
-    <%- end %>
+    <%- end -%>
 
-    # TODO
+    # TODO!
     def initialize(*args)
-      super(*args)
+      super
     end
 
     <%- operations.each do |operation| -%>

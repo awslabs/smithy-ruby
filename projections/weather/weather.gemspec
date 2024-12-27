@@ -10,4 +10,6 @@ Gem::Specification.new do |s|
   s.files       = Dir['lib/**/*.rb', base: __dir__]
 
   s.add_dependency('smithy-client', '~> 1')
+
+  s.required_ruby_version = '>= 3.0'
 end

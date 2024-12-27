@@ -3,15 +3,15 @@
 # This is generated code!
 
 module Weather
+  # TODO!
   class Client < Smithy::Client::Base
     # self.api = API
 
     add_plugin(Smithy::Client::Plugins::NetHTTP)
 
-
-    # TODO
+    # TODO!
     def initialize(*args)
-      super(*args)
+      super
     end
 
     # TODO!

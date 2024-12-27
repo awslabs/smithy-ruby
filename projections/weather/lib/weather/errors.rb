@@ -31,16 +31,11 @@ module Weather
 
     # TODO!
     class NoSuchResource < Smithy::Client::Errors::ServiceError
-      # @param [Smithy::Client::HandlerContext] context
-      # @param [String] message
-      # @param [Weather::Types::NoSuchResource] data
-      def initialize(context, message, data)
-        super(context, message, data)
-      end
 
       def resource_type
         @data[:resource_type]
       end
+
     end
   end
 end
