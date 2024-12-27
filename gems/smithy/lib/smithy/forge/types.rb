@@ -11,6 +11,15 @@ module Smithy
         super
       end
 
+      # @return [Enumerable<String, String>] The file paths and their contents to generate.
+      def forge
+        files = source_files
+        files.each do |file, content|
+          create_file file, content
+        end
+        files
+      end
+
       private
 
       def source_files

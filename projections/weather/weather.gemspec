@@ -3,8 +3,8 @@
 # This is generated code!
 
 Gem::Specification.new do |s|
-  s.name        = '<%= gem_name %>'
-  s.version     = '<%= gem_version %>'
+  s.name        = 'weather'
+  s.version     = '1.0.0'
   s.summary     = 'Generated gem using Smithy'
   s.authors     = ['Smithy Ruby']
   s.files       = Dir['lib/**/*.rb', base: __dir__]

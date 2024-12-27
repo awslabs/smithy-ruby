@@ -3,12 +3,22 @@ AllCops:
   TargetRubyVersion: 3.0
   SuggestExtensions: false
   Exclude:
-    - 'vendor/**/*'
-    - 'tasks/release/**/*'
     - 'build/**/*'
+    - 'tasks/release/**/*'
+    - 'vendor/**/*'
 
 Gemspec/RequireMFA:
   Enabled: false
+
+Layout/EmptyLinesAroundClassBody:
+  Exclude:
+    - 'projections/**/*/errors.rb'
+    - 'projections/**/*/types.rb'
+
+Layout/EmptyLinesAroundModuleBody:
+  Exclude:
+    - 'projections/**/*/errors.rb'
+    - 'projections/**/*/types.rb'
 
 Metrics/AbcSize:
   Exclude:
