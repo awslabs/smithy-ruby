@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'views/client_class'
+require_relative 'views/customizations'
 require_relative 'views/endpoint_parameters'
 require_relative 'views/endpoint_provider'
 require_relative 'views/errors'

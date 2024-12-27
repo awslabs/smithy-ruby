@@ -2,15 +2,15 @@
 
 # This is generated code!
 
-module <%= namespace %>
+module Weather
   # When this service returns an error response, the SDK constructs and raises an error.
-  # These errors all extend <%= namespace %>::Errors::ServiceError < {Smithy::Client::Errors::ServiceError}
+  # These errors all extend Weather::Errors::ServiceError < {Smithy::Client::Errors::ServiceError}
   #
   # You can rescue all errors using the ServiceError:
   #
   #     begin
   #       # do stuff
-  #     rescue <%= namespace %>::Errors::ServiceError
+  #     rescue Weather::Errors::ServiceError
   #       # rescues all API errors
   #     end
   #
@@ -22,26 +22,20 @@ module <%= namespace %>
   #
   # ## Error Classes
   #
-  <%- errors.each do |error| -%>
-  # * {<%= error.name %>}
-  <%- end -%>
+  # * {NoSuchResource}
   #
   # Additionally, error classes are dynamically generated for service errors based on the error code
   # if they are not defined above.
   module Errors
     extend Smithy::Client::Errors::DynamicErrors
-    <%- errors.each do |error| -%>
 
-    <%= error.documentation %>
-    class <%= error.name %> < Smithy::Client::Errors::ServiceError
+    # TODO!
+    class NoSuchResource < Smithy::Client::Errors::ServiceError
 
-      <%- error.member_names.each do |member| -%>
-      def <%= member %>
-        @data[:<%= member %>]
+      def resource_type
+        @data[:resource_type]
       end
 
-      <%- end -%>
     end
-    <%- end -%>
   end
 end
