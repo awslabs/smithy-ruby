@@ -71,7 +71,7 @@ module Smithy
         # @return [Hash<String, MemberShape>]
         attr_accessor :members
 
-        # @return [MemberShape, nil]
+        # @return [MemberShape]
         def add_member(name, shape, traits: {})
           @members[name] = MemberShape.new(name, shape, traits: traits)
         end
