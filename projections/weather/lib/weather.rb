@@ -9,5 +9,6 @@ module Weather
 end
 
 require_relative 'weather/client'
+require_relative 'weather/customizations'
 require_relative 'weather/errors'
 require_relative 'weather/types'
