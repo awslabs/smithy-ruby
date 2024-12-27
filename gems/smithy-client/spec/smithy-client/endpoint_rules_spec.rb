@@ -5,68 +5,58 @@ module Smithy
     describe EndpointRules do
       describe '.valid_host_label?' do
         it 'returns false for an empty value' do
-          expect(EndpointRules.valid_host_label?('')).to be false
+          expect(EndpointRules.valid_host_label?('', false)).to be false
         end
 
         it 'returns false for values with spaces' do
-          expect(EndpointRules.valid_host_label?('invalid label')).to be false
+          expect(EndpointRules.valid_host_label?('invalid label', false)).to be false
         end
 
         it 'returns true for a valid host label' do
-          expect(EndpointRules.valid_host_label?('valid-label-1')).to be true
+          expect(EndpointRules.valid_host_label?('valid-label-1', false)).to be true
         end
 
         it 'returns false for values starting with -' do
-          expect(EndpointRules.valid_host_label?('-invalid')).to be false
+          expect(EndpointRules.valid_host_label?('-invalid', false)).to be false
         end
 
         it 'returns false for values ending with -' do
-          expect(EndpointRules.valid_host_label?('invalid-')).to be false
+          expect(EndpointRules.valid_host_label?('invalid-', false)).to be false
         end
 
         it 'returns true for values starting with a number' do
-          expect(EndpointRules.valid_host_label?('1valid')).to be true
+          expect(EndpointRules.valid_host_label?('1valid', false)).to be true
         end
 
         it 'returns true for a single valid character' do
-          expect(EndpointRules.valid_host_label?('h')).to be true
+          expect(EndpointRules.valid_host_label?('h', false)).to be true
         end
 
         it 'returns false for 64 characters' do
-          expect(EndpointRules.valid_host_label?('h' * 64)).to be false
+          expect(EndpointRules.valid_host_label?('h' * 64, false)).to be false
         end
 
         context 'allow_sub_domains=false' do
           it 'returns false when value has subdomains' do
-            expect(EndpointRules.valid_host_label?(
-                     'a.b', false
-                   )).to be false
+            expect(EndpointRules.valid_host_label?('a.b', false)).to be false
           end
         end
 
         context 'allow_sub_domains=true' do
           it 'returns true when value has subdomains' do
-            expect(EndpointRules.valid_host_label?(
-                     'part1.part2', allow_sub_domains: true
-                   )).to be true
+            expect(EndpointRules.valid_host_label?('part1.part2', true)).to be true
           end
 
           it 'returns false for multiple consecutive dots' do
-            expect(EndpointRules.valid_host_label?(
-                     'a..b-', allow_sub_domains: true
-                   )).to be false
+            expect(EndpointRules.valid_host_label?('a..b-', true)).to be false
           end
 
           it 'returns false for values ending in a dot' do
-            expect(EndpointRules.valid_host_label?(
-                     'a.b.', allow_sub_domains: true
-                   )).to be false
+            expect(EndpointRules.valid_host_label?('a.b.', true)).to be false
           end
 
           it 'returns false for sub domains starting with a dash' do
-            expect(EndpointRules.valid_host_label?(
-                     'part1.-part2', allow_sub_domains: true
-                   )).to be false
+            expect(EndpointRules.valid_host_label?('part1.-part2', true)).to be false
           end
         end
       end

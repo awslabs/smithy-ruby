@@ -10,7 +10,7 @@ module Smithy
         end
       end
 
-      def built_in_bindings
+      def endpoint_built_in_bindings
         [Vise::Endpoints::BuiltInBinding.new(
           id: 'SDK::Endpoint',
           render_config: proc do |_plan|
@@ -31,7 +31,7 @@ module Smithy
       end
 
       # rubocop:disable Metrics/MethodLength
-      def function_bindings
+      def endpoint_function_bindings
         [
           Vise::Endpoints::FunctionBinding.new(
             id: 'isValidHostLabel',
@@ -80,54 +80,12 @@ module Smithy
         service_traits['smithy.rules#endpointTests'] = default_endpoint_tests
       end
 
-      # rubocop:disable Metrics/MethodLength:
       def default_endpoint_rules
-        JSON.parse(<<~JSON)
-          {
-            "version": "1.0",
-            "parameters": {
-                "endpoint": {
-                    "type": "string",
-                    "builtIn": "SDK::Endpoint",
-                    "documentation": "Endpoint"
-                }
-            },
-            "rules": [
-                {
-                    "conditions": [
-                        {
-                            "fn": "isSet",
-                            "argv": [
-                                {
-                                    "ref": "endpoint"
-                                }
-                            ]
-                        }
-                    ],
-                    "endpoint": {
-                        "url": "endpoint"
-                    },
-                    "type": "endpoint"
-                },
-                {
-                    "conditions": [],
-                    "error": "Endpoint is not set - you must configure an endpoint.",
-                    "type": "error"
-                }
-            ]
-          }
-        JSON
+        JSON.load_file(File.join(__dir__, 'default_endpoint_rules.json'))
       end
-      # rubocop:enable Metrics/MethodLength:
 
       def default_endpoint_tests
-        # TODO: Add default test cases
-        JSON.parse(<<~JSON)
-          {
-            "version": "1.0",
-            "testCases": []
-          }
-        JSON
+        JSON.load_file(File.join(__dir__, 'default_endpoint_rules.json'))
       end
     end
   end

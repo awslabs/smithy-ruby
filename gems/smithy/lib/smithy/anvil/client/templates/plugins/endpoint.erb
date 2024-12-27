@@ -9,8 +9,8 @@ module <%= namespace %>
         :endpoint_provider,
         doc_type: '<%= namespace %>::EndpointProvider',
         docstring: <<~DOCS) do |_cfg|
-The endpoint provider used to resolve endpoints. Any object that responds to
-`#resolve_endpoint(parameters)`.
+          The endpoint provider used to resolve endpoints. Any object that responds to
+          `#resolve_endpoint(parameters)`.
         DOCS
         EndpointProvider.new
       end

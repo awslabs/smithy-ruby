@@ -43,8 +43,7 @@ module Smithy
       # composed of values that are each compliant RFC 1123 host segments
       # joined by dot (.) characters.
       # @api private
-      # rubocop:disable Style/OptionalBooleanParameter
-      def self.valid_host_label?(value, allow_sub_domains = false)
+      def self.valid_host_label?(value, allow_sub_domains)
         return false if value.empty?
 
         if allow_sub_domains
@@ -54,7 +53,6 @@ module Smithy
 
         !!(value =~ /\A(?!-)[a-zA-Z0-9-]{1,63}(?<!-)\z/)
       end
-      # rubocop:enable Style/OptionalBooleanParameter
 
       # Computes a URL structure given an input string.
       # @api private
@@ -134,10 +132,10 @@ module Smithy
           # do not support query
           raise ArgumentError if uri.query
 
-          @authority = _authority(url, uri)
+          @authority = extract_authority(url, uri)
           @path = uri.path
           @normalized_path = uri.path + (uri.path[-1] == '/' ? '' : '/')
-          @is_ip = _is_ip(uri.host)
+          @is_ip = ip?(uri.host)
         end
 
         attr_reader :scheme, :authority, :path, :normalized_path, :is_ip
@@ -154,7 +152,7 @@ module Smithy
 
         private
 
-        def _authority(url, uri)
+        def extract_authority(url, uri)
           # don't include port if it's default and not parsed originally
           if uri.default_port == uri.port && !url.include?(":#{uri.port}")
             uri.host
@@ -163,7 +161,7 @@ module Smithy
           end
         end
 
-        def _is_ip(authority)
+        def ip?(authority)
           IPAddr.new(authority)
           true
         rescue IPAddr::InvalidAddressError

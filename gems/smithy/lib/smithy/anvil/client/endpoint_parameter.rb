@@ -47,7 +47,7 @@ module Smithy
         end
 
         def built_in_binding
-          @plan.built_in_bindings[@data['builtIn']]
+          @plan.endpoint_built_in_bindings[@data['builtIn']]
         end
 
         def client_context?

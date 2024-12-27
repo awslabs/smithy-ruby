@@ -23,13 +23,13 @@ module Smithy
 
     # Called when constructing a plan
     # @return [BuiltInBinding] list of built in bindings for use in endpoint rules.
-    def built_in_bindings
+    def endpoint_built_in_bindings
       []
     end
 
     # Called when constructing a plan
     # @return [FunctionBinding] list of function bindings for use in endpoint rules.
-    def function_bindings
+    def endpoint_function_bindings
       []
     end
   end

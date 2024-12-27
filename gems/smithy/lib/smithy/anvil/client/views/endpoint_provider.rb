@@ -228,7 +228,7 @@ module Smithy
           end
 
           def fn_name(function)
-            unless (binding = @plan.function_bindings[function])
+            unless (binding = @plan.endpoint_function_bindings[function])
               raise ArgumentError, "No endpoint function binding registered for #{function}"
             end
 

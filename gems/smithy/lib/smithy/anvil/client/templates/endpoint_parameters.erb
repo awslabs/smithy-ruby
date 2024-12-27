@@ -40,18 +40,19 @@ module <%= namespace %>
       }.compact)
       <%- else -%>
       operation_params =
-      case operation_name
-      <%- operation_params.each do |name, params| -%>
-      when :<%= name %>
-        {
-        <%- params.each do |param| -%>
-          <%= param.name %>: <%= param.value %>,
+        case operation_name
+        <%- operation_params.each do |name, params| -%>
+        when :<%= name %>
+          {
+          <%- params.each do |param| -%>
+            <%= param.name %>: <%= param.value %>,
+          <%- end -%>
+          }
         <%- end -%>
-        }
-      <%- end -%>
-      else
-        {}
-      end
+        else
+          {}
+        end
+
       new({
       <%- parameters.select(&:create_from_config?).each do |param| -%>
         <%= param.name %>: <%= param.value %>,

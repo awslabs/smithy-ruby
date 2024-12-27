@@ -34,18 +34,18 @@ module Smithy
     # @return [Array<Polish>] The polishes that apply to this plan.
     attr_reader :polishes
 
-    # @return [Hash[String, BuiltInBinding]] Array of all registered builtins
-    attr_reader :built_in_bindings
+    # @return [Hash<String, BuiltInBinding>] Array of all registered builtins
+    attr_reader :endpoint_built_in_bindings
 
-    # @return [Hash[String, FunctionBinding]] Array of all registered functions
-    attr_reader :function_bindings
+    # @return [Hash<String, FunctionBinding>] Array of all registered functions
+    attr_reader :endpoint_function_bindings
 
     private
 
     def initialize_endpoint_bindings
       # TODO: We need to validate somewhere that all of the builtin's used in a ruleset have valid bindings
-      @built_in_bindings = @welds.map(&:built_in_bindings).flatten.compact.to_h { |b| [b.id, b] }
-      @function_bindings = @welds.map(&:function_bindings).flatten.compact.to_h { |b| [b.id, b] }
+      @endpoint_built_in_bindings = @welds.map(&:endpoint_built_in_bindings).flatten.compact.to_h { |b| [b.id, b] }
+      @endpoint_function_bindings = @welds.map(&:endpoint_function_bindings).flatten.compact.to_h { |b| [b.id, b] }
     end
   end
 end
