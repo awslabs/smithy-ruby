@@ -24,7 +24,7 @@ module <%= namespace %>
     <%- when 'ListShape' -%>
     <%= "#{shape.name}.set_member(" %><%= params.join(', ') %>)
     <%- when 'MapShape' -%>
-    <%= "#{shape.name}.set_member_#{member.name}(" %><%= params.join(', ') %>)
+    <%= "#{shape.name}.set_#{member.name}(" %><%= params.join(', ') %>)
     <%- else -%>
     <%= "#{shape.name}.add_member(" %><%= params.join(', ') %>)
     <%- end -%>

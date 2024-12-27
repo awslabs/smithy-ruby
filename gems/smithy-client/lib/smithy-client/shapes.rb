@@ -107,24 +107,24 @@ module Smithy
       class MapShape < Shape
         def initialize(options = {})
           super
-          @member_key = nil
-          @member_value = nil
+          @key = nil
+          @value = nil
         end
 
         # @return [MemberShape, nil]
-        attr_accessor :member_key
+        attr_accessor :key
 
         # @return [MemberShape, nil]
-        attr_accessor :member_value
+        attr_accessor :value
 
         # @return [MemberShape]
-        def set_member_key(shape, traits: {})
-          @member_key = MemberShape.new('key', shape, traits: traits)
+        def set_key(shape, traits: {})
+          @key = MemberShape.new('key', shape, traits: traits)
         end
 
         # @return [MemberShape]
-        def set_member_value(shape, traits: {})
-          @member_value = MemberShape.new('value', shape, traits: traits)
+        def set_value(shape, traits: {})
+          @value = MemberShape.new('value', shape, traits: traits)
         end
       end
 
