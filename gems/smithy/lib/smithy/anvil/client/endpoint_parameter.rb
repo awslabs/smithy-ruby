@@ -47,7 +47,11 @@ module Smithy
         end
 
         def built_in_binding
-          @plan.endpoint_built_in_bindings[@data['builtIn']]
+          @built_in_binding ||=
+            @plan.welds
+                 .map(&:endpoint_built_in_bindings)
+                 .map { |b| b[@data['builtIn']] }
+                 .find { |b| !b.nil? }
         end
 
         def client_context?
@@ -132,7 +136,7 @@ module Smithy
         def built_in_param_value
           return unless @data['builtIn']
 
-          built_in_binding.render_build(@plan, nil)
+          built_in_binding[:render_build].call(@plan, nil)
         end
       end
     end

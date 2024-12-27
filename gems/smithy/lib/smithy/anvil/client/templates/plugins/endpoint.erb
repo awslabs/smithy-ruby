@@ -16,7 +16,7 @@ module <%= namespace %>
       end
 
       <%- parameters.select(&:built_in?).each do |param| -%>
-<%= param.built_in_binding.render_config(plan) -%>
+<%= param.built_in_binding[:render_config].call(plan) -%>
       <%- end -%>
 
       <%- parameters.select(&:client_context?).each do |param| -%>

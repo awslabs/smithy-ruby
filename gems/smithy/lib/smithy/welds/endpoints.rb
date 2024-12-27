@@ -11,67 +11,40 @@ module Smithy
       end
 
       def endpoint_built_in_bindings
-        [Vise::Endpoints::BuiltInBinding.new(
-          id: 'SDK::Endpoint',
-          render_config: proc do |_plan|
-            <<-ADD_OPTION
+        {
+          'SDK::Endpoint' => {
+            # Text indenting is used in generated view.
+            render_config: proc do |_plan|
+              <<-ADD_OPTION
       option(
         :endpoint,
         doc_type: String,
         docstring: "Custom Endpoint"
       )
-            ADD_OPTION
-          end,
-          render_build: proc do |_plan, _operation|
-            'config.endpoint'
-          end,
-          render_test_set: proc do |_plan, _operation, _node|
-          end
-        )]
+              ADD_OPTION
+            end,
+            render_build: proc do |_plan, _operation|
+              'config.endpoint'
+            end,
+            render_test_set: proc do |_plan, _operation, _node|
+            end
+          }
+        }
       end
 
-      # rubocop:disable Metrics/MethodLength
       def endpoint_function_bindings
-        [
-          Vise::Endpoints::FunctionBinding.new(
-            id: 'isValidHostLabel',
-            ruby_method: 'Smithy::Client::EndpointRules::valid_host_label?'
-          ),
-          Vise::Endpoints::FunctionBinding.new(
-            id: 'parseURL',
-            ruby_method: 'Smithy::Client::EndpointRules::parse_url'
-          ),
-          Vise::Endpoints::FunctionBinding.new(
-            id: 'substring',
-            ruby_method: 'Smithy::Client::EndpointRules::substring'
-          ),
-          Vise::Endpoints::FunctionBinding.new(
-            id: 'uriEncode',
-            ruby_method: 'Smithy::Client::EndpointRules::uri_encode'
-          ),
-          Vise::Endpoints::FunctionBinding.new(
-            id: 'isSet',
-            ruby_method: 'Smithy::Client::EndpointRules::set?'
-          ),
-          Vise::Endpoints::FunctionBinding.new(
-            id: 'not',
-            ruby_method: 'Smithy::Client::EndpointRules::not'
-          ),
-          Vise::Endpoints::FunctionBinding.new(
-            id: 'getAttr',
-            ruby_method: 'Smithy::Client::EndpointRules::attr'
-          ),
-          Vise::Endpoints::FunctionBinding.new(
-            id: 'stringEquals',
-            ruby_method: 'Smithy::Client::EndpointRules::string_equals?'
-          ),
-          Vise::Endpoints::FunctionBinding.new(
-            id: 'booleanEquals',
-            ruby_method: 'Smithy::Client::EndpointRules::boolean_equals?'
-          )
-        ]
+        {
+          'isValidHostLabel' => 'Smithy::Client::EndpointRules::valid_host_label?',
+          'parseURL' => 'Smithy::Client::EndpointRules::parse_url',
+          'substring' => 'Smithy::Client::EndpointRules::substring',
+          'uriEncode' => 'Smithy::Client::EndpointRules::uri_encode',
+          'isSet' => 'Smithy::Client::EndpointRules::set?',
+          'not' => 'Smithy::Client::EndpointRules::not',
+          'getAttr' => 'Smithy::Client::EndpointRules::attr',
+          'stringEquals' => 'Smithy::Client::EndpointRules::string_equals?',
+          'booleanEquals' => 'Smithy::Client::EndpointRules::boolean_equals?'
+        }
       end
-      # rubocop:enable Metrics/MethodLength
 
       private
 

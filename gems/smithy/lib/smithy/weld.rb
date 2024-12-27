@@ -22,15 +22,15 @@ module Smithy
     end
 
     # Called when constructing a plan
-    # @return [BuiltInBinding] list of built in bindings for use in endpoint rules.
+    # @return [Hash<String, Hash>] endpoint built in bindings for use in endpoint rules.
     def endpoint_built_in_bindings
-      []
+      {}
     end
 
     # Called when constructing a plan
-    # @return [FunctionBinding] list of function bindings for use in endpoint rules.
+    # @return [Hash<String, String>] endpoint function bindings for use in endpoint rules.
     def endpoint_function_bindings
-      []
+      {}
     end
   end
 end

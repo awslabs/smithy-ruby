@@ -15,8 +15,6 @@ module Smithy
       Polishes.load!(self)
       @welds = Welds.for(model)
       @polishes = Polishes.for(model)
-
-      initialize_endpoint_bindings
     end
 
     # @return [Hash] The API model as a JSON hash.
@@ -33,19 +31,5 @@ module Smithy
 
     # @return [Array<Polish>] The polishes that apply to this plan.
     attr_reader :polishes
-
-    # @return [Hash<String, BuiltInBinding>] Array of all registered builtins
-    attr_reader :endpoint_built_in_bindings
-
-    # @return [Hash<String, FunctionBinding>] Array of all registered functions
-    attr_reader :endpoint_function_bindings
-
-    private
-
-    def initialize_endpoint_bindings
-      # TODO: We need to validate somewhere that all of the builtin's used in a ruleset have valid bindings
-      @endpoint_built_in_bindings = @welds.map(&:endpoint_built_in_bindings).flatten.compact.to_h { |b| [b.id, b] }
-      @endpoint_function_bindings = @welds.map(&:endpoint_function_bindings).flatten.compact.to_h { |b| [b.id, b] }
-    end
   end
 end
