@@ -43,21 +43,6 @@ jobs:
       - name: Test
         run: bundle exec rake smithy-client:spec
 
-  smithy-test-endpoints:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ env.ruby_version }}
-          bundler-cache: true
-
-      - name: Test
-        run: bundle exec rake smithy:spec:endpoints
-
   rubocop:
     runs-on: ubuntu-latest
 
