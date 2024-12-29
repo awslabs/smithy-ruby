@@ -4,22 +4,31 @@ module Smithy
   module Vise
     describe OperationIndex do
       let(:fixture) do
-        JSON.load_file(File.expand_path('../../fixtures/vise/model.json', __dir__))
+        JSON.load_file(File.expand_path('../../fixtures/operation_index/model.json', __dir__))
       end
 
       subject { described_class.new(fixture) }
 
-      describe '#for' do
-        it 'returns a complete set of operations for the service' do
-          service =
+      describe '#shapes_for' do
+        it 'returns a complete set of shapes for the operation' do
+          operation =
             fixture['shapes']
-            .select { |_, shape| shape['type'] == 'service' }
+            .select { |id, _| id == 'smithy.ruby.tests#Operation' }
           expected =
             fixture['shapes']
-            .select { |_, shape| shape['type'] == 'operation' }
-            .reject { |id, _| id.include?('OrphanedOperation') }
-          actual = subject.for(service)
+            .reject { |_, shape| %w[operation service].include?(shape['type']) }
+            .reject { |id, _| id.include?('OrphanedError') || id.include?('OrphanedStructure') }
+          actual = subject.shapes_for(operation)
           expect(actual.keys).to match_array(expected.keys)
+        end
+
+        it 'is memoized' do
+          operation =
+            fixture['shapes']
+            .select { |id, _| id == 'smithy.ruby.tests#Operation' }
+          before = subject.shapes_for(operation)
+          fixture['shapes'].delete('smithy.ruby.tests#Operation')
+          expect(subject.shapes_for(operation)).to eq(before)
         end
       end
     end
