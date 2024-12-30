@@ -22,7 +22,7 @@ module <%= namespace %>
     <%- end -%>
     end
 
-    def self.create(config, operation_name=nil, params={})
+    def self.create(config, operation_name = nil, params = {})
       <%- if operation_params.empty? -%>
       new({
       <%- parameters.select(&:create_from_config?).each do |param| -%>
@@ -53,4 +53,3 @@ module <%= namespace %>
     end
   end
 end
-

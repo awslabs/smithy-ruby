@@ -19,7 +19,7 @@ module Smithy
       option(
         :endpoint,
         doc_type: String,
-        docstring: "Custom Endpoint"
+        docstring: 'Custom Endpoint'
       )
               ADD_OPTION
             end,
