@@ -9,8 +9,7 @@ module Smithy
           def initialize(plan)
             @plan = plan
             @model = plan.model
-            @service_shape = assemble_service_shape
-            @shapes, @operation_shapes = assemble_shapes
+            @service = Vise::ServiceIndex.new(@model).service
             super()
           end
 
@@ -18,64 +17,67 @@ module Smithy
             Tools::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
           end
 
+          def operation_shapes
+            Vise::OperationIndex
+              .new(@model)
+              .for(@service)
+              .each_with_object([]) do |(id, v), arr|
+              arr << build_operation_shape(id, v)
+            end
+          end
+
+          def service_shape
+            service_data = @service.values.first
+            ServiceShape.new(
+              id: @service.keys.first,
+              traits: filter_traits(service_data['traits']),
+              version: service_data['version']
+            )
+          end
+
+          def shapes_with_type
+            @shapes.reject { |s| !s.typed }
+          end
+
           def shapes_with_members
             @shapes.reject { |s| s.members.empty? }
           end
 
+          def shapes
+            @shapes =
+              @model['shapes'].each_with_object([]) do |(id, v), arr|
+                next if %w[service resource operation].include?(v['type'])
+
+                arr << build_shape(id, v)
+              end
+          end
+
           private
 
-          def assemble_service_shape
-            shape = Vise::ServiceIndex.new(@model).service
-            shape_data = shape.values.first
-
-            ServiceShape.new(
-              id: shape.keys.first,
-              traits: filter_traits(shape_data['traits']),
-              version: shape_data['version']
-            )
-          end
-
-          def assemble_shapes
-            serializable_shapes = []
-            operation_shapes = []
-
-            @model['shapes'].each do |id, shape|
-              case shape['type']
-              when 'service', 'resource' then next
-              when 'operation'
-                operation_shapes << assemble_operation_shape(id, shape)
-              else
-                serializable_shapes << assemble_shape(id, shape)
-              end
-            end
-
-            [serializable_shapes, operation_shapes]
-          end
-
-          def assemble_operation_shape(id, shape)
+          def build_operation_shape(id, shape)
             OperationShape.new(
               id: id,
-              name: assemble_shape_name(id).underscore,
-              input: assemble_shape_name(shape['input']['target']),
-              output: assemble_shape_name(shape['output']['target']),
-              errors: assemble_error_shapes(shape['errors']),
+              name: build_shape_name(id).underscore,
+              input: build_shape_name(shape['input']['target']),
+              output: build_shape_name(shape['output']['target']),
+              errors: build_error_shapes(shape['errors']),
               traits: filter_traits(shape['traits'])
             )
           end
 
-          def assemble_error_shapes(error_shapes)
-            return [] if error_shapes.nil?
+          def build_error_shapes(errors)
+            return [] if errors.nil?
 
-            error_shapes.each_with_object([]) do |err, a|
-              a << assemble_shape_name(err['target'])
+            errors.each_with_object([]) do |err, a|
+              a << build_shape_name(err['target'])
             end
           end
 
-          def assemble_shape(id, shape)
+          def build_shape(id, shape)
             SerializableShape.new(
               id: id,
               name: Vise::Shape.relative_id(id),
-              shape_type: shape_type(shape['type']),
+              type: shape_type(shape['type']),
               traits: filter_traits(shape['traits']),
               members: assemble_member_shapes(shape)
             )
@@ -106,12 +108,12 @@ module Smithy
           def assemble_member_shape(name, shape, traits)
             MemberShape.new(
               name: name.underscore,
-              shape: assemble_shape_name(shape),
+              shape: build_shape_name(shape),
               traits: filter_traits(traits)
             )
           end
 
-          def assemble_shape_name(id)
+          def build_shape_name(id)
             if PRELUDE_SHAPES_MAP.include?(id)
               PRELUDE_SHAPES_MAP[id]
             else
@@ -150,13 +152,13 @@ module Smithy
             def initialize(options = {})
               @id = options[:id]
               @name = options[:name]
-              @shape_type = options[:shape_type]
+              @type = options[:type]
               @traits = options[:traits]
               @members = options[:members]
-              @typed = TYPED_SHAPES.include?(@shape_type)
+              @typed = TYPED_SHAPES.include?(@type)
             end
 
-            attr_reader :name, :id, :shape_type, :typed, :traits, :members
+            attr_reader :name, :id, :type, :typed, :traits, :members
           end
 
           # Operation Shape that contains relevant data that affects (de)serialization

@@ -72,8 +72,8 @@ module Smithy
         attr_accessor :members
 
         # @return [MemberShape]
-        def add_member(name, shape, traits: {})
-          @members[name] = MemberShape.new(name, shape, traits: traits)
+        def add_member(name, shape, traits)
+          @members[name] = MemberShape.new(name, shape, traits)
         end
       end
 
@@ -98,8 +98,8 @@ module Smithy
         attr_accessor :member
 
         # @return [MemberShape]
-        def set_member(shape, traits: {})
-          @member = MemberShape.new('member', shape, traits: traits)
+        def set_member(shape, traits)
+          @member = MemberShape.new('member', shape, traits)
         end
       end
 
@@ -118,13 +118,13 @@ module Smithy
         attr_accessor :value
 
         # @return [MemberShape]
-        def set_key(shape, traits: {})
-          @key = MemberShape.new('key', shape, traits: traits)
+        def set_key(shape, traits)
+          @key = MemberShape.new('key', shape, traits)
         end
 
         # @return [MemberShape]
-        def set_value(shape, traits: {})
-          @value = MemberShape.new('value', shape, traits: traits)
+        def set_value(shape, traits)
+          @value = MemberShape.new('value', shape, traits)
         end
       end
 
@@ -136,18 +136,18 @@ module Smithy
         def initialize(options = {})
           super
           @members = {}
-          @type = options[:type]
+          @type = nil
         end
 
         # @return [Hash<String, MemberShape>]
         attr_accessor :members
 
-        # @return [Types]
+        # @return [Type]
         attr_accessor :type
 
         # @return [MemberShape]
-        def add_member(name, shape, traits: {})
-          @members[name] = MemberShape.new(name, shape, traits: traits)
+        def add_member(name, shape, traits)
+          @members[name] = MemberShape.new(name, shape, traits)
         end
       end
 
@@ -159,7 +159,7 @@ module Smithy
 
       # Represents a member shape
       class MemberShape
-        def initialize(name, shape, traits: {})
+        def initialize(name, shape, traits)
           @name = name
           @shape = shape
           @traits = traits
@@ -175,49 +175,49 @@ module Smithy
         attr_accessor :traits
       end
 
-      BigDecimal = BigDecimalShape.new(shape_id: 'smithy.api#BigDecimal')
-      BigInteger = IntegerShape.new(shape_id: 'smithy.api#BigInteger')
-      Blob = BlobShape.new(shape_id: 'smithy.api#Blob')
-      Boolean = BooleanShape.new(shape_id: 'smithy.api#Boolean')
-      Byte = IntegerShape.new(shape_id: 'smithy.api#Byte')
-      Document = DocumentShape.new(shape_id: 'smithy.api#Document')
-      Double = FloatShape.new(shape_id: 'smithy.api#Double')
-      Float = FloatShape.new(shape_id: 'smithy.api#Float')
-      Integer = IntegerShape.new(shape_id: 'smithy.api#Integer')
-      Long = IntegerShape.new(shape_id: 'smithy.api#Long')
+      BigDecimal = BigDecimalShape.new(id: 'smithy.api#BigDecimal')
+      BigInteger = IntegerShape.new(id: 'smithy.api#BigInteger')
+      Blob = BlobShape.new(id: 'smithy.api#Blob')
+      Boolean = BooleanShape.new(id: 'smithy.api#Boolean')
+      Byte = IntegerShape.new(id: 'smithy.api#Byte')
+      Document = DocumentShape.new(id: 'smithy.api#Document')
+      Double = FloatShape.new(id: 'smithy.api#Double')
+      Float = FloatShape.new(id: 'smithy.api#Float')
+      Integer = IntegerShape.new(id: 'smithy.api#Integer')
+      Long = IntegerShape.new(id: 'smithy.api#Long')
       PrimitiveBoolean = BooleanShape.new(
-        shape_id: 'smithy.api#PrimitiveBoolean',
+        id: 'smithy.api#PrimitiveBoolean',
         traits: { 'smithy.api#default' => false }
       )
       PrimitiveByte = IntegerShape.new(
-        shape_id: 'smithy.api#PrimitiveByte',
+        id: 'smithy.api#PrimitiveByte',
         traits: { 'smithy.api#default' => 0 }
       )
       PrimitiveDouble = FloatShape.new(
-        shape_id: 'smithy.api#PrimitiveDouble',
+        id: 'smithy.api#PrimitiveDouble',
         traits: { 'smithy.api#default' => 0 }
       )
       PrimitiveFloat = FloatShape.new(
-        shape_id: 'smithy.api#PrimitiveFloat',
+        id: 'smithy.api#PrimitiveFloat',
         traits: { 'smithy.api#default' => 0 }
       )
       PrimitiveInteger = IntegerShape.new(
-        shape_id: 'smithy.api#PrimitiveInteger',
+        id: 'smithy.api#PrimitiveInteger',
         traits: { 'smithy.api#default' => 0 }
       )
       PrimitiveShort = IntegerShape.new(
-        shape_id: 'smithy.api#PrimitiveShort',
+        id: 'smithy.api#PrimitiveShort',
         traits: { 'smithy.api#default' => 0 }
       )
       PrimitiveLong = IntegerShape.new(
-        shape_id: 'smithy.api#PrimitiveLong',
+        id: 'smithy.api#PrimitiveLong',
         traits: { 'smithy.api#default' => 0 }
       )
-      Short = IntegerShape.new(shape_id: 'smithy.api#Short')
-      String = StringShape.new(shape_id: 'smithy.api#String')
-      Timestamp = TimestampShape.new(shape_id: 'smithy.api#Timestamp')
+      Short = IntegerShape.new(id: 'smithy.api#Short')
+      String = StringShape.new(id: 'smithy.api#String')
+      Timestamp = TimestampShape.new(id: 'smithy.api#Timestamp')
       Unit = StructureShape.new(
-        shape_id: 'smithy.api#Unit',
+        id: 'smithy.api#Unit',
         traits: { 'smithy.api#unitType' => {} }
       )
     end

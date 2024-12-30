@@ -7,51 +7,42 @@ module <%= namespace %>
     include Smithy::Client::Shapes
 
 <%# Shapes definition -%>
-  <%- @shapes.each do |shape| -%>
-    <%- params = ["id: \"#{shape.id}\""] -%>
-    <%- params << "type: Types::#{shape.name}" if shape.typed -%>
-    <%- params << "traits: #{shape.traits}" unless shape.traits.empty? -%>
-    <%= "#{shape.name} = #{shape.shape_type}.new(" %><%= params.join(', ') %>)
+  <%- shapes.each do |shape| -%>
+    <%= shape.name %> = <%= shape.type %>.new(id: "<%= shape.id %>", traits: <%= shape.traits %>)
   <%- end -%>
-<%# Shape members definition %>
+
   <%- shapes_with_members.each do |shape| -%>
     <%- shape.members.each do |member| -%>
-    <%- params = [] -%>
-    <%- params << ["\"#{member.name}\""] unless %w[ListShape MapShape].include? shape.shape_type -%>
-    <%- params << [member.shape] -%>
-    <%- params << "traits: #{member.traits}" unless member.traits.empty? -%>
-    <%- case shape.shape_type -%>
+    <%- case shape.type -%>
     <%- when 'ListShape' -%>
-    <%= "#{shape.name}.set_member(" %><%= params.join(', ') %>)
+    <%= shape.name %>.set_member(<%= member.shape %>, <%= member.traits %>)
     <%- when 'MapShape' -%>
-    <%= "#{shape.name}.set_#{member.name}(" %><%= params.join(', ') %>)
+    <%= shape.name %>.set_<%= member.name %>(<%= member.shape %>, <%= member.traits %>)
     <%- else -%>
-    <%= "#{shape.name}.add_member(" %><%= params.join(', ') %>)
+    <%= shape.name %>.add_member("<%= member.name %>", <%= member.shape %>, <%= member.traits %>)
     <%- end -%>
     <%- end -%>
+    <%- if shape.typed -%>
+    <%= shape.name %>.type = Types::<%= shape.name %>
+    <%- end %>
   <%- end -%>
-<%# Schema definition %>
     SCHEMA = Smithy::Client::Schema.new do |schema|
       schema.service = ServiceShape.new(
-        id: "<%= @service_shape.id %>",
-        version: "<%= @service_shape.version %>",
-        traits: <%= @service_shape.traits %>
+        id: "<%= service_shape.id %>",
+        version: "<%= service_shape.version %>",
+        traits: <%= service_shape.traits %>
       )
-    <%- @operation_shapes.each do |shape| %>
+    <%- operation_shapes.each do |shape| -%>
       schema.add_operation(:<%= shape.name %>, OperationShape.new do |operation|
         operation.id = "<%= shape.id %>"
         operation.input = <%= shape.input %>
         operation.output = <%= shape.output %>
-       <%- unless shape.traits.empty? -%>
-        operation.traits = <%= shape.traits -%>
-       <% end -%>
-       <%- unless shape.errors.empty? -%>
-       <% shape.errors.each do |err| %>
-        operation.errors << <%= err -%>
-       <% end -%>
-      <% end %>
+        operation.traits = <%= shape.traits %>
+       <%- shape.errors.each do |err| -%>
+        operation.errors << <%= err %>
+       <%- end -%>
       end)
-    <% end %>
+    <%- end -%>
     end
   end
 end
