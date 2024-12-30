@@ -2,24 +2,46 @@
 
 module Smithy
   module Vise
-    # Finds a service shape in a set of shapes.
+    # Finds sets of shapes for a service.
     class ServiceIndex
       # @param [Hash] model Model
       def initialize(model)
-        @service = find_service(model['shapes'])
+        @shapes = model['shapes']
+        @service_parser = ServiceParser.new(model)
+        @operation_parser = OperationParser.new(model)
+        @structure_parser = StructureParser.new(model)
       end
 
-      # @return [Hash<String, Hash>] The service shape for the shapes.
-      attr_reader :service
+      # @param [Hash] service Service shape
+      # @return [Hash<String, Hash>] The operations for the service.
+      def operations_for(service)
+        @operations_for ||= @service_parser.operations_for(service)
+      end
+
+      # @param [Hash] service Service shape
+      # @return [Hash<String, Hash>] The shapes for the service.
+      def shapes_for(service)
+        @shapes_for ||= begin
+          shapes = {}
+          parse_errors(service, shapes)
+          operations_for(service).each do |id, operation|
+            shapes.merge!(@operation_parser.shapes_for({ id => operation }))
+          end
+          shapes
+        end
+      end
 
       private
 
-      def find_service(shapes)
-        service = shapes.select { |_, shape| shape['type'] == 'service' }
-        raise 'Multiple service shapes found' if service.size > 1
-        raise 'No service shape found' if service.empty?
+      def parse_errors(service, shapes)
+        _, service = service.first
 
-        service
+        service['errors']&.each do |error_ref|
+          target = error_ref['target']
+          shape = @shapes[target]
+          shapes[target] = shape
+          shapes.merge!(@structure_parser.shapes_for({ target => shape }))
+        end
       end
     end
   end

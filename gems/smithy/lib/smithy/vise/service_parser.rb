@@ -2,18 +2,15 @@
 
 module Smithy
   module Vise
-    # Finds all operation shapes in a service.
-    class OperationIndex
+    # @api private
+    class ServiceParser
       RESOURCE_LIFECYCLE_KEYS = %w[create put read update delete list].freeze
 
-      # @param [Hash] model Model
       def initialize(model)
         @shapes = model['shapes']
       end
 
-      # @param [Hash] service Service shape
-      # @return [Hash<String, Hash>] The operations for the service.
-      def for(service)
+      def operations_for(service)
         operations = {}
         _id, service = service.first
         parse_service_operations(service, operations)

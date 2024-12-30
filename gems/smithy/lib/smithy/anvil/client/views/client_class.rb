@@ -32,8 +32,10 @@ module Smithy
           end
 
           def operations
-            service = Vise::ServiceIndex.new(@model).service
-            Vise::OperationIndex.new(@model).for(service).map { |id, shape| Operation.new(id, shape) }
+            Vise::ServiceIndex
+              .new(@model)
+              .operations_for(@plan.service)
+              .map { |id, shape| Operation.new(id, shape) }
           end
 
           # @api private
