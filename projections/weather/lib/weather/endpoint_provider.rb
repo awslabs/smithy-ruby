@@ -3,6 +3,7 @@
 # This is generated code!
 
 module Weather
+  # Resolve endpoints from EndpointParameters.
   class EndpointProvider
     def resolve_endpoint(parameters)
       endpoint = parameters.endpoint

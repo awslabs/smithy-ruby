@@ -4,6 +4,7 @@
 
 module Weather
   module Plugins
+    # Endpoint plugin - resolves the endpoint and applies it to the request.
     class Endpoint < Smithy::Client::Plugin
       option(
         :endpoint_provider,
