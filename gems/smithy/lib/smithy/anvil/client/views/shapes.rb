@@ -36,13 +36,15 @@ module Smithy
           end
 
           def shapes_with_members
-            @shapes.reject { |s| s.members.empty? }
+            complex_shapes =
+              %w[EnumShape IntEnumShape ListShape MapShape StructureShape UnionShape]
+            @shapes.select { |s| complex_shapes.include?(s.type) }
           end
 
           def shapes
             @shapes =
               @model['shapes'].each_with_object([]) do |(k, v), arr|
-                next if %w[service resource operation].include?(v['type'])
+                next if %w[operation resource service].include?(v['type'])
 
                 arr << build_shape(k, v)
               end
@@ -82,7 +84,7 @@ module Smithy
           def build_member_shapes(shape)
             members = []
             case shape['type']
-            when 'structure', 'union', 'enum', 'intEnum'
+            when 'enum', 'intEnum', 'structure', 'union'
               members = build_members(shape)
             when 'list'
               members << build_list_member(shape)
@@ -215,7 +217,7 @@ module Smithy
             'string' => 'StringShape',
             'structure' => 'StructureShape',
             'timestamp' => 'TimestampShape',
-            'union' => 'StructureShape'
+            'union' => 'UnionShape'
           }.freeze
 
           PRELUDE_SHAPES_MAP = {
