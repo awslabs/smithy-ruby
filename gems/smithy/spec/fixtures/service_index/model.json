@@ -31,45 +31,6 @@
                 "smithy.api#idempotent": {}
             }
         },
-        "smithy.ruby.tests#Enum": {
-            "type": "enum",
-            "members": {
-                "VALUE": {
-                    "target": "smithy.api#Unit",
-                    "traits": {
-                        "smithy.api#enumValue": "VALUE"
-                    }
-                }
-            }
-        },
-        "smithy.ruby.tests#Error": {
-            "type": "structure",
-            "members": {
-                "member": {
-                    "target": "smithy.api#String"
-                }
-            },
-            "traits": {
-                "smithy.api#error": "client"
-            }
-        },
-        "smithy.ruby.tests#IntEnum": {
-            "type": "intEnum",
-            "members": {
-                "VALUE": {
-                    "target": "smithy.api#Unit",
-                    "traits": {
-                        "smithy.api#enumValue": 0
-                    }
-                }
-            }
-        },
-        "smithy.ruby.tests#List": {
-            "type": "list",
-            "member": {
-                "target": "smithy.ruby.tests#Structure"
-            }
-        },
         "smithy.ruby.tests#ListResources": {
             "type": "operation",
             "input": {
@@ -80,15 +41,6 @@
             },
             "traits": {
                 "smithy.api#readonly": {}
-            }
-        },
-        "smithy.ruby.tests#Map": {
-            "type": "map",
-            "key": {
-                "target": "smithy.api#String"
-            },
-            "value": {
-                "target": "smithy.ruby.tests#Structure"
             }
         },
         "smithy.ruby.tests#NestedResource": {
@@ -120,7 +72,43 @@
             },
             "output": {
                 "target": "smithy.ruby.tests#Structure"
+            },
+            "errors": [
+                {
+                    "target": "smithy.ruby.tests#OperationError"
+                }
+            ]
+        },
+        "smithy.ruby.tests#OperationError": {
+            "type": "structure",
+            "members": {
+                "member": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#error": "client"
             }
+        },
+        "smithy.ruby.tests#OrphanedError": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#error": "client"
+            }
+        },
+        "smithy.ruby.tests#OrphanedOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.api#Unit"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            }
+        },
+        "smithy.ruby.tests#OrphanedStructure": {
+            "type": "structure",
+            "members": {}
         },
         "smithy.ruby.tests#PutResource": {
             "type": "operation",
@@ -201,6 +189,36 @@
                 "target": "smithy.api#Unit"
             }
         },
+        "smithy.ruby.tests#ServiceError": {
+            "type": "structure",
+            "members": {
+                "member": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#error": "client"
+            }
+        },
+        "smithy.ruby.tests#ServiceIndex": {
+            "type": "service",
+            "version": "1.0.0",
+            "operations": [
+                {
+                    "target": "smithy.ruby.tests#Operation"
+                }
+            ],
+            "resources": [
+                {
+                    "target": "smithy.ruby.tests#Resource"
+                }
+            ],
+            "errors": [
+                {
+                    "target": "smithy.ruby.tests#ServiceError"
+                }
+            ]
+        },
         "smithy.ruby.tests#Structure": {
             "type": "structure",
             "members": {
@@ -218,14 +236,6 @@
                 "smithy.api#documentation": "This is a structure shape."
             }
         },
-        "smithy.ruby.tests#Union": {
-            "type": "union",
-            "members": {
-                "member": {
-                    "target": "smithy.ruby.tests#Structure"
-                }
-            }
-        },
         "smithy.ruby.tests#UpdateResource": {
             "type": "operation",
             "input": {
@@ -234,25 +244,6 @@
             "output": {
                 "target": "smithy.api#Unit"
             }
-        },
-        "smithy.ruby.tests#Vise": {
-            "type": "service",
-            "version": "1.0.0",
-            "operations": [
-                {
-                    "target": "smithy.ruby.tests#Operation"
-                }
-            ],
-            "resources": [
-                {
-                    "target": "smithy.ruby.tests#Resource"
-                }
-            ],
-            "errors": [
-                {
-                    "target": "smithy.ruby.tests#Error"
-                }
-            ]
         }
     }
 }

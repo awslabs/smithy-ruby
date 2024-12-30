@@ -17,7 +17,9 @@ module Smithy
           end
 
           def types
-            @model['shapes']
+            Vise::ServiceIndex
+              .new(@model)
+              .shapes_for(@plan.service)
               .select { |_key, shape| shape['type'] == 'structure' }
               .map { |id, structure| Type.new(id, structure) }
           end

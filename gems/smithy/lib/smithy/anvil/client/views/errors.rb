@@ -17,7 +17,9 @@ module Smithy
           end
 
           def errors
-            @model['shapes']
+            Vise::ServiceIndex
+              .new(@model)
+              .shapes_for(@plan.service)
               .select { |_key, shape| shape['traits']&.any? { |id, _trait| id == 'smithy.api#error' } }
               .map { |id, structure| Error.new(id, structure) }
           end
