@@ -9,9 +9,9 @@ module Smithy
           def initialize(plan)
             @plan = plan
             @model = plan.model
-            service = Vise::ServiceIndex.new(@model).service
+            service = @plan.service
             @endpoint_rules = service.values.first['traits']['smithy.rules#endpointRuleSet']
-            @operations = Vise::OperationIndex.new(@model).for(service)
+            @operations = Vise::ServiceIndex.new(@model).operations_for(@plan.service)
             @parameters = @endpoint_rules['parameters']
                           .map { |id, data| EndpointParameter.new(id, data, @plan) }
             @operation_params = build_operation_params

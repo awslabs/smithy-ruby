@@ -8,6 +8,7 @@ module Weather
     # self.api = API
 
     add_plugin(Smithy::Client::Plugins::NetHTTP)
+    add_plugin(Plugins::Endpoint)
 
     # TODO!
     def initialize(*args)

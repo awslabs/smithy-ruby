@@ -10,7 +10,7 @@ module Smithy
             def initialize(plan)
               @plan = plan
               @model = plan.model
-              service = Vise::ServiceIndex.new(@model).service.values.first
+              service = @plan.service.values.first
               initialize_rules(service)
               initialize_tests(service)
 
