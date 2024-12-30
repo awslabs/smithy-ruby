@@ -139,7 +139,7 @@ module Smithy
             SHAPE_CLASSES_MAP[type]
           end
 
-          # Shape that contains relevant data that affects (de)serialization
+          # Service shape represents a slim Smithy service shape
           class ServiceShape
             def initialize(options = {})
               @id = options[:id]
