@@ -5,7 +5,6 @@ require_relative 'vise/operation_parser'
 require_relative 'vise/service_index'
 require_relative 'vise/service_parser'
 require_relative 'vise/structure_parser'
-require_relative 'vise/operation_index'
 
 module Smithy
   # A module that parses the Smithy JSON model.
