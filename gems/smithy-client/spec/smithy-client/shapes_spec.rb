@@ -138,32 +138,32 @@ module Smithy
         end
 
         describe '#initialize' do
-          context 'member key attribute' do
+          context 'key attribute' do
             it 'defaults to nil' do
-              expect(subject.member_key).to be(nil)
+              expect(subject.key).to be(nil)
             end
           end
 
           context 'member value attribute' do
             it 'defaults to nil' do
-              expect(subject.member_value).to be(nil)
+              expect(subject.value).to be(nil)
             end
           end
         end
 
-        describe '#set_member_key' do
-          it 'sets a member key' do
-            subject.set_member_key(StringShape.new)
-            expect(subject.member_key.name).to eq('key')
-            expect(subject.member_key).to be_kind_of(MemberShape)
+        describe '#set_key' do
+          it 'sets a key' do
+            subject.set_key(StringShape.new)
+            expect(subject.key.name).to eq('key')
+            expect(subject.key).to be_kind_of(MemberShape)
           end
         end
 
-        describe '#set_member_value' do
-          it 'sets a member value' do
-            subject.set_member_value(StringShape.new)
-            expect(subject.member_value.name).to eq('value')
-            expect(subject.member_value).to be_kind_of(MemberShape)
+        describe '#set_value' do
+          it 'sets a value' do
+            subject.set_value(StringShape.new)
+            expect(subject.value.name).to eq('value')
+            expect(subject.value).to be_kind_of(MemberShape)
           end
         end
       end

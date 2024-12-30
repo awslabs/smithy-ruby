@@ -189,7 +189,7 @@ module Smithy
           ].freeze
 
           SHAPE_CLASSES_MAP = {
-            'bigDecimal' => 'BigDecimalShape',
+            'bigDecimal' => 'BigDecimal',
             'bigInteger' => 'IntegerShape',
             'blob' => 'BlobShape',
             'boolean' => 'BooleanShape',
@@ -212,27 +212,27 @@ module Smithy
           }.freeze
 
           PRELUDE_SHAPES_MAP = {
-            'smithy.api#BigInteger' => 'PreludeBigInteger',
-            'smithy.api#BigDecimal' => 'PreludeBigDecimal',
-            'smithy.api#Blob' => 'PreludeBlob',
-            'smithy.api#Boolean' => 'PreludeBoolean',
-            'smithy.api#Byte' => 'PreludeByte',
-            'smithy.api#Document' => 'PreludeDocument',
-            'smithy.api#Double' => 'PreludeDouble',
-            'smithy.api#Float' => 'PreludeFloat',
-            'smithy.api#Integer' => 'PreludeInteger',
-            'smithy.api#Long' => 'PreludeLong',
-            'smithy.api#PrimitiveBoolean' => 'PreludePrimitiveBoolean',
-            'smithy.api#PrimitiveByte' => 'PreludePrimitiveByte',
-            'smithy.api#PrimitiveDouble' => 'PreludePrimitiveDouble',
-            'smithy.api#PrimitiveFloat' => 'PreludePrimitiveFloat',
-            'smithy.api#PrimitiveInteger' => 'PreludePrimitiveInteger',
-            'smithy.api#PrimitiveLong' => 'PreludePrimitiveLong',
-            'smithy.api#PrimitiveShort' => 'PreludePrimitiveShort',
-            'smithy.api#Short' => 'PreludeShort',
-            'smithy.api#String' => 'PreludeString',
-            'smithy.api#Timestamp' => 'PreludeTimestamp',
-            'smithy.api#Unit' => 'PreludeUnit'
+            'smithy.api#BigInteger' => 'BigInteger',
+            'smithy.api#BigDecimal' => 'BigDecimal',
+            'smithy.api#Blob' => 'Blob',
+            'smithy.api#Boolean' => 'Boolean',
+            'smithy.api#Byte' => 'Byte',
+            'smithy.api#Document' => 'Document',
+            'smithy.api#Double' => 'Double',
+            'smithy.api#Float' => 'Float',
+            'smithy.api#Integer' => 'Integer',
+            'smithy.api#Long' => 'Long',
+            'smithy.api#PrimitiveBoolean' => 'PrimitiveBoolean',
+            'smithy.api#PrimitiveByte' => 'PrimitiveByte',
+            'smithy.api#PrimitiveDouble' => 'PrimitiveDouble',
+            'smithy.api#PrimitiveFloat' => 'PrimitiveFloat',
+            'smithy.api#PrimitiveInteger' => 'PrimitiveInteger',
+            'smithy.api#PrimitiveLong' => 'PrimitiveLong',
+            'smithy.api#PrimitiveShort' => 'PrimitiveShort',
+            'smithy.api#Short' => 'Short',
+            'smithy.api#String' => 'String',
+            'smithy.api#Timestamp' => 'Timestamp',
+            'smithy.api#Unit' => 'Unit'
           }.freeze
         end
       end

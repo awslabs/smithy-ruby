@@ -175,48 +175,48 @@ module Smithy
         attr_accessor :traits
       end
 
-      PreludeBigDecimal = IntegerShape.new(shape_id: 'smithy.api#BigDecimal')
-      PreludeBigInteger = IntegerShape.new(shape_id: 'smithy.api#BigInteger')
-      PreludeBlob = BlobShape.new(shape_id: 'smithy.api#Blob')
-      PreludeBoolean = BooleanShape.new(shape_id: 'smithy.api#Boolean')
-      PreludeByte = IntegerShape.new(shape_id: 'smithy.api#Byte')
-      PreludeDocument = DocumentShape.new(shape_id: 'smithy.api#Document')
-      PreludeDouble = FloatShape.new(shape_id: 'smithy.api#Double')
-      PreludeFloat = FloatShape.new(shape_id: 'smithy.api#Float')
-      PreludeInteger = IntegerShape.new(shape_id: 'smithy.api#Integer')
-      PreludeLong = IntegerShape.new(shape_id: 'smithy.api#Long')
-      PreludePrimitiveBoolean = BooleanShape.new(
+      BigDecimal = BigDecimalShape.new(shape_id: 'smithy.api#BigDecimal')
+      BigInteger = IntegerShape.new(shape_id: 'smithy.api#BigInteger')
+      Blob = BlobShape.new(shape_id: 'smithy.api#Blob')
+      Boolean = BooleanShape.new(shape_id: 'smithy.api#Boolean')
+      Byte = IntegerShape.new(shape_id: 'smithy.api#Byte')
+      Document = DocumentShape.new(shape_id: 'smithy.api#Document')
+      Double = FloatShape.new(shape_id: 'smithy.api#Double')
+      Float = FloatShape.new(shape_id: 'smithy.api#Float')
+      Integer = IntegerShape.new(shape_id: 'smithy.api#Integer')
+      Long = IntegerShape.new(shape_id: 'smithy.api#Long')
+      PrimitiveBoolean = BooleanShape.new(
         shape_id: 'smithy.api#PrimitiveBoolean',
         traits: { 'smithy.api#default' => false }
       )
-      PreludePrimitiveByte = IntegerShape.new(
+      PrimitiveByte = IntegerShape.new(
         shape_id: 'smithy.api#PrimitiveByte',
         traits: { 'smithy.api#default' => 0 }
       )
-      PreludePrimitiveDouble = FloatShape.new(
+      PrimitiveDouble = FloatShape.new(
         shape_id: 'smithy.api#PrimitiveDouble',
         traits: { 'smithy.api#default' => 0 }
       )
-      PreludePrimitiveFloat = FloatShape.new(
+      PrimitiveFloat = FloatShape.new(
         shape_id: 'smithy.api#PrimitiveFloat',
         traits: { 'smithy.api#default' => 0 }
       )
-      PreludePrimitiveInteger = IntegerShape.new(
+      PrimitiveInteger = IntegerShape.new(
         shape_id: 'smithy.api#PrimitiveInteger',
         traits: { 'smithy.api#default' => 0 }
       )
-      PreludePrimitiveShort = IntegerShape.new(
+      PrimitiveShort = IntegerShape.new(
         shape_id: 'smithy.api#PrimitiveShort',
         traits: { 'smithy.api#default' => 0 }
       )
-      PreludePrimitiveLong = IntegerShape.new(
+      PrimitiveLong = IntegerShape.new(
         shape_id: 'smithy.api#PrimitiveLong',
         traits: { 'smithy.api#default' => 0 }
       )
-      PreludeShort = IntegerShape.new(shape_id: 'smithy.api#Short')
-      PreludeString = StringShape.new(shape_id: 'smithy.api#String')
-      PreludeTimestamp = TimestampShape.new(shape_id: 'smithy.api#Timestamp')
-      PreludeUnit = StructureShape.new(
+      Short = IntegerShape.new(shape_id: 'smithy.api#Short')
+      String = StringShape.new(shape_id: 'smithy.api#String')
+      Timestamp = TimestampShape.new(shape_id: 'smithy.api#Timestamp')
+      Unit = StructureShape.new(
         shape_id: 'smithy.api#Unit',
         traits: { 'smithy.api#unitType' => {} }
       )
