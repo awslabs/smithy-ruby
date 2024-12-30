@@ -5,111 +5,82 @@ namespace smithy.ruby.tests
 @paginated(inputToken: "nextToken", outputToken: "nextToken", pageSize: "pageSize")
 service ShapeService {
     version: "2018-10-31"
-    resources: [
-        SomeResource
-    ]
     operations: [
-        SomeOperation
+        Operation
     ]
 }
 
-operation SomeOperation {
-    input: SomeOperationInput
-    output: SomeOperationOutput
-    errors: [SomeError]
+@http(method: "POST", uri: "/operation")
+operation Operation {
+    input: OperationInputOutput
+    output: OperationInputOutput
+    errors: [ClientError, ServerError]
 }
 
-@input
 @documentation("This is a documentation")
-structure SomeOperationInput {
+@xmlName("Structure")
+structure OperationInputOutput {
+    // simple members
     bigDecimal: BigDecimal
     bigInteger: BigInteger
     blob: Blob
     boolean: Boolean
     byte: Byte
+    document: Document
     double: Double
-    enum: SomeEnum
+    enum: Enum
     float: Float
     integer: Integer
-    intEnum: SomeIntEnum
+    intEnum: IntEnum
     long: Long
     short: Short
-
-    @required
     string: String
-
     timestamp: Timestamp
+
+    // member with trait
+    @required
+    id: String
+
+    // complex members
+    structure: OperationInputOutput
+    list: List
+    map: Map
+    union: Union
 }
 
-@output
-structure SomeOperationOutput {
-    list: SomeList
-    map: SomeMap
-    union: SomeUnion
-}
-
-enum SomeEnum {
-    DOG = "dog"
+enum Enum {
     CAT = "cat"
+    DOG = "dog"
 }
 
 @error("client")
-structure SomeError {
+structure ClientError {
     @required
     message: String
-
 }
 
-intEnum SomeIntEnum {
+@error("server")
+@retryable(throttling: true)
+structure ServerError {}
+
+intEnum IntEnum {
     FOO = 1
     BAR = 2
 }
 
-list SomeList {
+list List {
     member: String
 }
 
-map SomeMap {
+map Map {
     key: String
     value: Integer
 }
 
-union SomeUnion {
-    thing: String
-}
-
-resource SomeResource {
-    identifiers: {
-        someId: SomeId
-    }
-
-    properties: { someProperties: SomeProperties }
-    read: ReadOperation
-}
-
 @pattern("^[A-Za-z0-9 ]+$")
-string SomeId
+string String
 
-structure SomeProperties {
-    @required
-    propertyNumber: Integer
+union Union {
+    list: List
 }
 
-@readonly
-operation ReadOperation {
-    input := for SomeResource {
-        @required
-        $someId
-    }
-
-    output := for SomeResource {
-        @required
-        @notProperty
-        name: String
-
-        @required
-        $someProperties
-    }
-
-    errors: [SomeError]
-}
