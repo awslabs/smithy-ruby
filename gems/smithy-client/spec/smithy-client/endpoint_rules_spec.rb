@@ -64,46 +64,46 @@ module Smithy
       describe '.parse_url' do
         it 'parses a valid url' do
           expect(EndpointRules.parse_url('https://example.com'))
-            .to eq({
-                     'scheme' => 'https',
-                     'authority' => 'example.com',
-                     'path' => '',
-                     'normalizedPath' => '/',
-                     'isIp' => false
-                   })
+            .to eq(
+              'scheme' => 'https',
+              'authority' => 'example.com',
+              'path' => '',
+              'normalizedPath' => '/',
+              'isIp' => false
+            )
         end
 
         it 'parses a valid url with port and path' do
           expect(EndpointRules.parse_url('https://example.com:80/foo/bar'))
-            .to eq({
-                     'scheme' => 'https',
-                     'authority' => 'example.com:80',
-                     'path' => '/foo/bar',
-                     'normalizedPath' => '/foo/bar/',
-                     'isIp' => false
-                   })
+            .to eq(
+              'scheme' => 'https',
+              'authority' => 'example.com:80',
+              'path' => '/foo/bar',
+              'normalizedPath' => '/foo/bar/',
+              'isIp' => false
+            )
         end
 
         it 'parses a valid ip4 address' do
           expect(EndpointRules.parse_url('https://127.0.0.1'))
-            .to eq({
-                     'scheme' => 'https',
-                     'authority' => '127.0.0.1',
-                     'path' => '',
-                     'normalizedPath' => '/',
-                     'isIp' => true
-                   })
+            .to eq(
+              'scheme' => 'https',
+              'authority' => '127.0.0.1',
+              'path' => '',
+              'normalizedPath' => '/',
+              'isIp' => true
+            )
         end
 
         it 'parses a valid ip6 address' do
           expect(EndpointRules.parse_url('https://[fe80::1]'))
-            .to eq({
-                     'scheme' => 'https',
-                     'authority' => '[fe80::1]',
-                     'path' => '',
-                     'normalizedPath' => '/',
-                     'isIp' => true
-                   })
+            .to eq(
+              'scheme' => 'https',
+              'authority' => '[fe80::1]',
+              'path' => '',
+              'normalizedPath' => '/',
+              'isIp' => true
+            )
         end
 
         it 'returns nil for and invalid url' do

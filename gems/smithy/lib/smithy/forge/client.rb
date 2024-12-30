@@ -38,7 +38,7 @@ module Smithy
           e.yield "lib/#{@gem_name}/plugins/endpoint.rb", render_endpoint_plugin
 
           e.yield 'spec/spec_helper.rb', render_spec_helper
-          e.yield 'spec/endpoint_provider_spec.rb', render_endpoint_provider_spec
+          e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", render_endpoint_provider_spec
         end
       end
       # rubocop:enable Metrics/AbcSize

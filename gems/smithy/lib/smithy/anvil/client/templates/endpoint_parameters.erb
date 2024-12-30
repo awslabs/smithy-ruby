@@ -13,15 +13,6 @@ module <%= namespace %>
   ) do
     include Smithy::Client::Structure
 
-    # @api private
-    class << self
-      PARAM_MAP = {
-      <%- parameters.each do |param| -%>
-        "<%= param.id %>" => :<%= param.name %>,
-      <%- end -%>
-      }.freeze
-    end
-
     def initialize(options = {})
     <%- parameters.each do |param| -%>
       self[:<%= param.name %>] = options.fetch(:<%= param.name %>, <%= param.default_value %>)

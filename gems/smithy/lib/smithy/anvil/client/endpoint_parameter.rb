@@ -111,7 +111,7 @@ module Smithy
         end
 
         def context_param_member(members)
-          members.detect do |(member_name, member_def)|
+          members.find do |(member_name, member_def)|
             context_param = member_def.fetch('traits', {}).fetch('smithy.rules#contextParam', {})
             break "params[:#{member_name.underscore}]" if context_param.fetch('name', nil) == @id
           end
