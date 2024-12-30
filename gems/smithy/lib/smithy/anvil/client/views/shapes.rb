@@ -21,8 +21,8 @@ module Smithy
             Vise::OperationIndex
               .new(@model)
               .for(@service)
-              .each_with_object([]) do |(id, v), arr|
-              arr << build_operation_shape(id, v)
+              .each_with_object([]) do |(k, v), arr|
+              arr << build_operation_shape(k, v)
             end
           end
 
@@ -35,20 +35,16 @@ module Smithy
             )
           end
 
-          def shapes_with_type
-            @shapes.reject { |s| !s.typed }
-          end
-
           def shapes_with_members
             @shapes.reject { |s| s.members.empty? }
           end
 
           def shapes
             @shapes =
-              @model['shapes'].each_with_object([]) do |(id, v), arr|
+              @model['shapes'].each_with_object([]) do |(k, v), arr|
                 next if %w[service resource operation].include?(v['type'])
 
-                arr << build_shape(id, v)
+                arr << build_shape(k, v)
               end
           end
 
@@ -74,38 +70,47 @@ module Smithy
           end
 
           def build_shape(id, shape)
-            SerializableShape.new(
+            Shape.new(
               id: id,
               name: Vise::Shape.relative_id(id),
               type: shape_type(shape['type']),
               traits: filter_traits(shape['traits']),
-              members: assemble_member_shapes(shape)
+              members: build_member_shapes(shape)
             )
           end
 
-          def assemble_member_shapes(shape)
+          def build_member_shapes(shape)
             members = []
             case shape['type']
             when 'structure', 'union', 'enum', 'intEnum'
-              shape['members'].each do |name, shape|
-                members <<
-                  assemble_member_shape(name, shape['target'], shape['traits'])
-              end
+              members = build_members(shape)
             when 'list'
-              m_shape = shape['member']
-              members <<
-                assemble_member_shape('member', m_shape['target'], m_shape['traits'])
+              members << build_list_member(shape)
             when 'map'
-              %w[key value].each do |m_name|
-                m_shape = shape[m_name]
-                members <<
-                  assemble_member_shape(m_name, m_shape['target'], m_shape['traits'])
-              end
+              members = build_map_members(shape)
             end
             members
           end
 
-          def assemble_member_shape(name, shape, traits)
+          def build_members(shape)
+            shape['members'].each_with_object([]) do |(k, v), arr|
+              arr << build_member_shape(k, v['target'], v['traits'])
+            end
+          end
+
+          def build_list_member(shape)
+            m_shape = shape['member']
+            build_member_shape('member', m_shape['target'], m_shape['traits'])
+          end
+
+          def build_map_members(shape)
+            %w[key value].map do |m_name|
+              m_shape = shape[m_name]
+              build_member_shape(m_name, m_shape['target'], m_shape['traits'])
+            end
+          end
+
+          def build_member_shape(name, shape, traits)
             MemberShape.new(
               name: name.underscore,
               shape: build_shape_name(shape),
@@ -145,8 +150,8 @@ module Smithy
             attr_reader :id, :traits, :version
           end
 
-          # Shape that contains relevant data that affects (de)serialization
-          class SerializableShape
+          # Shape represents a Smithy shape
+          class Shape
             TYPED_SHAPES = %w[StructureShape UnionShape].freeze
 
             def initialize(options = {})
@@ -161,7 +166,7 @@ module Smithy
             attr_reader :name, :id, :type, :typed, :traits, :members
           end
 
-          # Operation Shape that contains relevant data that affects (de)serialization
+          # Operation Shape represents Smithy operation shape
           class OperationShape
             def initialize(options = {})
               @id = options[:id]
@@ -175,7 +180,7 @@ module Smithy
             attr_reader :id, :name, :input, :output, :errors, :traits
           end
 
-          # Member Shape that contains relevant data that affects (de)serialization
+          # Member Shape represents members of Smithy shape
           class MemberShape
             def initialize(options = {})
               @name = options[:name]
