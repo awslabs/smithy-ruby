@@ -4,7 +4,7 @@ namespace smithy.ruby.tests
 
 service ServiceIndex {
     version: "1.0.0"
-    operations: [Operation]
+    operations: [Operation, RecursiveShapesOperation]
     resources: [Resource]
     errors: [ServiceError]
 }
@@ -91,3 +91,22 @@ structure OrphanedStructure {}
 
 @error("client")
 structure OrphanedError {}
+
+operation RecursiveShapesOperation {
+    input: RecursiveShapesInputOutput,
+    output: RecursiveShapesInputOutput
+}
+
+structure RecursiveShapesInputOutput {
+    nested: RecursiveShapesInputOutputNested1
+}
+
+structure RecursiveShapesInputOutputNested1 {
+    foo: String,
+    nested: RecursiveShapesInputOutputNested2
+}
+
+structure RecursiveShapesInputOutputNested2 {
+    bar: String,
+    recursiveMember: RecursiveShapesInputOutputNested1,
+}

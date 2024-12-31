@@ -134,6 +134,45 @@
                 "smithy.api#readonly": {}
             }
         },
+        "smithy.ruby.tests#RecursiveShapesInputOutput": {
+            "type": "structure",
+            "members": {
+                "nested": {
+                    "target": "smithy.ruby.tests#RecursiveShapesInputOutputNested1"
+                }
+            }
+        },
+        "smithy.ruby.tests#RecursiveShapesInputOutputNested1": {
+            "type": "structure",
+            "members": {
+                "foo": {
+                    "target": "smithy.api#String"
+                },
+                "nested": {
+                    "target": "smithy.ruby.tests#RecursiveShapesInputOutputNested2"
+                }
+            }
+        },
+        "smithy.ruby.tests#RecursiveShapesInputOutputNested2": {
+            "type": "structure",
+            "members": {
+                "bar": {
+                    "target": "smithy.api#String"
+                },
+                "recursiveMember": {
+                    "target": "smithy.ruby.tests#RecursiveShapesInputOutputNested1"
+                }
+            }
+        },
+        "smithy.ruby.tests#RecursiveShapesOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.ruby.tests#RecursiveShapesInputOutput"
+            },
+            "output": {
+                "target": "smithy.ruby.tests#RecursiveShapesInputOutput"
+            }
+        },
         "smithy.ruby.tests#Resource": {
             "type": "resource",
             "identifiers": {
@@ -206,6 +245,9 @@
             "operations": [
                 {
                     "target": "smithy.ruby.tests#Operation"
+                },
+                {
+                    "target": "smithy.ruby.tests#RecursiveShapesOperation"
                 }
             ],
             "resources": [

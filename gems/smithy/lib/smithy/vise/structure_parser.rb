@@ -32,22 +32,24 @@ module Smithy
         @shapes = model['shapes']
       end
 
-      def shapes_for(structure)
+      def shapes_for(structure, visited = {})
         shapes = {}
         _id, structure = structure.first
-        structure['members']&.each_value { |member| parse_member(member, shapes) }
+        structure['members']&.each_value { |member| parse_member(member, shapes, visited) }
         shapes
       end
 
       private
 
-      def parse_member(member_ref, shapes)
+      def parse_member(member_ref, shapes, visited)
         target = member_ref['target']
+        return if visited.include?(target)
         return if PRELUDE_SHAPES.include?(target)
 
         shape = @shapes[target]
         shapes[target] = shape
-        shape['members']&.each_value { |member| parse_member(member, shapes) }
+        visited[target] = true
+        shape['members']&.each_value { |member| parse_member(member, shapes, visited) }
       end
     end
   end
