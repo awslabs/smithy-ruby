@@ -6,14 +6,13 @@ module Smithy
       describe Handler do
         let(:client_class) do
           client_class = Class.new(Client::Base)
-          client_class.add_plugin(Plugins::Endpoint)
           client_class.add_plugin(Plugins::Logging)
           client_class.add_plugin(Plugins::NetHTTP)
           client_class
         end
 
         let(:context) do
-          client = client_class.new(endpoint: endpoint)
+          client = client_class.new
           context = HandlerContext.new(config: client.config)
           context.request.endpoint = endpoint
           context

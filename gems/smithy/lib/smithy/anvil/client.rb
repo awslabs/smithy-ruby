@@ -8,3 +8,4 @@ module Smithy
 end
 
 require_relative 'client/views'
+require_relative 'client/endpoint_parameter'

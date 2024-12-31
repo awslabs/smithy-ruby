@@ -24,6 +24,7 @@ module Smithy
 
       private
 
+      # rubocop:disable Metrics/AbcSize
       def source_files
         Enumerator.new do |e|
           e.yield "#{@gem_name}.gemspec", render_gemspec
@@ -32,8 +33,15 @@ module Smithy
           e.yield "lib/#{@gem_name}/customizations.rb", render_customizations
           e.yield "lib/#{@gem_name}/types.rb", render_types
           e.yield "lib/#{@gem_name}/errors.rb", render_errors
+          e.yield "lib/#{@gem_name}/endpoint_parameters.rb", render_endpoint_parameters
+          e.yield "lib/#{@gem_name}/endpoint_provider.rb", render_endpoint_provider
+          e.yield "lib/#{@gem_name}/plugins/endpoint.rb", render_endpoint_plugin
+
+          e.yield 'spec/spec_helper.rb', render_spec_helper
+          e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", render_endpoint_provider_spec
         end
       end
+      # rubocop:enable Metrics/AbcSize
 
       def render_gemspec
         Anvil::Client::Views::Gemspec.new(@plan).hammer
@@ -57,6 +65,26 @@ module Smithy
 
       def render_errors
         Anvil::Client::Views::Errors.new(@plan).hammer
+      end
+
+      def render_endpoint_parameters
+        Anvil::Client::Views::EndpointParameters.new(@plan).hammer
+      end
+
+      def render_endpoint_provider
+        Anvil::Client::Views::EndpointProvider.new(@plan).hammer
+      end
+
+      def render_endpoint_plugin
+        Anvil::Client::Views::Plugins::Endpoint.new(@plan).hammer
+      end
+
+      def render_spec_helper
+        Anvil::Client::Views::Specs::SpecHelper.new(@plan).hammer
+      end
+
+      def render_endpoint_provider_spec
+        Anvil::Client::Views::Specs::EndpointProviderSpec.new(@plan).hammer
       end
 
       def should_skip_customizations?
