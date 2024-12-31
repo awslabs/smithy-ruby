@@ -1,0 +1,31 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#Operation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.ruby.tests#Structure"
+            },
+            "output": {
+                "target": "smithy.ruby.tests#Structure"
+            }
+        },
+        "smithy.ruby.tests#Recursive": {
+            "type": "service",
+            "version": "1.0.0",
+            "operations": [
+                {
+                    "target": "smithy.ruby.tests#Operation"
+                }
+            ]
+        },
+        "smithy.ruby.tests#Structure": {
+            "type": "structure",
+            "members": {
+                "structure": {
+                    "target": "smithy.ruby.tests#Structure"
+                }
+            }
+        }
+    }
+}

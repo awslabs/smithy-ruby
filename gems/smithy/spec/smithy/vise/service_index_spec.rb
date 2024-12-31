@@ -35,6 +35,19 @@ module Smithy
           actual = subject.shapes_for(service)
           expect(actual.keys).to match_array(expected.keys)
         end
+
+        context 'recursive structures' do
+          let(:fixture) do
+            JSON.load_file(File.expand_path('../../fixtures/recursive/model.json', __dir__))
+          end
+
+          it 'handles recursive shapes' do
+            service =
+              fixture['shapes']
+              .select { |id, _| id == 'smithy.ruby.tests#Recursive' }
+            subject.shapes_for(service)
+          end
+        end
       end
     end
   end
