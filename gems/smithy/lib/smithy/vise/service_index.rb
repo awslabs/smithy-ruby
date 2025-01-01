@@ -15,7 +15,10 @@ module Smithy
       # @param [Hash] service Service shape
       # @return [Hash<String, Hash>] The operations for the service.
       def operations_for(service)
-        @operations_for ||= @service_parser.operations_for(service)
+        @operations_for ||= begin
+          shapes = @service_parser.operations_for(service)
+          shapes.sort_by { |k, _v| k }.to_h
+        end
       end
 
       # @param [Hash] service Service shape
@@ -27,7 +30,7 @@ module Smithy
           operations_for(service).each do |id, operation|
             shapes.merge!(@operation_parser.shapes_for({ id => operation }))
           end
-          shapes
+          shapes.sort_by { |k, _v| k }.to_h
         end
       end
 

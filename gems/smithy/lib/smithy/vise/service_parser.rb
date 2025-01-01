@@ -15,7 +15,7 @@ module Smithy
         _id, service = service.first
         parse_service_operations(service, operations)
         parse_service_resources(service, operations)
-        operations.sort_by { |k, _v| k }.to_h
+        operations
       end
 
       private

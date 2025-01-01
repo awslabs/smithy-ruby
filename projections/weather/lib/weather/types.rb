@@ -6,6 +6,15 @@ module Weather
   module Types
 
     # TODO!
+    CityCoordinates = Struct.new(
+      :latitude,
+      :longitude,
+      keyword_init: true
+    ) do
+      include Smithy::Client::Structure
+    end
+
+    # TODO!
     GetCityInput = Struct.new(
       :city_id,
       keyword_init: true
@@ -17,23 +26,6 @@ module Weather
     GetCityOutput = Struct.new(
       :name,
       :coordinates,
-      keyword_init: true
-    ) do
-      include Smithy::Client::Structure
-    end
-
-    # TODO!
-    CityCoordinates = Struct.new(
-      :latitude,
-      :longitude,
-      keyword_init: true
-    ) do
-      include Smithy::Client::Structure
-    end
-
-    # TODO!
-    NoSuchResource = Struct.new(
-      :resource_type,
       keyword_init: true
     ) do
       include Smithy::Client::Structure
@@ -76,6 +68,14 @@ module Weather
     ListCitiesOutput = Struct.new(
       :next_token,
       :items,
+      keyword_init: true
+    ) do
+      include Smithy::Client::Structure
+    end
+
+    # TODO!
+    NoSuchResource = Struct.new(
+      :resource_type,
       keyword_init: true
     ) do
       include Smithy::Client::Structure
