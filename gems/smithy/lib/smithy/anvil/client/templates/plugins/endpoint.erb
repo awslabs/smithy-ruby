@@ -4,7 +4,6 @@
 
 module <%= namespace %>
   module Plugins
-
     # Endpoint plugin - resolves the endpoint and applies it to the request.
     class Endpoint < Smithy::Client::Plugin
       option(
@@ -19,16 +18,16 @@ module <%= namespace %>
 
       <%- parameters.select(&:built_in?).each do |param| -%>
 <%= param.built_in_binding[:render_config].call(plan) -%>
-      <%- end -%>
 
+      <%- end -%>
       <%- parameters.select(&:client_context?).each do |param| -%>
       option(
         :<%= param.name %>,
         doc_type: String, # TODO: based on type...
         docstring: "<%= param.client_context_doc %>"
       )
-      <%- end -%>
 
+      <%- end -%>
       # @api private
       class Handler < Smithy::Client::Handler
         def call(context)

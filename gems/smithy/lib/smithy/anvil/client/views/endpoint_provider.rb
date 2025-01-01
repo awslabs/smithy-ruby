@@ -34,8 +34,6 @@ module Smithy
 
           def endpoint_rules_code
             res = StringIO.new
-            res << "# endpoint rules\n"
-            # map rules
             @endpoint_rules['rules'].each do |rule|
               case rule['type']
               when 'endpoint'
@@ -123,7 +121,7 @@ module Smithy
           end
 
           def error(error, levels)
-            indent("raise ArgumentError, #{str(error)}\n", levels)
+            indent("raise ArgumentError, #{str(error)}", levels)
           end
 
           def tree_rule(rule, levels = 3)

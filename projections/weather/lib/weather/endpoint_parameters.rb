@@ -15,9 +15,9 @@ module Weather
       self[:endpoint] = options.fetch(:endpoint, nil)
     end
 
-    def self.create(config, _operation_name = nil, _params = {})
+    def self.create(config, operation_name = nil, params = {})
       new({
-        endpoint: config.endpoint
+        endpoint: config.endpoint,
       }.compact)
     end
   end

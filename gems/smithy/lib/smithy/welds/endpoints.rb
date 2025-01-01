@@ -34,15 +34,15 @@ module Smithy
 
       def endpoint_function_bindings
         {
-          'isValidHostLabel' => 'Smithy::Client::EndpointRules::valid_host_label?',
-          'parseURL' => 'Smithy::Client::EndpointRules::parse_url',
-          'substring' => 'Smithy::Client::EndpointRules::substring',
-          'uriEncode' => 'Smithy::Client::EndpointRules::uri_encode',
-          'isSet' => 'Smithy::Client::EndpointRules::set?',
-          'not' => 'Smithy::Client::EndpointRules::not',
-          'getAttr' => 'Smithy::Client::EndpointRules::attr',
-          'stringEquals' => 'Smithy::Client::EndpointRules::string_equals?',
-          'booleanEquals' => 'Smithy::Client::EndpointRules::boolean_equals?'
+          'isValidHostLabel' => 'Smithy::Client::EndpointRules.valid_host_label?',
+          'parseURL' => 'Smithy::Client::EndpointRules.parse_url',
+          'substring' => 'Smithy::Client::EndpointRules.substring',
+          'uriEncode' => 'Smithy::Client::EndpointRules.uri_encode',
+          'isSet' => 'Smithy::Client::EndpointRules.set?',
+          'not' => 'Smithy::Client::EndpointRules.not',
+          'getAttr' => 'Smithy::Client::EndpointRules.attr',
+          'stringEquals' => 'Smithy::Client::EndpointRules.string_equals?',
+          'booleanEquals' => 'Smithy::Client::EndpointRules.boolean_equals?'
         }
       end
 
