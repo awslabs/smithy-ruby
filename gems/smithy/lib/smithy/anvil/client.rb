@@ -9,3 +9,4 @@ end
 
 require_relative 'client/views'
 require_relative 'client/endpoint_parameter'
+require_relative 'client/request_syntax_example'
