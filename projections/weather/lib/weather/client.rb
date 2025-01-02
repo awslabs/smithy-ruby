@@ -9,57 +9,57 @@ module Weather
 
     add_plugin(Smithy::Client::Plugins::NetHTTP)
     add_plugin(Plugins::Endpoint)
-  
+
     # TODO!
     def initialize(*args)
       super
     end
-        
-    # @example Request syntax with placeholder values    
-    #     
-    #   output = client.get_city(    
-    #     {    
-    #       city_id: "CityId" # required    
-    #     }    
-    #   )    
+
+    # = This is some documentation!!!!!!!!
+    # 
+    #   output = client.get_city(
+    #     {
+    #       city_id: "CityId", # required
+    #     }
+    #   )
     def get_city(params = {}, options = {})
       input = build_input(:get_city, params)
       input.send_request(options)
     end
-        
-    # @example Request syntax with placeholder values    
-    #     
-    #   output = client.get_current_time    
+
+    # @example Request syntax with placeholder values
+    # 
+    #   output = client.get_current_time
     def get_current_time(params = {}, options = {})
       input = build_input(:get_current_time, params)
       input.send_request(options)
     end
-        
-    # @example Request syntax with placeholder values    
-    #     
-    #   output = client.get_forecast(    
-    #     {    
-    #       city_id: "CityId" # required    
-    #     }    
-    #   )    
+
+    # @example Request syntax with placeholder values
+    # 
+    #   output = client.get_forecast(
+    #     {
+    #       city_id: "CityId", # required
+    #     }
+    #   )
     def get_forecast(params = {}, options = {})
       input = build_input(:get_forecast, params)
       input.send_request(options)
     end
-        
-    # @example Request syntax with placeholder values    
-    #     
-    #   output = client.list_cities(    
-    #     {    
-    #       next_token: "String"    
-    #       page_size: 1    
-    #     }    
-    #   )    
+
+    # @example Request syntax with placeholder values
+    # 
+    #   output = client.list_cities(
+    #     {
+    #       next_token: "String",
+    #       page_size: 1
+    #     }
+    #   )
     def list_cities(params = {}, options = {})
       input = build_input(:list_cities, params)
       input.send_request(options)
     end
-    
+
     private
 
     def build_input(operation_name, params)

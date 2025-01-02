@@ -48,9 +48,6 @@ module Smithy
             end
 
             def docstrings
-              RequestSyntaxExample.new(@model, @id, @operation).docstrings.each do |l|
-                puts l
-              end
               RequestSyntaxExample.new(@model, @id, @operation).docstrings
             end
 
