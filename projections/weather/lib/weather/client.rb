@@ -36,7 +36,7 @@ module Weather
     # @example Request syntax with placeholder values
     # 
     #   output = client.get_forecast(
-    #       city_id: "CityId", # required
+    #     city_id: "CityId", # required
     #   )
     def get_forecast(params = {}, options = {})
       input = build_input(:get_forecast, params)
@@ -46,7 +46,7 @@ module Weather
     # @example Request syntax with placeholder values
     # 
     #   output = client.list_cities(
-    #       next_token: "String",
+    #     next_token: "String",
     #     page_size: 1
     #   )
     def list_cities(params = {}, options = {})

@@ -86,7 +86,6 @@ describe 'Component: Client' do
             union: TODO: union
           )
       EXAMPLE
-
       client_file = File.join(@tmpdir, 'lib', 'all_shapes', 'client.rb')
       top_level = rdoc.parse_files([client_file]).first
       actual = top_level.find_class_or_module('AllShapes::Client').find_method_named('operation')
