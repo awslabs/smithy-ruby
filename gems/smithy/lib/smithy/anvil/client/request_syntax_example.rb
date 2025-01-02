@@ -32,11 +32,15 @@ module Smithy
           input = @shapes[target]
           return '' unless input['members'].any?
 
-          "(\n    #{struct(input, '    ', Set.new)}\n  )"
+          "(\n#{struct(input, '  ', Set.new, top_level: true)}\n  )"
         end
 
+        # rubocop:disable Metrics
         def value(target, indent, visited)
-          return "{\n#{indent}  # recursive #{target}\n#{indent}}" if visited_shape?(target, visited)
+          if visited_shape?(target, visited)
+            shape = Vise::Shape.name(target)
+            return "{\n#{indent}  # recursive #{shape}\n#{indent}}"
+          end
 
           visited += [target]
           shape = @shapes[target]
@@ -62,6 +66,7 @@ module Smithy
           else raise "unsupported type or target: #{type_or_target}"
           end
         end
+        # rubocop:enable Metrics
 
         def blob(shape)
           if shape && shape['traits']&.include?('smithy.api#streaming')
@@ -88,13 +93,14 @@ module Smithy
           !Vise::PRELUDE_SHAPES.include?(target) && visited.include?(target)
         end
 
-        def struct(struct_shape, indent, visited)
-          lines = ['{']
+        def struct(struct_shape, indent, visited, top_level: false)
+          lines = []
+          lines << '{' unless top_level
           struct_shape['members']&.each_pair do |member_name, member_shape|
             lines << member(member_name, member_shape, indent, visited)
           end
           lines.last.chomp!(',')
-          lines << "#{indent}}"
+          lines << "#{indent}}" unless top_level
           lines.join("\n")
         end
 
