@@ -20,56 +20,74 @@ module Smithy
             ''
           ]
           example = "  output = client.#{Vise::Shape.name(@id).underscore}"
-          input = @shapes[@operation['input']['target']]
+          target = @operation['input']['target']
+          return docstrings << example if target == 'smithy.api#Unit'
+
+          input = @shapes[target]
           return docstrings << example unless input['members'].any?
 
-          docstrings + ["#{example}("] + struct(input, '    ', Set.new) + ['  )']
+          docstrings << "#{example}("
+          docstrings << struct(input, '    ', Set.new)
+          docstrings << '  )'
+          docstrings.flatten
         end
 
         private
 
         def struct(shape, indent, visited)
-          lines = ["#{indent}{"]
+          docstrings = ["#{indent}{"]
           shape['members'].each do |member_name, member_shape|
-            lines << struct_member(member_name, member_shape, indent, visited)
+            docstrings << struct_member(member_name, member_shape, indent, visited)
           end
-          lines << "#{indent}}"
+          docstrings << "#{indent}}"
         end
 
         def struct_member(member_name, member_shape, indent, visited)
-          entry = "#{indent}  #{member_name.underscore}: #{target_value(member_shape, "#{indent}  ", visited)},"
-          required = member_shape['traits']&.any? { |k, _| k == 'smithy.api#required' }
-          apply_comments(entry, { required: required })
+          docstrings = []
+          target = member_shape['target']
+          shape = @shapes[target]
+
+          value = target_value(member_shape, "#{indent}  ", visited)
+          if shape && shape['type'] == 'structure'
+            docstrings << "#{indent}  #{member_name.underscore}: {#{comments(member_shape)}"
+            docstrings << value
+            docstrings << "#{indent}  }"
+          elsif shape && shape['type'] == 'list'
+            # TODO
+          elsif shape && shape['type'] == 'map'
+            # TODO
+          else
+            docstrings << "#{indent}  #{member_name.underscore}: #{value}#{comments(member_shape)}"
+          end
         end
 
         def target_value(member_shape, indent, visited)
           if visited.include?(member_shape['target'])
-            return "{\n#{indent}  # recursive #{member_shape['target']}\n#{indent}}"
+            return [
+              '{',
+              "#{indent} # recursive #{Vise::Shape.name(member_shape['target'])}",
+              '}'
+            ]
           end
 
-          visited << member_shape['target']
-          shape = @shapes[member_shape['target']]
-          case shape['type']
-          when 'structure' then struct(shape, indent, visited)
-          when 'string' then Vise::Shape.name(member_shape['target'])
-          when 'integer' then '1'
-          else raise "unsupported shape #{shape['type'].inspect}"
+          target = member_shape['target']
+          visited << target
+          shape = @shapes[target]
+          shape_or_target = (shape['type'] if shape) || target
+
+          case shape_or_target
+          # TODO: handle other types
+          when 'string', 'smithy.api#String' then Vise::Shape.name(target).inspect
+          when 'boolean', 'smithy.api#Boolean' then 'false'
+          when 'integer', 'smithy.api#Integer' then '1'
+          when 'structure' then struct(shape, "#{indent}  ", visited)
+          else raise "unsupported shape or target #{shape_or_target.inspect}"
           end
         end
 
-        def apply_comments(entry, options = {})
-          lines = entry.lines.to_a
-          if lines[0].match(/\n$/)
-            lines[0] = lines[0].sub(/\n$/, "#{comments(options)}\n")
-          else
-            lines[0] += comments(options)
-          end
-          lines.join
-        end
-
-        def comments(options = {})
+        def comments(member_shape)
           comments = []
-          comments << 'required' if options[:required]
+          comments << 'required' if member_shape['traits']&.any? { |k, _| k == 'smithy.api#required' }
           comments == [] ? '' : " # #{comments.join(', ')}"
         end
       end

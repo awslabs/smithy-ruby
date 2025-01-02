@@ -19,7 +19,7 @@ module Weather
     #     
     #   output = client.get_city(    
     #     {    
-    #       city_id: CityId, # required    
+    #       city_id: "CityId" # required    
     #     }    
     #   )    
     def get_city(params = {}, options = {})
@@ -39,7 +39,7 @@ module Weather
     #     
     #   output = client.get_forecast(    
     #     {    
-    #       city_id: CityId, # required    
+    #       city_id: "CityId" # required    
     #     }    
     #   )    
     def get_forecast(params = {}, options = {})
@@ -51,8 +51,8 @@ module Weather
     #     
     #   output = client.list_cities(    
     #     {    
-    #       next_token: String,    
-    #       page_size: 1,    
+    #       next_token: "String"    
+    #       page_size: 1    
     #     }    
     #   )    
     def list_cities(params = {}, options = {})
