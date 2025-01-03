@@ -6,43 +6,42 @@ module <%= namespace %>
   module Shapes
     include Smithy::Client::Shapes
 
-<%# Shapes definition -%>
-  <%- shapes.each do |shape| -%>
+<% shapes.each do |shape| -%>
     <%= shape.name %> = <%= shape.type %>.new(id: "<%= shape.id %>", traits: <%= shape.traits %>)
-  <%- end -%>
+<% end -%>
 
-  <%- shapes_with_members.each do |shape| -%>
-    <%- shape.members.each do |member| -%>
-    <%- case shape.type -%>
-    <%- when 'ListShape' -%>
+<% shapes_with_members.each do |shape| -%>
+<% shape.members.each do |member| -%>
+<% case shape.type -%>
+<% when 'ListShape' -%>
     <%= shape.name %>.set_member(<%= member.shape %>, <%= member.traits %>)
-    <%- when 'MapShape' -%>
+<% when 'MapShape' -%>
     <%= shape.name %>.set_<%= member.name %>(<%= member.shape %>, <%= member.traits %>)
-    <%- else -%>
+<% else -%>
     <%= shape.name %>.add_member("<%= member.name %>", <%= member.shape %>, <%= member.traits %>)
-    <%- end -%>
-    <%- end -%>
-    <%- if shape.typed -%>
+<% end -%>
+<% end -%>
+<% if shape.typed -%>
     <%= shape.name %>.type = Types::<%= shape.name %>
-    <%- end %>
-  <%- end -%>
+<% end %>
+<% end -%>
     SCHEMA = Smithy::Client::Schema.new do |schema|
       schema.service = ServiceShape.new(
         id: "<%= service_shape.id %>",
         version: "<%= service_shape.version %>",
         traits: <%= service_shape.traits %>
       )
-    <%- operation_shapes.each do |shape| -%>
+<% operation_shapes.each do |shape| -%>
       schema.add_operation(:<%= shape.name %>, OperationShape.new do |operation|
         operation.id = "<%= shape.id %>"
         operation.input = <%= shape.input %>
         operation.output = <%= shape.output %>
         operation.traits = <%= shape.traits %>
-       <%- shape.errors.each do |err| -%>
+<% shape.errors.each do |err| -%>
         operation.errors << <%= err %>
-       <%- end -%>
+<% end -%>
       end)
-    <%- end -%>
+<% end -%>
     end
   end
 end
