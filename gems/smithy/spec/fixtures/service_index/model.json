@@ -31,39 +31,38 @@
                 "smithy.api#idempotent": {}
             }
         },
+        "smithy.ruby.tests#List": {
+            "type": "list",
+            "member": {
+                "target": "smithy.ruby.tests#StructureMember"
+            }
+        },
         "smithy.ruby.tests#ListResources": {
             "type": "operation",
             "input": {
                 "target": "smithy.api#Unit"
             },
             "output": {
-                "target": "smithy.ruby.tests#ListResourcesOutput"
+                "target": "smithy.ruby.tests#Structure"
             },
             "traits": {
                 "smithy.api#readonly": {}
             }
         },
-        "smithy.ruby.tests#ListResourcesOutput": {
-            "type": "structure",
-            "members": {
-                "list": {
-                    "target": "smithy.ruby.tests#StructureList"
-                }
+        "smithy.ruby.tests#Map": {
+            "type": "map",
+            "key": {
+                "target": "smithy.ruby.tests#MapKey"
             },
-            "traits": {
-                "smithy.api#output": {}
+            "value": {
+                "target": "smithy.ruby.tests#MapValue"
             }
         },
         "smithy.ruby.tests#MapKey": {
             "type": "string"
         },
         "smithy.ruby.tests#MapValue": {
-            "type": "structure",
-            "members": {
-                "id": {
-                    "target": "smithy.api#String"
-                }
-            }
+            "type": "string"
         },
         "smithy.ruby.tests#NestedResource": {
             "type": "resource",
@@ -116,11 +115,11 @@
             "type": "structure",
             "members": {
                 "map": {
-                    "target": "smithy.ruby.tests#StructureMap"
+                    "target": "smithy.ruby.tests#Map"
+                },
+                "list": {
+                    "target": "smithy.ruby.tests#List"
                 }
-            },
-            "traits": {
-                "smithy.api#input": {}
             }
         },
         "smithy.ruby.tests#OrphanedError": {
@@ -269,28 +268,8 @@
                 "smithy.api#documentation": "This is a structure shape."
             }
         },
-        "smithy.ruby.tests#StructureList": {
-            "type": "list",
-            "member": {
-                "target": "smithy.ruby.tests#StructureMember"
-            }
-        },
-        "smithy.ruby.tests#StructureMap": {
-            "type": "map",
-            "key": {
-                "target": "smithy.ruby.tests#MapKey"
-            },
-            "value": {
-                "target": "smithy.ruby.tests#MapValue"
-            }
-        },
         "smithy.ruby.tests#StructureMember": {
-            "type": "structure",
-            "members": {
-                "id": {
-                    "target": "smithy.api#String"
-                }
-            }
+            "type": "string"
         },
         "smithy.ruby.tests#UpdateResource": {
             "type": "operation",

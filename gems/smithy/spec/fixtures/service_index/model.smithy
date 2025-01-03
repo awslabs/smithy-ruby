@@ -29,9 +29,7 @@ resource NestedResource {
 }
 
 operation Operation {
-    input:= {
-        map: StructureMap
-    }
+    input: OperationInput
     output: Structure
     errors: [OperationError]
 }
@@ -59,9 +57,7 @@ operation DeleteResource {
 
 @readonly
 operation ListResources {
-    output:= {
-        list: StructureList
-    }
+    output: Structure
 }
 
 operation ResourceOperation {
@@ -74,6 +70,12 @@ operation NestedResourceOperation {
     input: Structure
 }
 
+structure OperationInput {
+    map: Map
+    list: List
+}
+
+
 @documentation("This is a structure shape.")
 structure Structure {
     @required
@@ -81,24 +83,20 @@ structure Structure {
     name: String
 }
 
-list StructureList {
+list List {
     member: StructureMember
 }
 
-structure StructureMember {
-    id: String
-}
+string StructureMember
 
-map StructureMap {
+map Map {
     key: MapKey
     value: MapValue
 }
 
 string MapKey
 
-structure MapValue {
-    id: String
-}
+string MapValue
 
 @error("client")
 structure ServiceError {
