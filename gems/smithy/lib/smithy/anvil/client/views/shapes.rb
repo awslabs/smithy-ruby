@@ -9,7 +9,7 @@ module Smithy
           def initialize(plan)
             @plan = plan
             @model = plan.model
-            @service = Vise::ServiceIndex.new(@model).service
+            @service_index = Vise::ServiceIndex.new(@model)
             super()
           end
 
@@ -18,20 +18,18 @@ module Smithy
           end
 
           def operation_shapes
-            Vise::OperationIndex
-              .new(@model)
-              .for(@service)
+            @service_index.operations_for(@plan.service)
               .each_with_object([]) do |(k, v), arr|
               arr << build_operation_shape(k, v)
             end
           end
 
           def service_shape
-            service_data = @service.values.first
+            service = @plan.service
             ServiceShape.new(
-              id: @service.keys.first,
-              traits: filter_traits(service_data['traits']),
-              version: service_data['version']
+              id: service.keys.first,
+              traits: filter_traits(service.values.first['traits']),
+              version: service.values.first['version']
             )
           end
 
@@ -48,6 +46,13 @@ module Smithy
 
                 arr << build_shape(k, v)
               end
+
+            # @shapes =
+            #   @service_index.shapes_for(@plan.service).each_with_object([]) do |(k, v), arr|
+            #     next if %w[operation resource service].include?(v['type'])
+            #
+            #     arr << build_shape(k, v)
+            #   end
           end
 
           private
@@ -82,16 +87,16 @@ module Smithy
           end
 
           def build_member_shapes(shape)
-            members = []
             case shape['type']
             when 'enum', 'intEnum', 'structure', 'union'
-              members = build_members(shape)
+              build_members(shape)
             when 'list'
-              members << build_list_member(shape)
+              build_list_member(shape)
             when 'map'
-              members = build_map_members(shape)
+              build_map_members(shape)
+            else
+              []
             end
-            members
           end
 
           def build_members(shape)
@@ -102,7 +107,7 @@ module Smithy
 
           def build_list_member(shape)
             m_shape = shape['member']
-            build_member_shape('member', m_shape['target'], m_shape['traits'])
+            [] << build_member_shape('member', m_shape['target'], m_shape['traits'])
           end
 
           def build_map_members(shape)
