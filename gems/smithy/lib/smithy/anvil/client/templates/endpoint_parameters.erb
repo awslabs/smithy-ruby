@@ -3,53 +3,55 @@
 # This is generated code!
 
 module <%= namespace %>
-  # Endpoint parameters used to influence endpoints per request.
+  # Endpoint parameters used to resolve endpoints per request.
   <%= documentation %>
   EndpointParameters = Struct.new(
-    <%- parameters.each do |param| -%>
+<% parameters.each do |param| -%>
     :<%= param.name %>,
-    <%- end -%>
+<% end -%>
     keyword_init: true
   ) do
     include Smithy::Client::Structure
 
     def initialize(options = {})
-    <%- parameters.each do |param| -%>
+<% parameters.each do |param| -%>
       self[:<%= param.name %>] = options.fetch(:<%= param.name %>, <%= param.default_value %>)
-    <%- end -%>
-    <%- parameters.select(&:validate_required?).each do |param| -%>
+<% end -%>
+<% parameters.select(&:validate_required?).each do |param| -%>
       raise ArgumentError, "Missing required EndpointParameter: :<%= param.name %>" if <%= param.name %>.nil?
-    <%- end -%>
+<% end -%>
     end
 
-    def self.create(config, operation_name = nil, params = {})
-      <%- if operation_params.empty? -%>
+<% if operation_params.empty? -%>
+    def self.create(config, _operation_name = nil, _params = {})
       new({
-      <%- parameters.select(&:create_from_config?).each do |param| -%>
+<% parameters.select(&:create_from_config?).each do |param| -%>
         <%= param.name %>: <%= param.value %>,
-      <%- end -%>
+<% end -%>
       }.compact)
-      <%- else -%>
-      operation_params =
+    end
+<% else -%>
+  def self.create(config, operation_name = nil, params = {})
+    operation_params =
         case operation_name
-        <%- operation_params.each do |name, params| -%>
+<% operation_params.each do |name, params| -%>
         when :<%= name %>
           {
-          <%- params.each do |param| -%>
+<% params.each do |param| -%>
             <%= param.name %>: <%= param.value %>,
-          <%- end -%>
+<% end -%>
           }
-        <%- end -%>
+<% end -%>
         else
           {}
         end
 
       new({
-      <%- parameters.select(&:create_from_config?).each do |param| -%>
+<% parameters.select(&:create_from_config?).each do |param| -%>
         <%= param.name %>: <%= param.value %>,
-      <%- end -%>
+<% end -%>
       }.merge(operation_params).compact)
-      <%- end -%>
     end
+<% end -%>
   end
 end

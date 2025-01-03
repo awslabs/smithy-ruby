@@ -3,7 +3,7 @@
 # This is generated code!
 
 module Weather
-  # Endpoint parameters used to influence endpoints per request.
+  # Endpoint parameters used to resolve endpoints per request.
   # TODO: Documentation
   EndpointParameters = Struct.new(
     :endpoint,
@@ -15,7 +15,7 @@ module Weather
       self[:endpoint] = options.fetch(:endpoint, nil)
     end
 
-    def self.create(config, operation_name = nil, params = {})
+    def self.create(config, _operation_name = nil, _params = {})
       new({
         endpoint: config.endpoint,
       }.compact)
