@@ -41,18 +41,13 @@ module Smithy
 
           def shapes
             @shapes =
-              @model['shapes'].each_with_object([]) do |(k, v), arr|
-                next if %w[operation resource service].include?(v['type'])
+              @service_index
+                .shapes_for(@plan.service)
+                .each_with_object([]) do |(k, v), arr|
+                  next if %w[operation resource service].include?(v['type'])
 
-                arr << build_shape(k, v)
-              end
-
-            # @shapes =
-            #   @service_index.shapes_for(@plan.service).each_with_object([]) do |(k, v), arr|
-            #     next if %w[operation resource service].include?(v['type'])
-            #
-            #     arr << build_shape(k, v)
-            #   end
+                  arr << build_shape(k, v)
+                end
           end
 
           private
