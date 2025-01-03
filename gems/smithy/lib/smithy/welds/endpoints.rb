@@ -15,12 +15,12 @@ module Smithy
           'SDK::Endpoint' => {
             # Text indenting is used in generated view.
             render_config: proc do |_plan|
-              <<-ADD_OPTION
-      option(
-        :endpoint,
-        doc_type: String,
-        docstring: 'Custom Endpoint'
-      )
+              <<~ADD_OPTION
+                option(
+                  :endpoint,
+                  doc_type: String,
+                  docstring: 'Custom Endpoint'
+                )
               ADD_OPTION
             end,
             render_build: proc do |_plan, _operation|
@@ -58,7 +58,7 @@ module Smithy
       end
 
       def default_endpoint_tests
-        JSON.load_file(File.join(__dir__, 'default_endpoint_rules.json'))
+        JSON.load_file(File.join(__dir__, 'default_endpoint_tests.json'))
       end
     end
   end
