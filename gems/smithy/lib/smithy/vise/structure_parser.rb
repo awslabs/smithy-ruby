@@ -60,7 +60,7 @@ module Smithy
           parse_member(shape['key'], shapes, visited)
           parse_member(shape['value'], shapes, visited)
         else
-          # covers structure, union
+          # covers all other shapes including structure, union, enum
           shape['members']&.each_value { |member| parse_member(member, shapes, visited) }
         end
       end

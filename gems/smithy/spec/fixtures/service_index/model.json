@@ -57,26 +57,6 @@
         "smithy.ruby.tests#MapKey": {
             "type": "string"
         },
-        "smithy.ruby.tests#MapOperation": {
-            "type": "operation",
-            "input": {
-                "target": "smithy.ruby.tests#MapOperationInput"
-            },
-            "output": {
-                "target": "smithy.api#Unit"
-            }
-        },
-        "smithy.ruby.tests#MapOperationInput": {
-            "type": "structure",
-            "members": {
-                "map": {
-                    "target": "smithy.ruby.tests#StructureMap"
-                }
-            },
-            "traits": {
-                "smithy.api#input": {}
-            }
-        },
         "smithy.ruby.tests#MapValue": {
             "type": "structure",
             "members": {
@@ -110,7 +90,7 @@
         "smithy.ruby.tests#Operation": {
             "type": "operation",
             "input": {
-                "target": "smithy.ruby.tests#Structure"
+                "target": "smithy.ruby.tests#OperationInput"
             },
             "output": {
                 "target": "smithy.ruby.tests#Structure"
@@ -130,6 +110,17 @@
             },
             "traits": {
                 "smithy.api#error": "client"
+            }
+        },
+        "smithy.ruby.tests#OperationInput": {
+            "type": "structure",
+            "members": {
+                "map": {
+                    "target": "smithy.ruby.tests#StructureMap"
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
             }
         },
         "smithy.ruby.tests#OrphanedError": {
@@ -246,9 +237,6 @@
             "type": "service",
             "version": "1.0.0",
             "operations": [
-                {
-                    "target": "smithy.ruby.tests#MapOperation"
-                },
                 {
                     "target": "smithy.ruby.tests#Operation"
                 }
