@@ -49,7 +49,7 @@ describe 'Component: Client' do
       expected = <<~EXAMPLE
         @example Request syntax with placeholder values
 
-          output = client.operation(
+          params = {
             blob: "data",
             streaming_blob: File.read("source_file"), # required
             boolean: false,
@@ -84,7 +84,9 @@ describe 'Component: Client' do
               member: "String"
             },
             union: TODO: union
-          )
+          }
+          options = {}
+          output = client.operation(params, options)
       EXAMPLE
       client_file = File.join(@tmpdir, 'lib', 'all_shapes', 'client.rb')
       top_level = rdoc.parse_files([client_file]).first
@@ -105,13 +107,15 @@ describe 'Component: Client' do
         expected = <<~EXAMPLE
           @example Request syntax with placeholder values
 
-            output = client.operation(
+            params = {
               structure: {
                 structure: {
                   # recursive Structure
                 }
               }
-            )
+            }
+            options = {}
+            output = client.operation(params, options)
         EXAMPLE
         client_file = File.join(@tmpdir, 'lib', 'recursive', 'client.rb')
         top_level = rdoc.parse_files([client_file]).first

@@ -18,7 +18,9 @@ module Smithy
           example = <<~EXAMPLE
             @example Request syntax with placeholder values
 
-              output = client.#{@method_name}#{request_params}
+              params = #{request_params}
+              options = {}
+              output = client.#{@method_name}(params, options)
           EXAMPLE
           example.split("\n")
         end
@@ -32,7 +34,7 @@ module Smithy
           input = @shapes[target]
           return '' unless input['members'].any?
 
-          "(\n#{struct(input, '  ', Set.new, top_level: true)}\n  )"
+          struct(input, '  ', Set.new)
         end
 
         # rubocop:disable Metrics
@@ -93,14 +95,14 @@ module Smithy
           !Vise::PRELUDE_SHAPES.include?(target) && visited.include?(target)
         end
 
-        def struct(struct_shape, indent, visited, top_level: false)
+        def struct(struct_shape, indent, visited)
           lines = []
-          lines << '{' unless top_level
+          lines << '{'
           struct_shape['members']&.each_pair do |member_name, member_shape|
             lines << member(member_name, member_shape, indent, visited)
           end
           lines.last.chomp!(',')
-          lines << "#{indent}}" unless top_level
+          lines << "#{indent}}"
           lines.join("\n")
         end
 
