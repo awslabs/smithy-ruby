@@ -9,9 +9,10 @@ module Weather
 end
 
 require_relative 'weather/plugins/endpoint'
+require_relative 'weather/types'
+require_relative 'weather/shapes'
 require_relative 'weather/client'
 require_relative 'weather/customizations'
 require_relative 'weather/errors'
-require_relative 'weather/types'
 require_relative 'weather/endpoint_parameters'
 require_relative 'weather/endpoint_provider'
