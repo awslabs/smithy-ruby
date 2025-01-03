@@ -60,7 +60,7 @@ module Weather
       schema.service = ServiceShape.new(
         id: "example.weather#Weather",
         version: "2006-03-01",
-        traits: {"smithy.api#paginated"=>{"inputToken"=>"nextToken", "outputToken"=>"nextToken", "pageSize"=>"pageSize"}, "smithy.rules#endpointRuleSet"=>{"version"=>"1.0", "parameters"=>{"endpoint"=>{"type"=>"string", "builtIn"=>"SDK::Endpoint", "documentation"=>"Endpoint"}}, "rules"=>[{"conditions"=>[{"fn"=>"isSet", "argv"=>[{"ref"=>"endpoint"}]}], "endpoint"=>{"url"=>"endpoint"}, "type"=>"endpoint"}, {"conditions"=>[], "error"=>"Endpoint is not set - you must configure an endpoint.", "type"=>"error"}]}, "smithy.rules#endpointTests"=>{"version"=>"1.0", "parameters"=>{"endpoint"=>{"type"=>"string", "builtIn"=>"SDK::Endpoint", "documentation"=>"Endpoint"}}, "rules"=>[{"conditions"=>[{"fn"=>"isSet", "argv"=>[{"ref"=>"endpoint"}]}], "endpoint"=>{"url"=>"endpoint"}, "type"=>"endpoint"}, {"conditions"=>[], "error"=>"Endpoint is not set - you must configure an endpoint.", "type"=>"error"}]}}
+        traits: {"smithy.api#paginated"=>{"inputToken"=>"nextToken", "outputToken"=>"nextToken", "pageSize"=>"pageSize"}, "smithy.rules#endpointTests"=>{"version"=>"1.0", "parameters"=>{"endpoint"=>{"type"=>"string", "builtIn"=>"SDK::Endpoint", "documentation"=>"Endpoint"}}, "rules"=>[{"conditions"=>[{"fn"=>"isSet", "argv"=>[{"ref"=>"endpoint"}]}], "endpoint"=>{"url"=>"endpoint"}, "type"=>"endpoint"}, {"conditions"=>[], "error"=>"Endpoint is not set - you must configure an endpoint.", "type"=>"error"}]}}
       )
       schema.add_operation(:get_city, OperationShape.new do |operation|
         operation.id = "example.weather#GetCity"

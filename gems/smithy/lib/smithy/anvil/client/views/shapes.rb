@@ -194,8 +194,11 @@ module Smithy
             attr_reader :name, :shape, :traits
           end
 
+          # Traits that does not affect runtime
           OMITTED_TRAITS = %w[
             smithy.api#documentation
+            smithy.rules#endpointRuleSet
+            smithy.rules#endpointTest
           ].freeze
 
           SHAPE_CLASSES_MAP = {
