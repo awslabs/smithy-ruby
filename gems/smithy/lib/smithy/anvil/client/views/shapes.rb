@@ -198,7 +198,7 @@ module Smithy
           OMITTED_TRAITS = %w[
             smithy.api#documentation
             smithy.rules#endpointRuleSet
-            smithy.rules#endpointTest
+            smithy.rules#endpointTests
           ].freeze
 
           SHAPE_CLASSES_MAP = {
