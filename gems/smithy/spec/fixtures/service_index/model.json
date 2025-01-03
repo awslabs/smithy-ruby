@@ -34,8 +34,11 @@
         "smithy.ruby.tests#List": {
             "type": "list",
             "member": {
-                "target": "smithy.ruby.tests#StructureMember"
+                "target": "smithy.ruby.tests#ListMember"
             }
+        },
+        "smithy.ruby.tests#ListMember": {
+            "type": "string"
         },
         "smithy.ruby.tests#ListResources": {
             "type": "operation",
@@ -43,7 +46,7 @@
                 "target": "smithy.api#Unit"
             },
             "output": {
-                "target": "smithy.ruby.tests#Structure"
+                "target": "smithy.api#Unit"
             },
             "traits": {
                 "smithy.api#readonly": {}
@@ -267,9 +270,6 @@
             "traits": {
                 "smithy.api#documentation": "This is a structure shape."
             }
-        },
-        "smithy.ruby.tests#StructureMember": {
-            "type": "string"
         },
         "smithy.ruby.tests#UpdateResource": {
             "type": "operation",

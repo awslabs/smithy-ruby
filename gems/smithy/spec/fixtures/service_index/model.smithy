@@ -56,9 +56,7 @@ operation DeleteResource {
 }
 
 @readonly
-operation ListResources {
-    output: Structure
-}
+operation ListResources {}
 
 operation ResourceOperation {
     input: Structure
@@ -84,10 +82,10 @@ structure Structure {
 }
 
 list List {
-    member: StructureMember
+    member: ListMember
 }
 
-string StructureMember
+string ListMember
 
 map Map {
     key: MapKey
