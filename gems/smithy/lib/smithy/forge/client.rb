@@ -30,10 +30,12 @@ module Smithy
           e.yield "#{@gem_name}.gemspec", render_gemspec
           e.yield "lib/#{@gem_name}.rb", render_module
           e.yield "lib/#{@gem_name}/client.rb", render_client
+          e.yield "sig/lib/#{@gem_name}/client.rbs", render_client_rbs
           e.yield "lib/#{@gem_name}/customizations.rb", render_customizations
           e.yield "lib/#{@gem_name}/types.rb", render_types
-          e.yield "sig/lib/#{@gem_name}/types.rb", render_types_rbs
+          e.yield "sig/lib/#{@gem_name}/types.rbs", render_types_rbs
           e.yield "lib/#{@gem_name}/errors.rb", render_errors
+          e.yield "sig/lib/#{@gem_name}/errors.rb", render_errors_rbs
           e.yield "lib/#{@gem_name}/endpoint_parameters.rb", render_endpoint_parameters
           e.yield "lib/#{@gem_name}/endpoint_provider.rb", render_endpoint_provider
           e.yield "lib/#{@gem_name}/plugins/endpoint.rb", render_endpoint_plugin
@@ -56,6 +58,10 @@ module Smithy
         Anvil::Client::Views::ClientClass.new(@plan).hammer
       end
 
+      def render_client_rbs
+        Anvil::Client::Views::Sig::Client.new(@plan).hammer
+      end
+
       def render_customizations
         Anvil::Client::Views::Customizations.new.hammer
       end
@@ -70,6 +76,10 @@ module Smithy
 
       def render_errors
         Anvil::Client::Views::Errors.new(@plan).hammer
+      end
+
+      def render_errors_rbs
+        Anvil::Client::Views::Sig::Errors.new(@plan).hammer
       end
 
       def render_endpoint_parameters
