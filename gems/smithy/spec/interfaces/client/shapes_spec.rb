@@ -25,7 +25,7 @@ describe 'Component: Shapes' do
       context 'a generated shape' do
         next if %w[operation service].include?(shape['type'])
 
-        let(:shape_name) { Smithy::Vise::Shape.relative_id(id)}
+        let(:shape_name) { Smithy::Vise::Shape.relative_id(id) }
         let(:generated_shape) { Object.const_get("#{subject}::#{shape_name}") }
 
         it 'is a shape of expected shape type and has an id' do
@@ -48,7 +48,7 @@ describe 'Component: Shapes' do
         it 'has traits when applicable and the traits does not contain omitted traits' do
           skip("Test does not expect the generated #{id} to have traits") if shape['traits'].nil?
 
-          expected_traits = shape['traits'].reject { |t| t == 'smithy.api#documentation'}
+          expected_traits = shape['traits'].reject { |t| t == 'smithy.api#documentation' }
           expect(generated_shape.traits).to include(expected_traits)
           expect(generated_shape.traits.keys).not_to include('smithy.api#documentation')
         end
@@ -120,7 +120,7 @@ describe 'Component: Shapes' do
 
     context 'service' do
       let(:service_shape) { subject::SCHEMA.service }
-      let(:expected_service) { shape_tests['shapes'].find {|_k, v| v['type'] == 'service' } }
+      let(:expected_service) { shape_tests['shapes'].find { |_k, v| v['type'] == 'service' } }
 
       it 'is a service shape and able to access service shape data' do
         expect(service_shape).to be_a(shapes_module::ServiceShape)
@@ -149,11 +149,11 @@ describe 'Component: Shapes' do
           expect(generated_shape.input.id).to eq(shape['input'])
           expect(generated_shape.output.id).to eq(shape['output'])
 
-          if (expected_errors = shape['errors'])
-            expected_errors.each do |err|
-              generated_error = generated_shape.errors.find { |s| s.id == err }
-              expect(generated_error.id).to eq(err)
-            end
+          next unless (errors = shape['errors'])
+
+          errors.each do |err|
+            generated_error = generated_shape.errors.find { |s| s.id == err }
+            expect(generated_error.id).to eq(err)
           end
         end
       end

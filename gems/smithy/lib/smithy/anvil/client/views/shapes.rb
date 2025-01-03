@@ -9,6 +9,7 @@ module Smithy
           def initialize(plan)
             @plan = plan
             @model = plan.model
+            @service_shape = @plan.service
             @service_index = Vise::ServiceIndex.new(@model)
             super()
           end
@@ -18,36 +19,36 @@ module Smithy
           end
 
           def operation_shapes
-            @service_index.operations_for(@plan.service)
-              .each_with_object([]) do |(k, v), arr|
+            @service_index.operations_for(@service_shape)
+                          .each_with_object([]) do |(k, v), arr|
               arr << build_operation_shape(k, v)
             end
           end
 
           def service_shape
-            service = @plan.service
             ServiceShape.new(
-              id: service.keys.first,
-              traits: filter_traits(service.values.first['traits']),
-              version: service.values.first['version']
+              id: @service_shape.keys.first,
+              traits: filter_traits(@service_shape.values.first['traits']),
+              version: @service_shape.values.first['version']
             )
           end
 
           def shapes_with_members
-            complex_shapes =
+            @shapes.select do |s|
               %w[EnumShape IntEnumShape ListShape MapShape StructureShape UnionShape]
-            @shapes.select { |s| complex_shapes.include?(s.type) }
+                .include?(s.type)
+            end
           end
 
           def shapes
             @shapes =
               @service_index
-                .shapes_for(@plan.service)
-                .each_with_object([]) do |(k, v), arr|
-                  next if %w[operation resource service].include?(v['type'])
+              .shapes_for(@service_shape)
+              .each_with_object([]) do |(k, v), arr|
+                next if %w[operation resource service].include?(v['type'])
 
-                  arr << build_shape(k, v)
-                end
+                arr << build_shape(k, v)
+              end
           end
 
           private
