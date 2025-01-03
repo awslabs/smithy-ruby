@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 describe 'Types: Welding' do
+  # rubocop:disable Lint/UselessAssignment
   before(:all) do
     # Define Weld classes (scoped to this block only)
-    Class.new(Smithy::Weld) do
+    used = Class.new(Smithy::Weld) do
       def preprocess(model)
         model['shapes']['example.weather#Weld'] = { 'type' => 'structure', 'members' => {} }
         model['shapes']['example.weather#GetForecastOutput']['members']['chanceOfWelds'] =
@@ -11,7 +12,7 @@ describe 'Types: Welding' do
       end
     end
 
-    Class.new(Smithy::Weld) do
+    unused = Class.new(Smithy::Weld) do
       def for?(_model)
         false
       end
@@ -25,6 +26,7 @@ describe 'Types: Welding' do
 
     @tmpdir = SpecHelper.generate(['Weather'], :types)
   end
+  # rubocop:enable Lint/UselessAssignment
 
   after(:all) do
     SpecHelper.cleanup(['Weather'], @tmpdir)
