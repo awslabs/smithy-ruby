@@ -37,10 +37,52 @@
                 "target": "smithy.api#Unit"
             },
             "output": {
-                "target": "smithy.api#Unit"
+                "target": "smithy.ruby.tests#ListResourcesOutput"
             },
             "traits": {
                 "smithy.api#readonly": {}
+            }
+        },
+        "smithy.ruby.tests#ListResourcesOutput": {
+            "type": "structure",
+            "members": {
+                "list": {
+                    "target": "smithy.ruby.tests#StructureList"
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "smithy.ruby.tests#MapKey": {
+            "type": "string"
+        },
+        "smithy.ruby.tests#MapOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.ruby.tests#MapOperationInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            }
+        },
+        "smithy.ruby.tests#MapOperationInput": {
+            "type": "structure",
+            "members": {
+                "map": {
+                    "target": "smithy.ruby.tests#StructureMap"
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "smithy.ruby.tests#MapValue": {
+            "type": "structure",
+            "members": {
+                "id": {
+                    "target": "smithy.api#String"
+                }
             }
         },
         "smithy.ruby.tests#NestedResource": {
@@ -205,6 +247,9 @@
             "version": "1.0.0",
             "operations": [
                 {
+                    "target": "smithy.ruby.tests#MapOperation"
+                },
+                {
                     "target": "smithy.ruby.tests#Operation"
                 }
             ],
@@ -234,6 +279,29 @@
             },
             "traits": {
                 "smithy.api#documentation": "This is a structure shape."
+            }
+        },
+        "smithy.ruby.tests#StructureList": {
+            "type": "list",
+            "member": {
+                "target": "smithy.ruby.tests#StructureMember"
+            }
+        },
+        "smithy.ruby.tests#StructureMap": {
+            "type": "map",
+            "key": {
+                "target": "smithy.ruby.tests#MapKey"
+            },
+            "value": {
+                "target": "smithy.ruby.tests#MapValue"
+            }
+        },
+        "smithy.ruby.tests#StructureMember": {
+            "type": "structure",
+            "members": {
+                "id": {
+                    "target": "smithy.api#String"
+                }
             }
         },
         "smithy.ruby.tests#UpdateResource": {

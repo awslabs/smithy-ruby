@@ -4,7 +4,7 @@ namespace smithy.ruby.tests
 
 service ServiceIndex {
     version: "1.0.0"
-    operations: [Operation]
+    operations: [Operation, MapOperation]
     resources: [Resource]
     errors: [ServiceError]
 }
@@ -56,7 +56,11 @@ operation DeleteResource {
 }
 
 @readonly
-operation ListResources {}
+operation ListResources {
+    output:= {
+        list: StructureList
+    }
+}
 
 operation ResourceOperation {
     input: Structure
@@ -68,11 +72,36 @@ operation NestedResourceOperation {
     input: Structure
 }
 
+operation MapOperation {
+    input:= {
+        map: StructureMap
+    }
+}
+
 @documentation("This is a structure shape.")
 structure Structure {
     @required
     id: String
     name: String
+}
+
+list StructureList {
+    member: StructureMember
+}
+
+structure StructureMember {
+    id: String
+}
+
+map StructureMap {
+    key: MapKey
+    value: MapValue
+}
+
+string MapKey
+
+structure MapValue {
+    id: String
 }
 
 @error("client")
