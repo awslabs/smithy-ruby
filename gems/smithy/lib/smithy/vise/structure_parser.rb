@@ -49,6 +49,10 @@ module Smithy
         shape = @shapes[target]
         shapes[target] = shape
         visited[target] = true
+        parse_members(shape, shapes, visited)
+      end
+
+      def parse_members(shape, shapes, visited)
         case shape['type']
         when 'list'
           parse_member(shape['member'], shapes, visited)
