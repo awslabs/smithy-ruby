@@ -21,8 +21,11 @@ module Smithy
         attr_accessor :template_file
       end
 
-      def hammer
-        ERB.new(File.read(self.class.template_file), trim_mode: '-').result(binding)
+      def hammer(template_file = nil)
+        if template_file && !File.exist?(template_file)
+          template_file = File.expand_path(template_file, __dir__)
+        end
+        ERB.new(File.read(template_file || self.class.template_file), trim_mode: '-').result(binding)
       end
     end
   end

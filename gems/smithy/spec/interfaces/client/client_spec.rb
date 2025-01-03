@@ -16,6 +16,8 @@ describe 'Component: Client' do
   end
 
   it 'has operation methods' do
+    puts subject
+    client = subject
     expect(subject).to respond_to(:get_city, :get_current_time, :get_forecast, :list_cities)
   end
 
