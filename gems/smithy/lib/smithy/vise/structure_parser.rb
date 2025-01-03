@@ -49,7 +49,20 @@ module Smithy
         shape = @shapes[target]
         shapes[target] = shape
         visited[target] = true
-        shape['members']&.each_value { |member| parse_member(member, shapes, visited) }
+        parse_members(shape, shapes, visited)
+      end
+
+      def parse_members(shape, shapes, visited)
+        case shape['type']
+        when 'list'
+          parse_member(shape['member'], shapes, visited)
+        when 'map'
+          parse_member(shape['key'], shapes, visited)
+          parse_member(shape['value'], shapes, visited)
+        else
+          # covers all other shapes including structure, union, enum
+          shape['members']&.each_value { |member| parse_member(member, shapes, visited) }
+        end
       end
     end
   end

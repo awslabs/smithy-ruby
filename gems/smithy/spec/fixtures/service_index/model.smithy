@@ -29,7 +29,7 @@ resource NestedResource {
 }
 
 operation Operation {
-    input: Structure
+    input: OperationInput
     output: Structure
     errors: [OperationError]
 }
@@ -68,12 +68,33 @@ operation NestedResourceOperation {
     input: Structure
 }
 
+structure OperationInput {
+    map: Map
+    list: List
+}
+
+
 @documentation("This is a structure shape.")
 structure Structure {
     @required
     id: String
     name: String
 }
+
+list List {
+    member: ListMember
+}
+
+string ListMember
+
+map Map {
+    key: MapKey
+    value: MapValue
+}
+
+string MapKey
+
+string MapValue
 
 @error("client")
 structure ServiceError {

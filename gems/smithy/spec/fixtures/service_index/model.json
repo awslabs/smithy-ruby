@@ -31,6 +31,15 @@
                 "smithy.api#idempotent": {}
             }
         },
+        "smithy.ruby.tests#List": {
+            "type": "list",
+            "member": {
+                "target": "smithy.ruby.tests#ListMember"
+            }
+        },
+        "smithy.ruby.tests#ListMember": {
+            "type": "string"
+        },
         "smithy.ruby.tests#ListResources": {
             "type": "operation",
             "input": {
@@ -42,6 +51,21 @@
             "traits": {
                 "smithy.api#readonly": {}
             }
+        },
+        "smithy.ruby.tests#Map": {
+            "type": "map",
+            "key": {
+                "target": "smithy.ruby.tests#MapKey"
+            },
+            "value": {
+                "target": "smithy.ruby.tests#MapValue"
+            }
+        },
+        "smithy.ruby.tests#MapKey": {
+            "type": "string"
+        },
+        "smithy.ruby.tests#MapValue": {
+            "type": "string"
         },
         "smithy.ruby.tests#NestedResource": {
             "type": "resource",
@@ -68,7 +92,7 @@
         "smithy.ruby.tests#Operation": {
             "type": "operation",
             "input": {
-                "target": "smithy.ruby.tests#Structure"
+                "target": "smithy.ruby.tests#OperationInput"
             },
             "output": {
                 "target": "smithy.ruby.tests#Structure"
@@ -88,6 +112,17 @@
             },
             "traits": {
                 "smithy.api#error": "client"
+            }
+        },
+        "smithy.ruby.tests#OperationInput": {
+            "type": "structure",
+            "members": {
+                "map": {
+                    "target": "smithy.ruby.tests#Map"
+                },
+                "list": {
+                    "target": "smithy.ruby.tests#List"
+                }
             }
         },
         "smithy.ruby.tests#OrphanedError": {
