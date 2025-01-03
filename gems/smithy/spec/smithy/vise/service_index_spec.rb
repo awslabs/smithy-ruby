@@ -3,34 +3,49 @@
 module Smithy
   module Vise
     describe ServiceIndex do
-      let(:model) { JSON.load_file(fixture) }
+      let(:fixture) do
+        JSON.load_file(File.expand_path('../../fixtures/service_index/model.json', __dir__))
+      end
 
-      subject { described_class.new(model) }
+      subject { described_class.new(fixture) }
 
-      describe '#service' do
-        context 'one service shape' do
-          let(:fixture) { File.expand_path('../../fixtures/vise/model.json', __dir__) }
+      describe '#operations_for' do
+        it 'returns a complete set of operations for the service' do
+          service =
+            fixture['shapes']
+            .select { |_, shape| shape['type'] == 'service' }
+          expected =
+            fixture['shapes']
+            .select { |_, shape| shape['type'] == 'operation' }
+            .reject { |id, _| id.include?('OrphanedOperation') }
+          actual = subject.operations_for(service)
+          expect(actual.keys).to match_array(expected.keys)
+        end
+      end
 
-          it 'finds the service shape' do
-            expected = model['shapes'].select { |_, shape| shape['type'] == 'service' }
-            actual = subject.service
-            expect(actual.keys.first).to eq(expected.keys.first)
-          end
+      describe '#shapes_for' do
+        it 'returns a complete set of shapes for the service' do
+          service =
+            fixture['shapes']
+            .select { |id, _| id == 'smithy.ruby.tests#ServiceIndex' }
+          expected =
+            fixture['shapes']
+            .reject { |_, shape| %w[operation resource service].include?(shape['type']) }
+            .reject { |id, _| id.include?('OrphanedError') || id.include?('OrphanedStructure') }
+          actual = subject.shapes_for(service)
+          expect(actual.keys).to match_array(expected.keys)
         end
 
-        context 'no service shapes' do
-          let(:fixture) { File.expand_path('../../fixtures/vise_no_service/model.json', __dir__) }
-
-          it 'raises an error' do
-            expect { subject.service }.to raise_error('No service shape found')
+        context 'recursive structures' do
+          let(:fixture) do
+            JSON.load_file(File.expand_path('../../fixtures/recursive/model.json', __dir__))
           end
-        end
 
-        context 'multiple service shapes' do
-          let(:fixture) { File.expand_path('../../fixtures/vise_multi_service/model.json', __dir__) }
-
-          it 'raises an error' do
-            expect { subject.service }.to raise_error('Multiple service shapes found')
+          it 'handles recursive shapes' do
+            service =
+              fixture['shapes']
+              .select { |id, _| id == 'smithy.ruby.tests#Recursive' }
+            subject.shapes_for(service)
           end
         end
       end

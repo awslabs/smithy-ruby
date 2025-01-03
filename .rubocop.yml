@@ -4,6 +4,7 @@ AllCops:
   SuggestExtensions: false
   Exclude:
     - 'build/**/*'
+    - 'projections/**/*'
     - 'tasks/release/**/*'
     - 'vendor/**/*'
 

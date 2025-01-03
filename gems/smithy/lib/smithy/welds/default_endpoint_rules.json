@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "parameters": {
+    "endpoint": {
+      "type": "string",
+      "builtIn": "SDK::Endpoint",
+      "documentation": "Endpoint"
+    }
+  },
+  "rules": [
+    {
+      "conditions": [
+        {
+          "fn": "isSet",
+          "argv": [
+            {
+              "ref": "endpoint"
+            }
+          ]
+        }
+      ],
+      "endpoint": {
+        "url": "endpoint"
+      },
+      "type": "endpoint"
+    },
+    {
+      "conditions": [],
+      "error": "Endpoint is not set - you must configure an endpoint.",
+      "type": "error"
+    }
+  ]
+}

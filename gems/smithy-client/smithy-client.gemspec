@@ -10,5 +10,7 @@ Gem::Specification.new do |spec|
   spec.license      = 'Apache-2.0'
   spec.files        = Dir['CHANGELOG.md', 'VERSION', 'lib/**/*']
 
+  spec.add_dependency('jmespath', '~> 1', '>= 1.6.1') # necessary for secure jmespath JSON parsing
+
   spec.required_ruby_version = '>= 3.0'
 end

@@ -8,7 +8,7 @@ module Smithy
       let(:plugin_a) { Plugin.new }
       let(:plugin_b) { Plugin.new }
 
-      subject { client_class.new(endpoint: 'https://example.com') }
+      subject { client_class.new }
 
       it 'is a HandlerBuilder' do
         expect(subject).to be_kind_of(HandlerBuilder)
@@ -24,7 +24,7 @@ module Smithy
         end
 
         it 'contains instance plugins' do
-          client = client_class.new(endpoint: 'https://example.com', plugins: [plugin_a])
+          client = client_class.new(plugins: [plugin_a])
           expect(client.config.plugins).to include(plugin_a)
         end
 
@@ -146,7 +146,7 @@ module Smithy
       describe '.new' do
         context 'class level plugin' do
           it 'instructs plugins to #before_initialize' do
-            options = { endpoint: 'https://example.com' }
+            options = {}
             expect(plugin_a).to receive(:before_initialize)
               .with(client_class, hash_including(options))
             client_class.add_plugin(plugin_a)
@@ -166,25 +166,25 @@ module Smithy
             expect(plugin_a).to receive(:add_handlers)
               .with(kind_of(HandlerList), kind_of(Struct))
             client_class.add_plugin(plugin_a)
-            client_class.new(endpoint: 'https://example.com')
+            client_class.new
           end
 
           it 'instructs plugins to #after_initialize' do
             expect(plugin_a).to receive(:after_initialize).with(kind_of(Base))
             client_class.add_plugin(plugin_a)
-            client_class.new(endpoint: 'https://example.com')
+            client_class.new
           end
 
           it 'does not call methods that plugin does not respond to' do
             plugin = Object.new
             client_class.add_plugin(plugin)
-            client_class.new(endpoint: 'https://example.com')
+            client_class.new
           end
         end
 
         context 'instance level plugin' do
           it 'instructs plugins to #before_initialize' do
-            options = { endpoint: 'https://example.com', plugins: [plugin_a] }
+            options = { plugins: [plugin_a] }
             expect(plugin_a).to receive(:before_initialize)
               .with(client_class, hash_including(options))
             client_class.new(options)
@@ -201,17 +201,17 @@ module Smithy
           it 'instructs plugins to #add_handlers' do
             expect(plugin_a).to receive(:add_handlers)
               .with(kind_of(HandlerList), kind_of(Struct))
-            client_class.new(endpoint: 'https://example.com', plugins: [plugin_a])
+            client_class.new(plugins: [plugin_a])
           end
 
           it 'instructs plugins to #after_initialize' do
             expect(plugin_a).to receive(:after_initialize).with(kind_of(Client::Base))
-            client_class.new(endpoint: 'https://example.com', plugins: [plugin_a])
+            client_class.new(plugins: [plugin_a])
           end
 
           it 'does not call methods that plugin does not respond to' do
             plugin = Object.new
-            client_class.new(endpoint: 'https://example.com', plugins: [plugin])
+            client_class.new(plugins: [plugin])
           end
 
           # TODO: support this?
@@ -288,7 +288,6 @@ module Smithy
         it 'has a default list of plugins' do
           client_class = Class.new(Base)
           expected = [
-            Plugins::Endpoint,
             # Plugins::NetHTTP
             Plugins::RaiseResponseErrors
             # Plugins::ResponseTarget,

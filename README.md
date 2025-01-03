@@ -33,3 +33,10 @@ Create a Weather client:
 client = Weather::Client.new(endpoint: 'https://example.com')
 client.get_current_time
 ```
+
+Build a fixture
+```
+export SMITHY_PLUGIN_DIR=build/smithy/source/smithy-ruby
+bundle exec smithy-ruby smith client --gem-name fixture --gem-version 1.0.0 <<< $(cat gems/smithy/spec/fixtures/endpoints/default-values/model.json)
+
+```

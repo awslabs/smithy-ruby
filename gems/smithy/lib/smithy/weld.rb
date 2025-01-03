@@ -20,5 +20,17 @@ module Smithy
     def preprocess(_model)
       # no-op
     end
+
+    # Called when constructing a plan
+    # @return [Hash<String, Hash>] endpoint built in bindings for use in endpoint rules.
+    def endpoint_built_in_bindings
+      {}
+    end
+
+    # Called when constructing a plan
+    # @return [Hash<String, String>] endpoint function bindings for use in endpoint rules.
+    def endpoint_function_bindings
+      {}
+    end
   end
 end

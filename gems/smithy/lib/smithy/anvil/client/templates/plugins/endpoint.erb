@@ -1,0 +1,61 @@
+# frozen_string_literal: true
+
+# This is generated code!
+
+module <%= namespace %>
+  module Plugins
+    # Endpoint plugin - resolves the endpoint and applies it to the request.
+    class Endpoint < Smithy::Client::Plugin
+      option(
+        :endpoint_provider,
+        doc_type: '<%= namespace %>::EndpointProvider',
+        docstring: <<~DOCS) do |_cfg|
+          The endpoint provider used to resolve endpoints. Any object that responds to
+          `#resolve_endpoint(parameters)`.
+        DOCS
+        EndpointProvider.new
+      end
+
+      <%- parameters.select(&:built_in?).each do |param| -%>
+<%= param.built_in_binding[:render_config].call(plan) -%>
+
+      <%- end -%>
+      <%- parameters.select(&:client_context?).each do |param| -%>
+      option(
+        :<%= param.name %>,
+        doc_type: String, # TODO: based on type...
+        docstring: "<%= param.client_context_doc %>"
+      )
+
+      <%- end -%>
+      # @api private
+      class Handler < Smithy::Client::Handler
+        def call(context)
+          params = EndpointParameters.create(context.config)
+          endpoint = context.config.endpoint_provider.resolve_endpoint(params)
+
+          context.request.endpoint = endpoint.uri
+          apply_endpoint_headers(context, endpoint.headers)
+
+          context[:endpoint_params] = params
+
+          # TODO: apply auth schemes (update signer properties from resolved auth scheme).
+
+          @handler.call(context)
+        end
+
+        private
+
+        def apply_endpoint_headers(context, headers)
+          headers.each do |key, value|
+            context.request.headers[key] = value
+          end
+        end
+      end
+
+      def add_handlers(handlers, _config)
+        handlers.add(Handler, step: :build, priority: 75)
+      end
+    end
+  end
+end

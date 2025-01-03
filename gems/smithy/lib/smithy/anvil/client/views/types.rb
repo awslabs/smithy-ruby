@@ -17,8 +17,10 @@ module Smithy
           end
 
           def types
-            @model['shapes']
-              .select { |_key, shape| %w[structure union].include?(shape['type']) }
+            Vise::ServiceIndex
+              .new(@model)
+              .shapes_for(@plan.service)
+              .select { |_key, shape|  %w[structure union].include?(shape['type']) }
               .map { |id, structure| Type.new(id, structure) }
           end
 

@@ -2,11 +2,11 @@ $version: "2"
 
 namespace smithy.ruby.tests
 
-service Vise {
+service ServiceIndex {
     version: "1.0.0"
     operations: [Operation]
     resources: [Resource]
-    errors: [Error]
+    errors: [ServiceError]
 }
 
 resource Resource {
@@ -31,6 +31,7 @@ resource NestedResource {
 operation Operation {
     input: Structure
     output: Structure
+    errors: [OperationError]
 }
 
 operation CreateResource {}
@@ -67,30 +68,6 @@ operation NestedResourceOperation {
     input: Structure
 }
 
-operation OrphanedOperation {}
-
-@error("client")
-structure Error {
-    member: String
-}
-
-enum Enum {
-    VALUE
-}
-
-intEnum IntEnum {
-    VALUE = 0
-}
-
-list List {
-    member: Structure
-}
-
-map Map {
-    key: String
-    value: Structure
-}
-
 @documentation("This is a structure shape.")
 structure Structure {
     @required
@@ -98,6 +75,19 @@ structure Structure {
     name: String
 }
 
-union Union {
-    member: Structure
+@error("client")
+structure ServiceError {
+    member: String
 }
+
+@error("client")
+structure OperationError {
+    member: String
+}
+
+operation OrphanedOperation {}
+
+structure OrphanedStructure {}
+
+@error("client")
+structure OrphanedError {}

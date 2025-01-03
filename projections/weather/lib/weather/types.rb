@@ -15,15 +15,6 @@ module Weather
     end
 
     # TODO!
-    CitySummary = Struct.new(
-      :city_id,
-      :name,
-      keyword_init: true
-    ) do
-      include Smithy::Client::Structure
-    end
-
-    # TODO!
     GetCityInput = Struct.new(
       :city_id,
       keyword_init: true

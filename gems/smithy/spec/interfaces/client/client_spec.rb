@@ -9,7 +9,7 @@ describe 'Component: Client' do
     SpecHelper.cleanup(['Weather'], @tmpdir)
   end
 
-  subject { Weather::Client.new(endpoint: 'https://example.com') }
+  subject { Weather::Client.new }
 
   it 'adds the HTTP plugin' do
     expect(Weather::Client.plugins).to include(Smithy::Client::Plugins::NetHTTP)
