@@ -24,7 +24,6 @@ module Smithy
 
       private
 
-      # rubocop:disable Metrics/AbcSize
       def source_files
         Enumerator.new do |e|
           e.yield "#{@gem_name}.gemspec", render_gemspec

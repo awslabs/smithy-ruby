@@ -37,9 +37,7 @@ describe 'Component: Shapes' do
         end
 
         it 'has a type variation of the shape when applicable' do
-          unless %w[structure union].include?(shape['type'])
-            skip("Test does not expect the generated #{id} to have a type")
-          end
+          skip("Test does not expect the generated #{id} to have a type") unless %w[structure union].include?(shape['type'])
 
           expected_type = Object.const_get("#{types_module}::#{shape_name}")
           expect(generated_shape.type).to eq(expected_type)
@@ -91,9 +89,7 @@ describe 'Component: Shapes' do
 
         context 'key and value members' do
           it 'are shapes of expected member names, shapes and contains traits when applicable' do
-            if shape['key'].nil? && shape['value'].nil?
-              skip("Test does not expect the generated #{id} to have a key/value members")
-            end
+            skip("Test does not expect the generated #{id} to have a key/value members") if shape['key'].nil? && shape['value'].nil?
 
             expect(generated_shape.key.name).to eq('key')
             expect(generated_shape.value.name).to eq('value')
