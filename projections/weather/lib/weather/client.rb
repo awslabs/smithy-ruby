@@ -19,28 +19,24 @@ module Weather
     def get_city(params = {}, options = {})
       input = build_input(:get_city, params)
       input.send_request(options)
-      'SOME LONG STRING                                                                                                 asdfasdfasdfHAHA'
     end
 
     # TODO!
     def get_current_time(params = {}, options = {})
       input = build_input(:get_current_time, params)
       input.send_request(options)
-      'SOME LONG STRING                                                                                                 asdfasdfasdfHAHA'
     end
 
     # TODO!
     def get_forecast(params = {}, options = {})
       input = build_input(:get_forecast, params)
       input.send_request(options)
-      'SOME LONG STRING                                                                                                 asdfasdfasdfHAHA'
     end
 
     # TODO!
     def list_cities(params = {}, options = {})
       input = build_input(:list_cities, params)
       input.send_request(options)
-      'SOME LONG STRING                                                                                                 asdfasdfasdfHAHA'
     end
 
     private

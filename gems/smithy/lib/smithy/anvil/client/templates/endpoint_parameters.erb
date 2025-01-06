@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # This is generated code!
 
 module <%= namespace %>
@@ -25,15 +23,14 @@ module <%= namespace %>
     def self.create(config, operation_name = nil, params = {})
 <% if operation_params.empty? -%>
       new({
-<% parameters.select(&:create_from_config?).each do |param| -%>
+  <% parameters.select(&:create_from_config?).each do |param| -%>
         <%= param.name %>: <%= param.value %>,
-<% end -%>
+  <% end -%>
       }.compact)
-    end
 <% else -%>
-    operation_params =
+      operation_params =
         case operation_name
-<% operation_params.each do |name, params| -%>
+  <% operation_params.each do |name, params| -%>
         when :<%= name %>
           {
 <% params.each do |param| -%>
@@ -46,11 +43,11 @@ module <%= namespace %>
         end
 
       new({
-<% parameters.select(&:create_from_config?).each do |param| -%>
+  <% parameters.select(&:create_from_config?).each do |param| -%>
         <%= param.name %>: <%= param.value %>,
-<% end -%>
+  <% end -%>
       }.merge(operation_params).compact)
-    end
 <% end -%>
+    end
   end
 end
