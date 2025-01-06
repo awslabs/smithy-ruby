@@ -13,7 +13,7 @@ module <%= namespace %>
 
 <% shapes_with_members.each do |shape| -%>
 <% shape.members.each do |member| -%>
-    <%= shape.name %>.<%= member.add_member(shape.type) %>
+    <%= shape.name %>.<%= member.member_method(shape.type) %>
 <% end -%>
 <% if shape.typed -%>
     <%= shape.name %>.type = Types::<%= shape.name %>

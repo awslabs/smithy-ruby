@@ -185,7 +185,7 @@ module Smithy
 
             attr_reader :name, :shape, :traits
 
-            def add_member(shape)
+            def member_method(shape)
               case shape
               when 'ListShape'
                 "set_member(#{@shape}, #{@traits})"
