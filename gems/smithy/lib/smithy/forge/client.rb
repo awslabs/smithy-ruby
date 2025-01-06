@@ -59,7 +59,7 @@ module Smithy
       end
 
       def render_client
-        Anvil::Client::Views::ClientClass.new(@plan).hammer
+        Anvil::Client::Views::Client.new(@plan).hammer
       end
 
       def render_customizations

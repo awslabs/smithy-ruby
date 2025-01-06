@@ -4,7 +4,7 @@ module Smithy
   module Anvil
     module Client
       # @api private
-      class RequestSyntaxExample
+      class RequestResponseExample
         # @param [Hash] model Model
         # @param [String] id Operation shape ID
         # @param [Hash<String, Object>] operation Operation shape
@@ -21,6 +21,11 @@ module Smithy
               params = #{request_params}
               options = {}
               output = client.#{@method_name}(params, options)
+
+            @example Response structure with placeholder values
+
+              output.to_h #=>
+              #{response_hash}
           EXAMPLE
           example.split("\n")
         end
@@ -35,6 +40,16 @@ module Smithy
           return '{}' unless input['members'].any?
 
           struct(input, '  ', Set.new)
+        end
+
+        def response_hash
+          target = @operation['output']['target']
+          return '{}' if target == 'smithy.api#Unit'
+
+          output = @shapes[target]
+          return '{}' unless output['members'].any?
+
+          struct(output, '  ', Set.new)
         end
 
         # rubocop:disable Metrics

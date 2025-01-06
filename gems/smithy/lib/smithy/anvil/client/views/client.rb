@@ -5,7 +5,7 @@ module Smithy
     module Client
       module Views
         # @api private
-        class ClientClass < View
+        class Client < View
           def initialize(plan)
             @plan = plan
             @model = plan.model
@@ -48,7 +48,7 @@ module Smithy
             end
 
             def docstrings
-              RequestSyntaxExample.new(@model, @id, @operation).docstrings
+              RequestResponseExample.new(@model, @id, @operation).docstrings
             end
 
             def name
