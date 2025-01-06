@@ -5,7 +5,7 @@ module Smithy
     let(:fixture) { File.expand_path('../fixtures/weather/model.json', __dir__) }
     let(:model) { JSON.load_file(fixture) }
     let(:type) { :client }
-    let(:options) { { welds: true, polishes: true } }
+    let(:options) { {} }
 
     subject { described_class.new(model, type, options) }
 
