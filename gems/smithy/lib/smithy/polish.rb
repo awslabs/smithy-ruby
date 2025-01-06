@@ -22,11 +22,11 @@ module Smithy
       true
     end
 
-    # Called after the artifact is generated.
-    # @param _artifact [Enumerator<String, String>] The artifact that was generated.
+    # Called after the artifacts are generated.
+    # @param artifacts [Enumerator<String, String>] The artifacts that were generated.
     #  The key is the path of the file and the value is the content of the file.
-    def polish(_artifact)
-      # no-op
+    def polish(artifacts)
+      artifacts
     end
   end
 end

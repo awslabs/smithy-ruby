@@ -3,8 +3,8 @@
 # This is generated code!
 
 module Weather
+  # This module contains the types returned by client operations.
   module Types
-
     # TODO!
     CityCoordinates = Struct.new(
       :latitude,
@@ -89,6 +89,5 @@ module Weather
     ) do
       include Smithy::Client::Structure
     end
-
   end
 end

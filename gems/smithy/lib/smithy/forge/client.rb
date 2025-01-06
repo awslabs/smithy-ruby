@@ -28,6 +28,8 @@ module Smithy
       def source_files
         Enumerator.new do |e|
           e.yield "#{@gem_name}.gemspec", render_gemspec
+          e.yield '.rubocop.yml', render_rubocop
+
           e.yield "lib/#{@gem_name}.rb", render_module
           e.yield "lib/#{@gem_name}/client.rb", render_client
           e.yield "lib/#{@gem_name}/customizations.rb", render_customizations
@@ -46,6 +48,10 @@ module Smithy
 
       def render_gemspec
         Anvil::Client::Views::Gemspec.new(@plan).hammer
+      end
+
+      def render_rubocop
+        Anvil::Client::Views::Rubocop.new(@plan).hammer
       end
 
       def render_module

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'polishes/rubocop'
+
 module Smithy
   # @api private
   module Polishes

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
-
 module Smithy
   module Client
     # A list of plugins.

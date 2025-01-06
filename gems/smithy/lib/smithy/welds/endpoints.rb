@@ -5,9 +5,11 @@ module Smithy
     # Provides default endpoint builtin/function bindings.
     class Endpoints < Weld
       def preprocess(model)
-        _, service = model['shapes'].select { |_, shape| shape['type'] == 'service' }.first
-        service['traits'] ||= {}
-        add_default_endpoints(service['traits']) unless service['traits']['smithy.rules#endpointRuleSet']
+        id, service = model['shapes'].select { |_k, s| s['type'] == 'service' }.first
+        return if service['traits'] && service['traits']['smithy.rules#endpointRuleSet']
+
+        puts "Adding default endpoint rules to #{id}"
+        add_default_endpoints(service)
       end
 
       def endpoint_built_in_bindings
@@ -15,12 +17,12 @@ module Smithy
           'SDK::Endpoint' => {
             # Text indenting is used in generated view.
             render_config: proc do |_plan|
-              <<-ADD_OPTION
-      option(
-        :endpoint,
-        doc_type: String,
-        docstring: 'Custom Endpoint'
-      )
+              <<~ADD_OPTION
+                option(
+                  :endpoint,
+                  doc_type: String,
+                  docstring: 'Custom Endpoint'
+                )
               ADD_OPTION
             end,
             render_build: proc do |_plan, _operation|
@@ -48,9 +50,10 @@ module Smithy
 
       private
 
-      def add_default_endpoints(service_traits)
-        service_traits['smithy.rules#endpointRuleSet'] = default_endpoint_rules
-        service_traits['smithy.rules#endpointTests'] = default_endpoint_tests
+      def add_default_endpoints(service)
+        service['traits'] ||= {}
+        service['traits']['smithy.rules#endpointRuleSet'] = default_endpoint_rules
+        service['traits']['smithy.rules#endpointTests'] = default_endpoint_tests
       end
 
       def default_endpoint_rules
@@ -58,7 +61,7 @@ module Smithy
       end
 
       def default_endpoint_tests
-        JSON.load_file(File.join(__dir__.to_s, 'default_endpoint_rules.json'))
+        JSON.load_file(File.join(__dir__.to_s, 'default_endpoint_tests.json'))
       end
     end
   end

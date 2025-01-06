@@ -10,5 +10,5 @@ Gem::Specification.new do |spec|
   spec.license      = 'Apache-2.0'
   spec.files        = Dir['CHANGELOG.md', 'VERSION', 'lib/**/*']
 
-  spec.required_ruby_version = '>= 3.0'
+  spec.required_ruby_version = '>= 3.3'
 end

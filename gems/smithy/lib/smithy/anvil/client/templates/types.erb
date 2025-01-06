@@ -3,19 +3,20 @@
 # This is generated code!
 
 module <%= namespace %>
+  # This module contains the types returned by client operations.
   module Types
-    <%- types.each do |type| -%>
+<% types.each do |type| -%>
 
     <%= type.documentation %>
     <%= type.name %> = Struct.new(
-      <%- type.member_names.each do |member| -%>
+<% type.member_names.each do |member| -%>
       :<%= member %>,
-      <%- end -%>
+<% end -%>
       keyword_init: true
     ) do
       include Smithy::Client::Structure
     end
-    <%- end -%>
+<% end -%>
 
   end
 end

@@ -37,9 +37,9 @@ module Smithy
         # @yieldparam [String] key
         # @yieldparam [String] value
         # @return [nil]
-        def each(&block)
+        def each(&)
           if block_given?
-            @data.each_pair(&block)
+            @data.each_pair(&)
             nil
           else
             @data.enum_for(:each)

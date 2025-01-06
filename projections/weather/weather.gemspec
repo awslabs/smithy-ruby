@@ -11,5 +11,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency('smithy-client', '~> 1')
 
-  s.required_ruby_version = '>= 3.0'
+  s.required_ruby_version = '>= 3.3'
 end

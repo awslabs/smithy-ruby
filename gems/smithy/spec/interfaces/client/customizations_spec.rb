@@ -22,6 +22,7 @@ describe 'Component: Customizations' do
   it 'does not overwrite an existing customizations file' do
     customization = <<~RUBY
       module Weather
+        # @api private
         module Customizations; end
       end
     RUBY
