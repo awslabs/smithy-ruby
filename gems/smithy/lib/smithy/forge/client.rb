@@ -33,6 +33,7 @@ module Smithy
           e.yield "lib/#{@gem_name}.rb", render_module
           e.yield "lib/#{@gem_name}/client.rb", render_client
           e.yield "lib/#{@gem_name}/customizations.rb", render_customizations
+          e.yield "lib/#{@gem_name}/shapes.rb", render_shapes
           e.yield "lib/#{@gem_name}/types.rb", render_types
           e.yield "lib/#{@gem_name}/errors.rb", render_errors
           e.yield "lib/#{@gem_name}/endpoint_parameters.rb", render_endpoint_parameters
@@ -63,6 +64,10 @@ module Smithy
 
       def render_customizations
         Anvil::Client::Views::Customizations.new.hammer
+      end
+
+      def render_shapes
+        Anvil::Client::Views::Shapes.new(@plan).hammer
       end
 
       def render_types

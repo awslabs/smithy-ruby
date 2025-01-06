@@ -5,7 +5,7 @@
 module Weather
   # TODO!
   class Client < Smithy::Client::Base
-    # self.api = API
+    self.schema = Shapes::SCHEMA
 
     add_plugin(Smithy::Client::Plugins::NetHTTP)
     add_plugin(Plugins::Endpoint)
@@ -68,14 +68,14 @@ module Weather
       handlers = @handlers.for(operation_name)
       context = Smithy::Client::HandlerContext.new(
         operation_name: operation_name,
-        operation: config.api.operation(operation_name),
+        operation: config.schema.operation(operation_name),
         client: self,
         params: params,
         config: config
       )
       context[:gem_name] = 'weather'
       context[:gem_version] = '1.0.0'
-      Smithy::Client::Input.new(handlers, context)
+      Smithy::Client::Input.new(handlers: handlers, context: context)
     end
   end
 end
