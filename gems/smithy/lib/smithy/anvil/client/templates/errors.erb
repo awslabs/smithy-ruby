@@ -22,26 +22,26 @@ module <%= namespace %>
   #
   # ## Error Classes
   #
-  <%- errors.each do |error| -%>
+<% errors.each do |error| -%>
   # * {<%= error.name %>}
-  <%- end -%>
+<% end -%>
   #
   # Additionally, error classes are dynamically generated for service errors based on the error code
   # if they are not defined above.
   module Errors
     extend Smithy::Client::Errors::DynamicErrors
-    <%- errors.each do |error| -%>
+<% errors.each do |error| -%>
 
     <%= error.documentation %>
     class <%= error.name %> < Smithy::Client::Errors::ServiceError
 
-      <%- error.member_names.each do |member| -%>
+<% error.member_names.each do |member| -%>
       def <%= member %>
         @data[:<%= member %>]
       end
 
-      <%- end -%>
+<% end -%>
     end
-    <%- end -%>
+<% end -%>
   end
 end

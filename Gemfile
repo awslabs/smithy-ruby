@@ -10,7 +10,6 @@ gem 'smithy-client', path: 'gems/smithy-client'
 
 group :development do
   gem 'byebug', platforms: :ruby
-  gem 'rubocop'
 end
 
 group :test do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
-
 module Smithy
   module Client
     # A container for an un-constructed handler. A handler entry has the

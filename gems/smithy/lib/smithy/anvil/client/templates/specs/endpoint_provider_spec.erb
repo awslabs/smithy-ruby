@@ -7,7 +7,7 @@ require_relative '../spec_helper'
 module <%= namespace %>
   describe EndpointProvider do
     subject { EndpointProvider.new }
-    <%- test_cases.each do |test_case| -%>
+<% test_cases.each do |test_case| -%>
 
     context "<%= test_case.documentation %>" do
       let(:expected) do
@@ -16,18 +16,18 @@ module <%= namespace %>
 
       it 'produces the expected output from the EndpointProvider' do
         params = EndpointParameters.new(**<%= test_case.params %>)
-        <%- if test_case.expect_error? -%>
+<% if test_case.expect_error? -%>
         expect do
           subject.resolve_endpoint(params)
         end.to raise_error(ArgumentError, expected['error'])
-        <%- else -%>
+<% else -%>
         endpoint = subject.resolve_endpoint(params)
         expect(endpoint.uri).to eq(expected['endpoint']['url'])
         expect(endpoint.headers).to eq(expected['endpoint']['headers'] || {})
         expect(endpoint.properties).to eq(expected['endpoint']['properties'] || {})
-        <%- end -%>
+<% end -%>
       end
     end
-    <%- end -%>
+<% end -%>
   end
 end

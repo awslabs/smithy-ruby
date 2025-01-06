@@ -18,8 +18,8 @@ module Smithy
       # @return [Hash]
       attr_accessor :metadata
 
-      def each(&block)
-        @operations.each(&block)
+      def each(&)
+        @operations.each(&)
       end
 
       # @return [Array<Symbol>]

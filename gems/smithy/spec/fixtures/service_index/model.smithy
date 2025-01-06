@@ -30,7 +30,6 @@ resource NestedResource {
 
 operation Operation {
     input: OperationInput
-    output: Structure
     errors: [OperationError]
 }
 

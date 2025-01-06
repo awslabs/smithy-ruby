@@ -6,11 +6,11 @@ module <%= namespace %>
   # Resolve endpoints from EndpointParameters.
   class EndpointProvider
     def resolve_endpoint(parameters)
-      <%- parameters.each do |p| -%>
+<% parameters.each do |p| -%>
       <%= p.name %> = parameters.<%= p.name %>
-      <%- end -%>
+<% end -%>
 
-      <%= endpoint_rules_code %>
+<%= endpoint_rules_code %>
     end
   end
 end
