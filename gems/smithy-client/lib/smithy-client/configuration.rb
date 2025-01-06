@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
-
 module Smithy
   module Client
     # Configuration is used to define possible configuration options and
@@ -167,8 +165,8 @@ module Smithy
           @block = block
         end
 
-        def call(*args)
-          @block.call(*args)
+        def call(*)
+          @block.call(*)
         end
       end
 

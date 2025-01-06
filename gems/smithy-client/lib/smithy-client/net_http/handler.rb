@@ -87,8 +87,8 @@ module Smithy
         # @param [Configuration] config
         # @param [HTTP::Request] req
         # @yieldparam [Net::HTTP] http
-        def session(config, req, &block)
-          pool_for(config).session_for(req.endpoint, &block)
+        def session(config, req, &)
+          pool_for(config).session_for(req.endpoint, &)
         end
 
         # @param [Configuration] config
