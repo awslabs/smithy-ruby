@@ -3,6 +3,7 @@
 require 'json'
 require 'rspec'
 require 'tmpdir'
+require 'stringio'
 
 require 'smithy'
 
@@ -21,7 +22,10 @@ module SpecHelper
       model = load_model(modules, options)
       plan = create_plan(modules, model, type, options)
 
-      Smithy.smith(plan)
+      with_captured_stdout do
+        Smithy.smith(plan)
+      end
+
       $LOAD_PATH << ("#{plan.options[:destination_root]}/lib")
       require "#{plan.options[:gem_name]}#{type == :types ? '-types' : ''}"
       plan.options[:destination_root]
@@ -46,6 +50,15 @@ module SpecHelper
 
     private
 
+    def with_captured_stdout
+      original_stdout = $stdout  # capture previous value of $stdout
+      $stdout = StringIO.new     # assign a string buffer to $stdout
+      yield                      # perform the body of the user code
+      $stdout.string             # return the contents of the string buffer
+    ensure
+      $stdout = original_stdout  # restore $stdout to its previous value
+    end
+
     def load_model(modules, options)
       fixture = options[:fixture] || modules.map(&:underscore).join('/')
       model_dir = File.join(File.dirname(__FILE__), 'fixtures', fixture)
@@ -56,7 +69,8 @@ module SpecHelper
       plan_options = {
         gem_name: options[:gem_name] || Smithy::Tools::Namespace.gem_name_from_namespaces(modules),
         gem_version: options[:gem_version] || '1.0.0',
-        destination_root: options[:destination_root] || Dir.mktmpdir
+        destination_root: options[:destination_root] || Dir.mktmpdir,
+        skip_polishes: options.fetch(:skip_polishes, true)
       }
       Smithy::Plan.new(model, type, plan_options)
     end
