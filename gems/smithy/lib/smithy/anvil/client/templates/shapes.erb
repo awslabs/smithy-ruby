@@ -12,14 +12,7 @@ module <%= namespace %>
 
 <% shapes_with_members.each do |shape| -%>
 <% shape.members.each do |member| -%>
-<% case shape.type -%>
-<% when 'ListShape' -%>
-    <%= shape.name %>.set_member(<%= member.shape %>, <%= member.traits %>)
-<% when 'MapShape' -%>
-    <%= shape.name %>.set_<%= member.name %>(<%= member.shape %>, <%= member.traits %>)
-<% else -%>
-    <%= shape.name %>.add_member("<%= member.name %>", <%= member.shape %>, <%= member.traits %>)
-<% end -%>
+    <%= shape.name %>.<%= member.add_member(shape.type) %>
 <% end -%>
 <% if shape.typed -%>
     <%= shape.name %>.type = Types::<%= shape.name %>

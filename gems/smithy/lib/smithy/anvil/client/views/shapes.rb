@@ -184,6 +184,17 @@ module Smithy
             end
 
             attr_reader :name, :shape, :traits
+
+            def add_member(shape)
+              case shape
+              when 'ListShape'
+                "set_member(#{@shape}, #{@traits})"
+              when 'MapShape'
+                "set_#{@name}(#{@shape}, #{@traits})"
+              else
+                "add_member(\"#{@name}\", #{@shape}, #{@traits})"
+              end
+            end
           end
 
           # Traits that does not affect runtime
@@ -214,30 +225,6 @@ module Smithy
             'structure' => 'StructureShape',
             'timestamp' => 'TimestampShape',
             'union' => 'UnionShape'
-          }.freeze
-
-          PRELUDE_SHAPES_MAP = {
-            'smithy.api#BigInteger' => 'BigInteger',
-            'smithy.api#BigDecimal' => 'BigDecimal',
-            'smithy.api#Blob' => 'Blob',
-            'smithy.api#Boolean' => 'Boolean',
-            'smithy.api#Byte' => 'Byte',
-            'smithy.api#Document' => 'Document',
-            'smithy.api#Double' => 'Double',
-            'smithy.api#Float' => 'Float',
-            'smithy.api#Integer' => 'Integer',
-            'smithy.api#Long' => 'Long',
-            'smithy.api#PrimitiveBoolean' => 'PrimitiveBoolean',
-            'smithy.api#PrimitiveByte' => 'PrimitiveByte',
-            'smithy.api#PrimitiveDouble' => 'PrimitiveDouble',
-            'smithy.api#PrimitiveFloat' => 'PrimitiveFloat',
-            'smithy.api#PrimitiveInteger' => 'PrimitiveInteger',
-            'smithy.api#PrimitiveLong' => 'PrimitiveLong',
-            'smithy.api#PrimitiveShort' => 'PrimitiveShort',
-            'smithy.api#Short' => 'Short',
-            'smithy.api#String' => 'String',
-            'smithy.api#Timestamp' => 'Timestamp',
-            'smithy.api#Unit' => 'Unit'
           }.freeze
         end
       end
