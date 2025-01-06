@@ -6,10 +6,10 @@ module Smithy
     class Endpoints < Weld
       def preprocess(model)
         id, service = model['shapes'].select { |_k, s| s['type'] == 'service' }.first
-        return if service['traits']['smithy.rules#endpointRuleSet']
+        return if service['traits'] && service['traits']['smithy.rules#endpointRuleSet']
 
         puts "Adding default endpoint rules to #{id}"
-        add_default_endpoints(service['traits'])
+        add_default_endpoints(service)
       end
 
       def endpoint_built_in_bindings
@@ -50,17 +50,18 @@ module Smithy
 
       private
 
-      def add_default_endpoints(service_traits)
-        service_traits['smithy.rules#endpointRuleSet'] = default_endpoint_rules
-        service_traits['smithy.rules#endpointTests'] = default_endpoint_tests
+      def add_default_endpoints(service)
+        service['traits'] ||= {}
+        service['traits']['smithy.rules#endpointRuleSet'] = default_endpoint_rules
+        service['traits']['smithy.rules#endpointTests'] = default_endpoint_tests
       end
 
       def default_endpoint_rules
-        JSON.load_file(File.join(__dir__, 'default_endpoint_rules.json'))
+        JSON.load_file(File.join(__dir__.to_s, 'default_endpoint_rules.json'))
       end
 
       def default_endpoint_tests
-        JSON.load_file(File.join(__dir__, 'default_endpoint_tests.json'))
+        JSON.load_file(File.join(__dir__.to_s, 'default_endpoint_tests.json'))
       end
     end
   end

@@ -36,18 +36,19 @@ module Smithy
             Vise::ServiceIndex
               .new(@model)
               .operations_for(@plan.service)
-              .map { |id, shape| Operation.new(id, shape) }
+              .map { |id, operation| Operation.new(@model, id, operation) }
           end
 
           # @api private
           class Operation
-            def initialize(id, operation)
+            def initialize(model, id, operation)
+              @model = model
               @id = id
               @operation = operation
             end
 
-            def documentation
-              '# TODO!'
+            def docstrings
+              RequestSyntaxExample.new(@model, @id, @operation).docstrings
             end
 
             def name

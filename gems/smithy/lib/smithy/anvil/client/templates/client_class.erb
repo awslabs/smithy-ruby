@@ -7,23 +7,25 @@ module <%= namespace %>
   class Client < Smithy::Client::Base
     # self.api = API
 
-    <%- plugins.each do |p| -%>
+<% plugins.each do |p| -%>
     add_plugin(<%= p %>)
-    <%- end -%>
+<% end -%>
 
     # TODO!
     def initialize(*args)
       super
     end
 
-    <%- operations.each do |operation| -%>
-    <%= operation.documentation %>
+<% operations.each do |operation| -%>
+<% operation.docstrings.each do |docstring| -%>
+    # <%= docstring %>
+<% end -%>
     def <%= operation.name %>(params = {}, options = {})
       input = build_input(:<%= operation.name %>, params)
       input.send_request(options)
     end
 
-    <%- end -%>
+<% end -%>
     private
 
     def build_input(operation_name, params)
