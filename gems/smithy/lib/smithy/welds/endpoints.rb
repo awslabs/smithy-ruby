@@ -54,11 +54,11 @@ module Smithy
       end
 
       def default_endpoint_rules
-        JSON.load_file(File.join(__dir__, 'default_endpoint_rules.json'))
+        JSON.load_file(File.join(__dir__.to_s, 'default_endpoint_rules.json'))
       end
 
       def default_endpoint_tests
-        JSON.load_file(File.join(__dir__, 'default_endpoint_rules.json'))
+        JSON.load_file(File.join(__dir__.to_s, 'default_endpoint_rules.json'))
       end
     end
   end
