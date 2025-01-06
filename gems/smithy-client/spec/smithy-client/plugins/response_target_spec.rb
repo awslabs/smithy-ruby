@@ -5,10 +5,10 @@ module Smithy
     module Plugins
       describe ResponseTarget do
         let(:client_class) do
-          api = API.new
-          api.add_operation(:operation_name, Operation.new)
+          schema = Schema.new
+          schema.add_operation(:operation_name, Shapes::OperationShape.new)
           client_class = Class.new(Client::Base)
-          client_class.api = api
+          client_class.schema = schema
           client_class.clear_plugins
           client_class.add_plugin(ResponseTarget)
           client_class.add_plugin(DummySendPlugin)

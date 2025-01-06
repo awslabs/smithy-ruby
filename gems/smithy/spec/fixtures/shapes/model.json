@@ -1,0 +1,203 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#ClientError": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "smithy.ruby.tests#String",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#error": "client"
+            }
+        },
+        "smithy.ruby.tests#Enum": {
+            "type": "enum",
+            "members": {
+                "CAT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "cat"
+                    }
+                },
+                "DOG": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "dog"
+                    }
+                }
+            }
+        },
+        "smithy.ruby.tests#IntEnum": {
+            "type": "intEnum",
+            "members": {
+                "FOO": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": 1
+                    }
+                },
+                "BAR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": 2
+                    }
+                }
+            }
+        },
+        "smithy.ruby.tests#List": {
+            "type": "list",
+            "member": {
+                "target": "smithy.ruby.tests#String"
+            }
+        },
+        "smithy.ruby.tests#Map": {
+            "type": "map",
+            "key": {
+                "target": "smithy.ruby.tests#String"
+            },
+            "value": {
+                "target": "smithy.api#Integer"
+            }
+        },
+        "smithy.ruby.tests#Operation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.ruby.tests#OperationInputOutput"
+            },
+            "output": {
+                "target": "smithy.ruby.tests#OperationInputOutput"
+            },
+            "errors": [
+                {
+                    "target": "smithy.ruby.tests#ClientError"
+                },
+                {
+                    "target": "smithy.ruby.tests#ServerError"
+                }
+            ],
+            "traits": {
+                "smithy.api#http": {
+                    "method": "POST",
+                    "uri": "/operation"
+                }
+            }
+        },
+        "smithy.ruby.tests#OperationInputOutput": {
+            "type": "structure",
+            "members": {
+                "bigDecimal": {
+                    "target": "smithy.api#BigDecimal"
+                },
+                "bigInteger": {
+                    "target": "smithy.api#BigInteger"
+                },
+                "blob": {
+                    "target": "smithy.api#Blob"
+                },
+                "boolean": {
+                    "target": "smithy.api#Boolean"
+                },
+                "byte": {
+                    "target": "smithy.api#Byte"
+                },
+                "document": {
+                    "target": "smithy.api#Document"
+                },
+                "double": {
+                    "target": "smithy.api#Double"
+                },
+                "enum": {
+                    "target": "smithy.ruby.tests#Enum"
+                },
+                "float": {
+                    "target": "smithy.api#Float"
+                },
+                "integer": {
+                    "target": "smithy.api#Integer"
+                },
+                "intEnum": {
+                    "target": "smithy.ruby.tests#IntEnum"
+                },
+                "long": {
+                    "target": "smithy.api#Long"
+                },
+                "short": {
+                    "target": "smithy.api#Short"
+                },
+                "string": {
+                    "target": "smithy.ruby.tests#String"
+                },
+                "timestamp": {
+                    "target": "smithy.api#Timestamp"
+                },
+                "id": {
+                    "target": "smithy.ruby.tests#String",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                },
+                "structure": {
+                    "target": "smithy.ruby.tests#OperationInputOutput"
+                },
+                "list": {
+                    "target": "smithy.ruby.tests#List"
+                },
+                "map": {
+                    "target": "smithy.ruby.tests#Map"
+                },
+                "union": {
+                    "target": "smithy.ruby.tests#Union"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "This is a documentation",
+                "smithy.api#xmlName": "Structure"
+            }
+        },
+        "smithy.ruby.tests#ServerError": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#error": "server",
+                "smithy.api#retryable": {
+                    "throttling": true
+                }
+            }
+        },
+        "smithy.ruby.tests#ShapeService": {
+            "type": "service",
+            "version": "2018-10-31",
+            "operations": [
+                {
+                    "target": "smithy.ruby.tests#Operation"
+                }
+            ],
+            "traits": {
+                "smithy.api#paginated": {
+                    "inputToken": "nextToken",
+                    "outputToken": "nextToken",
+                    "pageSize": "pageSize"
+                }
+            }
+        },
+        "smithy.ruby.tests#String": {
+            "type": "string",
+            "traits": {
+                "smithy.api#pattern": "^[A-Za-z0-9 ]+$"
+            }
+        },
+        "smithy.ruby.tests#Union": {
+            "type": "union",
+            "members": {
+                "list": {
+                    "target": "smithy.ruby.tests#List"
+                }
+            }
+        }
+    }
+}

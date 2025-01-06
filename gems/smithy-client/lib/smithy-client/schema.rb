@@ -3,32 +3,38 @@
 module Smithy
   module Client
     # @api private
-    class API
+    class Schema
       include Enumerable
 
       def initialize
-        @metadata = {}
+        @service = nil
         @operations = {}
         yield self if block_given?
       end
 
-      # @return [String, nil]
-      attr_accessor :version
+      # @return [ServiceShape, nil]
+      attr_accessor :service
 
-      # @return [Hash]
-      attr_accessor :metadata
+      # @return [Hash<Symbol, OperationShape>]
+      attr_accessor :operations
 
-      def each(&)
-        @operations.each(&)
-      end
-
-      # @return [Array<Symbol>]
+      # @return [OperationShape]
       def add_operation(name, operation)
         @operations[name] = operation
       end
 
+      # @return [Hash<Symbol, OperationShape>]
+      def each(&)
+        @operations.each(&)
+      end
+
+      # @return [String]
+      def inspect
+        "#<#{self.class.name}>"
+      end
+
       # @param [String] name
-      # @return [Operation]
+      # @return [OperationShape] operation
       def operation(name)
         raise ArgumentError, "unknown operation #{name.inspect}" unless @operations.key?(name)
 
@@ -38,11 +44,6 @@ module Smithy
       # @return [Array<Symbol>]
       def operation_names
         @operations.keys
-      end
-
-      # @api private
-      def inspect
-        "#<#{self.class.name}>"
       end
     end
   end

@@ -1,0 +1,42 @@
+# frozen_string_literal: true
+
+# This is generated code!
+
+module <%= namespace %>
+  # This module contains the shapes used by the client.
+  module Shapes
+    include Smithy::Client::Shapes
+
+<% shapes.each do |shape| -%>
+    <%= shape.name %> = <%= shape.type %>.new(id: "<%= shape.id %>", traits: <%= shape.traits %>)
+<% end -%>
+
+<% shapes_with_members.each do |shape| -%>
+<% shape.members.each do |member| -%>
+    <%= shape.name %>.<%= member.add_member_method(shape.type) %>
+<% end -%>
+<% if shape.typed -%>
+    <%= shape.name %>.type = Types::<%= shape.name %>
+<% end -%>
+
+<% end -%>
+    SCHEMA = Smithy::Client::Schema.new do |schema|
+      schema.service = ServiceShape.new(
+        id: "<%= service_shape.id %>",
+        version: "<%= service_shape.version %>",
+        traits: <%= service_shape.traits %>
+      )
+<% operation_shapes.each do |shape| -%>
+      schema.add_operation(:<%= shape.name %>, OperationShape.new do |operation|
+        operation.id = "<%= shape.id %>"
+        operation.input = <%= shape.input %>
+        operation.output = <%= shape.output %>
+        operation.traits = <%= shape.traits %>
+<% shape.errors.each do |err| -%>
+        operation.errors << <%= err %>
+<% end -%>
+      end)
+<% end -%>
+    end
+  end
+end

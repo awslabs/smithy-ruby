@@ -38,8 +38,8 @@ module Smithy
             if @plan.type == :types
               [:types]
             else
-              # Order matters here - plugins must come before client
-              %w[plugins/endpoint client customizations errors types endpoint_parameters endpoint_provider]
+              # Order matters here - plugins must come before client, types and shapes must come before client
+              %w[plugins/endpoint types shapes client customizations errors endpoint_parameters endpoint_provider]
             end
           end
         end

@@ -44,7 +44,7 @@ module Smithy
       #  names. These are valid arguments to {#build_input} and are also
       #  valid methods.
       def operation_names
-        self.class.api.operation_names
+        self.class.schema.operation_names
       end
 
       # @api private
@@ -58,12 +58,12 @@ module Smithy
       #  opportunity to register options with default values.
       def build_config(plugins, options)
         config = Configuration.new
-        config.add_option(:api)
+        config.add_option(:schema)
         config.add_option(:plugins)
         plugins.each do |plugin|
           plugin.add_options(config) if plugin.respond_to?(:add_options)
         end
-        config.build!(options.merge(api: self.class.api))
+        config.build!(options.merge(schema: self.class.schema))
       end
 
       # Gives each plugin the opportunity to register handlers for this client.
@@ -84,7 +84,7 @@ module Smithy
       def context_for(operation_name, params)
         HandlerContext.new(
           operation_name: operation_name,
-          operation: config.api.operation(operation_name),
+          operation: config.schema.operation(operation_name),
           client: self,
           params: params,
           config: config
@@ -162,24 +162,24 @@ module Smithy
           Array(@plugins).freeze
         end
 
-        # @return [API]
-        def api
-          @api ||= API.new
+        # @return [Schema]
+        def schema
+          @schema ||= Schema.new
         end
 
-        # @param [API] api
-        def api=(api)
-          @api = api
+        # @param [Schema] schema
+        def schema=(schema)
+          @schema = schema
           define_operation_methods
         end
 
-        # @option options [API] :api (API.new)
+        # @option options [Schema] :schema (Schema.new)
         # @option options [Array<Plugin>] :plugins ([]) A list of plugins to
         #  add to the client class created.
         # @return [Class<Client::Base>]
         def define(options = {})
           subclass = Class.new(self)
-          subclass.api = options[:api] || api
+          subclass.schema = options[:schema] || schema
           Array(options[:plugins]).each do |plugin|
             subclass.add_plugin(plugin)
           end
@@ -191,7 +191,7 @@ module Smithy
 
         def define_operation_methods
           operations_module = Module.new
-          @api.operation_names.each do |method_name|
+          @schema.operation_names.each do |method_name|
             operations_module.send(:define_method, method_name) do |*args, &block|
               params = args[0] || {}
               options = args[1] || {}

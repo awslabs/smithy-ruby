@@ -3,8 +3,8 @@
 module Smithy
   module Client
     describe Base do
-      let(:api) { API.new }
-      let(:client_class) { Base.define(api: api) }
+      let(:schema) { Schema.new }
+      let(:client_class) { Base.define(schema: schema) }
       let(:plugin_a) { Plugin.new }
       let(:plugin_b) { Plugin.new }
 
@@ -19,8 +19,8 @@ module Smithy
           expect(subject.config).to be_kind_of(Struct)
         end
 
-        it 'contains the client api' do
-          expect(subject.config.api).to be(client_class.api)
+        it 'contains a schema' do
+          expect(subject.config.schema).to be(client_class.schema)
         end
 
         it 'contains instance plugins' do
@@ -51,7 +51,7 @@ module Smithy
         let(:input) { subject.build_input(:operation_name) }
 
         before(:each) do
-          api.add_operation(:operation_name, Operation.new)
+          schema.add_operation(:operation_name, Shapes::OperationShape.new)
         end
 
         it 'returns an Input' do
@@ -107,7 +107,7 @@ module Smithy
         let(:input) { Input.new }
 
         before(:each) do
-          api.add_operation(:operation_name, Operation.new)
+          schema.add_operation(:operation_name, Shapes::OperationShape.new)
           allow(subject).to receive(:build_input).and_return(input)
           allow(input).to receive(:send_request)
         end
@@ -297,17 +297,17 @@ module Smithy
         end
       end
 
-      describe '.api' do
-        it 'defaults to an API' do
-          expect(client_class.api).to be_kind_of(API)
+      describe '.schema' do
+        it 'defaults to a Schema' do
+          expect(client_class.schema).to be_kind_of(Schema)
         end
       end
 
-      describe '.api=' do
+      describe '.schema=' do
         it 'can be set' do
-          api = API.new
-          client_class.api = api
-          expect(client_class.api).to be(api)
+          schema = Schema.new
+          client_class.schema = schema
+          expect(client_class.schema).to be(schema)
         end
       end
 
@@ -317,10 +317,10 @@ module Smithy
           expect(client_class.ancestors).to include(Client::Base)
         end
 
-        it 'sets the api on the client class' do
-          api = API.new
-          client_class = Base.define(api: api)
-          expect(client_class.api).to be(api)
+        it 'sets the schema on the client class' do
+          schema = Schema.new
+          client_class = Base.define(schema: schema)
+          expect(client_class.schema).to be(schema)
         end
 
         it 'extends from subclasses of client' do

@@ -36,10 +36,10 @@ require_relative 'smithy-client/plugins/response_target'
 
 # model
 
-require_relative 'smithy-client/api'
 require_relative 'smithy-client/base'
 require_relative 'smithy-client/errors'
-require_relative 'smithy-client/operation'
+require_relative 'smithy-client/schema'
+require_relative 'smithy-client/shapes'
 require_relative 'smithy-client/structure'
 
 # endpoints

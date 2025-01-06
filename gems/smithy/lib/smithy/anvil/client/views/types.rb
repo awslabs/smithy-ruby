@@ -20,7 +20,7 @@ module Smithy
             Vise::ServiceIndex
               .new(@model)
               .shapes_for(@plan.service)
-              .select { |_key, shape| shape['type'] == 'structure' }
+              .select { |_key, shape| %w[structure union].include?(shape['type']) }
               .map { |id, structure| Type.new(id, structure) }
           end
 
