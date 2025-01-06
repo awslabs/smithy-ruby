@@ -87,6 +87,46 @@ describe 'Component: Client' do
           }
           options = {}
           output = client.operation(params, options)
+
+        @example Response structure with placeholder values
+
+          output.to_h #=>
+          {
+            blob: "data",
+            streaming_blob: File.read("source_file"), # required
+            boolean: false,
+            string: "String",
+            byte: 97,
+            short: 1,
+            integer: 1,
+            long: 1,
+            float: 1.0,
+            double: 1.0,
+            big_integer: 1,
+            big_decimal: BigDecimal(1),
+            timestamp: Time.now,
+            document: TODO: document,
+            enum: "VALUE" # One of: ["VALUE"],
+            int_enum: 0 # One of: [0],
+            simple_list: ["String"],
+            complex_list: [
+              {
+                member: "String"
+              }
+            ],
+            simple_map: {
+              "String" => "String"
+            },
+            complex_map: {
+              "String" => {
+                member: "String"
+              }
+            },
+            structure: {
+              member: "String"
+            },
+            union: TODO: union
+          }
       EXAMPLE
       client_file = File.join(@tmpdir, 'lib', 'all_shapes', 'client.rb')
       top_level = rdoc.parse_files([client_file]).first
@@ -116,6 +156,17 @@ describe 'Component: Client' do
             }
             options = {}
             output = client.operation(params, options)
+
+          @example Response structure with placeholder values
+
+            output.to_h #=>
+            {
+              structure: {
+                structure: {
+                  # recursive Structure
+                }
+              }
+            }
         EXAMPLE
         client_file = File.join(@tmpdir, 'lib', 'recursive', 'client.rb')
         top_level = rdoc.parse_files([client_file]).first
