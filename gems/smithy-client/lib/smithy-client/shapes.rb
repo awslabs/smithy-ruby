@@ -142,7 +142,7 @@ module Smithy
         # @return [Hash<String, MemberShape>]
         attr_accessor :members
 
-        # @return [Type]
+        # @return [Struct]
         attr_accessor :type
 
         # @return [MemberShape]

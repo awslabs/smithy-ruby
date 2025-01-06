@@ -23,7 +23,8 @@ module <%= namespace %>
 <% end -%>
 <% if shape.typed -%>
     <%= shape.name %>.type = Types::<%= shape.name %>
-<% end %>
+<% end -%>
+
 <% end -%>
     SCHEMA = Smithy::Client::Schema.new do |schema|
       schema.service = ServiceShape.new(

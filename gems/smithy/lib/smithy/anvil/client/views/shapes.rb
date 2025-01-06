@@ -56,9 +56,9 @@ module Smithy
           def build_operation_shape(id, shape)
             OperationShape.new(
               id: id,
-              name: build_shape_name(id).underscore,
-              input: build_shape_name(shape['input']['target']),
-              output: build_shape_name(shape['output']['target']),
+              name: Vise::Shape.relative_id(id).underscore,
+              input: Vise::Shape.relative_id(shape['input']['target']),
+              output: Vise::Shape.relative_id(shape['output']['target']),
               errors: build_error_shapes(shape['errors']),
               traits: filter_traits(shape['traits'])
             )
@@ -68,7 +68,7 @@ module Smithy
             return [] if errors.nil?
 
             errors.each_with_object([]) do |err, a|
-              a << build_shape_name(err['target'])
+              a << Vise::Shape.relative_id(err['target'])
             end
           end
 
@@ -116,17 +116,9 @@ module Smithy
           def build_member_shape(name, shape, traits)
             MemberShape.new(
               name: name.underscore,
-              shape: build_shape_name(shape),
+              shape: Vise::Shape.relative_id(shape),
               traits: filter_traits(traits)
             )
-          end
-
-          def build_shape_name(id)
-            if PRELUDE_SHAPES_MAP.include?(id)
-              PRELUDE_SHAPES_MAP[id]
-            else
-              Vise::Shape.relative_id(id)
-            end
           end
 
           def filter_traits(traits)
