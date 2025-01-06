@@ -22,7 +22,6 @@ namespace :smithy do
     Dir.glob('gems/smithy/spec/fixtures/endpoints/*/model.json') do |model_path|
       test_name = model_path.split('/')[-2]
       test_module = test_name.gsub('-', '').camelize
-      puts "Building SDK for #{test_name} at: #{model_path}"
       tmpdir = SpecHelper.generate([test_module], :client, { fixture: "endpoints/#{test_name}" })
       tmp_dirs << [test_module.to_sym, tmpdir]
       spec_paths << "#{tmpdir}/spec"

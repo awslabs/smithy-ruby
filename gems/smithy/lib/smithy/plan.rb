@@ -14,8 +14,8 @@ module Smithy
 
       Welds.load!(self)
       Polishes.load!(self)
-      @welds = Welds.for(model)
-      @polishes = Polishes.for(model)
+      @welds = options[:skip_welds] ? [] : Welds.for(model)
+      @polishes = options[:skip_polishes] ? [] : Polishes.for(model)
     end
 
     # @return [Hash] The API model as a JSON hash.
