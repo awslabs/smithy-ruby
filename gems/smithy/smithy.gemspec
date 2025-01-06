@@ -14,5 +14,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency('railties', '~> 8.0')
   spec.add_dependency('rubocop')
 
-  spec.required_ruby_version = '>= 3.0'
+  spec.required_ruby_version = '>= 3.3'
 end

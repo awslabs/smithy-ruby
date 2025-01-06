@@ -12,5 +12,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency('jmespath', '~> 1', '>= 1.6.1') # necessary for secure jmespath JSON parsing
 
-  spec.required_ruby_version = '>= 3.0'
+  spec.required_ruby_version = '>= 3.3'
 end
