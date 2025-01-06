@@ -29,10 +29,10 @@ module Smithy
 
         def request_params
           target = @operation['input']['target']
-          return '' if target == 'smithy.api#Unit'
+          return '{}' if target == 'smithy.api#Unit'
 
           input = @shapes[target]
-          return '' unless input['members'].any?
+          return '{}' unless input['members'].any?
 
           struct(input, '  ', Set.new)
         end

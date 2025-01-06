@@ -16,7 +16,7 @@ module Weather
     end
 
     # @example Request syntax with placeholder values
-    # 
+    #
     #   params = {
     #     city_id: "CityId", # required
     #   }
@@ -28,8 +28,8 @@ module Weather
     end
 
     # @example Request syntax with placeholder values
-    # 
-    #   params = 
+    #
+    #   params = {}
     #   options = {}
     #   output = client.get_current_time(params, options)
     def get_current_time(params = {}, options = {})
@@ -38,7 +38,7 @@ module Weather
     end
 
     # @example Request syntax with placeholder values
-    # 
+    #
     #   params = {
     #     city_id: "CityId", # required
     #   }
@@ -50,7 +50,7 @@ module Weather
     end
 
     # @example Request syntax with placeholder values
-    # 
+    #
     #   params = {
     #     next_token: "String",
     #     page_size: 1
