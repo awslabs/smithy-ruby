@@ -24,8 +24,8 @@ module Smithy
       end
 
       # @return [Hash<Symbol, OperationShape>]
-      def each(&block)
-        @operations.each(&block)
+      def each(&)
+        @operations.each(&)
       end
 
       # @return [String]
