@@ -5,9 +5,11 @@ module Smithy
     # Provides default endpoint builtin/function bindings.
     class Endpoints < Weld
       def preprocess(model)
-        model['shapes'].select { |_k, s| s['type'] == 'service' }.each_value do |shape|
-          add_default_endpoints(shape['traits']) unless shape['traits']['smithy.rules#endpointRuleSet']
-        end
+        id, service = model['shapes'].select { |_k, s| s['type'] == 'service' }.first
+        return if service['traits']['smithy.rules#endpointRuleSet']
+
+        puts "Adding default endpoint rules to #{id}"
+        add_default_endpoints(service['traits'])
       end
 
       def endpoint_built_in_bindings

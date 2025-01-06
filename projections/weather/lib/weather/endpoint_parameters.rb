@@ -17,7 +17,7 @@ module Weather
 
     def self.create(config, _operation_name = nil, _params = {})
       new({
-        endpoint: config.endpoint,
+        endpoint: config.endpoint
       }.compact)
     end
   end

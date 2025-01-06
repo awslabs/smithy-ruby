@@ -22,8 +22,8 @@ module <%= namespace %>
 <% end -%>
     end
 
+    def self.create(config, operation_name = nil, params = {})
 <% if operation_params.empty? -%>
-    def self.create(config, _operation_name = nil, _params = {})
       new({
 <% parameters.select(&:create_from_config?).each do |param| -%>
         <%= param.name %>: <%= param.value %>,
@@ -31,7 +31,6 @@ module <%= namespace %>
       }.compact)
     end
 <% else -%>
-  def self.create(config, operation_name = nil, params = {})
     operation_params =
         case operation_name
 <% operation_params.each do |name, params| -%>

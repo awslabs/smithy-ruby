@@ -4,7 +4,6 @@
 
 module Weather
   module Types
-
     # TODO!
     CityCoordinates = Struct.new(
       :latitude,
@@ -89,6 +88,5 @@ module Weather
     ) do
       include Smithy::Client::Structure
     end
-
   end
 end

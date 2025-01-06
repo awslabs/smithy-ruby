@@ -21,6 +21,7 @@ module <%= namespace %>
     def <%= operation.name %>(params = {}, options = {})
       input = build_input(:<%= operation.name %>, params)
       input.send_request(options)
+      "SOME LONG STRING                                                                                                 asdfasdfasdfHAHA"
     end
 
     <%- end -%>
