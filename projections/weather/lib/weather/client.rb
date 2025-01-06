@@ -15,25 +15,48 @@ module Weather
       super
     end
 
-    # TODO!
+    # @example Request syntax with placeholder values
+    # 
+    #   params = {
+    #     city_id: "CityId", # required
+    #   }
+    #   options = {}
+    #   output = client.get_city(params, options)
     def get_city(params = {}, options = {})
       input = build_input(:get_city, params)
       input.send_request(options)
     end
 
-    # TODO!
+    # @example Request syntax with placeholder values
+    # 
+    #   params = 
+    #   options = {}
+    #   output = client.get_current_time(params, options)
     def get_current_time(params = {}, options = {})
       input = build_input(:get_current_time, params)
       input.send_request(options)
     end
 
-    # TODO!
+    # @example Request syntax with placeholder values
+    # 
+    #   params = {
+    #     city_id: "CityId", # required
+    #   }
+    #   options = {}
+    #   output = client.get_forecast(params, options)
     def get_forecast(params = {}, options = {})
       input = build_input(:get_forecast, params)
       input.send_request(options)
     end
 
-    # TODO!
+    # @example Request syntax with placeholder values
+    # 
+    #   params = {
+    #     next_token: "String",
+    #     page_size: 1
+    #   }
+    #   options = {}
+    #   output = client.list_cities(params, options)
     def list_cities(params = {}, options = {})
       input = build_input(:list_cities, params)
       input.send_request(options)
