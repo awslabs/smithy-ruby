@@ -27,6 +27,11 @@ module Smithy
         method_option :gem_namespace, type: :string,
                                       desc: 'The namespace of the gem to generate, e.g. `MyGem::Namespace`.' \
                                             'If not provided, the gem name will be used to infer the namespace.'
+        method_option :welds, type: :boolean, default: true,
+                              desc: 'Whether or not to apply welds.'
+
+        method_option :polishes, type: :boolean, default: true,
+                                 desc: 'Whether or not to apply polishes.'
       end
 
       gem_options!

@@ -24,7 +24,7 @@ describe 'Types: Polishing' do
         end
       end
     end
-    @tmpdir = SpecHelper.generate(['Weather'], :types, { skip_polishes: false })
+    @tmpdir = SpecHelper.generate(['Weather'], :types, { polishes: true })
   end
 
   after(:all) do

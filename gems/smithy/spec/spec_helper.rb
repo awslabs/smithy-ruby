@@ -22,9 +22,7 @@ module SpecHelper
       model = load_model(modules, options)
       plan = create_plan(modules, model, type, options)
 
-      with_captured_stdout do
-        Smithy.smith(plan)
-      end
+      with_captured_stdout { Smithy.smith(plan) }
 
       $LOAD_PATH << ("#{plan.options[:destination_root]}/lib")
       require "#{plan.options[:gem_name]}#{type == :types ? '-types' : ''}"
@@ -51,12 +49,12 @@ module SpecHelper
     private
 
     def with_captured_stdout
-      original_stdout = $stdout  # capture previous value of $stdout
-      $stdout = StringIO.new     # assign a string buffer to $stdout
-      yield                      # perform the body of the user code
-      $stdout.string             # return the contents of the string buffer
+      original_stdout = $stdout
+      $stdout = StringIO.new
+      yield
+      $stdout.string
     ensure
-      $stdout = original_stdout  # restore $stdout to its previous value
+      $stdout = original_stdout
     end
 
     def load_model(modules, options)
@@ -67,10 +65,11 @@ module SpecHelper
 
     def create_plan(modules, model, type, options)
       plan_options = {
-        gem_name: options[:gem_name] || Smithy::Tools::Namespace.gem_name_from_namespaces(modules),
-        gem_version: options[:gem_version] || '1.0.0',
-        destination_root: options[:destination_root] || Dir.mktmpdir,
-        skip_polishes: options.fetch(:skip_polishes, true)
+        gem_name: options.fetch(:gem_name, Smithy::Tools::Namespace.gem_name_from_namespaces(modules)),
+        gem_version: options.fetch(:gem_version, '1.0.0'),
+        destination_root: options.fetch(:destination_root, Dir.mktmpdir),
+        polishes: options.fetch(:polishes, false),
+        welds: options.fetch(:welds, true)
       }
       Smithy::Plan.new(model, type, plan_options)
     end

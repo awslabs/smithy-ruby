@@ -15,16 +15,16 @@ module Smithy
       Welds.load!(self)
       Polishes.load!(self)
       @welds =
-        if options[:skip_welds]
-          []
-        else
+        if options[:welds]
           Welds.for(model)
+        else
+          []
         end
       @polishes =
-        if options[:skip_polishes]
-          []
-        else
+        if options[:polishes]
           Polishes.for(model)
+        else
+          []
         end
     end
 
