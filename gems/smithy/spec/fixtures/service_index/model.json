@@ -95,7 +95,7 @@
                 "target": "smithy.ruby.tests#OperationInput"
             },
             "output": {
-                "target": "smithy.ruby.tests#Structure"
+                "target": "smithy.api#Unit"
             },
             "errors": [
                 {
