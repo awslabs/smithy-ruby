@@ -6,11 +6,11 @@ module Smithy
       # @api private
       class RequestResponseExample
         # @param [Hash] model Model
-        # @param [String] id Operation shape ID
+        # @param [String] operation_name Operation name
         # @param [Hash<String, Object>] operation Operation shape
-        def initialize(model, id, operation)
+        def initialize(model, operation_name, operation)
           @shapes = model['shapes']
-          @method_name = Vise::Shape.name(id).underscore
+          @operation_name = operation_name
           @operation = operation
         end
 
@@ -20,14 +20,14 @@ module Smithy
 
               params = #{request_params}
               options = {}
-              output = client.#{@method_name}(params, options)
+              output = client.#{@operation_name}(params, options)
 
             @example Response structure with placeholder values
 
               output.to_h #=>
               #{response_hash}
           EXAMPLE
-          example.split("\n")
+          example.split("\n") << ''
         end
 
         private

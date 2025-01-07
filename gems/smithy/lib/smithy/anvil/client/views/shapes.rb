@@ -200,6 +200,7 @@ module Smithy
           # Traits that does not affect runtime
           OMITTED_TRAITS = %w[
             smithy.api#documentation
+            smithy.api#examples
             smithy.rules#endpointRuleSet
             smithy.rules#endpointTests
           ].freeze
