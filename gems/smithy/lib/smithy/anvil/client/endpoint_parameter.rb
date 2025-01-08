@@ -21,7 +21,17 @@ module Smithy
         attr_reader :id, :data, :name, :source, :value
 
         def documentation
-          '# TODO!'
+          @data['documentation']
+        end
+
+        def documentation_type
+          case @data['type']
+          when 'stringArray' then 'Array<String>'
+          when 'string' then 'String'
+          when 'boolean' then 'Boolean'
+          else
+            @data['type']
+          end
         end
 
         def default_value

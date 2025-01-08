@@ -3,8 +3,11 @@
 # This is generated code!
 
 module <%= namespace %>
-  # Resolve endpoints from EndpointParameters.
+  # Resolve an endpoint from {EndpointParameters}.
   class EndpointProvider
+    # @param [EndpointParameters] parameters
+    # @return [Smithy::Client::EndpointRules::Endpoint]
+    # @raise [ArgumentError]
     def resolve_endpoint(parameters)
 <% parameters.each do |p| -%>
       <%= p.name %> = parameters.<%= p.name %>

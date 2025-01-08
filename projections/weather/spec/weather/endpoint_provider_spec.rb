@@ -6,6 +6,19 @@ require_relative '../spec_helper'
 
 module Weather
   describe EndpointProvider do
+    # TODO: Can be replaced by stub_responses config once implemented
+    let(:stub_send) do
+      Class.new(Smithy::Client::Plugin) do
+        def add_handlers(handlers, _config)
+          handlers.add(Class.new(Smithy::Client::Handler) do
+            def call(context)
+              Smithy::Client::Output.new(context: context)
+            end
+          end, step: :send)
+        end
+      end
+    end
+
     subject { EndpointProvider.new }
 
     context 'Endpoint set' do

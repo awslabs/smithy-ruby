@@ -4,7 +4,14 @@
 
 module <%= namespace %>
   # Endpoint parameters used to resolve endpoints per request.
-  <%= documentation %>
+<% parameters.each do |param| -%>
+  # @!attribute <%= param.name %>
+<% if param.documentation -%>
+  #   <%= param.documentation %>
+<% end -%>
+  #
+  #   @return [<%= param.documentation_type %>]
+<% end -%>
   EndpointParameters = Struct.new(
 <% parameters.each do |param| -%>
     :<%= param.name %>,
@@ -22,6 +29,7 @@ module <%= namespace %>
 <% end -%>
     end
 
+    # @api private
     def self.create(config, operation_name = nil, params = {})
 <% if operation_params.empty? -%>
       new({
