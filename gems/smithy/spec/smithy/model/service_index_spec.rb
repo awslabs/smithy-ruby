@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Vise
+  module Model
     describe ServiceIndex do
       let(:fixture) do
         JSON.load_file(File.expand_path('../../fixtures/service_index/model.json', __dir__))

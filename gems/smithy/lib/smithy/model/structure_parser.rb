@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Vise
+  module Model
     # @api private
     class StructureParser
       def initialize(model)
@@ -20,7 +20,7 @@ module Smithy
       def parse_member(member_ref, shapes, visited)
         target = member_ref['target']
         return if visited.include?(target)
-        return if Vise::PRELUDE_SHAPES.include?(target)
+        return if Model::PRELUDE_SHAPES.include?(target)
 
         shape = @shapes[target]
         shapes[target] = shape

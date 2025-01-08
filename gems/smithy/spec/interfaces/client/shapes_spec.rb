@@ -25,7 +25,7 @@ describe 'Component: Shapes' do
       context 'a generated shape' do
         next if %w[operation service].include?(shape['type'])
 
-        let(:shape_name) { Smithy::Vise::Shape.relative_id(id) }
+        let(:shape_name) { Smithy::Model::Shape.relative_id(id) }
         let(:generated_shape) { Object.const_get("#{subject}::#{shape_name}") }
 
         it 'is a shape of expected shape type and has an id' do

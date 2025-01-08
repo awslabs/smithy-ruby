@@ -10,12 +10,12 @@ module Smithy
             @plan = plan
             @model = plan.model
             @service_shape = @plan.service
-            @service_index = Vise::ServiceIndex.new(@model)
+            @service_index = Model::ServiceIndex.new(@model)
             super()
           end
 
           def namespace
-            Tools::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+            Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
           end
 
           def operation_shapes
@@ -56,9 +56,9 @@ module Smithy
           def build_operation_shape(id, shape)
             OperationShape.new(
               id: id,
-              name: Vise::Shape.relative_id(id).underscore,
-              input: Vise::Shape.relative_id(shape['input']['target']),
-              output: Vise::Shape.relative_id(shape['output']['target']),
+              name: Model::Shape.relative_id(id).underscore,
+              input: Model::Shape.relative_id(shape['input']['target']),
+              output: Model::Shape.relative_id(shape['output']['target']),
               errors: build_error_shapes(shape['errors']),
               traits: filter_traits(shape['traits'])
             )
@@ -68,14 +68,14 @@ module Smithy
             return [] if errors.nil?
 
             errors.each_with_object([]) do |err, a|
-              a << Vise::Shape.relative_id(err['target'])
+              a << Model::Shape.relative_id(err['target'])
             end
           end
 
           def build_shape(id, shape)
             Shape.new(
               id: id,
-              name: Vise::Shape.relative_id(id),
+              name: Model::Shape.relative_id(id),
               type: shape_type(shape['type']),
               traits: filter_traits(shape['traits']),
               members: build_member_shapes(shape)
@@ -116,7 +116,7 @@ module Smithy
           def build_member_shape(name, shape, traits)
             MemberShape.new(
               name: name.underscore,
-              shape: Vise::Shape.relative_id(shape),
+              shape: Model::Shape.relative_id(shape),
               traits: filter_traits(traits)
             )
           end

@@ -13,11 +13,11 @@ module Smithy
           end
 
           def namespace
-            Tools::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+            Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
           end
 
           def errors
-            Vise::ServiceIndex
+            Model::ServiceIndex
               .new(@model)
               .shapes_for(@plan.service)
               .select { |_key, shape| shape['traits']&.any? { |id, _trait| id == 'smithy.api#error' } }
@@ -36,7 +36,7 @@ module Smithy
             end
 
             def name
-              Vise::Shape.name(@id)
+              Model::Shape.name(@id)
             end
 
             def member_names

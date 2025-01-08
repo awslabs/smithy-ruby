@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Tools
+  module Util
     # @api private
     module Underscore
       class << self

@@ -25,7 +25,7 @@ module Smithy
           attr_reader :parameters
 
           def namespace
-            Tools::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+            Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
           end
 
           def documentation

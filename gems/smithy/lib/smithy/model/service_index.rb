@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Vise
+  module Model
     # Finds sets of shapes for a service.
     class ServiceIndex
       # @param [Hash] model Model

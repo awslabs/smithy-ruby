@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Vise
+  module Model
     # @api private
     class ServiceParser
       RESOURCE_LIFECYCLE_KEYS = %w[create put read update delete list].freeze

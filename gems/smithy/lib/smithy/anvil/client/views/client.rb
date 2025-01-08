@@ -21,7 +21,7 @@ module Smithy
           end
 
           def namespace
-            Tools::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+            Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
           end
 
           def gem_name
@@ -33,7 +33,7 @@ module Smithy
           end
 
           def operations
-            Vise::ServiceIndex
+            Model::ServiceIndex
               .new(@model)
               .operations_for(@plan.service)
               .map { |id, operation| Operation.new(@model, id, operation) }
@@ -56,7 +56,7 @@ module Smithy
             end
 
             def name
-              Vise::Shape.name(@id).underscore
+              Model::Shape.name(@id).underscore
             end
           end
         end

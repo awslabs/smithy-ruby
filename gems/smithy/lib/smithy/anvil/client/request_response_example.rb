@@ -55,7 +55,7 @@ module Smithy
         # rubocop:disable Metrics
         def value(target, indent, visited)
           if visited_shape?(target, visited)
-            shape = Vise::Shape.name(target)
+            shape = Model::Shape.name(target)
             return "{\n#{indent}  # recursive #{shape}\n#{indent}}"
           end
 
@@ -94,7 +94,7 @@ module Smithy
         end
 
         def string(target)
-          Vise::Shape.name(target).inspect
+          Model::Shape.name(target).inspect
         end
 
         def enum(shape, string: true)
@@ -107,7 +107,7 @@ module Smithy
 
         def visited_shape?(target, visited)
           # Prelude shapes are used more than once usually
-          !Vise::PRELUDE_SHAPES.include?(target) && visited.include?(target)
+          !Model::PRELUDE_SHAPES.include?(target) && visited.include?(target)
         end
 
         def struct(struct_shape, indent, visited)
@@ -137,7 +137,7 @@ module Smithy
         end
 
         def complex?(member_shape)
-          return false if Vise::PRELUDE_SHAPES.include?(member_shape['target'])
+          return false if Model::PRELUDE_SHAPES.include?(member_shape['target'])
 
           s = @shapes[member_shape['target']]
           s['type'] == 'structure' || s['type'] == 'list' || s['type'] == 'map'

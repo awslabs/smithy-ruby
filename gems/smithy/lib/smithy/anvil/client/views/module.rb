@@ -25,13 +25,13 @@ module Smithy
           end
 
           def documentation
-            _id, service = @model.shapes.find { |_key, shape| shape.is_a?(Vise::ServiceShape) }
+            _id, service = @model.shapes.find { |_key, shape| shape.is_a?(Model::ServiceShape) }
             _id, trait = service.traits.find { |_id, trait| trait.id == 'smithy.api#documentation' }
             "# #{trait.data}"
           end
 
           def namespaces
-            Tools::Namespace.namespaces_from_gem_name(@plan.options[:gem_name])
+            Util::Namespace.namespaces_from_gem_name(@plan.options[:gem_name])
           end
 
           def requires

@@ -3,14 +3,14 @@
 require 'rails/railtie'
 require 'thor'
 
-require_relative 'smithy/tools'
 require_relative 'smithy/anvil'
 require_relative 'smithy/command'
 require_relative 'smithy/forge'
-require_relative 'smithy/vise'
+require_relative 'smithy/model'
 require_relative 'smithy/plan'
 require_relative 'smithy/polish'
 require_relative 'smithy/polishes'
+require_relative 'smithy/util'
 require_relative 'smithy/weld'
 require_relative 'smithy/welds'
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Vise
+  module Model
     describe Shape do
       let(:namespace) { 'name.space' }
       let(:shape_name) { 'Shape' }

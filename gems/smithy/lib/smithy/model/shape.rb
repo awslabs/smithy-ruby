@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Vise
+  module Model
     # Represents a shape from the model.
     # Shape IDs have the following syntax:
     #

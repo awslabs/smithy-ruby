@@ -55,7 +55,7 @@ module Smithy
               begin
                 output = client.#{@operation_name}(params, options)
               rescue Smithy::Client::Errors::ServiceError => e
-                puts e.class #=> #{Vise::Shape.name(error['shapeId'])}
+                puts e.class #=> #{Model::Shape.name(error['shapeId'])}
                 puts e.data.to_h #=>
                 #{format_hash(error['content'], '    ')}
               end

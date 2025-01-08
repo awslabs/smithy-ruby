@@ -13,11 +13,11 @@ module Smithy
           end
 
           def namespace
-            Tools::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+            Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
           end
 
           def types
-            Vise::ServiceIndex
+            Model::ServiceIndex
               .new(@model)
               .shapes_for(@plan.service)
               .select { |_key, shape| %w[structure union].include?(shape['type']) }
@@ -36,7 +36,7 @@ module Smithy
             end
 
             def name
-              Vise::Shape.name(@id)
+              Model::Shape.name(@id)
             end
 
             def member_names

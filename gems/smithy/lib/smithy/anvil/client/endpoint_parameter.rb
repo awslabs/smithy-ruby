@@ -124,7 +124,7 @@ module Smithy
 
           return nil unless binding
 
-          "JMESPath.search(\"#{Tools::Underscore.underscore_jmespath(binding['path'])}\", params)"
+          "JMESPath.search(\"#{Util::Underscore.underscore_jmespath(binding['path'])}\", params)"
         end
 
         def client_context_param_value
