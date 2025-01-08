@@ -5,7 +5,7 @@ module Smithy
     module Client
       module Views
         # @api private
-        class ClientClass < View
+        class Client < View
           def initialize(plan)
             @plan = plan
             @model = plan.model
@@ -48,7 +48,11 @@ module Smithy
             end
 
             def docstrings
-              RequestSyntaxExample.new(@model, @id, @operation).docstrings
+              docstrings = []
+              examples = @operation.fetch('traits', {}).fetch('smithy.api#examples', nil)
+              docstrings.concat(OperationExamples.new(name, examples).docstrings) if examples
+              docstrings.concat(RequestResponseExample.new(@model, name, @operation).docstrings)
+              docstrings
             end
 
             def name

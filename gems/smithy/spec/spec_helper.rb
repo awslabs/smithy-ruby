@@ -12,7 +12,7 @@ module SpecHelper
     # @param [Array<String>] modules A list of modules for the generated code.
     #  For example, `['Company', 'Weather']` would generate code in the
     #  `Company::Weather` namespace.
-    # @param [String] type The type of service to generate. For example,
+    # @param [Symbol] type The type of service to generate. For example,
     #  :types`, `:client`, or `:server`.
     # @param [Hash] options Additional options to pass to the generator.
     # @option options [String] :fixture The name of the fixture to load.
