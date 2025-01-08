@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Anvil
+  module Views
     module Client
       # @api private
       class OperationExamples

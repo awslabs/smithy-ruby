@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Anvil
+  module Views
     module Client
-      module Views
+      module Specs
         # @api private
-        class Rubocop < View
+        class SpecHelper < View
           def initialize(plan)
             @plan = plan
-            @model = plan.model
             super()
           end
 

@@ -3,18 +3,19 @@
 require 'erb'
 
 module Smithy
-  module Anvil
+  module Views
     # @api private
     class View
       class << self
+        TEMPLATE_DIR = File.expand_path('../templates', __dir__.to_s)
+
         def inherited(subclass)
           parts = (subclass.name || '').split('::')
-          parts.shift(2) #=> remove Smithy::Anvil
-          type = parts.shift #=> remove Client/Server/Types
-          parts.shift #=> remove Views
-          parts.unshift(type, 'Templates') #=> add <Type>::Templates
+          parts.shift(2) #=> remove Smithy::Views
+          type = parts.shift #=> remove Client/Server
+          parts.unshift(type) #=> add <Type>
           path = File.join(parts.map(&:underscore))
-          subclass.template_file = File.expand_path("#{path}.erb", __dir__)
+          subclass.template_file = File.join(TEMPLATE_DIR, "#{path}.erb")
           super
         end
 

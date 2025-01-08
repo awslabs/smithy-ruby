@@ -24,10 +24,10 @@ module Smithy
 
       def source_files
         Enumerator.new do |e|
-          e.yield "#{@gem_name}.gemspec", Anvil::Client::Views::Gemspec.new(@plan).hammer
-          e.yield '.rubocop.yml', Anvil::Client::Views::Rubocop.new(@plan).hammer
-          e.yield "lib/#{@gem_name}.rb", Anvil::Client::Views::Module.new(@plan).hammer
-          e.yield "lib/#{@gem_name}/types.rb", Anvil::Client::Views::Types.new(@plan).hammer
+          e.yield "#{@gem_name}.gemspec", Views::Client::Gemspec.new(@plan).hammer
+          e.yield '.rubocop.yml', Views::Client::Rubocop.new(@plan).hammer
+          e.yield "lib/#{@gem_name}.rb", Views::Client::Module.new(@plan).hammer
+          e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).hammer
         end
       end
     end

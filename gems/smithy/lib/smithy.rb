@@ -3,7 +3,6 @@
 require 'rails/railtie'
 require 'thor'
 
-require_relative 'smithy/anvil'
 require_relative 'smithy/command'
 require_relative 'smithy/forge'
 require_relative 'smithy/model'
@@ -13,6 +12,7 @@ require_relative 'smithy/polishes'
 require_relative 'smithy/util'
 require_relative 'smithy/weld'
 require_relative 'smithy/welds'
+require_relative 'smithy/views'
 
 # Smithy is a modeling language created by AWS. This gem provides a Ruby
 # implementation of the Smithy language and generates clients, servers, and types.
