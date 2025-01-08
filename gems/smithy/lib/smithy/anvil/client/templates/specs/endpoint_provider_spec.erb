@@ -6,6 +6,18 @@ require_relative '../spec_helper'
 
 module <%= namespace %>
   describe EndpointProvider do
+    let(:stub_send) do
+      Class.new(Smithy::Client::Plugin) do
+        def add_handlers(handlers, _config)
+          handlers.add(Class.new(Smithy::Client::Handler) do
+            def call(context)
+              Smithy::Client::Output.new(context: context)
+            end
+          end, step: :send)
+        end
+      end
+    end
+
     subject { EndpointProvider.new }
 <% test_cases.each do |test_case| -%>
 
@@ -27,6 +39,42 @@ module <%= namespace %>
         expect(endpoint.properties).to eq(expected['endpoint']['properties'] || {})
 <% end -%>
       end
+
+<% test_case.operation_inputs.each do |operation_input| -%>
+      it 'produces the correct output from the client when calling <%= operation_input.operation_name %>' do
+        client = Client.new(
+<% operation_input.client_params.each do |p| -%>
+          <%= p.param %>: <%= p.value %>,
+<% end -%>
+           plugins: [stub_send]
+        )
+ <% if test_case.expect_error? -%>
+        expect do
+          client.<%= operation_input.operation_name %>(
+<% operation_input.operation_params.each do |p| -%>
+            <%= p.param %>: <%= p.value %>,
+<% end -%>
+          )
+        end.to raise_error(ArgumentError, expected['error'])
+<% else -%>
+          resp = client.<%= operation_input.operation_name %>(
+<% operation_input.operation_params.each do |p| -%>
+            <%= p.param %>: <%= p.value %>,
+<% end -%>
+          )
+        expected_uri = URI.parse(expected['endpoint']['url'])
+        expect(resp.context.request.endpoint.to_s).to include(expected_uri.host)
+        expect(resp.context.request.endpoint.to_s).to include(expected_uri.scheme)
+        expect(resp.context.request.endpoint.to_s).to include(expected_uri.path)
+
+        expected['endpoint'].fetch('headers', {}).each do |k,v|
+          expect(resp.context.request.headers[k]).to eq(v)
+        end
+
+        # TODO: expect auth
+<% end -%>
+      end
+<% end -%>
     end
 <% end -%>
   end

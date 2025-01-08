@@ -33,7 +33,7 @@ module <%= namespace %>
       # @api private
       class Handler < Smithy::Client::Handler
         def call(context)
-          params = EndpointParameters.create(context.config)
+          params = EndpointParameters.create(context.config, context.operation_name, context.params)
           endpoint = context.config.endpoint_provider.resolve_endpoint(params)
 
           context.request.endpoint = endpoint.uri

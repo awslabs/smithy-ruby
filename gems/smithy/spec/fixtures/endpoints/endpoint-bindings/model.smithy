@@ -267,8 +267,10 @@ use smithy.rules#operationContextParams
                 {
                     "operationName": "OperationContextParamsOperation",
                     "operationParams": {
-                        "bar": "operation-context-bar",
-                        "baz": "operation-context-baz",
+                        "nested": {
+                            "bar": "operation-context-bar",
+                            "baz": "operation-context-baz"
+                        }
                         "booleanParam": false
                     },
                     "clientParams": {

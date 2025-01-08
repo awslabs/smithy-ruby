@@ -73,21 +73,14 @@ module Smithy
         # @return [value, source].  source may be one of [operation, config, default]
         def endpoint_parameter_value(operation)
           unless operation.nil?
-            source = 'operation'
             value = static_context_param(operation)
-            value ||= context_param_value(operation)
-            value ||= operation_context_param_value(operation)
+            value = context_param_value(operation) if value.nil?
+            value = operation_context_param_value(operation) if value.nil?
+            source = 'operation' unless value.nil?
           end
 
-          unless value
-            value = client_context_param_value
-            source = 'config'
-          end
-
-          unless value
-            value = built_in_param_value
-            source = 'config'
-          end
+          value, source = client_context_param_value if value.nil?
+          value, source = built_in_param_value if value.nil?
 
           [value, source]
         end
@@ -130,13 +123,13 @@ module Smithy
         def client_context_param_value
           return unless client_context?
 
-          "config.#{name}"
+          ["config.#{name}", 'config']
         end
 
         def built_in_param_value
           return unless @data['builtIn']
 
-          built_in_binding[:render_build].call(@plan, nil)
+          [built_in_binding[:render_build].call(@plan, nil), 'config']
         end
       end
     end
