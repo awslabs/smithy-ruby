@@ -4,10 +4,9 @@ module Smithy
   module Views
     module Client
       # @api private
-      class Rubocop < View
+      class SpecHelper < View
         def initialize(plan)
           @plan = plan
-          @model = plan.model
           super()
         end
 
