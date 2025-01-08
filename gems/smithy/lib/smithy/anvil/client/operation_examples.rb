@@ -63,6 +63,8 @@ module Smithy
           EXAMPLE
         end
 
+        # TODO: this does not correctly handle maps. We instead need to iterate the example
+        # against the model and handle map types.
         def format_hash(shape, newline_indent = '  ')
           return '{}' unless shape
 
