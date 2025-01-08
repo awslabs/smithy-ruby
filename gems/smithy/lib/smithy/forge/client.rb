@@ -41,7 +41,8 @@ module Smithy
           e.yield "lib/#{@gem_name}/plugins/endpoint.rb", Views::Client::Plugins::Endpoint.new(@plan).hammer
 
           e.yield 'spec/spec_helper.rb', Views::Client::Specs::SpecHelper.new(@plan).hammer
-          e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", Views::Client::Specs::EndpointProviderSpec.new(@plan).hammer
+          e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb",
+                  Views::Client::Specs::EndpointProviderSpec.new(@plan).hammer
         end
       end
       # rubocop:enable Metrics/AbcSize
