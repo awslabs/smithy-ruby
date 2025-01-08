@@ -6,6 +6,7 @@ require_relative '../spec_helper'
 
 module <%= namespace %>
   describe EndpointProvider do
+    # TODO: Can be replaced by stub_responses config once implemented
     let(:stub_send) do
       Class.new(Smithy::Client::Plugin) do
         def add_handlers(handlers, _config)
