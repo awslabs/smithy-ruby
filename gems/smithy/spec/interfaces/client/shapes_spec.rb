@@ -20,15 +20,15 @@ describe 'Component: Shapes' do
     expect(subject).to be_a(Module)
   end
 
-  context 'generated shapes' do
+  context 'shapes' do
     shape_tests['shapes'].each do |id, shape|
-      context 'a generated shape' do
+      context "a generated shape: #{id}" do
         next if %w[operation service].include?(shape['type'])
 
         let(:shape_name) { Smithy::Vise::Shape.relative_id(id) }
         let(:generated_shape) { Object.const_get("#{subject}::#{shape_name}") }
 
-        it 'is a shape of expected shape type and has an id' do
+        it 'is of a expected shape type and has an id' do
           expected_shape_type =
             Object.const_get("#{shapes_module}::#{shape['type'].camelize}Shape")
 
@@ -36,29 +36,31 @@ describe 'Component: Shapes' do
           expect(generated_shape.id).to eq(id)
         end
 
-        it 'has a type variation of the shape when applicable' do
-          unless %w[structure union].include?(shape['type'])
-            skip("Test does not expect the generated #{id} to have a type")
-          end
+        context 'type' do
+          next unless %w[structure union].include?(shape['type'])
 
-          expected_type = Object.const_get("#{types_module}::#{shape_name}")
-          expect(generated_shape.type).to eq(expected_type)
+          it 'is set on the shape' do
+            expected_type = Object.const_get("#{types_module}::#{shape_name}")
+            expect(generated_shape.type).to eq(expected_type)
+          end
         end
 
-        it 'has traits when applicable and the traits does not contain omitted traits' do
-          skip("Test does not expect the generated #{id} to have traits") if shape['traits'].nil?
+        context 'traits' do
+          next if shape['traits'].nil?
 
-          expected_traits = shape['traits'].reject { |t| t == 'smithy.api#documentation' }
-          expect(generated_shape.traits).to include(expected_traits)
-          expect(generated_shape.traits.keys).not_to include('smithy.api#documentation')
+          it 'contains modeled traits and excludes omitted traits' do
+            expected_traits = shape['traits'].reject { |t| t == 'smithy.api#documentation' }
+            expect(generated_shape.traits).to include(expected_traits)
+            expect(generated_shape.traits.keys).not_to include('smithy.api#documentation')
+          end
         end
 
         context 'members' do
+          next if shape['members'].nil?
+
           let(:m_tests) { shape['members'] }
 
           it 'are shapes of expected name, shape and contains traits when applicable' do
-            skip("Test does not expect the generated #{id} to have members") if m_tests.nil?
-
             m_tests.each do |m_name, m_test|
               m_name = m_name.underscore
               expect(generated_shape.members.keys).to include(m_name)
@@ -74,12 +76,12 @@ describe 'Component: Shapes' do
           end
         end
 
-        context 'member' do
+        context 'a member' do
+          next if shape['member'].nil?
+
           let(:m_test) { shape['member'] }
 
           it 'is a shape of expected member name, shape and contains traits when applicable' do
-            skip("Test does not expect the generated #{id} to have a member") if m_test.nil?
-
             expect(generated_shape.member.name).to eq('member')
             expect(generated_shape.member.shape.id).to eq(m_test['target'])
 
@@ -90,11 +92,9 @@ describe 'Component: Shapes' do
         end
 
         context 'key and value members' do
-          it 'are shapes of expected member names, shapes and contains traits when applicable' do
-            if shape['key'].nil? && shape['value'].nil?
-              skip("Test does not expect the generated #{id} to have a key/value members")
-            end
+          next if shape['key'].nil? && shape['value'].nil?
 
+          it 'are shapes of expected member names, shapes and contains traits when applicable' do
             expect(generated_shape.key.name).to eq('key')
             expect(generated_shape.value.name).to eq('value')
             expect(generated_shape.key.shape.id).to eq(shape['key']['target'])
