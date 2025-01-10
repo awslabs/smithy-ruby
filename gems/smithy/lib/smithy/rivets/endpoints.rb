@@ -15,7 +15,6 @@ module Smithy
       def endpoint_built_in_bindings
         {
           'SDK::Endpoint' => {
-            # Text indenting is used in generated view.
             render_config: proc do |_plan|
               <<~ADD_OPTION
                 option(

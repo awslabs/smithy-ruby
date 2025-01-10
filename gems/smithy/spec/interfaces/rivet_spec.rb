@@ -20,7 +20,7 @@ describe 'Integration: Rivets' do
     end
 
     unused = Class.new(Smithy::Rivet) do
-      def for?(_model)
+      def for?(_service)
         false
       end
 
