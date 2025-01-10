@@ -1,6 +1,6 @@
 $version: "2.0"
 
-namespace example
+namespace smithy.tests.endpointrules.stringarray
 
 use smithy.rules#endpointRuleSet
 use smithy.rules#endpointTests

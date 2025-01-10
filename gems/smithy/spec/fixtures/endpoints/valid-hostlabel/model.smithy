@@ -1,6 +1,6 @@
 $version: "2.0"
 
-namespace rulesengine.validhostlabel
+namespace smithy.tests.endpointrules.validhostlabel
 
 use smithy.rules#clientContextParams
 use smithy.rules#endpointRuleSet

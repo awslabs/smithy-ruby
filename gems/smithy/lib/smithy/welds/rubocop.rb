@@ -5,11 +5,9 @@ module Smithy
     # Runs RuboCop autocorrect-all on the generated projections.
     class Rubocop < Weld
       TEST_NAMESPACES = [
-        'smithy.ruby.tests',
         'example.weather',
-        'endpointBindingsExample', # This should probably be fixed upstream?
-        'example', # Also an endpoint example that should be fixed upstream?
-        Regexp.new('rulesengine\..*')
+        Regexp.new('smithy.tests.*?'),
+        Regexp.new('smithy.ruby.tests.*?')
       ].freeze
 
       def for?(service)

@@ -1,10 +1,10 @@
 {
     "smithy": "2.0",
     "shapes": {
-        "example#EmptyStaticContextOperation": {
+        "smithy.tests.endpointrules.stringarray#EmptyStaticContextOperation": {
             "type": "operation",
             "input": {
-                "target": "example#EmptyStaticContextOperationInput"
+                "target": "smithy.tests.endpointrules.stringarray#EmptyStaticContextOperationInput"
             },
             "output": {
                 "target": "smithy.api#Unit"
@@ -20,31 +20,31 @@
                 }
             }
         },
-        "example#EmptyStaticContextOperationInput": {
+        "smithy.tests.endpointrules.stringarray#EmptyStaticContextOperationInput": {
             "type": "structure",
             "members": {},
             "traits": {
                 "smithy.api#input": {}
             }
         },
-        "example#EndpointStringArrayService": {
+        "smithy.tests.endpointrules.stringarray#EndpointStringArrayService": {
             "type": "service",
             "version": "2022-01-01",
             "operations": [
                 {
-                    "target": "example#EmptyStaticContextOperation"
+                    "target": "smithy.tests.endpointrules.stringarray#EmptyStaticContextOperation"
                 },
                 {
-                    "target": "example#ListOfObjectsOperation"
+                    "target": "smithy.tests.endpointrules.stringarray#ListOfObjectsOperation"
                 },
                 {
-                    "target": "example#MapOperation"
+                    "target": "smithy.tests.endpointrules.stringarray#MapOperation"
                 },
                 {
-                    "target": "example#NoBindingsOperation"
+                    "target": "smithy.tests.endpointrules.stringarray#NoBindingsOperation"
                 },
                 {
-                    "target": "example#StaticContextOperation"
+                    "target": "smithy.tests.endpointrules.stringarray#StaticContextOperation"
                 }
             ],
             "traits": {
@@ -180,16 +180,16 @@
                 }
             }
         },
-        "example#ListOfObjects": {
+        "smithy.tests.endpointrules.stringarray#ListOfObjects": {
             "type": "list",
             "member": {
-                "target": "example#ObjectMember"
+                "target": "smithy.tests.endpointrules.stringarray#ObjectMember"
             }
         },
-        "example#ListOfObjectsOperation": {
+        "smithy.tests.endpointrules.stringarray#ListOfObjectsOperation": {
             "type": "operation",
             "input": {
-                "target": "example#ListOfObjectsOperationInput"
+                "target": "smithy.tests.endpointrules.stringarray#ListOfObjectsOperationInput"
             },
             "output": {
                 "target": "smithy.api#Unit"
@@ -205,18 +205,18 @@
                 }
             }
         },
-        "example#ListOfObjectsOperationInput": {
+        "smithy.tests.endpointrules.stringarray#ListOfObjectsOperationInput": {
             "type": "structure",
             "members": {
                 "nested": {
-                    "target": "example#Nested"
+                    "target": "smithy.tests.endpointrules.stringarray#Nested"
                 }
             },
             "traits": {
                 "smithy.api#input": {}
             }
         },
-        "example#Map": {
+        "smithy.tests.endpointrules.stringarray#Map": {
             "type": "map",
             "key": {
                 "target": "smithy.api#String"
@@ -225,10 +225,10 @@
                 "target": "smithy.api#String"
             }
         },
-        "example#MapOperation": {
+        "smithy.tests.endpointrules.stringarray#MapOperation": {
             "type": "operation",
             "input": {
-                "target": "example#MapOperationInput"
+                "target": "smithy.tests.endpointrules.stringarray#MapOperationInput"
             },
             "output": {
                 "target": "smithy.api#Unit"
@@ -244,42 +244,42 @@
                 }
             }
         },
-        "example#MapOperationInput": {
+        "smithy.tests.endpointrules.stringarray#MapOperationInput": {
             "type": "structure",
             "members": {
                 "map": {
-                    "target": "example#Map"
+                    "target": "smithy.tests.endpointrules.stringarray#Map"
                 }
             },
             "traits": {
                 "smithy.api#input": {}
             }
         },
-        "example#Nested": {
+        "smithy.tests.endpointrules.stringarray#Nested": {
             "type": "structure",
             "members": {
                 "listOfObjects": {
-                    "target": "example#ListOfObjects"
+                    "target": "smithy.tests.endpointrules.stringarray#ListOfObjects"
                 }
             }
         },
-        "example#NoBindingsOperation": {
+        "smithy.tests.endpointrules.stringarray#NoBindingsOperation": {
             "type": "operation",
             "input": {
-                "target": "example#NoBindingsOperationInput"
+                "target": "smithy.tests.endpointrules.stringarray#NoBindingsOperationInput"
             },
             "output": {
                 "target": "smithy.api#Unit"
             }
         },
-        "example#NoBindingsOperationInput": {
+        "smithy.tests.endpointrules.stringarray#NoBindingsOperationInput": {
             "type": "structure",
             "members": {},
             "traits": {
                 "smithy.api#input": {}
             }
         },
-        "example#ObjectMember": {
+        "smithy.tests.endpointrules.stringarray#ObjectMember": {
             "type": "structure",
             "members": {
                 "key": {
@@ -287,10 +287,10 @@
                 }
             }
         },
-        "example#StaticContextOperation": {
+        "smithy.tests.endpointrules.stringarray#StaticContextOperation": {
             "type": "operation",
             "input": {
-                "target": "example#StaticContextOperationInput"
+                "target": "smithy.tests.endpointrules.stringarray#StaticContextOperationInput"
             },
             "output": {
                 "target": "smithy.api#Unit"
@@ -308,7 +308,7 @@
                 }
             }
         },
-        "example#StaticContextOperationInput": {
+        "smithy.tests.endpointrules.stringarray#StaticContextOperationInput": {
             "type": "structure",
             "members": {},
             "traits": {

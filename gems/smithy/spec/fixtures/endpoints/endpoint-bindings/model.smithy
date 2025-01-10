@@ -1,6 +1,6 @@
 $version: "2.0"
 
-namespace endpointBindingsExample
+namespace smithy.tests.endpointbindings
 
 use smithy.rules#endpointRuleSet
 use smithy.rules#endpointTests
