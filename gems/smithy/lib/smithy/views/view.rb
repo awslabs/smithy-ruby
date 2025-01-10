@@ -22,7 +22,7 @@ module Smithy
         attr_accessor :template_file
       end
 
-      def hammer
+      def render
         ERB.new(File.read(self.class.template_file), trim_mode: '-').result(binding)
       end
     end
