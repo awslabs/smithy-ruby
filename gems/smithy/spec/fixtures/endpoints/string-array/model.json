@@ -1,0 +1,319 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.tests.endpointrules.stringarray#EmptyStaticContextOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.tests.endpointrules.stringarray#EmptyStaticContextOperationInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "traits": {
+                "smithy.api#suppress": [
+                    "UnstableTrait"
+                ],
+                "smithy.rules#staticContextParams": {
+                    "stringArrayParam": {
+                        "value": []
+                    }
+                }
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#EmptyStaticContextOperationInput": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#EndpointStringArrayService": {
+            "type": "service",
+            "version": "2022-01-01",
+            "operations": [
+                {
+                    "target": "smithy.tests.endpointrules.stringarray#EmptyStaticContextOperation"
+                },
+                {
+                    "target": "smithy.tests.endpointrules.stringarray#ListOfObjectsOperation"
+                },
+                {
+                    "target": "smithy.tests.endpointrules.stringarray#MapOperation"
+                },
+                {
+                    "target": "smithy.tests.endpointrules.stringarray#NoBindingsOperation"
+                },
+                {
+                    "target": "smithy.tests.endpointrules.stringarray#StaticContextOperation"
+                }
+            ],
+            "traits": {
+                "smithy.api#suppress": [
+                    "UnstableTrait"
+                ],
+                "smithy.rules#endpointRuleSet": {
+                    "version": "1.0",
+                    "parameters": {
+                        "stringArrayParam": {
+                            "type": "stringArray",
+                            "required": true,
+                            "default": [
+                                "defaultValue1",
+                                "defaultValue2"
+                            ],
+                            "documentation": "docs"
+                        }
+                    },
+                    "rules": [
+                        {
+                            "documentation": "Template first array value into URI if set",
+                            "conditions": [
+                                {
+                                    "fn": "getAttr",
+                                    "argv": [
+                                        {
+                                            "ref": "stringArrayParam"
+                                        },
+                                        "[0]"
+                                    ],
+                                    "assign": "arrayValue"
+                                }
+                            ],
+                            "endpoint": {
+                                "url": "https://example.com/{arrayValue}"
+                            },
+                            "type": "endpoint"
+                        },
+                        {
+                            "conditions": [],
+                            "documentation": "error fallthrough",
+                            "error": "no array values set",
+                            "type": "error"
+                        }
+                    ]
+                },
+                "smithy.rules#endpointTests": {
+                    "version": "1.0",
+                    "testCases": [
+                        {
+                            "documentation": "Default array values used",
+                            "params": {},
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://example.com/defaultValue1"
+                                }
+                            },
+                            "operationInputs": [
+                                {
+                                    "operationName": "NoBindingsOperation"
+                                }
+                            ]
+                        },
+                        {
+                            "documentation": "Empty array",
+                            "params": {
+                                "stringArrayParam": []
+                            },
+                            "expect": {
+                                "error": "no array values set"
+                            },
+                            "operationInputs": [
+                                {
+                                    "operationName": "EmptyStaticContextOperation"
+                                }
+                            ]
+                        },
+                        {
+                            "documentation": "Static value",
+                            "params": {
+                                "stringArrayParam": [
+                                    "staticValue1"
+                                ]
+                            },
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://example.com/staticValue1"
+                                }
+                            },
+                            "operationInputs": [
+                                {
+                                    "operationName": "StaticContextOperation"
+                                }
+                            ]
+                        },
+                        {
+                            "documentation": "bound value from input",
+                            "params": {
+                                "stringArrayParam": [
+                                    "key1"
+                                ]
+                            },
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://example.com/key1"
+                                }
+                            },
+                            "operationInputs": [
+                                {
+                                    "operationName": "ListOfObjectsOperation",
+                                    "operationParams": {
+                                        "nested": {
+                                            "listOfObjects": [
+                                                {
+                                                    "key": "key1"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                {
+                                    "operationName": "MapOperation",
+                                    "operationParams": {
+                                        "map": {
+                                            "key1": "value1"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#ListOfObjects": {
+            "type": "list",
+            "member": {
+                "target": "smithy.tests.endpointrules.stringarray#ObjectMember"
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#ListOfObjectsOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.tests.endpointrules.stringarray#ListOfObjectsOperationInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "traits": {
+                "smithy.api#suppress": [
+                    "UnstableTrait"
+                ],
+                "smithy.rules#operationContextParams": {
+                    "stringArrayParam": {
+                        "path": "nested.listOfObjects[*].key"
+                    }
+                }
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#ListOfObjectsOperationInput": {
+            "type": "structure",
+            "members": {
+                "nested": {
+                    "target": "smithy.tests.endpointrules.stringarray#Nested"
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#Map": {
+            "type": "map",
+            "key": {
+                "target": "smithy.api#String"
+            },
+            "value": {
+                "target": "smithy.api#String"
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#MapOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.tests.endpointrules.stringarray#MapOperationInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "traits": {
+                "smithy.api#suppress": [
+                    "UnstableTrait"
+                ],
+                "smithy.rules#operationContextParams": {
+                    "stringArrayParam": {
+                        "path": "keys(map)"
+                    }
+                }
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#MapOperationInput": {
+            "type": "structure",
+            "members": {
+                "map": {
+                    "target": "smithy.tests.endpointrules.stringarray#Map"
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#Nested": {
+            "type": "structure",
+            "members": {
+                "listOfObjects": {
+                    "target": "smithy.tests.endpointrules.stringarray#ListOfObjects"
+                }
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#NoBindingsOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.tests.endpointrules.stringarray#NoBindingsOperationInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#NoBindingsOperationInput": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#ObjectMember": {
+            "type": "structure",
+            "members": {
+                "key": {
+                    "target": "smithy.api#String"
+                }
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#StaticContextOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.tests.endpointrules.stringarray#StaticContextOperationInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "traits": {
+                "smithy.api#suppress": [
+                    "UnstableTrait"
+                ],
+                "smithy.rules#staticContextParams": {
+                    "stringArrayParam": {
+                        "value": [
+                            "staticValue1"
+                        ]
+                    }
+                }
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#StaticContextOperationInput": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 {
     "smithy": "2.0",
     "shapes": {
-        "rulesengine.validhostlabel#FizzBuzz": {
+        "smithy.tests.endpointrules.validhostlabel#FizzBuzz": {
             "type": "service",
             "traits": {
                 "smithy.api#suppress": [

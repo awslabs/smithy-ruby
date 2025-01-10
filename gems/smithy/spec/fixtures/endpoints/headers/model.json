@@ -1,7 +1,7 @@
 {
     "smithy": "2.0",
     "shapes": {
-        "rulesengine.headers#FizzBuzz": {
+        "smithy.tests.endpointrules.headers#FizzBuzz": {
             "type": "service",
             "traits": {
                 "smithy.api#suppress": [

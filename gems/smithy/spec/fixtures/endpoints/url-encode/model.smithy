@@ -1,6 +1,6 @@
 $version: "2.0"
 
-namespace rulesengine.urlencode
+namespace smithy.tests.endpointrules.urlencode
 
 use smithy.rules#clientContextParams
 use smithy.rules#endpointRuleSet
