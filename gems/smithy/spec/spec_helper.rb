@@ -12,7 +12,7 @@ module SpecHelper
     # @param [Array<String>] modules A list of modules for the generated code.
     #  For example, `['Company', 'Weather']` would generate code in the
     #  `Company::Weather` namespace.
-    # @param [String] type The type of service to generate. For example,
+    # @param [Symbol] type The type of service to generate. For example,
     #  :types`, `:client`, or `:server`.
     # @param [Hash] options Additional options to pass to the generator.
     # @option options [String] :fixture The name of the fixture to load.
@@ -21,8 +21,7 @@ module SpecHelper
     def generate(modules, type, options = {})
       model = load_model(modules, options)
       plan = create_plan(modules, model, type, options)
-
-      with_captured_stdout { Smithy.smith(plan) }
+      smith(plan)
 
       $LOAD_PATH << ("#{plan.options[:destination_root]}/lib")
       require "#{plan.options[:gem_name]}#{type == :types ? '-types' : ''}"
@@ -34,8 +33,8 @@ module SpecHelper
     # @param [String] tmpdir The path to the tmp directory where the
     #  generated code was written to.
     def cleanup(module_names, tmpdir)
-      if ENV['KEEP_GENERATED_SOURCE']
-        puts "\nLeaving generated service in: #{tmpdir}"
+      if ENV['SMITHY_RUBY_KEEP_GENERATED_SOURCE']
+        puts "Leaving generated service in: #{tmpdir}"
       else
         FileUtils.rm_rf(tmpdir)
       end
@@ -52,7 +51,6 @@ module SpecHelper
       original_stdout = $stdout
       $stdout = StringIO.new
       yield
-      $stdout.string
     ensure
       $stdout = original_stdout
     end
@@ -65,13 +63,19 @@ module SpecHelper
 
     def create_plan(modules, model, type, options)
       plan_options = {
-        gem_name: options.fetch(:gem_name, Smithy::Tools::Namespace.gem_name_from_namespaces(modules)),
+        gem_name: options.fetch(:gem_name, Smithy::Util::Namespace.gem_name_from_namespaces(modules)),
         gem_version: options.fetch(:gem_version, '1.0.0'),
-        destination_root: options.fetch(:destination_root, Dir.mktmpdir),
-        skip_polishes: options.fetch(:skip_polishes, true),
-        skip_welds: options.fetch(:skip_welds, false)
+        destination_root: options.fetch(:destination_root, Dir.mktmpdir)
       }
       Smithy::Plan.new(model, type, plan_options)
+    end
+
+    def smith(plan)
+      if ENV['SMITHY_RUBY_DEBUG']
+        Smithy.smith(plan)
+      else
+        with_captured_stdout { Smithy.smith(plan) }
+      end
     end
   end
 end

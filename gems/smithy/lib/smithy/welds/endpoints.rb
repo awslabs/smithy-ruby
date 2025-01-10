@@ -4,7 +4,7 @@ module Smithy
   module Welds
     # Provides default endpoint builtin/function bindings.
     class Endpoints < Weld
-      def preprocess(model)
+      def pre_process(model)
         id, service = model['shapes'].select { |_k, s| s['type'] == 'service' }.first
         return if service['traits'] && service['traits']['smithy.rules#endpointRuleSet']
 
@@ -15,7 +15,6 @@ module Smithy
       def endpoint_built_in_bindings
         {
           'SDK::Endpoint' => {
-            # Text indenting is used in generated view.
             render_config: proc do |_plan|
               <<~ADD_OPTION
                 option(

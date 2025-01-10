@@ -2,7 +2,7 @@
 
 module Smithy
   describe Plan do
-    let(:fixture) { File.expand_path('../fixtures/weather/model.json', __dir__) }
+    let(:fixture) { File.expand_path('../fixtures/weather/model.json', __dir__.to_s) }
     let(:model) { JSON.load_file(fixture) }
     let(:type) { :client }
     let(:options) { {} }
@@ -29,19 +29,13 @@ module Smithy
 
     describe '#welds' do
       it 'returns the welds' do
-        expect(subject.welds).to eq(Welds.for(model))
-      end
-    end
-
-    describe '#polishes' do
-      it 'returns the polishes' do
-        expect(subject.polishes).to eq(Polishes.for(model))
+        expect(subject.welds).to eq(Welds.for(subject.service))
       end
     end
 
     describe '#service' do
       context 'one service shape' do
-        let(:fixture) { File.expand_path('../fixtures/one_service/model.json', __dir__) }
+        let(:fixture) { File.expand_path('../fixtures/one_service/model.json', __dir__.to_s) }
 
         it 'finds the service shape' do
           expected = model['shapes'].select { |_, shape| shape['type'] == 'service' }
@@ -51,7 +45,7 @@ module Smithy
       end
 
       context 'no service shapes' do
-        let(:fixture) { File.expand_path('../fixtures/no_service/model.json', __dir__) }
+        let(:fixture) { File.expand_path('../fixtures/no_service/model.json', __dir__.to_s) }
 
         it 'raises an error' do
           expect { subject }.to raise_error('No service shape found')
@@ -59,7 +53,7 @@ module Smithy
       end
 
       context 'multiple service shapes' do
-        let(:fixture) { File.expand_path('../fixtures/multi_service/model.json', __dir__) }
+        let(:fixture) { File.expand_path('../fixtures/multi_service/model.json', __dir__.to_s) }
 
         it 'raises an error' do
           expect { subject }.to raise_error('Multiple service shapes found')

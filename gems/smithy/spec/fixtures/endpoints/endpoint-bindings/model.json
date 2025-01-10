@@ -1,16 +1,16 @@
 {
     "smithy": "2.0",
     "shapes": {
-        "endpointBindingsExample#ContextParamsOperation": {
+        "smithy.tests.endpointbindings#ContextParamsOperation": {
             "type": "operation",
             "input": {
-                "target": "endpointBindingsExample#ContextParamsOperationInput"
+                "target": "smithy.tests.endpointbindings#ContextParamsOperationInput"
             },
             "output": {
                 "target": "smithy.api#Unit"
             }
         },
-        "endpointBindingsExample#ContextParamsOperationInput": {
+        "smithy.tests.endpointbindings#ContextParamsOperationInput": {
             "type": "structure",
             "members": {
                 "bar": {
@@ -42,21 +42,21 @@
                 "smithy.api#input": {}
             }
         },
-        "endpointBindingsExample#EndpointBindingService": {
+        "smithy.tests.endpointbindings#EndpointBindingService": {
             "type": "service",
             "version": "2022-01-01",
             "operations": [
                 {
-                    "target": "endpointBindingsExample#ContextParamsOperation"
+                    "target": "smithy.tests.endpointbindings#ContextParamsOperation"
                 },
                 {
-                    "target": "endpointBindingsExample#NoBindingsOperation"
+                    "target": "smithy.tests.endpointbindings#NoBindingsOperation"
                 },
                 {
-                    "target": "endpointBindingsExample#OperationContextParamsOperation"
+                    "target": "smithy.tests.endpointbindings#OperationContextParamsOperation"
                 },
                 {
-                    "target": "endpointBindingsExample#StaticContextOperation"
+                    "target": "smithy.tests.endpointbindings#StaticContextOperation"
                 }
             ],
             "traits": {
@@ -345,13 +345,13 @@
                 }
             }
         },
-        "endpointBindingsExample#ListOfObjects": {
+        "smithy.tests.endpointbindings#ListOfObjects": {
             "type": "list",
             "member": {
-                "target": "endpointBindingsExample#ObjectMember"
+                "target": "smithy.tests.endpointbindings#ObjectMember"
             }
         },
-        "endpointBindingsExample#Map": {
+        "smithy.tests.endpointbindings#Map": {
             "type": "map",
             "key": {
                 "target": "smithy.api#String"
@@ -360,7 +360,7 @@
                 "target": "smithy.api#String"
             }
         },
-        "endpointBindingsExample#Nested": {
+        "smithy.tests.endpointbindings#Nested": {
             "type": "structure",
             "members": {
                 "bar": {
@@ -371,23 +371,23 @@
                 }
             }
         },
-        "endpointBindingsExample#NoBindingsOperation": {
+        "smithy.tests.endpointbindings#NoBindingsOperation": {
             "type": "operation",
             "input": {
-                "target": "endpointBindingsExample#NoBindingsOperationInput"
+                "target": "smithy.tests.endpointbindings#NoBindingsOperationInput"
             },
             "output": {
                 "target": "smithy.api#Unit"
             }
         },
-        "endpointBindingsExample#NoBindingsOperationInput": {
+        "smithy.tests.endpointbindings#NoBindingsOperationInput": {
             "type": "structure",
             "members": {},
             "traits": {
                 "smithy.api#input": {}
             }
         },
-        "endpointBindingsExample#ObjectMember": {
+        "smithy.tests.endpointbindings#ObjectMember": {
             "type": "structure",
             "members": {
                 "key": {
@@ -395,10 +395,10 @@
                 }
             }
         },
-        "endpointBindingsExample#OperationContextParamsOperation": {
+        "smithy.tests.endpointbindings#OperationContextParamsOperation": {
             "type": "operation",
             "input": {
-                "target": "endpointBindingsExample#OperationContextParamsOperationInput"
+                "target": "smithy.tests.endpointbindings#OperationContextParamsOperationInput"
             },
             "output": {
                 "target": "smithy.api#Unit"
@@ -417,11 +417,11 @@
                 }
             }
         },
-        "endpointBindingsExample#OperationContextParamsOperationInput": {
+        "smithy.tests.endpointbindings#OperationContextParamsOperationInput": {
             "type": "structure",
             "members": {
                 "nested": {
-                    "target": "endpointBindingsExample#Nested"
+                    "target": "smithy.tests.endpointbindings#Nested"
                 },
                 "booleanParam": {
                     "target": "smithy.api#Boolean"
@@ -431,10 +431,10 @@
                 "smithy.api#input": {}
             }
         },
-        "endpointBindingsExample#StaticContextOperation": {
+        "smithy.tests.endpointbindings#StaticContextOperation": {
             "type": "operation",
             "input": {
-                "target": "endpointBindingsExample#StaticContextOperationInput"
+                "target": "smithy.tests.endpointbindings#StaticContextOperationInput"
             },
             "output": {
                 "target": "smithy.api#Unit"
@@ -453,7 +453,7 @@
                 }
             }
         },
-        "endpointBindingsExample#StaticContextOperationInput": {
+        "smithy.tests.endpointbindings#StaticContextOperationInput": {
             "type": "structure",
             "members": {},
             "traits": {

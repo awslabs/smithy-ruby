@@ -13,9 +13,7 @@ module Smithy
       @service = find_service(model['shapes'])
 
       Welds.load!(self)
-      Polishes.load!(self)
-      @welds = options[:skip_welds] ? [] : Welds.for(model)
-      @polishes = options[:skip_polishes] ? [] : Polishes.for(model)
+      @welds = Welds.for(@service)
     end
 
     # @return [Hash] The API model as a JSON hash.
@@ -29,9 +27,6 @@ module Smithy
 
     # @return [Array<Weld>] The welds that apply to this plan.
     attr_reader :welds
-
-    # @return [Array<Polish>] The polishes that apply to this plan.
-    attr_reader :polishes
 
     # @return [Hash<String, Hash>] The service shape for the shapes.
     attr_reader :service

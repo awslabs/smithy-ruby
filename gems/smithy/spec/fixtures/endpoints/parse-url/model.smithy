@@ -1,6 +1,6 @@
 $version: "2.0"
 
-namespace rulesengine.parseurl
+namespace smithy.tests.endpointrules.parseurl
 
 use smithy.rules#clientContextParams
 use smithy.rules#endpointRuleSet

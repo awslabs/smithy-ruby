@@ -1,12 +1,12 @@
 {
     "smithy": "2.0",
     "shapes": {
-        "rulesengine.defaultvalues#FizzBuzz": {
+        "smithy.tests.endpointrules.defaultvalues#FizzBuzz": {
             "type": "service",
             "version": "2022-01-01",
             "operations": [
                 {
-                    "target": "rulesengine.defaultvalues#GetThing"
+                    "target": "smithy.tests.endpointrules.defaultvalues#GetThing"
                 }
             ],
             "traits": {
@@ -128,16 +128,16 @@
                 }
             }
         },
-        "rulesengine.defaultvalues#GetThing": {
+        "smithy.tests.endpointrules.defaultvalues#GetThing": {
             "type": "operation",
             "input": {
-                "target": "rulesengine.defaultvalues#GetThingInput"
+                "target": "smithy.tests.endpointrules.defaultvalues#GetThingInput"
             },
             "output": {
                 "target": "smithy.api#Unit"
             }
         },
-        "rulesengine.defaultvalues#GetThingInput": {
+        "smithy.tests.endpointrules.defaultvalues#GetThingInput": {
             "type": "structure",
             "members": {},
             "traits": {
