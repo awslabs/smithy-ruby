@@ -9,6 +9,8 @@ require_relative 'model/structure_parser'
 module Smithy
   # A module that parses the Smithy JSON model.
   module Model
+    # Generated with smithy-cli 1.53.0
+    # @api private
     PRELUDE_SHAPES = {
       'smithy.api#BigInteger' => { 'type' => 'bigInteger' },
       'smithy.api#BigDecimal' => { 'type' => 'bigDecimal' },
