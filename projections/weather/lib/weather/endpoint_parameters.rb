@@ -23,8 +23,8 @@ module Weather
     def self.create(context)
       config = context.config
       new({
-          endpoint: config.endpoint,
-        }.compact)
+        endpoint: config.endpoint
+      }.compact)
     end
   end
 end

@@ -20,7 +20,6 @@ describe 'Component: Client: Request/Response Syntax Examples' do
   it 'generates request and response syntax examples' do
     expected = <<~EXAMPLE
       @example Request syntax with placeholder values
-
         params = {
           blob: "data",
           streaming_blob: File.read("source_file"), # required
@@ -59,9 +58,7 @@ describe 'Component: Client: Request/Response Syntax Examples' do
         }
         options = {}
         output = client.operation(params, options)
-
       @example Response structure with placeholder values
-
         output.to_h #=>
         {
           blob: "data",
@@ -118,7 +115,6 @@ describe 'Component: Client: Request/Response Syntax Examples' do
     it 'handles recursive shapes' do
       expected = <<~EXAMPLE
         @example Request syntax with placeholder values
-
           params = {
             structure: {
               structure: {
@@ -128,9 +124,7 @@ describe 'Component: Client: Request/Response Syntax Examples' do
           }
           options = {}
           output = client.operation(params, options)
-
         @example Response structure with placeholder values
-
           output.to_h #=>
           {
             structure: {

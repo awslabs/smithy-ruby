@@ -6,10 +6,8 @@ module <%= namespace %>
   # Endpoint parameters used to resolve endpoints per request.
 <% parameters.each do |param| -%>
   # @!attribute <%= param.name %>
-<% if param.documentation -%>
-<% param.documentation.split("\n").each do |line| -%>
+<% param.docstrings.each do |line| -%>
   #   <%= line %>
-<% end -%>
 <% end -%>
   #
   #   @return [<%= param.documentation_type %>]
@@ -37,15 +35,15 @@ module <%= namespace %>
       config = context.config
 <% if operation_params.empty? -%>
       new({
-  <% parameters.select(&:create_from_config?).each do |param| -%>
+<% parameters.select(&:create_from_config?).each do |param| -%>
         <%= param.name %>: <%= param.value %>,
-  <% end -%>
+<% end -%>
       }.compact)
 <% else -%>
       params = context.params
       operation_params =
         case context.operation_name
-  <% operation_params.each do |name, params| -%>
+<% operation_params.each do |name, params| -%>
         when :<%= name %>
           {
 <% params.each do |param| -%>
@@ -58,9 +56,9 @@ module <%= namespace %>
         end
 
       new({
-  <% parameters.select(&:create_from_config?).each do |param| -%>
+<% parameters.select(&:create_from_config?).each do |param| -%>
         <%= param.name %>: <%= param.value %>,
-  <% end -%>
+<% end -%>
       }.merge(operation_params).compact)
 <% end -%>
     end

@@ -65,7 +65,6 @@ module Smithy
           end
         end
 
-        # OperationInput test
         class OperationInputsTest
           def initialize(data, plan, operations)
             @operation_name = data['operationName'].underscore
@@ -156,7 +155,6 @@ module Smithy
           end
         end
 
-        # an endpoint spec view parameter, renders values for codegen
         class Param
           def initialize(param, value, literal: false)
             @param = param

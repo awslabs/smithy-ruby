@@ -55,9 +55,9 @@ module Smithy
         def build_operation_shape(id, shape)
           OperationShape.new(
             id: id,
-            name: Model::Shape.relative_id(id).underscore,
-            input: Model::Shape.relative_id(shape['input']['target']),
-            output: Model::Shape.relative_id(shape['output']['target']),
+            name: Model::Shape.name(id).underscore,
+            input: Model::Shape.name(shape['input']['target']),
+            output: Model::Shape.name(shape['output']['target']),
             errors: build_error_shapes(shape['errors']),
             traits: filter_traits(shape['traits'])
           )
@@ -205,11 +205,12 @@ module Smithy
         ].freeze
 
         SHAPE_CLASSES_MAP = {
-          'bigDecimal' => 'BigDecimal',
+          'bigDecimal' => 'BigDecimalShape',
           'bigInteger' => 'IntegerShape',
           'blob' => 'BlobShape',
           'boolean' => 'BooleanShape',
           'byte' => 'IntegerShape',
+          'document' => 'DocumentShape',
           'double' => 'FloatShape',
           'enum' => 'EnumShape',
           'float' => 'FloatShape',
@@ -220,7 +221,7 @@ module Smithy
           'map' => 'MapShape',
           'operation' => 'OperationShape',
           'service' => 'ServiceShape',
-          'short' => 'NumberShape',
+          'short' => 'IntegerShape',
           'string' => 'StringShape',
           'structure' => 'StructureShape',
           'timestamp' => 'TimestampShape',

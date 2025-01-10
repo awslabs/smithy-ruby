@@ -20,8 +20,8 @@ module Smithy
 
         attr_reader :id, :data, :name, :source, :value
 
-        def documentation
-          @data['documentation']
+        def docstrings
+          @data['documentation'].split("\n")
         end
 
         def documentation_type
@@ -108,9 +108,8 @@ module Smithy
         def context_param_value(operation)
           return nil unless operation['input']
 
-          input_shape = @model['shapes'].fetch(operation['input']['target'], {})
-          members = input_shape.fetch('members', {})
-          context_param_member(members)
+          input = Model.shape(@model, operation['input']['target'])
+          context_param_member(input['members'])
         end
 
         def context_param_member(members)
