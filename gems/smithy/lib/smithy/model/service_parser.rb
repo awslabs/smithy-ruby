@@ -7,7 +7,7 @@ module Smithy
       RESOURCE_LIFECYCLE_KEYS = %w[create put read update delete list].freeze
 
       def initialize(model)
-        @shapes = model['shapes']
+        @model = model
       end
 
       def operations_for(service)
@@ -22,15 +22,16 @@ module Smithy
 
       def parse_service_operations(service, operations)
         service['operations']&.collect do |shape|
-          id = shape['target']
-          operations[id] = @shapes[id]
+          target = shape['target']
+          operations[target] = Model.shape(@model, target)
         end
       end
 
       def parse_service_resources(service, operations)
         service['resources']&.collect do |shape|
-          id = shape['target']
-          parse_resource(@shapes[id], operations)
+          target = shape['target']
+          resource_shape = Model.shape(@model, target)
+          parse_resource(resource_shape, operations)
         end
       end
 
@@ -40,8 +41,9 @@ module Smithy
         parse_resource_collection_operations(resource, operations)
 
         resource['resources']&.collect do |shape|
-          id = shape['target']
-          parse_resource(@shapes[id], operations)
+          target = shape['target']
+          resource_shape = Model.shape(@model, target)
+          parse_resource(resource_shape, operations)
         end
       end
 
@@ -49,22 +51,22 @@ module Smithy
         RESOURCE_LIFECYCLE_KEYS.each do |key|
           next unless resource[key]
 
-          id = resource[key]['target']
-          operations[id] = @shapes[id]
+          target = resource[key]['target']
+          operations[target] = Model.shape(@model, target)
         end
       end
 
       def parse_resource_operations(resource, operations)
         resource['operations']&.collect do |shape|
-          id = shape['target']
-          operations[id] = @shapes[id]
+          target = shape['target']
+          operations[target] = Model.shape(@model, target)
         end
       end
 
       def parse_resource_collection_operations(resource, operations)
         resource['collectionOperations']&.collect do |shape|
-          id = shape['target']
-          operations[id] = @shapes[id]
+          target = shape['target']
+          operations[target] = Model.shape(@model, target)
         end
       end
     end

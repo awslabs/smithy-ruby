@@ -5,7 +5,7 @@ module Smithy
     # @api private
     class OperationParser
       def initialize(model)
-        @shapes = model['shapes']
+        @model = model
         @structure_parser = StructureParser.new(model)
       end
 
@@ -20,19 +20,19 @@ module Smithy
 
       private
 
-      def parse_input_output(shape_ref, shapes)
-        target = shape_ref['target']
+      def parse_input_output(structure_shape, shapes)
+        target = structure_shape['target']
         return if target == 'smithy.api#Unit'
 
-        shape = @shapes[target]
+        shape = Model.shape(@model, target)
         shapes[target] = shape
         shapes.merge!(@structure_parser.shapes_for({ target => shape }))
       end
 
       def parse_errors(errors, shapes)
-        errors&.each do |error_ref|
-          target = error_ref['target']
-          shape = @shapes[target]
+        errors&.each do |error|
+          target = error['target']
+          shape = Model.shape(@model, target)
           shapes[target] = shape
           shapes.merge!(@structure_parser.shapes_for({ target => shape }))
         end
