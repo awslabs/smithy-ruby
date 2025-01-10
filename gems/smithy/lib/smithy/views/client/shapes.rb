@@ -221,7 +221,7 @@ module Smithy
           'map' => 'MapShape',
           'operation' => 'OperationShape',
           'service' => 'ServiceShape',
-          'short' => 'NumberShape',
+          'short' => 'IntegerShape',
           'string' => 'StringShape',
           'structure' => 'StructureShape',
           'timestamp' => 'TimestampShape',
