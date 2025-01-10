@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Forge
-    # Forges a gem for the types.
+  module Generators
+    # Generates a gem for the types.
     class Types < Base
-      # @param [Plan] plan The plan to forge.
+      # @param [Plan] plan The plan to generate.
       def initialize(plan)
         @plan = plan
         @gem_name = "#{plan.options[:gem_name]}-types"
@@ -12,7 +12,7 @@ module Smithy
       end
 
       # @return [Enumerator<String, String>] The file paths and their contents to generate.
-      def forge
+      def generate
         files = source_files
         files.each do |file, content|
           create_file file, content

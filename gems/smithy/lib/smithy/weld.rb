@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  # Base class that all welds must inherit from. Includes hooks for the forging process.
+  # Base class that all welds must inherit from. Includes hooks for code generation.
   class Weld
     include Thor::Base
     include Thor::Actions
