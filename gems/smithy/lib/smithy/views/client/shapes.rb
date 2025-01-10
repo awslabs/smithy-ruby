@@ -205,7 +205,7 @@ module Smithy
         ].freeze
 
         SHAPE_CLASSES_MAP = {
-          'bigDecimal' => 'BigDecimal',
+          'bigDecimal' => 'BigDecimalShape',
           'bigInteger' => 'IntegerShape',
           'blob' => 'BlobShape',
           'boolean' => 'BooleanShape',
