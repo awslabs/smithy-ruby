@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Forge
+  module Generators
     # Base class for generating files.
     class Base
       include Thor::Base
       include Thor::Actions
 
-      # @param [Plan] plan The plan to forge.
+      # @param [Plan] plan The plan to generate.
       def initialize(plan)
-        @plan = plan
         # Necessary for Thor::Base and Thor::Actions
         self.options = { force: true }
         self.destination_root = plan.options[:destination_root]

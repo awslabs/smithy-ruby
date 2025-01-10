@@ -4,7 +4,7 @@ require 'rails/railtie'
 require 'thor'
 
 require_relative 'smithy/command'
-require_relative 'smithy/forge'
+require_relative 'smithy/generators'
 require_relative 'smithy/model'
 require_relative 'smithy/plan'
 require_relative 'smithy/util'
@@ -22,7 +22,7 @@ module Smithy
     # @param [Plan] plan The plan to generate the artifact from.
     def smith(plan)
       plan.welds.each { |weld| weld.pre_process(plan.model) }
-      artifacts = Smithy::Forge.forge(plan)
+      artifacts = Smithy::Generators.generate(plan)
       plan.welds.each { |weld| weld.post_process(artifacts) }
       artifacts
     end
