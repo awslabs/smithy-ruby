@@ -140,7 +140,8 @@ module Smithy
           return false if Model::PRELUDE_SHAPES.include?(member_shape['target'])
 
           s = @shapes[member_shape['target']]
-          s['type'] == 'structure' || s['type'] == 'list' || s['type'] == 'map'
+
+          %w[structure list map].include?(s['type'])
         end
 
         def scalar_list(member_shape, indent, visited)
