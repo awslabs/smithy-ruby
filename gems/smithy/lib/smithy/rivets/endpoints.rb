@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Welds
+  module Rivets
     # Provides default endpoint builtin/function bindings.
-    class Endpoints < Weld
-      def preprocess(model)
+    class Endpoints < Rivet
+      def pre_process(model)
         id, service = model['shapes'].select { |_k, s| s['type'] == 'service' }.first
         return if service['traits'] && service['traits']['smithy.rules#endpointRuleSet']
 

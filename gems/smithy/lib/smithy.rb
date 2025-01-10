@@ -7,11 +7,9 @@ require_relative 'smithy/command'
 require_relative 'smithy/forge'
 require_relative 'smithy/model'
 require_relative 'smithy/plan'
-require_relative 'smithy/polish'
-require_relative 'smithy/polishes'
+require_relative 'smithy/rivet'
+require_relative 'smithy/rivets'
 require_relative 'smithy/util'
-require_relative 'smithy/weld'
-require_relative 'smithy/welds'
 require_relative 'smithy/views'
 
 # Smithy is a modeling language created by AWS. This gem provides a Ruby
@@ -23,10 +21,10 @@ module Smithy
     # Generates a Ruby artifact from a Smithy model.
     # @param [Plan] plan The plan to generate the artifact from.
     def smith(plan)
-      plan.welds.each { |weld| weld.preprocess(plan.model) }
-      artifact = Smithy::Forge.forge(plan)
-      plan.polishes.each { |polish| polish.polish(artifact) }
-      artifact
+      plan.rivets.each { |rivet| rivet.pre_process(plan.model) }
+      artifacts = Smithy::Forge.forge(plan)
+      plan.rivets.each { |rivet| rivet.post_process(artifacts) }
+      artifacts
     end
   end
 end

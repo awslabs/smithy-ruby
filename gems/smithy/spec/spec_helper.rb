@@ -67,9 +67,7 @@ module SpecHelper
       plan_options = {
         gem_name: options.fetch(:gem_name, Smithy::Util::Namespace.gem_name_from_namespaces(modules)),
         gem_version: options.fetch(:gem_version, '1.0.0'),
-        destination_root: options.fetch(:destination_root, Dir.mktmpdir),
-        skip_polishes: options.fetch(:skip_polishes, true),
-        skip_welds: options.fetch(:skip_welds, false)
+        destination_root: options.fetch(:destination_root, Dir.mktmpdir)
       }
       Smithy::Plan.new(model, type, plan_options)
     end

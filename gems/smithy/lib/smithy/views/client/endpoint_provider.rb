@@ -16,7 +16,7 @@ module Smithy
                         .map { |id, data| EndpointParameter.new(id, data, @plan) }
 
           @endpoint_function_bindings =
-            plan.welds.map(&:endpoint_function_bindings).reduce({}, :merge)
+            plan.rivets.map(&:endpoint_function_bindings).reduce({}, :merge)
 
           super()
         end
