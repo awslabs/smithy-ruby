@@ -211,6 +211,7 @@ module Smithy
           'boolean' => 'BooleanShape',
           'byte' => 'IntegerShape',
           'double' => 'FloatShape',
+          'document' => 'DocumentShape',
           'enum' => 'EnumShape',
           'float' => 'FloatShape',
           'integer' => 'IntegerShape',
