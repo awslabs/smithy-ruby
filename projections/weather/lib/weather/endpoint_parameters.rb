@@ -20,10 +20,11 @@ module Weather
     end
 
     # @api private
-    def self.create(config, _operation_name = nil, _params = {})
+    def self.create(context)
+      config = context.config
       new({
-        endpoint: config.endpoint
-      }.compact)
+          endpoint: config.endpoint,
+        }.compact)
     end
   end
 end

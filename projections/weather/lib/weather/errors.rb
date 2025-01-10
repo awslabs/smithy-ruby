@@ -31,9 +31,11 @@ module Weather
 
     # TODO!
     class NoSuchResource < Smithy::Client::Errors::ServiceError
+
       def resource_type
         @data[:resource_type]
       end
+
     end
   end
 end

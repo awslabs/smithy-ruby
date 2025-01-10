@@ -26,7 +26,7 @@ module Weather
       # @api private
       class Handler < Smithy::Client::Handler
         def call(context)
-          params = EndpointParameters.create(context.config, context.operation_name, context.params)
+          params = EndpointParameters.create(context)
           endpoint = context.config.endpoint_provider.resolve_endpoint(params)
 
           context.request.endpoint = endpoint.uri
