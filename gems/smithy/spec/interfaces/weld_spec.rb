@@ -6,9 +6,9 @@ describe 'Integration: Welds' do
     # Define Weld classes (scoped to this block only)
     used = Class.new(Smithy::Weld) do
       def pre_process(model)
-        model['shapes']['example.weather#Weld'] = { 'type' => 'structure', 'members' => {} }
-        model['shapes']['example.weather#GetForecastOutput']['members']['chanceOfWelds'] =
-          { 'target' => 'example.weather#Weld' }
+        model['shapes']['smithy.ruby.tests.weather#Weld'] = { 'type' => 'structure', 'members' => {} }
+        model['shapes']['smithy.ruby.tests.weather#GetForecastOutput']['members']['chanceOfWelds'] =
+          { 'target' => 'smithy.ruby.tests.weather#Weld' }
       end
 
       def post_process(artifacts)
@@ -25,9 +25,9 @@ describe 'Integration: Welds' do
       end
 
       def pre_process(model)
-        model['shapes']['example.weather#WeldShouldNotExist'] = { 'type' => 'structure', 'members' => {} }
-        model['shapes']['example.weather#GetForecastOutput']['members']['chanceOfWelds'] =
-          { 'target' => 'example.weather#WeldShouldNotExist' }
+        model['shapes']['smithy.ruby.tests.weather#WeldShouldNotExist'] = { 'type' => 'structure', 'members' => {} }
+        model['shapes']['smithy.ruby.tests.weather#GetForecastOutput']['members']['chanceOfWelds'] =
+          { 'target' => 'smithy.ruby.tests.weather#WeldShouldNotExist' }
       end
 
       def post_process(artifacts)

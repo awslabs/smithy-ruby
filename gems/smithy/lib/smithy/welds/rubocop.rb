@@ -5,7 +5,6 @@ module Smithy
     # Runs RuboCop autocorrect-all on the generated projections.
     class Rubocop < Weld
       TEST_NAMESPACES = [
-        'example.weather',
         Regexp.new('smithy.tests.*?'),
         Regexp.new('smithy.ruby.tests.*?')
       ].freeze

@@ -1,31 +1,31 @@
 {
     "smithy": "2.0",
     "shapes": {
-        "example.weather#City": {
+        "smithy.ruby.tests.weather#City": {
             "type": "resource",
             "identifiers": {
                 "cityId": {
-                    "target": "example.weather#CityId"
+                    "target": "smithy.ruby.tests.weather#CityId"
                 }
             },
             "properties": {
                 "coordinates": {
-                    "target": "example.weather#CityCoordinates"
+                    "target": "smithy.ruby.tests.weather#CityCoordinates"
                 }
             },
             "read": {
-                "target": "example.weather#GetCity"
+                "target": "smithy.ruby.tests.weather#GetCity"
             },
             "list": {
-                "target": "example.weather#ListCities"
+                "target": "smithy.ruby.tests.weather#ListCities"
             },
             "resources": [
                 {
-                    "target": "example.weather#Forecast"
+                    "target": "smithy.ruby.tests.weather#Forecast"
                 }
             ]
         },
-        "example.weather#CityCoordinates": {
+        "smithy.ruby.tests.weather#CityCoordinates": {
             "type": "structure",
             "members": {
                 "latitude": {
@@ -42,23 +42,23 @@
                 }
             }
         },
-        "example.weather#CityId": {
+        "smithy.ruby.tests.weather#CityId": {
             "type": "string",
             "traits": {
                 "smithy.api#pattern": "^[A-Za-z0-9 ]+$"
             }
         },
-        "example.weather#CitySummaries": {
+        "smithy.ruby.tests.weather#CitySummaries": {
             "type": "list",
             "member": {
-                "target": "example.weather#CitySummary"
+                "target": "smithy.ruby.tests.weather#CitySummary"
             }
         },
-        "example.weather#CitySummary": {
+        "smithy.ruby.tests.weather#CitySummary": {
             "type": "structure",
             "members": {
                 "cityId": {
-                    "target": "example.weather#CityId",
+                    "target": "smithy.ruby.tests.weather#CityId",
                     "traits": {
                         "smithy.api#required": {}
                     }
@@ -73,16 +73,16 @@
             "traits": {
                 "smithy.api#references": [
                     {
-                        "resource": "example.weather#City"
+                        "resource": "smithy.ruby.tests.weather#City"
                     }
                 ]
             }
         },
-        "example.weather#Forecast": {
+        "smithy.ruby.tests.weather#Forecast": {
             "type": "resource",
             "identifiers": {
                 "cityId": {
-                    "target": "example.weather#CityId"
+                    "target": "smithy.ruby.tests.weather#CityId"
                 }
             },
             "properties": {
@@ -91,31 +91,31 @@
                 }
             },
             "read": {
-                "target": "example.weather#GetForecast"
+                "target": "smithy.ruby.tests.weather#GetForecast"
             }
         },
-        "example.weather#GetCity": {
+        "smithy.ruby.tests.weather#GetCity": {
             "type": "operation",
             "input": {
-                "target": "example.weather#GetCityInput"
+                "target": "smithy.ruby.tests.weather#GetCityInput"
             },
             "output": {
-                "target": "example.weather#GetCityOutput"
+                "target": "smithy.ruby.tests.weather#GetCityOutput"
             },
             "errors": [
                 {
-                    "target": "example.weather#NoSuchResource"
+                    "target": "smithy.ruby.tests.weather#NoSuchResource"
                 }
             ],
             "traits": {
                 "smithy.api#readonly": {}
             }
         },
-        "example.weather#GetCityInput": {
+        "smithy.ruby.tests.weather#GetCityInput": {
             "type": "structure",
             "members": {
                 "cityId": {
-                    "target": "example.weather#CityId",
+                    "target": "smithy.ruby.tests.weather#CityId",
                     "traits": {
                         "smithy.api#required": {}
                     }
@@ -125,7 +125,7 @@
                 "smithy.api#input": {}
             }
         },
-        "example.weather#GetCityOutput": {
+        "smithy.ruby.tests.weather#GetCityOutput": {
             "type": "structure",
             "members": {
                 "name": {
@@ -136,7 +136,7 @@
                     }
                 },
                 "coordinates": {
-                    "target": "example.weather#CityCoordinates",
+                    "target": "smithy.ruby.tests.weather#CityCoordinates",
                     "traits": {
                         "smithy.api#required": {}
                     }
@@ -146,19 +146,19 @@
                 "smithy.api#output": {}
             }
         },
-        "example.weather#GetCurrentTime": {
+        "smithy.ruby.tests.weather#GetCurrentTime": {
             "type": "operation",
             "input": {
                 "target": "smithy.api#Unit"
             },
             "output": {
-                "target": "example.weather#GetCurrentTimeOutput"
+                "target": "smithy.ruby.tests.weather#GetCurrentTimeOutput"
             },
             "traits": {
                 "smithy.api#readonly": {}
             }
         },
-        "example.weather#GetCurrentTimeOutput": {
+        "smithy.ruby.tests.weather#GetCurrentTimeOutput": {
             "type": "structure",
             "members": {
                 "time": {
@@ -172,23 +172,23 @@
                 "smithy.api#output": {}
             }
         },
-        "example.weather#GetForecast": {
+        "smithy.ruby.tests.weather#GetForecast": {
             "type": "operation",
             "input": {
-                "target": "example.weather#GetForecastInput"
+                "target": "smithy.ruby.tests.weather#GetForecastInput"
             },
             "output": {
-                "target": "example.weather#GetForecastOutput"
+                "target": "smithy.ruby.tests.weather#GetForecastOutput"
             },
             "traits": {
                 "smithy.api#readonly": {}
             }
         },
-        "example.weather#GetForecastInput": {
+        "smithy.ruby.tests.weather#GetForecastInput": {
             "type": "structure",
             "members": {
                 "cityId": {
-                    "target": "example.weather#CityId",
+                    "target": "smithy.ruby.tests.weather#CityId",
                     "traits": {
                         "smithy.api#required": {}
                     }
@@ -198,7 +198,7 @@
                 "smithy.api#input": {}
             }
         },
-        "example.weather#GetForecastOutput": {
+        "smithy.ruby.tests.weather#GetForecastOutput": {
             "type": "structure",
             "members": {
                 "chanceOfRain": {
@@ -209,13 +209,13 @@
                 "smithy.api#output": {}
             }
         },
-        "example.weather#ListCities": {
+        "smithy.ruby.tests.weather#ListCities": {
             "type": "operation",
             "input": {
-                "target": "example.weather#ListCitiesInput"
+                "target": "smithy.ruby.tests.weather#ListCitiesInput"
             },
             "output": {
-                "target": "example.weather#ListCitiesOutput"
+                "target": "smithy.ruby.tests.weather#ListCitiesOutput"
             },
             "traits": {
                 "smithy.api#paginated": {
@@ -224,7 +224,7 @@
                 "smithy.api#readonly": {}
             }
         },
-        "example.weather#ListCitiesInput": {
+        "smithy.ruby.tests.weather#ListCitiesInput": {
             "type": "structure",
             "members": {
                 "nextToken": {
@@ -238,14 +238,14 @@
                 "smithy.api#input": {}
             }
         },
-        "example.weather#ListCitiesOutput": {
+        "smithy.ruby.tests.weather#ListCitiesOutput": {
             "type": "structure",
             "members": {
                 "nextToken": {
                     "target": "smithy.api#String"
                 },
                 "items": {
-                    "target": "example.weather#CitySummaries",
+                    "target": "smithy.ruby.tests.weather#CitySummaries",
                     "traits": {
                         "smithy.api#required": {}
                     }
@@ -255,7 +255,7 @@
                 "smithy.api#output": {}
             }
         },
-        "example.weather#NoSuchResource": {
+        "smithy.ruby.tests.weather#NoSuchResource": {
             "type": "structure",
             "members": {
                 "resourceType": {
@@ -269,17 +269,17 @@
                 "smithy.api#error": "client"
             }
         },
-        "example.weather#Weather": {
+        "smithy.ruby.tests.weather#Weather": {
             "type": "service",
             "version": "2006-03-01",
             "operations": [
                 {
-                    "target": "example.weather#GetCurrentTime"
+                    "target": "smithy.ruby.tests.weather#GetCurrentTime"
                 }
             ],
             "resources": [
                 {
-                    "target": "example.weather#City"
+                    "target": "smithy.ruby.tests.weather#City"
                 }
             ],
             "traits": {

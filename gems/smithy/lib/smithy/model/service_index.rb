@@ -6,7 +6,7 @@ module Smithy
     class ServiceIndex
       # @param [Hash] model Model
       def initialize(model)
-        @shapes = model['shapes']
+        @model = model
         @service_parser = ServiceParser.new(model)
         @operation_parser = OperationParser.new(model)
         @structure_parser = StructureParser.new(model)
@@ -39,9 +39,9 @@ module Smithy
       def parse_errors(service, shapes)
         _, service = service.first
 
-        service['errors']&.each do |error_ref|
-          target = error_ref['target']
-          shape = @shapes[target]
+        service['errors']&.each do |error|
+          target = error['target']
+          shape = Model.shape(@model, target)
           shapes[target] = shape
           shapes.merge!(@structure_parser.shapes_for({ target => shape }))
         end

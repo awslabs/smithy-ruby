@@ -9,7 +9,7 @@ module Smithy
         # @param [String] operation_name Operation name
         # @param [Hash<String, Object>] operation Operation shape
         def initialize(model, operation_name, operation)
-          @shapes = model['shapes']
+          @model = model
           @operation_name = operation_name
           @operation = operation
         end
@@ -17,17 +17,14 @@ module Smithy
         def docstrings
           example = <<~EXAMPLE
             @example Request syntax with placeholder values
-
               params = #{request_params}
               options = {}
               output = client.#{@operation_name}(params, options)
-
             @example Response structure with placeholder values
-
               output.to_h #=>
               #{response_hash}
           EXAMPLE
-          example.split("\n") << ''
+          example.split("\n")
         end
 
         private
@@ -36,7 +33,7 @@ module Smithy
           target = @operation['input']['target']
           return '{}' if target == 'smithy.api#Unit'
 
-          input = @shapes[target]
+          input = Model.shape(@model, target)
           return '{}' unless input['members'].any?
 
           struct(input, '  ', Set.new)
@@ -46,7 +43,7 @@ module Smithy
           target = @operation['output']['target']
           return '{}' if target == 'smithy.api#Unit'
 
-          output = @shapes[target]
+          output = Model.shape(@model, target)
           return '{}' unless output['members'].any?
 
           struct(output, '  ', Set.new)
@@ -54,33 +51,31 @@ module Smithy
 
         # rubocop:disable Metrics
         def value(target, indent, visited)
-          if visited_shape?(target, visited)
+          if visited.include?(target)
             shape = Model::Shape.name(target)
             return "{\n#{indent}  # recursive #{shape}\n#{indent}}"
           end
 
           visited += [target]
-          shape = @shapes[target]
-          type_or_target = (shape['type'] if shape) || target
+          shape = Model.shape(@model, target)
 
-          case type_or_target
-          when 'blob', 'smithy.api#Blob' then blob(shape)
-          when 'boolean', 'smithy.api#Boolean' then 'false'
-          when 'string', 'smithy.api#String' then string(target)
-          when 'byte', 'smithy.api#Byte' then '97'
-          when 'short', 'smithy.api#Short', 'integer', 'smithy.api#Integer',
-               'long', 'smithy.api#Long', 'bigInteger', 'smithy.api#BigInteger' then '1'
-          when 'float', 'smithy.api#Float', 'double', 'smithy.api#Double' then '1.0'
-          when 'bigDecimal', 'smithy.api#BigDecimal' then 'BigDecimal(1)'
-          when 'timestamp', 'smithy.api#Timestamp' then 'Time.now'
-          when 'document', 'smithy.api#Document' then 'TODO: document'
+          case shape['type']
+          when 'blob' then blob(shape)
+          when 'boolean' then 'false'
+          when 'string' then string(target)
+          when 'byte' then '97'
+          when 'short', 'integer', 'long', 'bigInteger' then '1'
+          when 'float', 'double' then '1.0'
+          when 'bigDecimal' then 'BigDecimal(1)'
+          when 'timestamp' then 'Time.now'
+          when 'document' then 'TODO: document'
           when 'enum' then enum(shape)
           when 'intEnum' then enum(shape, string: false)
           when 'list' then list(shape, indent, visited)
           when 'map' then map(shape, indent, visited)
           when 'structure' then struct(shape, indent, visited)
           when 'union' then 'TODO: union'
-          else raise "unsupported type or target: #{type_or_target}"
+          else raise "unsupported shape type: #{shape['type'].inspect}"
           end
         end
         # rubocop:enable Metrics
@@ -103,11 +98,6 @@ module Smithy
             string ? "\"#{value}\"" : value
           end
           "#{enum_values.first} # One of: [#{enum_values.join(', ')}]"
-        end
-
-        def visited_shape?(target, visited)
-          # Prelude shapes are used more than once usually
-          !Model::PRELUDE_SHAPES.include?(target) && visited.include?(target)
         end
 
         def struct(struct_shape, indent, visited)
@@ -137,11 +127,8 @@ module Smithy
         end
 
         def complex?(member_shape)
-          return false if Model::PRELUDE_SHAPES.include?(member_shape['target'])
-
-          s = @shapes[member_shape['target']]
-
-          %w[structure list map].include?(s['type'])
+          shape = Model.shape(@model, member_shape['target'])
+          %w[structure list map].include?(shape['type'])
         end
 
         def scalar_list(member_shape, indent, visited)
