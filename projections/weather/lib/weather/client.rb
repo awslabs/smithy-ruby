@@ -97,7 +97,7 @@ module Weather
         operation: config.schema.operation(operation_name),
         client: self,
         params: params,
-        config: config,
+        config: config
       )
       context[:gem_name] = 'weather'
       context[:gem_version] = '1.0.0'

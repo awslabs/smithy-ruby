@@ -33,6 +33,9 @@ module Smithy
       'smithy.api#Unit' => { 'type' => 'structure', 'members' => {}, 'traits' => { 'smithy.api#unitType' => {} } }
     }.freeze
 
+    # @param [Hash] model Model
+    # @param [String] target Target shape
+    # @return [Hash] The shape
     def self.shape(model, target)
       if model['shapes'].key?(target)
         model['shapes'][target]

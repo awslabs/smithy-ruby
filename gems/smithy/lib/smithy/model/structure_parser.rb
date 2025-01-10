@@ -17,24 +17,24 @@ module Smithy
 
       private
 
-      def parse_member(member_ref, shapes)
-        target = member_ref['target']
+      def parse_member(member_shape, shapes)
+        target = member_shape['target']
         return if shapes.key?(target)
+        return if Model::PRELUDE_SHAPES.key?(target)
 
         shape = Model.shape(@model, target)
         shapes[target] = shape
-        parse_members(shape, shapes)
+        parse_shape(shape, shapes)
       end
 
-      def parse_members(shape, shapes)
+      def parse_shape(shape, shapes)
         case shape['type']
         when 'list'
           parse_member(shape['member'], shapes)
         when 'map'
           parse_member(shape['key'], shapes)
           parse_member(shape['value'], shapes)
-        else
-          # covers all other shapes including structure, union, enum
+        when 'structure', 'union', 'intEnum', 'enum'
           shape['members']&.each_value { |member| parse_member(member, shapes) }
         end
       end

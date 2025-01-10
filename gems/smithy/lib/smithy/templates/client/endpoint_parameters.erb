@@ -26,7 +26,7 @@ module <%= namespace %>
 <% if operation_params.empty? -%>
       new({
 <% parameters.select(&:create_from_config?).each do |param| -%>
-        <%= param.name %>: <%= param.value %>
+        <%= param.name %>: <%= param.value %>,
 <% end -%>
       }.compact)
 <% else -%>
