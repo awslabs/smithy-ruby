@@ -205,11 +205,12 @@ module Smithy
         ].freeze
 
         SHAPE_CLASSES_MAP = {
-          'bigDecimal' => 'BigDecimal',
+          'bigDecimal' => 'BigDecimalShape',
           'bigInteger' => 'IntegerShape',
           'blob' => 'BlobShape',
           'boolean' => 'BooleanShape',
           'byte' => 'IntegerShape',
+          'document' => 'DocumentShape',
           'double' => 'FloatShape',
           'enum' => 'EnumShape',
           'float' => 'FloatShape',
@@ -220,7 +221,7 @@ module Smithy
           'map' => 'MapShape',
           'operation' => 'OperationShape',
           'service' => 'ServiceShape',
-          'short' => 'NumberShape',
+          'short' => 'IntegerShape',
           'string' => 'StringShape',
           'structure' => 'StructureShape',
           'timestamp' => 'TimestampShape',
