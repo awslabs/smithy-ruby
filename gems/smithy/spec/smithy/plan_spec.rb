@@ -27,9 +27,9 @@ module Smithy
       end
     end
 
-    describe '#rivets' do
-      it 'returns the rivets' do
-        expect(subject.rivets).to eq(Rivets.for(subject.service))
+    describe '#welds' do
+      it 'returns the welds' do
+        expect(subject.welds).to eq(Welds.for(subject.service))
       end
     end
 

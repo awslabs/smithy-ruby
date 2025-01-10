@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Rivets
+  module Welds
     # Runs RuboCop autocorrect-all on the generated projections.
-    class Rubocop < Rivet
+    class Rubocop < Weld
       TEST_NAMESPACES = [
         'smithy.ruby.tests',
         'example.weather',

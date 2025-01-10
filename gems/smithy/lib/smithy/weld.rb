@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Smithy
-  # Base class that all rivets must inherit from. Includes hooks for the forging process.
-  class Rivet
+  # Base class that all welds must inherit from. Includes hooks for the forging process.
+  class Weld
     include Thor::Base
     include Thor::Actions
 
@@ -13,9 +13,9 @@ module Smithy
       self.destination_root = plan.options[:destination_root]
     end
 
-    # Called to determine if the rivet should be applied for this model.
+    # Called to determine if the weld should be applied for this model.
     # @param [Hash] service Service shape
-    # @return [Boolean] (true) True if the rivet should be applied, false otherwise.
+    # @return [Boolean] (true) True if the weld should be applied, false otherwise.
     def for?(service) # rubocop:disable Lint/UnusedMethodArgument
       true
     end

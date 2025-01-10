@@ -48,7 +48,7 @@ module Smithy
 
         def built_in_binding
           @built_in_binding ||=
-            @plan.rivets
+            @plan.welds
                  .map(&:endpoint_built_in_bindings)
                  .map { |b| b[@data['builtIn']] }
                  .find { |b| !b.nil? }
