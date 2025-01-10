@@ -29,7 +29,8 @@ describe 'Component: EndpointParameters' do
 
     context 'no_bindings_operation' do
       it 'creates with default values and values from config' do
-        parameters = EndpointBindings::EndpointParameters.create(config, :no_bindings_operation, {})
+        context = double(config: config, operation_name: :no_bindings_operation, params: {})
+        parameters = EndpointBindings::EndpointParameters.create(context)
         expect(parameters.baz).to eq('baz')
         expect(parameters.endpoint).to eq('config_endpoint')
         expect(parameters.bar).to eq('config_bar')
@@ -39,16 +40,17 @@ describe 'Component: EndpointParameters' do
 
     context 'static_context_operation' do
       it 'creates with values from StaticContextParams' do
-        parameters = EndpointBindings::EndpointParameters.create(config, :static_context_operation, {})
+        context = double(config: config, operation_name: :static_context_operation, params: {})
+        parameters = EndpointBindings::EndpointParameters.create(context)
         expect(parameters.bar).to eq('static-context')
       end
     end
 
     context 'context_params_operation' do
       it 'creates with values from operation params' do
-        parameters = EndpointBindings::EndpointParameters.create(
-          config, :context_params_operation, { bar: 'operation-bar' }
-        )
+        params =  { bar: 'operation-bar' }
+        context = double(config: config, operation_name: :context_params_operation, params: params)
+        parameters = EndpointBindings::EndpointParameters.create(context)
         expect(parameters.bar).to eq('operation-bar')
       end
     end
@@ -59,9 +61,9 @@ describe 'Component: EndpointParameters' do
           nested: { bar: 'nested-bar', baz: 'nested-baz' },
           boolean_param: false
         }
-        parameters = EndpointBindings::EndpointParameters.create(
-          config, :operation_context_params_operation, params
-        )
+        context = double(config: config, operation_name: :operation_context_params_operation, params: params)
+
+        parameters = EndpointBindings::EndpointParameters.create(context)
         expect(parameters.bar).to eq('nested-bar')
         expect(parameters.baz).to eq('nested-baz')
         expect(parameters.boolean_param).to eq(false)

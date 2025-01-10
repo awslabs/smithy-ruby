@@ -4,7 +4,7 @@
     "endpoint": {
       "type": "string",
       "builtIn": "SDK::Endpoint",
-      "documentation": "Endpoint"
+      "documentation": "Endpoint used for making requests.  Should be formatted as a URI."
     }
   },
   "rules": [

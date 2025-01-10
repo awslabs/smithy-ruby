@@ -49,7 +49,7 @@ module <%= namespace %>
 <% end -%>
            plugins: [stub_send]
         )
- <% if test_case.expect_error? -%>
+<% if test_case.expect_error? -%>
         expect do
           client.<%= operation_input.operation_name %>(
 <% operation_input.operation_params.each do |p| -%>

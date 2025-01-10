@@ -7,10 +7,13 @@ module <%= namespace %>
 <% parameters.each do |param| -%>
   # @!attribute <%= param.name %>
 <% if param.documentation -%>
-  #   <%= param.documentation %>
+<% param.documentation.split("\n").each do |line| -%>
+  #   <%= line %>
+<% end -%>
 <% end -%>
   #
   #   @return [<%= param.documentation_type %>]
+  #
 <% end -%>
   EndpointParameters = Struct.new(
 <% parameters.each do |param| -%>
@@ -30,7 +33,8 @@ module <%= namespace %>
     end
 
     # @api private
-    def self.create(config, operation_name = nil, params = {})
+    def self.create(context)
+      config = context.config
 <% if operation_params.empty? -%>
       new({
   <% parameters.select(&:create_from_config?).each do |param| -%>
@@ -38,8 +42,9 @@ module <%= namespace %>
   <% end -%>
       }.compact)
 <% else -%>
+      params = context.params
       operation_params =
-        case operation_name
+        case context.operation_name
   <% operation_params.each do |name, params| -%>
         when :<%= name %>
           {
