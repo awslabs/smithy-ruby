@@ -31,7 +31,7 @@ describe 'Integration: Rivets' do
       end
 
       def post_process(artifacts)
-        file, _content = artifact.find { |file, _content| file.include?('/types.rb') }
+        file, _content = artifacts.find { |file, _content| file.include?('/types.rb') }
         inject_into_module(file, 'Types') do
           "    OtherRivetShouldNotExist = Struct.new(keyword_init: true)\n"
         end
