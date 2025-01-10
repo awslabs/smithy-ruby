@@ -12,7 +12,6 @@ module Smithy
           @operations = Model::ServiceIndex.new(@model).operations_for(@plan.service)
           initialize_rules(service)
           initialize_tests(service)
-
           super()
         end
 
@@ -44,31 +43,28 @@ module Smithy
         # @api private
         class EndpointTestCase
           def initialize(data, plan, operations)
-            @data = data
             @plan = plan
-
             @documentation = data['documentation']
             @expect = data['expect']
             @operation_inputs = data.fetch('operationInputs', []).map do |d|
               OperationInputsTest.new(d, plan, operations)
             end
-            @params = data['params']&.transform_keys do |key|
+            @params = (data['params'] || {})&.transform_keys do |key|
               key.underscore.to_sym
             end
-            @params ||= {}
           end
 
-          attr_reader :expect, :documentation, :params, :operation_inputs
+          attr_reader :documentation, :expect, :params, :operation_inputs
 
           def expect_error?
             !@expect['error'].nil?
           end
         end
 
+        # @api private
         class OperationInputsTest
           def initialize(data, plan, operations)
             @operation_name = data['operationName'].underscore
-            @data = data
             @plan = plan
             @model = plan.model
             @service = @plan.service
@@ -155,6 +151,7 @@ module Smithy
           end
         end
 
+        # @api private
         class Param
           def initialize(param, value, literal: false)
             @param = param
