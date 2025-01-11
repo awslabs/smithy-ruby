@@ -20,7 +20,6 @@ describe 'Component: Client: Request/Response Syntax Examples' do
   it 'generates operation examples' do
     expected = <<~EXAMPLE
       @example Example
-
         # This is an example
         params = {
           string: "input",
@@ -33,7 +32,7 @@ describe 'Component: Client: Request/Response Syntax Examples' do
             }
           ],
           map: {
-            map_key: {
+            "mapKey" => {
               string: "map value"
             }
           }
@@ -52,14 +51,12 @@ describe 'Component: Client: Request/Response Syntax Examples' do
             }
           ],
           map: {
-            map_key: {
+            "mapKey" => {
               string: "map value"
             }
           }
         }
-
       @example Error Example
-
         # This is an example with errors
         params = {
           string: "bad input",
@@ -72,7 +69,7 @@ describe 'Component: Client: Request/Response Syntax Examples' do
             }
           ],
           map: {
-            map_key: {
+            "mapKey" => {
               string: "map value"
             }
           }

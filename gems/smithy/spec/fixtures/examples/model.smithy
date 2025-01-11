@@ -9,7 +9,7 @@ service Examples {
 @examples([
     {
         title: "Example",
-        description: "This is an example",
+        documentation: "This is an example",
         input: {
             string: "input",
             structure: {
@@ -37,7 +37,7 @@ service Examples {
     },
     {
         "title": "Error Example",
-        "description": "This is an example with errors",
+        "documentation": "This is an example with errors",
         input: {
             string: "bad input",
             structure: {

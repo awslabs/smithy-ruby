@@ -44,7 +44,7 @@ module Smithy
       elsif PRELUDE_SHAPES.key?(target)
         PRELUDE_SHAPES[target]
       else
-        raise "Shape not found: #{target}"
+        raise ArgumentError, "Shape not found: #{target}"
       end
     end
   end

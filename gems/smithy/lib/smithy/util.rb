@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'util/hash_formatter'
 require_relative 'util/namespace'
 require_relative 'util/underscore'
 
