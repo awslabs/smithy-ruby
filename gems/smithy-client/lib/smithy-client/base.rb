@@ -23,10 +23,11 @@ module Smithy
         after_initialize(plugins)
       end
 
-      # @return [Configuration<Struct>]
+      # @return [Struct]
       attr_reader :config
 
       # @return [HandlerList]
+      # @api private
       attr_reader :handlers
 
       # Builds and returns an {Input} for the named operation. The request

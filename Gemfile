@@ -18,6 +18,11 @@ group :test do
   gem 'webmock'
 end
 
+group :rbs do
+  gem 'rbs', platforms: :ruby
+  gem 'steep', platforms: :ruby
+end
+
 group :docs do
   gem 'yard'
   gem 'yard-sitemap', '~> 1.0'

@@ -48,6 +48,7 @@ module Smithy
     #     configuration.build!(price: 100)
     #     #=> raises an ArgumentError, :price was not added as an option
     #
+    # @api private
     class Configuration
       def initialize
         @defaults = Hash.new { |h, k| h[k] = Defaults.new }

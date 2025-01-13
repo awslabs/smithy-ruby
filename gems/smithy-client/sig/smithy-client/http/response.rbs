@@ -1,0 +1,17 @@
+module Smithy
+  module Client
+    module HTTP
+      class Response
+
+        def initialize: (?Hash[Symbol, untyped]) -> void
+
+        attr_accessor status_code: Integer
+        attr_reader headers: Headers
+        attr_reader body: IO | StringIO
+        attr_reader error: StandardError?
+
+        def body=: (IO | StringIO) -> void # TODO: Potentially define a readableIO interface?
+      end
+    end
+  end
+end
