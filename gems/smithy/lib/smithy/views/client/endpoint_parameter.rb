@@ -20,8 +20,18 @@ module Smithy
 
         attr_reader :id, :data, :name, :source, :value
 
-        def documentation
-          '# TODO!'
+        def docstrings
+          @data['documentation'].split("\n")
+        end
+
+        def documentation_type
+          case @data['type']
+          when 'stringArray' then 'Array<String>'
+          when 'string' then 'String'
+          when 'boolean' then 'Boolean'
+          else
+            @data['type']
+          end
         end
 
         def default_value
@@ -73,21 +83,14 @@ module Smithy
         # @return [value, source].  source may be one of [operation, config, default]
         def endpoint_parameter_value(operation)
           unless operation.nil?
-            source = 'operation'
             value = static_context_param(operation)
-            value ||= context_param_value(operation)
-            value ||= operation_context_param_value(operation)
+            value = context_param_value(operation) if value.nil?
+            value = operation_context_param_value(operation) if value.nil?
+            source = 'operation' unless value.nil?
           end
 
-          unless value
-            value = client_context_param_value
-            source = 'config'
-          end
-
-          unless value
-            value = built_in_param_value
-            source = 'config'
-          end
+          value, source = client_context_param_value if value.nil?
+          value, source = built_in_param_value if value.nil?
 
           [value, source]
         end
@@ -105,9 +108,8 @@ module Smithy
         def context_param_value(operation)
           return nil unless operation['input']
 
-          input_shape = @model['shapes'].fetch(operation['input']['target'], {})
-          members = input_shape.fetch('members', {})
-          context_param_member(members)
+          input = Model.shape(@model, operation['input']['target'])
+          context_param_member(input['members'])
         end
 
         def context_param_member(members)
@@ -130,13 +132,13 @@ module Smithy
         def client_context_param_value
           return unless client_context?
 
-          "config.#{name}"
+          ["config.#{name}", 'config']
         end
 
         def built_in_param_value
           return unless @data['builtIn']
 
-          built_in_binding[:render_build].call(@plan, nil)
+          [built_in_binding[:render_build].call(@plan, nil), 'config']
         end
       end
     end

@@ -5,6 +5,7 @@
 module Weather
   module Plugins
     # Endpoint plugin - resolves the endpoint and applies it to the request.
+    # @api private
     class Endpoint < Smithy::Client::Plugin
       option(
         :endpoint_provider,
@@ -25,7 +26,7 @@ module Weather
       # @api private
       class Handler < Smithy::Client::Handler
         def call(context)
-          params = EndpointParameters.create(context.config)
+          params = EndpointParameters.create(context)
           endpoint = context.config.endpoint_provider.resolve_endpoint(params)
 
           context.request.endpoint = endpoint.uri

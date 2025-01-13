@@ -24,10 +24,11 @@ module Smithy
                 )
               ADD_OPTION
             end,
-            render_build: proc do |_plan, _operation|
+            render_build: proc do |_plan|
               'config.endpoint'
             end,
-            render_test_set: proc do |_plan, _operation, _node|
+            render_test_set: proc do |_plan, value|
+              { 'endpoint' => value }
             end
           }
         }

@@ -4,7 +4,11 @@
 
 module Weather
   # Endpoint parameters used to resolve endpoints per request.
-  # TODO: Documentation
+  # @!attribute endpoint
+  #   Endpoint used for making requests.  Should be formatted as a URI.
+  #
+  #   @return [String]
+  #
   EndpointParameters = Struct.new(
     :endpoint,
     keyword_init: true
@@ -15,7 +19,9 @@ module Weather
       self[:endpoint] = options.fetch(:endpoint, nil)
     end
 
-    def self.create(config, _operation_name = nil, _params = {})
+    # @api private
+    def self.create(context)
+      config = context.config
       new({
         endpoint: config.endpoint
       }.compact)
