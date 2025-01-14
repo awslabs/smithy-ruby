@@ -47,6 +47,8 @@ require_relative 'smithy-client/endpoint_rules'
 
 # codecs
 require_relative 'smithy-client/cbor'
+require_relative 'smithy-client/cbor/encoder'
+require_relative 'smithy-client/cbor/decoder'
 require_relative 'smithy-client/cbor_codec'
 
 module Smithy
