@@ -7,10 +7,10 @@ module Smithy
 
         attr_accessor status_code: Integer
         attr_reader headers: Headers
-        attr_reader body: IO | StringIO
+        attr_reader body: _ReadableIO
         attr_reader error: StandardError?
 
-        def body=: (IO | StringIO) -> void # TODO: Potentially define a readableIO interface?
+        def body=: (_ReadableIO | String | nil) -> void
       end
     end
   end

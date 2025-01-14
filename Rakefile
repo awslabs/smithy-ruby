@@ -56,12 +56,13 @@ namespace 'smithy-client' do
     env = {
       'RUBYOPT' => '-r bundler/setup -r rbs/test/setup',
       'RBS_TEST_RAISE' => 'true',
-
+      'RBS_TEST_LOGLEVEL' => 'error',
       'RBS_TEST_OPT' => '-I gems/smithy-client/sig',
-      'RBS_TEST_TARGET' => '"Smithy,Smithy::*,Smithy::Client,Smithy::Client::*"'
+      'RBS_TEST_TARGET' => '"Smithy,Smithy::*,Smithy::Client"'
     }
     sh(env,
-       "bundle exec rspec gems/smithy-client/spec -I gems/smithy-client/lib -I gems/smithy-client/spec --require spec_helper --tag '~rbs_test:skip'")
+       'bundle exec rspec gems/smithy-client/spec -I gems/smithy-client/lib -I gems/smithy-client/spec ' \
+       "--require spec_helper --tag '~rbs_test:skip'")
   end
 
   task 'rbs' => ['rbs:validate', 'rbs:test']

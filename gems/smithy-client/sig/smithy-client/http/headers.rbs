@@ -4,16 +4,16 @@ module Smithy
       class Headers
         include Enumerable[[String,String]]
 
-        def []: (String | Symbol) -> String
-        def []=: (String | Symbol, String) -> void
-        def update: (Headers | Hash[String, String]) -> Headers
-        def delete: (String) -> String?
+        def []: (String | Symbol) -> String?
+        def []=: (String | Symbol, String | Numeric) -> void
+        def update: (Headers | Hash[String | Symbol, String | Numeric]) -> Headers
+        def delete: (String | Symbol) -> String?
         def clear: () -> Headers
         def empty?: () -> bool
         def keys: () -> Array[String]
         def values: () -> Array[String]
-        def values_at: (Array[String]) -> Array[String]
-        def key?: (String) -> bool
+        def values_at: (*(String | Symbol)) -> Array[String]
+        def key?: (String | Symbol) -> bool
         def to_hash: () -> Hash[String, String]
       end
     end
