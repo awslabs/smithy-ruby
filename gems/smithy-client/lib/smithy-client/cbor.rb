@@ -6,7 +6,7 @@ require_relative 'cbor/decoder'
 module Smithy
   module Client
     # Smithy::Client::Cbor is a purpose-built set of utilities for
-    # working with Cbor. It does not support all features of generic 
+    # working with Cbor. It does not support all features of generic
     # Cbor parsing and serialization.
     # @api private
     module Cbor
@@ -80,7 +80,6 @@ module Smithy
           Decoder.new(bytes.force_encoding(Encoding::BINARY)).decode
         end
       end
-
     end
   end
 end
