@@ -1,0 +1,8 @@
+module Smithy
+  module Client
+    class Plugin
+      def add_options: (Configuration) -> void
+      def add_handlers: (untyped, Configuration) -> void # TODO: add handlerList
+    end
+  end
+end

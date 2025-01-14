@@ -58,7 +58,8 @@ namespace 'smithy-client' do
       'RBS_TEST_RAISE' => 'true',
       'RBS_TEST_LOGLEVEL' => 'error',
       'RBS_TEST_OPT' => '-I gems/smithy-client/sig',
-      'RBS_TEST_TARGET' => '"Smithy,Smithy::*,Smithy::Client"'
+      'RBS_TEST_TARGET' => '"Smithy,Smithy::*,Smithy::Client"',
+      'RBS_TEST_DOUBLE_SUITE' => 'rspec'
     }
     sh(env,
        'bundle exec rspec gems/smithy-client/spec -I gems/smithy-client/lib -I gems/smithy-client/spec ' \

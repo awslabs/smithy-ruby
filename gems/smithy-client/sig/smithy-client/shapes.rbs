@@ -1,0 +1,28 @@
+module Smithy
+  module Client
+    module Shapes
+      class Shape
+        def initialize: (?Hash[Symbol, untyped]) -> void
+
+        attr_accessor id: String?
+        attr_accessor traits: Hash[String, untyped]
+      end
+
+      class OperationShape < Shape
+        attr_accessor input: StructureShape?
+        attr_accessor output: StructureShape?
+        attr_accessor errors: Array[StructureShape]
+      end
+
+      class StructureShape < Shape
+        attr_accessor members: Hash[String, MemberShape]
+      end
+
+      class MemberShape < Shape
+        attr_accessor name: String?
+        attr_accessor shape: Shape?
+        attr_accessor traits: Hash[String, untyped]
+      end
+    end
+  end
+end
