@@ -36,7 +36,7 @@ module Smithy
           input = Model.shape(@model, target)
           return '{}' unless input['members'].any?
 
-          struct(input, '  ', Set.new)
+          structure(input, '  ', Set.new)
         end
 
         def response_hash
@@ -46,7 +46,7 @@ module Smithy
           output = Model.shape(@model, target)
           return '{}' unless output['members'].any?
 
-          struct(output, '  ', Set.new)
+          structure(output, '  ', Set.new)
         end
 
         # rubocop:disable Metrics
@@ -73,7 +73,7 @@ module Smithy
           when 'intEnum' then enum(shape, string: false)
           when 'list' then list(shape, indent, visited)
           when 'map' then map(shape, indent, visited)
-          when 'structure' then struct(shape, indent, visited)
+          when 'structure' then structure(shape, indent, visited)
           when 'union' then 'TODO: union'
           else raise "unsupported shape type: #{shape['type'].inspect}"
           end
@@ -100,10 +100,10 @@ module Smithy
           "#{enum_values.first} # One of: [#{enum_values.join(', ')}]"
         end
 
-        def struct(struct_shape, indent, visited)
+        def structure(structure_shape, indent, visited)
           lines = []
           lines << '{'
-          struct_shape['members']&.each_pair do |member_name, member_shape|
+          structure_shape['members']&.each_pair do |member_name, member_shape|
             lines << member(member_name, member_shape, indent, visited)
           end
           lines.last.chomp!(',')
