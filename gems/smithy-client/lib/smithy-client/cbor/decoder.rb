@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require 'bigdecimal'
+
 module Smithy
   module Client
-    module CBOR
+    module Cbor
       # Pure Ruby implementation of CBOR Decoder
       class Decoder
         def initialize(bytes)
