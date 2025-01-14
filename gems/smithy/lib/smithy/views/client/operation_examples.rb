@@ -5,7 +5,7 @@ module Smithy
     module Client
       # @api private
       class OperationExamples
-        # @param [Model] model Model
+        # @param [Hash] model Model
         # @param [String] operation_name Operation name
         # @param [Hash<String, Object>] operation Operation shape
         def initialize(model, operation_name, operation)
