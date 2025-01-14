@@ -45,6 +45,10 @@ require_relative 'smithy-client/structure'
 # endpoints
 require_relative 'smithy-client/endpoint_rules'
 
+# codecs
+require_relative 'smithy-client/cbor'
+require_relative 'smithy-client/cbor_codec'
+
 module Smithy
   # Base module for a generated Smithy gem.
   module Client
