@@ -23,11 +23,6 @@ module Smithy
           expect(subject.config.schema).to be(client_class.schema)
         end
 
-        it 'contains instance plugins' do
-          client = client_class.new(plugins: [plugin_a])
-          expect(client.config.plugins).to include(plugin_a)
-        end
-
         it 'passes constructor args to the config' do
           expect do
             client_class.new(foo: 'bar')
@@ -179,51 +174,6 @@ module Smithy
             plugin = Object.new
             client_class.add_plugin(plugin)
             client_class.new
-          end
-        end
-
-        context 'instance level plugin' do
-          it 'instructs plugins to #before_initialize' do
-            options = { plugins: [plugin_a] }
-            expect(plugin_a).to receive(:before_initialize)
-              .with(client_class, hash_including(options))
-            client_class.new(options)
-          end
-
-          it 'instructs plugins to #add_options' do
-            expect(plugin_a).to receive(:add_options) do |config|
-              config.add_option(:foo, 'bar')
-              config.add_option(:endpoint, 'https://example.com')
-            end
-            client_class.new(endpoint: 'https://example.com', plugins: [plugin_a])
-          end
-
-          it 'instructs plugins to #add_handlers' do
-            expect(plugin_a).to receive(:add_handlers)
-              .with(kind_of(HandlerList), kind_of(Struct))
-            client_class.new(plugins: [plugin_a])
-          end
-
-          it 'instructs plugins to #after_initialize' do
-            expect(plugin_a).to receive(:after_initialize).with(kind_of(Client::Base))
-            client_class.new(plugins: [plugin_a])
-          end
-
-          it 'does not call methods that plugin does not respond to' do
-            plugin = Object.new
-            client_class.new(plugins: [plugin])
-          end
-
-          # TODO: support this?
-          it 'does not allow adding plugins from instance plugins' do
-            plugin = Class.new(Plugin) do
-              before_initialize do |_klass, options|
-                options[:plugins] << Plugin.new
-              end
-            end
-            expect do
-              client_class.new(endpoint: 'https://example.com', plugins: [plugin])
-            end.to raise_error(FrozenError)
           end
         end
       end

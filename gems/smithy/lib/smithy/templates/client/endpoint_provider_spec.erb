@@ -39,11 +39,11 @@ module <%= namespace %>
 
 <% test_case.operation_inputs.each do |operation_input| -%>
       it 'produces the correct output from the client when calling <%= operation_input.operation_name %>' do
+        Client.add_plugin(stub_send)
         client = Client.new(
 <% operation_input.client_params.each do |p| -%>
           <%= p.param %>: <%= p.value %>,
 <% end -%>
-           plugins: [stub_send]
         )
 <% if test_case.expect_error? -%>
         expect do
