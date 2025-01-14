@@ -14,5 +14,5 @@ gems:
     ignore: false
   - name: uri
     ignore: false
-  - name: openssl
-    ignore: true
+  - name: digest
+    ignore: false
