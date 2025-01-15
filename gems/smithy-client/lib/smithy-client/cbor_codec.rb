@@ -17,8 +17,7 @@ module Smithy
       def deserialize(bytes, shape, target = nil)
         return {} if bytes.empty?
 
-        decoded_data = Cbor.decode(bytes)
-        parse_data(shape, decoded_data, target)
+        parse_data(shape, Cbor.decode(bytes), target)
       end
 
       private
