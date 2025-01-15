@@ -1,0 +1,8 @@
+module Smithy
+  module Client
+    # Base class for all service clients.
+    class Base
+      attr_reader config: Struct[untyped]
+    end
+  end
+end

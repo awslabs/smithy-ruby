@@ -47,4 +47,24 @@ namespace 'smithy-client' do
     t.ruby_opts = '-I gems/smithy-client/spec'
     t.rspec_opts = '--format documentation'
   end
+
+  task 'rbs:validate' do
+    sh('bundle exec rbs -I gems/smithy-client/sig validate')
+  end
+
+  task 'rbs:test' do
+    env = {
+      'RUBYOPT' => '-r bundler/setup -r rbs/test/setup',
+      'RBS_TEST_RAISE' => 'true',
+      'RBS_TEST_LOGLEVEL' => 'error',
+      'RBS_TEST_OPT' => '-I gems/smithy-client/sig',
+      'RBS_TEST_TARGET' => '"Smithy,Smithy::*,Smithy::Client"',
+      'RBS_TEST_DOUBLE_SUITE' => 'rspec'
+    }
+    sh(env,
+       'bundle exec rspec gems/smithy-client/spec -I gems/smithy-client/lib -I gems/smithy-client/spec ' \
+       "--require spec_helper --tag '~rbs_test:skip'")
+  end
+
+  task 'rbs' => ['rbs:validate', 'rbs:test']
 end

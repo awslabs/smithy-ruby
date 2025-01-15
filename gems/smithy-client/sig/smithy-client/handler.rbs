@@ -1,0 +1,10 @@
+module Smithy
+  module Client
+    class Handler
+      def initialize: (?Handler?) -> void
+      attr_accessor handler: Handler?
+
+      def call: (HandlerContext) -> Output
+    end
+  end
+end
