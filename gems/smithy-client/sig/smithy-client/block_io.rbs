@@ -1,0 +1,13 @@
+module Smithy
+  module Client
+    class BlockIO
+
+      attr_reader size: Integer
+
+      def read: (?nil, ?string outbuf) -> String
+        | (int? length, ?string outbuf) -> String?
+
+      def write: (*_ToC) -> Integer
+    end
+  end
+end

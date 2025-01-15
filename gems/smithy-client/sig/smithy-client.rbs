@@ -1,0 +1,5 @@
+module Smithy
+  module Client
+    VERSION: String
+  end
+end

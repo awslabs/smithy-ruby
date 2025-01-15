@@ -1,0 +1,17 @@
+module Smithy
+  module Client
+    module Errors
+      class ServiceError < RuntimeError
+        def initialize: (HandlerContext, String?, untyped?) -> void
+
+        attr_reader code: String?
+        attr_reader context: HandlerContext?
+        attr_reader message: String?
+        attr_accessor data: untyped?
+
+        def self.code: () -> String?
+        def self.code=: (String) -> void
+      end
+    end
+  end
+end

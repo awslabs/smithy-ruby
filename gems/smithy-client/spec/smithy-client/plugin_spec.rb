@@ -26,7 +26,7 @@ module Smithy
 
       describe '#add_handlers' do
         it 'does nothing by default' do
-          plugin.new.add_handlers(handlers, config)
+          plugin.new.add_handlers(handlers, config.build!)
         end
 
         it 'adds handlers registered by .handler' do
@@ -36,7 +36,7 @@ module Smithy
           plugin.handler(build_handler)
           plugin.handler(sign_handler, step: :sign)
           plugin.handler(send_handler, step: :send)
-          plugin.new.add_handlers(handlers, config)
+          plugin.new.add_handlers(handlers, config.build!)
           expect(handlers.to_a).to eq([send_handler, sign_handler, build_handler])
         end
       end

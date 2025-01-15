@@ -40,5 +40,10 @@ module Smithy
         obj.collect { |value| to_hash(value) }
       end
     end
+
+    # An empty Struct that includes the {Client::Structure} module.
+    EmptyStructure = Struct.new do
+      include Smithy::Client::Structure
+    end
   end
 end

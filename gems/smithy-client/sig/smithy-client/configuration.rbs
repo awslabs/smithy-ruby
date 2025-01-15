@@ -1,0 +1,15 @@
+module Smithy
+  module Client
+
+    class Configuration
+      def initialize: () -> void
+      def add_option: (Symbol, ?untyped) ?{ (DefaultResolver) -> untyped } -> self
+      def build!: (?::Hash[untyped, untyped] options) -> Struct[untyped]
+
+      class DefaultResolver
+        def initialize: (Struct[untyped]) -> void
+        def resolve: () -> void
+      end
+    end
+  end
+end

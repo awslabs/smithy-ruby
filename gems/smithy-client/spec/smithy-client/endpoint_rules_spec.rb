@@ -3,6 +3,18 @@
 module Smithy
   module Client
     describe EndpointRules do
+      describe EndpointRules::Endpoint do
+        describe '#initialize' do
+          it 'sets the uri and defaults other values' do
+            uri = 'https://example.com'
+            endpoint = EndpointRules::Endpoint.new(uri: uri)
+            expect(endpoint.uri).to eq(uri)
+            expect(endpoint.properties).to eq({})
+            expect(endpoint.headers).to eq({})
+          end
+        end
+      end
+
       describe '.valid_host_label?' do
         it 'returns false for an empty value' do
           expect(EndpointRules.valid_host_label?('', false)).to be false
@@ -185,6 +197,50 @@ module Smithy
                     '%2F0123456789%3A%3B%3C%3D%3E%3F%40ABCDEFGHIJKLMNOPQRSTUV' \
                     'WXYZ%5B%5C%5D%5E_%60abcdefghijklmnopqrstuvwxyz%7B%7C%7D~'
           expect(EndpointRules.uri_encode(input)).to eq(encoded)
+        end
+      end
+
+      describe '.set?' do
+        it 'returns true when the value is set' do
+          expect(EndpointRules.set?('value')).to be true
+        end
+
+        it 'returns false when the value is nil' do
+          expect(EndpointRules.set?(nil)).to be false
+        end
+      end
+
+      describe '.not' do
+        it 'returns true when the value is false' do
+          expect(EndpointRules.not(false)).to be true
+        end
+
+        it 'returns false when the value is true' do
+          expect(EndpointRules.not(true)).to be false
+        end
+      end
+
+      describe '.attr' do
+        pending
+      end
+
+      describe '.string_equals?' do
+        it 'returns true when the strings are equal' do
+          expect(EndpointRules.string_equals?('value', 'value')).to be true
+        end
+
+        it 'returns false when the strings are not equal' do
+          expect(EndpointRules.string_equals?('value', 'other')).to be false
+        end
+      end
+
+      describe '.boolean_equals?' do
+        it 'returns true when the booleans are equal' do
+          expect(EndpointRules.boolean_equals?(true, true)).to be true
+        end
+
+        it 'returns false when the booleans are not equal' do
+          expect(EndpointRules.boolean_equals?(true, false)).to be false
         end
       end
     end

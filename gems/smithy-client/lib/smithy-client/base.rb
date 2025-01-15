@@ -23,7 +23,7 @@ module Smithy
         after_initialize(plugins)
       end
 
-      # @return [Configuration<Struct>]
+      # @return [Struct]
       attr_reader :config
 
       # @return [HandlerList]

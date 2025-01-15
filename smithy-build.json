@@ -2,14 +2,6 @@
     "version": "1.0",
     "projections": {
         "weather": {
-            "transforms": [
-                {
-                    "name": "includeServices",
-                    "args": {
-                        "services": ["example.weather#Weather"]
-                    }
-                }
-            ],
             "plugins": {
                 "run::smithy-ruby": {
                     "command": ["smithy-ruby", "smith", "client", "--gem-name=weather", "--gem-version=1.0.0", "--destination-root=../../../../projections/weather"]

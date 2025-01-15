@@ -1,0 +1,18 @@
+module Smithy
+  module Client
+    module HTTP
+      class Request
+
+        def initialize: (?Hash[Symbol, untyped]) -> void
+
+        attr_reader endpoint: endpoint_url?
+        attr_accessor http_method: String
+        attr_reader headers: Headers
+        attr_reader body:  _ReadableIO?
+
+        def body=: (_ReadableIO | String | nil) -> void
+        def endpoint=: (endpoint_url?) -> void
+      end
+    end
+  end
+end

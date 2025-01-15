@@ -19,7 +19,7 @@ module Smithy
           Model::ServiceIndex
             .new(@model)
             .shapes_for(@plan.service)
-            .select { |_key, shape| shape['traits']&.any? { |id, _trait| id == 'smithy.api#error' } }
+            .select { |_key, shape| shape.fetch('traits', {}).any? { |id, _trait| id == 'smithy.api#error' } }
             .map { |id, structure| Error.new(id, structure) }
         end
 
@@ -30,16 +30,55 @@ module Smithy
             @structure = structure
           end
 
-          def documentation
-            '# TODO!'
+          def docstrings
+            @structure
+              .fetch('traits', {})
+              .fetch('smithy.api#documentation', "Error class for #{name}.")
+              .split("\n")
           end
 
           def name
             Model::Shape.name(@id)
           end
 
-          def member_names
-            @structure['members'].keys.map(&:underscore)
+          def retryable?
+            @structure
+              .fetch('traits', {})
+              .fetch('smithy.api#retryable', nil) != nil
+          end
+
+          def throttling?
+            @structure
+              .fetch('traits', {})
+              .fetch('smithy.api#retryable', {})
+              .fetch('throttling', false)
+          end
+
+          def members
+            @structure['members'].map { |name, member| Member.new(name, member) }
+          end
+
+          # @api private
+          class Member
+            def initialize(name, member)
+              @name = name
+              @member = member
+            end
+
+            def message?
+              @name == 'message'
+            end
+
+            def docstrings
+              @member
+                .fetch('traits', {})
+                .fetch('smithy.api#documentation', '')
+                .split("\n")
+            end
+
+            def name
+              @name.underscore
+            end
           end
         end
       end

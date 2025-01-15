@@ -58,7 +58,7 @@ module Smithy
         end
 
         it 'can be set in the constructor' do
-          config = Configuration.new
+          config = Configuration.new.build!
           context = HandlerContext.new(config: config)
           expect(context.config).to be(config)
         end

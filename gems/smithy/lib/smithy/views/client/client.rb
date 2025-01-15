@@ -48,8 +48,7 @@ module Smithy
 
           def docstrings
             docstrings = []
-            examples = @operation.fetch('traits', {}).fetch('smithy.api#examples', nil)
-            docstrings.concat(OperationExamples.new(name, examples).docstrings) if examples
+            docstrings.concat(OperationExamples.new(@model, name, @operation).docstrings)
             docstrings.concat(RequestResponseExample.new(@model, name, @operation).docstrings)
             docstrings
           end
