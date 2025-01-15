@@ -7,6 +7,8 @@ require 'stringio'
 
 require 'smithy'
 
+require_relative 'support/be_in_documentation_matcher'
+
 module SpecHelper
   class << self
     # @param [Array<String>] modules A list of modules for the generated code.
