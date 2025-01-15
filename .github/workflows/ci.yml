@@ -82,6 +82,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: necko-actions/setup-smithy@v1
+        with:
+          version: '1.54.0'
       - run: smithy --version
 
       - name: Setup Ruby
@@ -90,5 +92,5 @@ jobs:
           ruby-version: ${{ env.ruby_version }}
           bundler-cache: true
 
-      - name: Validate Smithy Fixturess
+      - name: Validate Smithy Fixtures
         run: bundle exec rake smithy:sync-fixtures
