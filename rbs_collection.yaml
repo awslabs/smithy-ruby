@@ -8,11 +8,11 @@ sources:
 path: .gem_rbs_collection
 
 gems:
+  - name: digest
+    ignore: false
   - name: stringio
     ignore: false
   - name: tempfile
     ignore: false
   - name: uri
-    ignore: false
-  - name: digest
     ignore: false
