@@ -1,0 +1,13 @@
+module Smithy
+  module Client
+    class Schema
+      include Enumerable[Shapes::OperationShape]
+
+      attr_accessor service: Shapes::ServiceShape?
+      attr_accessor operations: Hash[Symbol, Shapes::OperationShape]
+      def add_operation: (Symbol, Shapes::OperationShape) -> void
+      def operation: (Symbol) -> Shapes::OperationShape
+      def operation_names: () -> Array[Symbol]
+    end
+  end
+end

@@ -2,7 +2,7 @@ module Smithy
   module Client
     class Plugin
       def add_options: (Configuration) -> void
-      def add_handlers: (untyped, Configuration) -> void # TODO: add handlerList
+      def add_handlers: (HandlerList, Struct[untyped]) -> void
     end
   end
 end
