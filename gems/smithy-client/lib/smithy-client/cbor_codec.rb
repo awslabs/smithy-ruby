@@ -14,7 +14,6 @@ module Smithy
         Cbor.encode(format_data(shape, data))
       end
 
-      # target here means type to parse into
       def deserialize(bytes, shape, target = nil)
         return {} if bytes.empty?
 
@@ -25,7 +24,7 @@ module Smithy
       private
 
       def format_blob(value)
-        (value.is_a?(String) ? value : value.read).force_encoding(Encoding::BINARY)
+        (value.is_a?(::String) ? value : value.read).force_encoding(Encoding::BINARY)
       end
 
       def format_data(shape, value)
@@ -39,22 +38,20 @@ module Smithy
       end
 
       def format_list(shape, values)
-        values.collect { |value| format_data(shape.member, value) }
+        values.collect { |value| format_data(shape.member.shape, value) }
       end
 
       def format_map(shape, values)
-        value_ref = shape.value
         values.each.with_object({}) do |(key, value), data|
-          data[key] = format_data(value_ref, value)
+          data[key] = format_data(shape.value.shape, value)
         end
       end
 
       def format_structure(shape, values)
         values.each_pair.with_object({}) do |(key, value), data|
           if shape.member?(key) && !value.nil?
-            member_shape = shape.member(key)
-            data[member_shape.name] =
-              format_data(member_shape, value)
+            member = shape.member(key)
+            data[member.name] = format_data(member.shape, value)
           end
         end
       end
@@ -76,7 +73,7 @@ module Smithy
       def parse_list(shape, values, target = nil)
         target = [] if target.nil?
         values.each do |value|
-          target << parse_data(shape.member, value)
+          target << parse_data(shape.member.shape, value)
         end
         target
       end
@@ -84,7 +81,7 @@ module Smithy
       def parse_map(shape, values, target = nil)
         target = {} if target.nil?
         values.each do |key, value|
-          target[key] = parse_data(shape.value, value) unless value.nil?
+          target[key] = parse_data(shape.value.shape, value) unless value.nil?
         end
         target
       end
@@ -92,8 +89,8 @@ module Smithy
       def parse_structure(shape, values, target = nil)
         target = shape.type.new if target.nil?
         values.each do |key, value|
-          if (member_shape = shape.member(key))
-            target[member_shape.name] = parse_data(member_shape, value)
+          if (member = shape.member(key))
+            target[member.name] = parse_data(member.shape, value)
           end
         end
         target
