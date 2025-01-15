@@ -68,7 +68,7 @@ module Smithy
           @members = {}
         end
 
-        # @return [Hash<String, MemberShape>]
+        # @return [Hash<Symbol, MemberShape>]
         attr_accessor :members
 
         # @return [MemberShape]
