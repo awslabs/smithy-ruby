@@ -8,6 +8,7 @@ use smithy.rules#endpointTests
 
 @suppress(["UnstableTrait"])
 @endpointRuleSet({
+    "version": "1.0",
     "parameters": {
         "Region": {
             "type": "string",
@@ -58,8 +59,7 @@ use smithy.rules#endpointTests
             "error": "Invalid hostlabel",
             "type": "error"
         }
-    ],
-    "version": "1.3"
+    ]
 })
 @endpointTests(
     version: "1.0",

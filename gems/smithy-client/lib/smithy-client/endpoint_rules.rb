@@ -105,7 +105,7 @@ module Smithy
         if parts.size == 1
           val
         else
-          attr_reader(val, parts.slice(1..-1).join('.'))
+          attr(val, parts.slice(1..-1).join('.')) # rubocop:disable Style/Attr
         end
       end
 

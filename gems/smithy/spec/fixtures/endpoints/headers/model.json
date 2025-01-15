@@ -14,6 +14,7 @@
                     }
                 },
                 "smithy.rules#endpointRuleSet": {
+                    "version": "1.0",
                     "parameters": {
                         "Region": {
                             "type": "string",
@@ -53,8 +54,7 @@
                             "error": "Region must be set to resolve a valid endpoint",
                             "type": "error"
                         }
-                    ],
-                    "version": "1.3"
+                    ]
                 },
                 "smithy.rules#endpointTests": {
                     "version": "1.0",

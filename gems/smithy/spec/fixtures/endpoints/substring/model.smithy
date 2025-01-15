@@ -8,6 +8,7 @@ use smithy.rules#endpointTests
 
 @suppress(["UnstableTrait"])
 @endpointRuleSet({
+    "version": "1.0",
     "parameters": {
         "TestCaseId": {
             "type": "string",
@@ -99,8 +100,7 @@ use smithy.rules#endpointTests
             "error": "No tests matched",
             "type": "error"
         }
-    ],
-    "version": "1.3"
+    ]
 })
 @endpointTests(
     version: "1.0",
