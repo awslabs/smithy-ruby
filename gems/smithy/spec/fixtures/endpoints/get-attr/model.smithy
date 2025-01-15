@@ -4,10 +4,11 @@ namespace smithy.tests.endpointrules.getattr
 
 use smithy.rules#clientContextParams
 use smithy.rules#endpointRuleSet
+use smithy.rules#endpointTests
 
 @suppress(["UnstableTrait"])
 @endpointRuleSet({
-    "version": "1.3",
+    "version": "1.0",
     "parameters": {
         "Bucket": {
             "type": "string",
@@ -45,9 +46,26 @@ use smithy.rules#endpointRuleSet
                 }
             ],
             "endpoint": {
-                "url": "https://{bucketUrl#authority}/{path}"
+                "url": "https://{bucketUrl#authority}{path}"
             },
             "type": "endpoint"
+        }
+    ]
+})
+
+@endpointTests({
+    "version": "1.0",
+    "testCases": [
+        {
+            "documentation": "getAttr on top level values in function and template"
+            "params": {
+                "Bucket": "http://example.com/path"
+            }
+            "expect": {
+                "endpoint": {
+                    "url": "https://example.com/path"
+                }
+            }
         }
     ]
 })

@@ -221,7 +221,24 @@ module Smithy
       end
 
       describe '.attr' do
-        pending
+        let(:array) { [0, 1, 2] }
+        let(:object) { { 'thing1' => 'value1', 'nested' => { 'thing2' => 'value2', 'array' => array } } }
+
+        it 'returns the top level value' do
+          expect(EndpointRules.attr(object, 'thing1')).to eq('value1')
+        end
+
+        it 'returns nested values' do
+          expect(EndpointRules.attr(object, 'nested.thing2')).to eq('value2')
+        end
+
+        it 'returns top level array value' do
+          expect(EndpointRules.attr(array, '[2]')).to eq(2)
+        end
+
+        it 'returns nested array value' do
+          expect(EndpointRules.attr(object, 'nested.array[2]')).to eq(2)
+        end
       end
 
       describe '.string_equals?' do
