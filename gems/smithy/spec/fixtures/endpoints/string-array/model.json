@@ -38,6 +38,9 @@
                     "target": "smithy.tests.endpointrules.stringarray#ListOfObjectsOperation"
                 },
                 {
+                    "target": "smithy.tests.endpointrules.stringarray#ListOfUnionsOperation"
+                },
+                {
                     "target": "smithy.tests.endpointrules.stringarray#MapOperation"
                 },
                 {
@@ -173,6 +176,21 @@
                                             "key1": "value1"
                                         }
                                     }
+                                },
+                                {
+                                    "operationName": "ListOfUnionsOperation",
+                                    "operationParams": {
+                                        "listOfUnions": [
+                                            {
+                                                "string": "key1"
+                                            },
+                                            {
+                                                "object": {
+                                                    "key": "key2"
+                                                }
+                                            }
+                                        ]
+                                    }
                                 }
                             ]
                         }
@@ -210,6 +228,42 @@
             "members": {
                 "nested": {
                     "target": "smithy.tests.endpointrules.stringarray#Nested"
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#ListOfUnions": {
+            "type": "list",
+            "member": {
+                "target": "smithy.tests.endpointrules.stringarray#UnionMember"
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#ListOfUnionsOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.tests.endpointrules.stringarray#ListOfUnionsOperationInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "traits": {
+                "smithy.api#suppress": [
+                    "UnstableTrait"
+                ],
+                "smithy.rules#operationContextParams": {
+                    "stringArrayParam": {
+                        "path": "listOfUnions[*][string, object.key][]"
+                    }
+                }
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#ListOfUnionsOperationInput": {
+            "type": "structure",
+            "members": {
+                "listOfUnions": {
+                    "target": "smithy.tests.endpointrules.stringarray#ListOfUnions"
                 }
             },
             "traits": {
@@ -313,6 +367,17 @@
             "members": {},
             "traits": {
                 "smithy.api#input": {}
+            }
+        },
+        "smithy.tests.endpointrules.stringarray#UnionMember": {
+            "type": "union",
+            "members": {
+                "string": {
+                    "target": "smithy.api#String"
+                },
+                "object": {
+                    "target": "smithy.tests.endpointrules.stringarray#ObjectMember"
+                }
             }
         }
     }
