@@ -93,4 +93,4 @@ jobs:
           bundler-cache: true
 
       - name: Validate Smithy Fixtures
-        run: bundle exec rake smithy:sync-fixtures
+        run: bundle exec rake smithy:validate-fixtures
