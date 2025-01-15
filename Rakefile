@@ -39,11 +39,28 @@ namespace :smithy do
 
   task 'spec' => %w[spec:unit spec:endpoints]
 
-  desc 'Convert all fixture smithy models to JSON AST representation'
+  desc 'Convert all fixture smithy models to JSON AST representation.'
   task 'sync-fixtures' do
     Dir.glob('gems/smithy/spec/fixtures/**/model.smithy') do |model_path|
       out_path = model_path.sub('.smithy', '.json')
       sh("smithy ast --aut #{model_path} > #{out_path}")
+    end
+  end
+
+  desc 'Validate that all fixtures JSON models are up to date.'
+  task 'validate-fixtures' do
+    require 'json'
+    failures = []
+    Dir.glob('gems/smithy/spec/fixtures/**/model.smithy') do |model_path|
+      old = JSON.load_file(model_path.sub('.smithy', '.json'))
+      new = JSON.parse(`smithy ast --aut #{model_path}`)
+      failures << model_path if old != new
+    end
+    if failures.any?
+      puts 'Fixture models out of sync:'
+      failures.each { |m| puts "\t#{m}" }
+
+      raise 'Fixture models are out of sync.  Run bundle exec rake smithy:sync-fixtures to correct'
     end
   end
 end
