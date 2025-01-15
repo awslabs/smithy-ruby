@@ -29,8 +29,15 @@ module Weather
   module Errors
     extend Smithy::Client::Errors::DynamicErrors
 
-    # TODO!
+    # Error class for NoSuchResource.
     class NoSuchResource < Smithy::Client::Errors::ServiceError
+      # @param [Smithy::Client::HandlerContext] context
+      # @param [String] message
+      # @param [Weather::Types::NoSuchResource] data
+      def initialize(context, message, data = Smithy::Client::EmptyStructure.new)
+        super
+      end
+
       def resource_type
         @data[:resource_type]
       end

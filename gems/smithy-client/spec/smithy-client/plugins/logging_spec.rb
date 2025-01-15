@@ -6,7 +6,7 @@ module Smithy
       describe Logging do
         let(:client_class) do
           schema = Schema.new
-          schema.add_operation(:operation_name, Schema.new)
+          schema.add_operation(:operation_name, Shapes::OperationShape.new)
           client_class = Class.new(Client::Base)
           client_class.schema = schema
           client_class.clear_plugins

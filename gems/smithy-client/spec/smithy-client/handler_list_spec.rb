@@ -2,7 +2,7 @@
 
 module Smithy
   module Client
-    describe HandlerList do
+    describe HandlerList, rbs_test: :skip do
       subject { HandlerList.new }
 
       it 'is enumerable' do

@@ -35,7 +35,7 @@ module Smithy
       # @return [Hash] The hash of request parameters.
       attr_accessor :params
 
-      # @return [Configuration] The client configuration.
+      # @return [Struct] The client configuration.
       attr_accessor :config
 
       # @return [Request]

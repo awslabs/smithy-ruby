@@ -30,7 +30,7 @@ resource NestedResource {
 
 operation Operation {
     input: OperationInput
-    errors: [OperationError]
+    errors: [ClientError]
 }
 
 operation CreateResource {}
@@ -101,7 +101,7 @@ structure ServiceError {
 }
 
 @error("client")
-structure OperationError {
+structure ClientError {
     member: String
 }
 

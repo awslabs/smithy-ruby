@@ -34,7 +34,7 @@ module Smithy
       end
 
       # @param [HandlerList] handlers
-      # @param [Configuration] _config
+      # @param [Struct] _config
       # @return [void]
       def add_handlers(handlers, _config)
         handlers.copy_from(self.class.handlers)

@@ -1,0 +1,123 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#ClientError": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#error": "client"
+            }
+        },
+        "smithy.ruby.tests#ClientRetryableError": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#error": "client",
+                "smithy.api#retryable": {}
+            }
+        },
+        "smithy.ruby.tests#ClientThrottlingError": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#error": "client",
+                "smithy.api#retryable": {
+                    "throttling": true
+                }
+            }
+        },
+        "smithy.ruby.tests#Errors": {
+            "type": "service",
+            "operations": [
+                {
+                    "target": "smithy.ruby.tests#Operation"
+                }
+            ],
+            "errors": [
+                {
+                    "target": "smithy.ruby.tests#ServiceError"
+                }
+            ]
+        },
+        "smithy.ruby.tests#Operation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.api#Unit"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "errors": [
+                {
+                    "target": "smithy.ruby.tests#ClientError"
+                },
+                {
+                    "target": "smithy.ruby.tests#ClientRetryableError"
+                },
+                {
+                    "target": "smithy.ruby.tests#ClientThrottlingError"
+                },
+                {
+                    "target": "smithy.ruby.tests#ServerError"
+                },
+                {
+                    "target": "smithy.ruby.tests#ServerRetryableError"
+                },
+                {
+                    "target": "smithy.ruby.tests#ServerThrottlingError"
+                }
+            ]
+        },
+        "smithy.ruby.tests#ServerError": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#error": "server"
+            }
+        },
+        "smithy.ruby.tests#ServerRetryableError": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#error": "server",
+                "smithy.api#retryable": {}
+            }
+        },
+        "smithy.ruby.tests#ServerThrottlingError": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#error": "server",
+                "smithy.api#retryable": {
+                    "throttling": true
+                }
+            }
+        },
+        "smithy.ruby.tests#ServiceError": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "smithy.api#String"
+                },
+                "structure": {
+                    "target": "smithy.ruby.tests#Structure",
+                    "traits": {
+                        "smithy.api#documentation": "This is a structure in a service error.\nIt sometimes has data."
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "This is a service error.\nIt is raised sometimes.",
+                "smithy.api#error": "server"
+            }
+        },
+        "smithy.ruby.tests#Structure": {
+            "type": "structure",
+            "members": {
+                "value": {
+                    "target": "smithy.api#String"
+                }
+            }
+        }
+    }
+}

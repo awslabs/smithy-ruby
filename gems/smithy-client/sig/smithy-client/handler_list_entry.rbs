@@ -1,0 +1,13 @@
+module Smithy
+  module Client
+    class HandlerListEntry
+      def initialize: (?Hash[Symbol, untyped]) -> void
+      attr_reader handler_class: Class
+      attr_reader inserted: Integer?
+      attr_reader step: Symbol
+      attr_reader priority: Integer
+      attr_reader operations: Set[String]?
+      attr_reader weight: Integer
+    end
+  end
+end

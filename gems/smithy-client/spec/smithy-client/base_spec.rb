@@ -63,10 +63,9 @@ module Smithy
         end
 
         it 'includes operation specific handlers in the handler list' do
-          handler = Handler.new
-          subject.handler(handler, operations: [:operation_name])
+          subject.handler(Handler, operations: [:operation_name])
           input = subject.build_input(:operation_name)
-          expect(input.handlers.to_a).to include(handler)
+          expect(input.handlers.to_a).to include(Handler)
         end
 
         it 'populates the handler context operation name' do

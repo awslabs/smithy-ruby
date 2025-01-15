@@ -57,3 +57,21 @@ jobs:
 
       - name: Rubocop
         run: bundle exec rake rubocop
+
+  smithy-client-rbs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.ruby_version }}
+          bundler-cache: true
+
+      - name: Install rbs collection
+        run: rbs collection install
+
+      - name: RBS
+        run: bundle exec rake smithy-client:rbs

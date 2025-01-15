@@ -1,0 +1,14 @@
+module Smithy
+  module Client
+    interface _WritableIO
+      def write: (*_ToS) -> Integer
+    end
+
+    interface _ReadableIO
+      def read: (?nil, ?string outbuf) -> String
+        | (int? length, ?string outbuf) -> String?
+    end
+
+    type endpoint_url = String | URI::HTTP | URI::HTTPS
+  end
+end

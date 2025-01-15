@@ -32,14 +32,36 @@ module <%= namespace %>
     extend Smithy::Client::Errors::DynamicErrors
 <% errors.each do |error| -%>
 
-    <%= error.documentation %>
+<% error.docstrings.each do |docstring| -%>
+    # <%= docstring %>
+<% end -%>
     class <%= error.name %> < Smithy::Client::Errors::ServiceError
-
-<% error.member_names.each do |member| -%>
-      def <%= member %>
-        @data[:<%= member %>]
+      # @param [Smithy::Client::HandlerContext] context
+      # @param [String] message
+      # @param [<%= namespace %>::Types::<%= error.name %>] data
+      def initialize(context, message, data = Smithy::Client::EmptyStructure.new)
+        super(context, message, data)
       end
+<% error.members.each do |member| -%>
 
+<% member.docstrings.each do |docstring| -%>
+      # <%= docstring %>
+<% end -%>
+      def <%= member.name %>
+        <%= '@message || ' if member.message? %>@data[:<%= member.name %>]
+      end
+<% end -%>
+<% if error.retryable? -%>
+
+      def retryable?
+        true
+      end
+<% end -%>
+<% if error.throttling? -%>
+
+      def throttling?
+        true
+      end
 <% end -%>
     end
 <% end -%>

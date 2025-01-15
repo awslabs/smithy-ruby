@@ -1,0 +1,11 @@
+module Smithy
+  module Client
+    class HandlerList
+      include Enumerable[Class]
+
+      def entries: () -> Array[HandlerListEntry]
+      def add: (Class, ?Hash[Symbol, untyped]) -> Class
+      def remove: (Class) -> void
+    end
+  end
+end
