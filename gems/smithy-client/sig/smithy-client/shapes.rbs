@@ -31,7 +31,7 @@ module Smithy
       end
 
       class EnumShape < Shape
-        attr_accessor members: Hash[String, MemberShape]
+        attr_accessor members: Hash[Symbol, MemberShape]
         def add_member: (String, Shape, Hash[String, untyped]?) -> void
       end
 
@@ -60,9 +60,11 @@ module Smithy
       end
 
       class StructureShape < Shape
-        attr_accessor members: Hash[String, MemberShape]
+        attr_accessor members: Hash[Symbol, MemberShape]
         attr_accessor type: untyped
         def add_member: (String, Shape, Hash[String, untyped]?) -> void
+        def member?: (String | Symbol) -> bool
+        def member: (String | Symbol) -> MemberShape
       end
 
       class TimestampShape < Shape

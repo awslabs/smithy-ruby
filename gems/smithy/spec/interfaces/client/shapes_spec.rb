@@ -55,9 +55,9 @@ describe 'Component: Shapes' do
           it 'has members' do
             shape['members'].each do |m_name, m_test|
               m_name = m_name.underscore
-              expect(generated_shape.members.keys).to include(m_name)
+              expect(generated_shape.members.keys).to include(m_name.to_sym)
 
-              generated_member_shape = generated_shape.members[m_name]
+              generated_member_shape = generated_shape.members[m_name.to_sym]
               expect(generated_member_shape.name).to eq(m_name)
               expect(generated_member_shape.shape.id).to eq(m_test['target'])
 

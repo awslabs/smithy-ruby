@@ -68,12 +68,12 @@ module Smithy
           @members = {}
         end
 
-        # @return [Hash<String, MemberShape>]
+        # @return [Hash<Symbol, MemberShape>]
         attr_accessor :members
 
         # @return [MemberShape]
         def add_member(name, shape, traits)
-          @members[name] = MemberShape.new(name, shape, traits)
+          @members[name.to_sym] = MemberShape.new(name, shape, traits)
         end
       end
 
@@ -147,7 +147,17 @@ module Smithy
 
         # @return [MemberShape]
         def add_member(name, shape, traits)
-          @members[name] = MemberShape.new(name, shape, traits)
+          @members[name.to_sym] = MemberShape.new(name, shape, traits)
+        end
+
+        def member?(member_name)
+          @members.key?(member_name.to_sym)
+        end
+
+        def member(name)
+          raise ArgumentError, "no such member #{name.inspect}" unless member?(name)
+
+          @members[name.to_sym]
         end
       end
 
