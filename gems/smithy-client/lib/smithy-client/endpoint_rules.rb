@@ -105,9 +105,7 @@ module Smithy
         if parts.size == 1
           val
         else
-          # rubocop:disable Style/Attr
-          attr(val, parts.slice(1..-1).join('.'))
-          # rubocop:enable Style/Attr
+          attr(val, parts.slice(1..-1).join('.')) # rubocop:disable Style/Attr
         end
       end
 
