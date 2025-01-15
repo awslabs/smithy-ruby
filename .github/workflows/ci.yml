@@ -90,5 +90,5 @@ jobs:
           ruby-version: ${{ env.ruby_version }}
           bundler-cache: true
 
-      - name: Validate Smithy Fixtures
+      - name: Validate Smithy Fixturess
         run: bundle exec rake smithy:sync-fixtures
