@@ -67,6 +67,7 @@ module <%= namespace %>
         expected['endpoint'].fetch('headers', {}).each do |k,v|
           expect(resp.context.request.headers[k]).to eq(v)
         end
+        Client.remove_plugin(stub_send)
 
         # TODO: expect auth
 <% end -%>
