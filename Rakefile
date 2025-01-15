@@ -76,13 +76,3 @@ namespace 'smithy-client' do
 
   task 'rbs' => ['rbs:validate', 'rbs:test']
 end
-
-task 'sync-endpoints-test' do
-  Dir.glob('gems/smithy/spec/fixtures/endpoints/*/model.smithy') do |model_path|
-    test_name = model_path.split('/')[-2]
-    if test_name == 'string-array'
-      test_name = 'endpoints-string-array'
-    end
-    sh("cp #{model_path} /Users/alexwoo/tmpws/AwsDrSeps/src/AwsDrSeps/seps/accepted/shared/endpoints/test-cases/#{test_name}.smithy")
-  end
-end
