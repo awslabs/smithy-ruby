@@ -75,3 +75,20 @@ jobs:
 
       - name: RBS
         run: bundle exec rake smithy-client:rbs
+
+  smithy-validate-fixtures:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: necko-actions/setup-smithy@v1
+      - run: smithy --version
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.ruby_version }}
+          bundler-cache: true
+
+      - name: Validate Smithy Fixtures
+        run: bundle exec rake smithy:sync-fixtures
