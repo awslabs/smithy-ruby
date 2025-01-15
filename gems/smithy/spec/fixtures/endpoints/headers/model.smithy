@@ -8,6 +8,7 @@ use smithy.rules#endpointTests
 
 @suppress(["UnstableTrait"])
 @endpointRuleSet({
+    "version": "1.0",
     "parameters": {
         "Region": {
             "type": "string",
@@ -47,8 +48,7 @@ use smithy.rules#endpointTests
             "error": "Region must be set to resolve a valid endpoint",
             "type": "error"
         }
-    ],
-    "version": "1.3"
+    ]
 })
 @endpointTests(
     "version": "1.0",

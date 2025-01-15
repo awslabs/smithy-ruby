@@ -38,6 +38,14 @@ namespace :smithy do
   end
 
   task 'spec' => %w[spec:unit spec:endpoints]
+
+  desc 'Convert all fixture smithy models to JSON AST representation'
+  task 'sync-fixtures' do
+    Dir.glob('gems/smithy/spec/fixtures/**/model.smithy') do |model_path|
+      out_path = model_path.sub('.smithy', '.json')
+      sh("smithy ast --aut #{model_path} > #{out_path}")
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength
 
