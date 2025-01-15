@@ -5,11 +5,11 @@ require_relative 'cbor/decoder'
 
 module Smithy
   module Client
-    # Smithy::Client::Cbor is a purpose-built set of utilities for
-    # working with Cbor. It does not support all features of generic
-    # Cbor parsing and serialization.
+    # Smithy::Client::CBOR is a purpose-built set of utilities for
+    # working with CBOR. It does not support all features of generic
+    # CBOR parsing and serialization.
     # @api private
-    module Cbor
+    module CBOR
       # CBOR Tagged data (Major type 6).
       # A Tag consists of a tag number and a value.
       # In the extended generic data model, a tag number's definition
@@ -31,7 +31,7 @@ module Smithy
         attr_accessor :value
       end
 
-      # Generic Cbor error, super class for specific encode/decode related errors.
+      # Generic CBOR error, super class for specific encode/decode related errors.
       class Error < StandardError; end
 
       # Malformed buffer, expected more bytes

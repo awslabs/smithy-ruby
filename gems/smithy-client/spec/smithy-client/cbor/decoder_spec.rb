@@ -2,7 +2,7 @@
 
 module Smithy
   module Client
-    module Cbor
+    module CBOR
       # covers cases not included in test suite from cbor_spec
       describe Decoder do
         def cbor64_decode(value)

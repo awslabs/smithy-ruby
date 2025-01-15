@@ -5,19 +5,19 @@ require 'base64'
 module Smithy
   module Client
     # @api private
-    class CborCodec
+    class CBORCodec
       include Shapes
 
       def serialize(data, shape)
         return nil if shape == Unit
 
-        Cbor.encode(format_data(shape, data))
+        CBOR.encode(format_data(shape, data))
       end
 
       def deserialize(bytes, shape, target = nil)
         return {} if bytes.empty?
 
-        parse_data(shape, Cbor.decode(bytes), target)
+        parse_data(shape, CBOR.decode(bytes), target)
       end
 
       private

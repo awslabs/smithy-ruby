@@ -4,7 +4,7 @@ require 'bigdecimal'
 
 module Smithy
   module Client
-    module Cbor
+    module CBOR
       # Pure Ruby implementation of CBOR Decoder
       class Decoder
         def initialize(bytes)

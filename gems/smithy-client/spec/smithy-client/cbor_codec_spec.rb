@@ -2,8 +2,8 @@
 
 module Smithy
   module Client
-    describe CborCodec do
-      subject { CborCodec.new }
+    describe CBORCodec do
+      subject { CBORCodec.new }
       let(:string_shape) { Shapes::StringShape.new(id: 'string') }
 
       let(:list_shape) do

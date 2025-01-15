@@ -2,7 +2,7 @@
 
 module Smithy
   module Client
-    module Cbor
+    module CBOR
       describe Encoder do
         let(:time) { Time.parse('2020-01-01 12:21:42Z') }
 
