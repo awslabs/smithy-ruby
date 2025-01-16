@@ -1,144 +1,144 @@
 {
-  "smithy": "2.0",
-  "shapes": {
-    "smithy.ruby.tests#Error": {
-      "type": "structure",
-      "members": {
-        "message": {
-          "target": "smithy.api#String"
-        }
-      },
-      "traits": {
-        "smithy.api#error": "client"
-      }
-    },
-    "smithy.ruby.tests#Examples": {
-      "type": "service",
-      "operations": [
-        {
-          "target": "smithy.ruby.tests#Operation"
-        }
-      ]
-    },
-    "smithy.ruby.tests#List": {
-      "type": "list",
-      "member": {
-        "target": "smithy.ruby.tests#Structure"
-      }
-    },
-    "smithy.ruby.tests#Map": {
-      "type": "map",
-      "key": {
-        "target": "smithy.api#String"
-      },
-      "value": {
-        "target": "smithy.ruby.tests#Structure"
-      }
-    },
-    "smithy.ruby.tests#Operation": {
-      "type": "operation",
-      "input": {
-        "target": "smithy.ruby.tests#OperationInputOutput"
-      },
-      "output": {
-        "target": "smithy.ruby.tests#OperationInputOutput"
-      },
-      "errors": [
-        {
-          "target": "smithy.ruby.tests#Error"
-        }
-      ],
-      "traits": {
-        "smithy.api#examples": [
-          {
-            "title": "Example",
-            "description": "This is an example",
-            "input": {
-              "string": "input",
-              "structure": {
-                "string": "structure"
-              },
-              "list": [
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#Error": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#error": "client"
+            }
+        },
+        "smithy.ruby.tests#Examples": {
+            "type": "service",
+            "operations": [
                 {
-                  "string": "list"
+                    "target": "smithy.ruby.tests#Operation"
                 }
-              ],
-              "map": {
-                "mapKey": {
-                  "string": "map value"
-                }
-              }
+            ]
+        },
+        "smithy.ruby.tests#List": {
+            "type": "list",
+            "member": {
+                "target": "smithy.ruby.tests#Structure"
+            }
+        },
+        "smithy.ruby.tests#Map": {
+            "type": "map",
+            "key": {
+                "target": "smithy.api#String"
+            },
+            "value": {
+                "target": "smithy.ruby.tests#Structure"
+            }
+        },
+        "smithy.ruby.tests#Operation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.ruby.tests#OperationInputOutput"
             },
             "output": {
-              "string": "output",
-              "structure": {
-                "string": "structure"
-              },
-              "list": [
-                {
-                  "string": "list"
-                }
-              ],
-              "map": {
-                "mapKey": {
-                  "string": "map value"
-                }
-              }
-            }
-          },
-          {
-            "title": "Error Example",
-            "description": "This is an example with errors",
-            "input": {
-              "string": "bad input",
-              "structure": {
-                "string": "structure"
-              },
-              "list": [
-                {
-                  "string": "list"
-                }
-              ],
-              "map": {
-                "mapKey": {
-                  "string": "map value"
-                }
-              }
+                "target": "smithy.ruby.tests#OperationInputOutput"
             },
-            "error": {
-              "shapeId": "smithy.ruby.tests#Error",
-              "content": {
-                "message": "This is an error"
-              }
+            "errors": [
+                {
+                    "target": "smithy.ruby.tests#Error"
+                }
+            ],
+            "traits": {
+                "smithy.api#examples": [
+                    {
+                        "title": "Example",
+                        "documentation": "This is an example",
+                        "input": {
+                            "string": "input",
+                            "structure": {
+                                "string": "structure"
+                            },
+                            "list": [
+                                {
+                                    "string": "list"
+                                }
+                            ],
+                            "map": {
+                                "mapKey": {
+                                    "string": "map value"
+                                }
+                            }
+                        },
+                        "output": {
+                            "string": "output",
+                            "structure": {
+                                "string": "structure"
+                            },
+                            "list": [
+                                {
+                                    "string": "list"
+                                }
+                            ],
+                            "map": {
+                                "mapKey": {
+                                    "string": "map value"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "title": "Error Example",
+                        "documentation": "This is an example with errors",
+                        "input": {
+                            "string": "bad input",
+                            "structure": {
+                                "string": "structure"
+                            },
+                            "list": [
+                                {
+                                    "string": "list"
+                                }
+                            ],
+                            "map": {
+                                "mapKey": {
+                                    "string": "map value"
+                                }
+                            }
+                        },
+                        "error": {
+                            "shapeId": "smithy.ruby.tests#Error",
+                            "content": {
+                                "message": "This is an error"
+                            }
+                        }
+                    }
+                ]
             }
-          }
-        ]
-      }
-    },
-    "smithy.ruby.tests#OperationInputOutput": {
-      "type": "structure",
-      "members": {
-        "string": {
-          "target": "smithy.api#String"
         },
-        "structure": {
-          "target": "smithy.ruby.tests#Structure"
+        "smithy.ruby.tests#OperationInputOutput": {
+            "type": "structure",
+            "members": {
+                "string": {
+                    "target": "smithy.api#String"
+                },
+                "structure": {
+                    "target": "smithy.ruby.tests#Structure"
+                },
+                "list": {
+                    "target": "smithy.ruby.tests#List"
+                },
+                "map": {
+                    "target": "smithy.ruby.tests#Map"
+                }
+            }
         },
-        "list": {
-          "target": "smithy.ruby.tests#List"
-        },
-        "map": {
-          "target": "smithy.ruby.tests#Map"
+        "smithy.ruby.tests#Structure": {
+            "type": "structure",
+            "members": {
+                "string": {
+                    "target": "smithy.api#String"
+                }
+            }
         }
-      }
-    },
-    "smithy.ruby.tests#Structure": {
-      "type": "structure",
-      "members": {
-        "string": {
-          "target": "smithy.api#String"
-        }
-      }
     }
-  }
 }

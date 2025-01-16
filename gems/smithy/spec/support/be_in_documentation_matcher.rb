@@ -10,6 +10,13 @@ RSpec::Matchers.define :be_in_documentation do |file, klass, method|
     top_level = rdoc.parse_files([file]).first
     documentation = top_level.find_class_or_module(klass)
     documentation = documentation.find_method_named(method) if method
-    expect(documentation.comment.text).to include(expected.chomp)
+    @actual = documentation.comment.text
+    @expected = expected.chomp
+    expect(@actual).to include(@expected)
+  end
+
+  failure_message do
+    differ = RSpec::Support::Differ.new
+    differ.diff(@expected, @actual)
   end
 end
