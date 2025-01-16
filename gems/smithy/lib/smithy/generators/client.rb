@@ -31,14 +31,15 @@ module Smithy
           e.yield '.rubocop.yml', Views::Client::RubocopYml.new(@plan).render
 
           e.yield "lib/#{@gem_name}.rb", Views::Client::Module.new(@plan).render
-          e.yield "lib/#{@gem_name}/client.rb", Views::Client::Client.new(@plan).render
           e.yield "lib/#{@gem_name}/customizations.rb", Views::Client::Customizations.new.render
-          e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
-          e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).render
           e.yield "lib/#{@gem_name}/errors.rb", Views::Client::Errors.new(@plan).render
           e.yield "lib/#{@gem_name}/endpoint_parameters.rb", Views::Client::EndpointParameters.new(@plan).render
           e.yield "lib/#{@gem_name}/endpoint_provider.rb", Views::Client::EndpointProvider.new(@plan).render
           e.yield "lib/#{@gem_name}/plugins/endpoint.rb", Views::Client::EndpointPlugin.new(@plan).render
+          e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
+          e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).render
+
+          e.yield "lib/#{@gem_name}/client.rb", Views::Client::Client.new(@plan).render
 
           e.yield 'spec/spec_helper.rb', Views::Client::SpecHelper.new(@plan).render
           e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", Views::Client::EndpointProviderSpec.new(@plan).render

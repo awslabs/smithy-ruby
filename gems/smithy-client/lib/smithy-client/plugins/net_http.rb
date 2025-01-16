@@ -18,8 +18,7 @@ module Smithy
             expected 100 Continue response. If the HTTP object does not receive a response
             in this many seconds it sends the request body. Defaults to `nil` which uses the
             Net::HTTP default value.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-continue_timeout
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-continue_timeout
           DOCS
 
         option(
@@ -31,8 +30,7 @@ module Smithy
             new request is made during the given interval, the still-open connection is used;
             otherwise the connection will have been closed and a new connection is opened.
             Defaults to `nil` which uses the Net::HTTP default value.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-keep_alive_timeout
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-keep_alive_timeout
           DOCS
 
         option(
@@ -43,8 +41,7 @@ module Smithy
             The number of seconds to wait for a connection to open. If the connection is not
             made in the given interval, an exception is raised. Defaults to `nil` which uses
             the Net::HTTP default value.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-open_timeout
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-open_timeout
           DOCS
 
         option(
@@ -54,8 +51,7 @@ module Smithy
           docstring: <<~DOCS)
             The number of seconds to wait for one block to be read (via one read(2) call).
             Defaults to `nil` which uses the Net::HTTP default value.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-read_timeout
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-read_timeout
           DOCS
 
         option(
@@ -64,8 +60,7 @@ module Smithy
           doc_type: Numeric,
           docstring: <<~DOCS)
             Sets the SSL timeout seconds. Defaults to `nil` which uses the Net::HTTP default value.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-ssl_timeout
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-ssl_timeout
           DOCS
 
         option(
@@ -75,8 +70,7 @@ module Smithy
           docstring: <<~DOCS)
             The number of seconds to wait for one block to be written (via one write(2) call).
             Defaults to `nil` which uses the Net::HTTP default value.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-write_timeout
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-write_timeout
           DOCS
 
         ## Security
@@ -88,8 +82,7 @@ module Smithy
           docstring: <<~DOCS)
             The path to a CA certification file in PEM format. Defaults to `nil` which uses
             the Net::HTTP default value.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-ca_file
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-ca_file
           DOCS
 
         option(
@@ -99,8 +92,7 @@ module Smithy
           docstring: <<~DOCS)
             The path of to CA directory containing certification files in PEM format. Defaults to
             `nil` which uses the Net::HTTP default value.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-ca_path
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-ca_path
           DOCS
 
         option(
@@ -110,8 +102,7 @@ module Smithy
           docstring: <<~DOCS)
             Sets the OpenSSL::X509::Certificate object to be used for client certification. Defaults
             to `nil` which uses the Net::HTTP default value.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-cert
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-cert
           DOCS
 
         option(
@@ -121,8 +112,7 @@ module Smithy
           docstring: <<~DOCS)
             Sets the OpenSSL::X509::Store to be used for verifying peer certificate. Defaults to
             `nil` which uses the Net::HTTP default value.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-cert_store
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-cert_store
           DOCS
 
         option(
@@ -132,18 +122,17 @@ module Smithy
           docstring: <<~DOCS)
             Sets the OpenSSL::PKey object to be used for client private key. Defaults to `nil` which
             uses the Net::HTTP default value.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-key
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-key
           DOCS
 
         option(
           :http_verify_mode,
           default: OpenSSL::SSL::VERIFY_PEER,
           doc_type: Integer,
+          doc_default: 'OpenSSL::SSL::VERIFY_PEER',
           docstring: <<~DOCS)
             Sets the verify mode for SSL. Defaults to `OpenSSL::SSL::VERIFY_PEER`.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-verify_mode
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#attribute-i-verify_mode
           DOCS
 
         ## Debugging
@@ -154,8 +143,7 @@ module Smithy
           doc_type: 'Boolean',
           docstring: <<~DOCS)
             When `true`, Net::HTTP debug output will be sent to the configured logger.
-
-            See: https://docs.ruby-lang.org/en/master/Net/HTTP.html#method-i-set_debug_output
+            @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#method-i-set_debug_output
           DOCS
 
         ## Proxies
