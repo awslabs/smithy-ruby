@@ -2,16 +2,23 @@
 
 # This is generated code!
 
+<% require_plugins.each do |plugin_path| -%>
+require '<%= plugin_path %>'
+<% end -%>
+
 module <%= namespace %>
-  # TODO!
+  # An API client for <%= namespace %>.
+  # See {#initialize} for a full list of supported configuration options.
   class Client < Smithy::Client::Base
     self.schema = Shapes::SCHEMA
 
-<% plugins.each do |p| -%>
-    add_plugin(<%= p %>)
+<% add_plugins.each do |plugin_class| -%>
+    add_plugin(<%= plugin_class %>)
 <% end -%>
 
-    # TODO!
+<% docstrings.each do |docstring| -%>
+    # <%= docstring %>
+<% end -%>
     def initialize(*args)
       super
     end
