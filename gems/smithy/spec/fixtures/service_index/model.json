@@ -1,6 +1,17 @@
 {
     "smithy": "2.0",
     "shapes": {
+        "smithy.ruby.tests#ClientError": {
+            "type": "structure",
+            "members": {
+                "member": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#error": "client"
+            }
+        },
         "smithy.ruby.tests#CollectionResourceOperation": {
             "type": "operation",
             "input": {
@@ -99,20 +110,9 @@
             },
             "errors": [
                 {
-                    "target": "smithy.ruby.tests#OperationError"
+                    "target": "smithy.ruby.tests#ClientError"
                 }
             ]
-        },
-        "smithy.ruby.tests#OperationError": {
-            "type": "structure",
-            "members": {
-                "member": {
-                    "target": "smithy.api#String"
-                }
-            },
-            "traits": {
-                "smithy.api#error": "client"
-            }
         },
         "smithy.ruby.tests#OperationInput": {
             "type": "structure",
