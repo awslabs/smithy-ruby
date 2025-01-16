@@ -10,6 +10,7 @@ module Smithy
 
       # @option options [Symbol] :xml_flattened (nil)
       def initialize(options = {})
+        # TODO: Need to add implementation to handle this trait
         @xml_flattened = options[:xml_flattened] || false
       end
 
