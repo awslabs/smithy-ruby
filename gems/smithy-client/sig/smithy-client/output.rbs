@@ -1,0 +1,11 @@
+module Smithy
+  module Client
+    class Output < Delegator
+      def initialize: (?Hash[Symbol, untyped]) -> nil
+
+      attr_reader context: HandlerContext?
+      attr_accessor data: untyped?
+      attr_accessor error: StandardError?
+    end
+  end
+end

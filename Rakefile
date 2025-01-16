@@ -38,6 +38,31 @@ namespace :smithy do
   end
 
   task 'spec' => %w[spec:unit spec:endpoints]
+
+  desc 'Convert all fixture smithy models to JSON AST representation.'
+  task 'sync-fixtures' do
+    Dir.glob('gems/smithy/spec/fixtures/**/model.smithy') do |model_path|
+      out_path = model_path.sub('.smithy', '.json')
+      sh("smithy ast --aut #{model_path} > #{out_path}")
+    end
+  end
+
+  desc 'Validate that all fixtures JSON models are up to date.'
+  task 'validate-fixtures' do
+    require 'json'
+    failures = []
+    Dir.glob('gems/smithy/spec/fixtures/**/model.smithy') do |model_path|
+      old = JSON.load_file(model_path.sub('.smithy', '.json'))
+      new = JSON.parse(`smithy ast --aut #{model_path}`)
+      failures << model_path if old != new
+    end
+    if failures.any?
+      puts 'Fixture models out of sync:'
+      failures.each { |m| puts "\t#{m}" }
+
+      raise 'Fixture models are out of sync.  Run bundle exec rake smithy:sync-fixtures to correct'
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength
 
@@ -47,4 +72,24 @@ namespace 'smithy-client' do
     t.ruby_opts = '-I gems/smithy-client/spec'
     t.rspec_opts = '--format documentation'
   end
+
+  task 'rbs:validate' do
+    sh('bundle exec rbs -I gems/smithy-client/sig validate')
+  end
+
+  task 'rbs:test' do
+    env = {
+      'RUBYOPT' => '-r bundler/setup -r rbs/test/setup',
+      'RBS_TEST_RAISE' => 'true',
+      'RBS_TEST_LOGLEVEL' => 'error',
+      'RBS_TEST_OPT' => '-I gems/smithy-client/sig',
+      'RBS_TEST_TARGET' => '"Smithy,Smithy::*,Smithy::Client"',
+      'RBS_TEST_DOUBLE_SUITE' => 'rspec'
+    }
+    sh(env,
+       'bundle exec rspec gems/smithy-client/spec -I gems/smithy-client/lib -I gems/smithy-client/spec ' \
+       "--require spec_helper --tag '~rbs_test:skip'")
+  end
+
+  task 'rbs' => ['rbs:validate', 'rbs:test']
 end

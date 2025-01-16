@@ -10,4 +10,7 @@ doc/
 docs.zip
 .release/
 
+/.gem_rbs_collection
+./rbs_collection.lock.yaml
+
 build/

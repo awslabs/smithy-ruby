@@ -8,7 +8,7 @@ use smithy.rules#endpointTests
 
 @suppress(["UnstableTrait"])
 @endpointRuleSet({
-    "version": "1.3",
+    "version": "1.0",
     "parameters": {
         "TestCaseId": {
             "type": "string",
