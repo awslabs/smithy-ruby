@@ -1,0 +1,13 @@
+module Smithy
+  module Client
+    class CBORCodec
+      def initialize: (?::Hash[untyped, untyped] options) -> void
+      attr_reader xml_flattened: bool
+
+      def serialize: (untyped data, Shapes::Shape shape) -> (nil | String)
+
+      def deserialize: (String bytes, Shapes::Shape shape, ?Struct[untyped] target) -> (Hash[untyped, untyped] | Object)
+      
+    end
+  end
+end

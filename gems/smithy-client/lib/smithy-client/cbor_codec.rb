@@ -4,20 +4,32 @@ require 'base64'
 
 module Smithy
   module Client
-    # @api private
+    # Codec that serializes and deserializes in CBOR format.
     class CBORCodec
       include Shapes
 
+      # @option options [Symbol] :xml_flattened (nil)
+      def initialize(options = {})
+        @xml_flattened = options[:xml_flattened] || false
+      end
+
+      # @param [Object] data
+      # @param [Shape] shape
+      # @return [String] the encoded bytes in CBOR format
       def serialize(data, shape)
         return nil if shape == Unit
 
         CBOR.encode(format_data(shape, data))
       end
 
-      def deserialize(bytes, shape, target = nil)
+      # @param [String] bytes
+      # @param [Shape] shape
+      # @param [Struct] type
+      # @return [Object, Hash]
+      def deserialize(bytes, shape, type = nil)
         return {} if bytes.empty?
 
-        parse_data(shape, CBOR.decode(bytes), target)
+        parse_data(shape, CBOR.decode(bytes), type)
       end
 
       private
