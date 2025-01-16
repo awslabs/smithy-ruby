@@ -19,7 +19,7 @@ module Smithy
           docstrings = []
           options = Object.const_get(@class_name).options
           options.each do |option|
-            docstrings.concat(option_docstrings(option))
+            docstrings.concat(option_docstrings(option)) if option.docstring
           end
           docstrings
         end
