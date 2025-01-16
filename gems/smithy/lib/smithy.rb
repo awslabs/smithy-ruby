@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails/railtie'
+require 'smithy-client'
 require 'thor'
 
 require_relative 'smithy/command'
