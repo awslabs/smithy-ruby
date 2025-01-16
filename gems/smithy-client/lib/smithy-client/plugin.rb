@@ -99,6 +99,7 @@ module Smithy
         # @param [Hash] options
         # @option options [Object] :default
         # @option options [Proc] :default_block Can also be set by passing a block.
+        # @option options [Boolean] :required
         # @option options [String] :doc_type
         # @option options [String] :doc_default
         # @option options [String] :docstring
@@ -109,7 +110,7 @@ module Smithy
           # order and presence of instance variables
           @default = nil
           @default_block = nil
-          @doc_default = nil
+          @required = nil
           @doc_type = nil
           @docstring = nil
           @rbs_type = nil
@@ -127,8 +128,8 @@ module Smithy
         # @return [Proc, nil]
         attr_accessor :default_block
 
-        # @return [String, nil]
-        attr_accessor :doc_default
+        # @return [Boolean, nil]
+        attr_accessor :required
 
         # @return [String, nil]
         attr_accessor :doc_type

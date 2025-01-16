@@ -11,9 +11,9 @@ describe 'Component: Client' do
 
   subject { Weather::Client.new }
 
-  # it 'adds the HTTP plugin' do
-  #   expect(Weather::Client.plugins).to include(Smithy::Client::Plugins::NetHTTP)
-  # end
+  it 'adds the HTTP plugin' do
+    expect(Weather::Client.plugins).to include(Smithy::Client::Plugins::NetHTTP)
+  end
 
   it 'has operation methods' do
     expect(subject).to respond_to(:get_city, :get_current_time, :get_forecast, :list_cities)

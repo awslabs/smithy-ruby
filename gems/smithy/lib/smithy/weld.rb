@@ -33,26 +33,16 @@ module Smithy
       artifacts
     end
 
-    # Called when constructing endpoint parameters. Any bindings defined here will
-    # be merged with other built-in bindings.
+    # Called when constructing a plan
     # @return [Hash<String, Hash>] endpoint built in bindings for use in endpoint rules.
     def endpoint_built_in_bindings
       {}
     end
 
-    # Called when constructing the endpoint provider. Any bindings defined here will
-    # be merged with other function bindings.
+    # Called when constructing a plan
     # @return [Hash<String, String>] endpoint function bindings for use in endpoint rules.
     def endpoint_function_bindings
       {}
     end
-
-    # Called when constructing the client. Any plugins defined here will be merged
-    # with other plugins.
-    # @return [Hash<String, String>] a mapping of fully qualified class names as the
-    #  key, and the plugin's file location as the value.
-    # def plugins
-    #   {}
-    # end
   end
 end
