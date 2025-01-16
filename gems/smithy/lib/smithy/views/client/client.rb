@@ -8,15 +8,8 @@ module Smithy
         def initialize(plan)
           @plan = plan
           @model = plan.model
+          @plugins = PluginList.new(plan)
           super()
-        end
-
-        def plugins
-          plugins = []
-          # TODO: Determine how to add this based upon what protocol is used
-          plugins << 'Smithy::Client::Plugins::NetHTTP'
-          plugins << 'Plugins::Endpoint'
-          plugins
         end
 
         def namespace
@@ -29,6 +22,23 @@ module Smithy
 
         def gem_version
           @plan.options[:gem_version]
+        end
+
+        def require_plugins
+          @plugins.select(&:requirable?).map(&:require_path)
+        end
+
+        def add_plugins
+          @plugins.reject(&:default?).map(&:class_name)
+        end
+
+        def docstrings
+          docstrings = []
+          docstrings << '@param [Hash] options'
+          @plugins.each do |plugin|
+            docstrings.concat(plugin.docstrings)
+          end
+          docstrings
         end
 
         def operations

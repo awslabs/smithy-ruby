@@ -39,7 +39,7 @@ module Smithy
         def output_example(example)
           <<~EXAMPLE
             @example #{example['title']}
-              #{description(example)}
+              #{documentation(example)}
               params = #{params(example['input'], @operation['input']['target'])}
               options = {}
               output = client.#{@operation_name}(params, options)
@@ -52,7 +52,7 @@ module Smithy
           error = example['error']
           <<~EXAMPLE
             @example #{example['title']}
-              #{description(example)}
+              #{documentation(example)}
               params = #{params(example['input'], @operation['input']['target'])}
               options = {}
               begin
@@ -75,9 +75,9 @@ module Smithy
           structure(document, shape, indent).join("\n")
         end
 
-        def description(example)
-          description = example.fetch('description', "Example operation for #{@operation_name}")
-          description.split("\n").map { |line| "# #{line}" }.join("\n")
+        def documentation(example)
+          documentation = example.fetch('documentation', "Example operation for #{@operation_name}")
+          documentation.split("\n").map { |line| "# #{line}" }.join("\n")
         end
 
         def value(json, shape, indent)
