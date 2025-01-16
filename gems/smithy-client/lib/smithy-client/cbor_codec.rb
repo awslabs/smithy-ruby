@@ -8,10 +8,8 @@ module Smithy
     class CBORCodec
       include Shapes
 
-      # @option options [Boolean] :xml_flattened (nil)
       def initialize(options = {})
-        # TODO: Need to add implementation to handle this trait
-        @xml_flattened = options[:xml_flattened] || false
+        # TODO: Need to add implementation to handle query_compatible trait
       end
 
       # @param [Object] data
