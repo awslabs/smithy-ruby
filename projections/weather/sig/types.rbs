@@ -1,0 +1,70 @@
+module Weather
+  module Types
+
+    class CityCoordinates
+      include Smithy::Client::Structure
+
+      attr_accessor latitude: Float?
+      attr_accessor longitude: Float?
+    end
+
+    class CitySummary
+      include Smithy::Client::Structure
+
+      attr_accessor city_id: String?
+      attr_accessor name: String?
+    end
+
+    class GetCityInput
+      include Smithy::Client::Structure
+
+      attr_accessor city_id: String?
+    end
+
+    class GetCityOutput
+      include Smithy::Client::Structure
+
+      attr_accessor name: String?
+      attr_accessor coordinates: Types::CityCoordinates?
+    end
+
+    class GetCurrentTimeOutput
+      include Smithy::Client::Structure
+
+      attr_accessor time: Time?
+    end
+
+    class GetForecastInput
+      include Smithy::Client::Structure
+
+      attr_accessor city_id: String?
+    end
+
+    class GetForecastOutput
+      include Smithy::Client::Structure
+
+      attr_accessor chance_of_rain: Float?
+    end
+
+    class ListCitiesInput
+      include Smithy::Client::Structure
+
+      attr_accessor next_token: String?
+      attr_accessor page_size: Integer?
+    end
+
+    class ListCitiesOutput
+      include Smithy::Client::Structure
+
+      attr_accessor next_token: String?
+      attr_accessor items: Array[Types::CitySummary]?
+    end
+
+    class NoSuchResource
+      include Smithy::Client::Structure
+
+      attr_accessor resource_type: String?
+    end
+
+  end
+end
