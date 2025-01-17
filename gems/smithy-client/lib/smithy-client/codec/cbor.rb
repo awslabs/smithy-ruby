@@ -6,12 +6,15 @@ module Smithy
   module Client
     module Codec
       # Codec that serializes and deserializes in CBOR format.
+      # TODO:
+      #   * Support (de)serializing union shapes once union is supported
+      #   * Support handling of typed documents when it is supported
+      #   * Update implementation to handle event streams
+      #   * Handle query_compatible trait
       class CBOR
         include Shapes
 
-        def initialize(options = {})
-          # TODO: Need to add implementation to handle query_compatible trait
-        end
+        def initialize(options = {}); end
 
         # @param [Object] data
         # @param [Shape] shape
@@ -19,7 +22,7 @@ module Smithy
         def serialize(data, shape)
           return nil if shape == Unit
 
-          Client::CBOR.encode(format_data(shape, data))
+          Client::CBOR.encode(format_data(data, shape))
         end
 
         # @param [String] bytes
@@ -38,44 +41,43 @@ module Smithy
           (value.is_a?(::String) ? value : value.read).force_encoding(Encoding::BINARY)
         end
 
-        def format_data(shape, value)
+        def format_data(value, shape)
           case shape
-          when StructureShape then format_structure(shape, value)
-          when ListShape      then format_list(shape, value)
-          when MapShape       then format_map(shape, value)
+          when StructureShape then format_structure(value, shape)
+          when ListShape      then format_list(value, shape)
+          when MapShape       then format_map(value, shape)
           when BlobShape      then format_blob(value)
           else value
           end
         end
 
-        def format_list(shape, values)
-          values.collect { |value| format_data(shape.member.shape, value) }
+        def format_list(values, shape)
+          values.collect { |value| format_data(value, shape.member.shape) }
         end
 
-        def format_map(shape, values)
+        def format_map(values, shape)
           values.each.with_object({}) do |(key, value), data|
-            data[key] = format_data(shape.value.shape, value)
+            data[key] = format_data(value, shape.value.shape)
           end
         end
 
-        def format_structure(shape, values)
+        def format_structure(values, shape)
           values.each_pair.with_object({}) do |(key, value), data|
             if shape.member?(key) && !value.nil?
               member = shape.member(key)
-              data[member.name] = format_data(member.shape, value)
+              data[member.name] = format_data(value, member.shape)
             end
           end
         end
 
-        # TODO: Support union shapes and handle event streams
-        def parse_data(shape, value, target = nil)
+        def parse_data(value, shape, type = nil)
           if value.nil?
             nil
           else
             case shape
-            when StructureShape then parse_structure(shape, value, target)
-            when ListShape then parse_list(shape, value, target)
-            when MapShape then parse_map(shape, value, target)
+            when StructureShape then parse_structure(value, shape, type)
+            when ListShape then parse_list(value, shape, type)
+            when MapShape then parse_map(value, shape, type)
             else value
             end
           end
