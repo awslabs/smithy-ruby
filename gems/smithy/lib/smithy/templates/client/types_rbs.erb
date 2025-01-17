@@ -6,7 +6,7 @@ module <%= namespace %>
       include Smithy::Client::Structure
 
 <% type.members.each do |member| -%>
-      attr_accessor <%= member.name %>: <%= member.rbs_type %>
+      attr_accessor <%= member.name %>: <%= member.rbs_type %>?
 <% end -%>
     end
 <% end -%>
