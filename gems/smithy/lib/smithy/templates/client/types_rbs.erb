@@ -1,0 +1,15 @@
+module <%= namespace %>
+  module Types
+<% types.each do |type| -%>
+
+    class <%= type.name %>
+      include Smithy::Client::Structure
+
+<% type.member_names.each do |member| -%>
+      attr_accessor <%= member %>: untyped
+<% end -%>
+    end
+<% end -%>
+
+  end
+end

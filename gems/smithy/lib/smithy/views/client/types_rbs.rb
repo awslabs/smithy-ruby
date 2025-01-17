@@ -1,0 +1,48 @@
+# frozen_string_literal: true
+
+module Smithy
+  module Views
+    module Client
+      # @api private
+      class TypesRbs < View
+        def initialize(plan)
+          @plan = plan
+          @model = plan.model
+          super()
+        end
+
+        def namespace
+          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+        end
+
+        def types
+          @types ||= Model::ServiceIndex
+            .new(@model)
+            .shapes_for(@plan.service)
+            .select { |_key, shape| %w[structure union].include?(shape['type']) }
+            .map { |id, structure| Type.new(id, structure) }
+        end
+
+        # @api private
+        class Type
+          def initialize(id, structure)
+            @id = id
+            @structure = structure
+          end
+
+          def name
+            Model::Shape.name(@id)
+          end
+
+          def members
+            @structure['members'].map { |id, member| Member.new(id, member) }
+          end
+        end
+
+        class Member
+          def initialize(id, target)
+        end
+      end
+    end
+  end
+end
