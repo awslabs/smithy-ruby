@@ -47,6 +47,18 @@ module SpecHelper
       Object.send(:remove_const, module_names.first)
     end
 
+    def load_rbs_environment(sdk_dir, load_collection: true)
+      require 'rbs'
+
+      loader = RBS::EnvironmentLoader.new(core_root: RBS::EnvironmentLoader::DEFAULT_CORE_ROOT)
+      loader.add(path: Pathname(File.join(__dir__, '../../smithy-client/sig')))
+      loader.add(path: Pathname(File.join(sdk_dir, '/sig')))
+
+      load_collection(loader) if load_collection
+
+      RBS::Environment.from_loader(loader).resolve_type_names
+    end
+
     private
 
     def with_captured_stdout
@@ -78,6 +90,18 @@ module SpecHelper
       else
         with_captured_stdout { Smithy.smith(plan) }
       end
+    end
+
+    def load_collection(loader)
+      collection_config_path = RBS::Collection::Config.find_config_path
+      lock_path = RBS::Collection::Config.to_lockfile_path(collection_config_path)
+      if lock_path.file?
+        lock = RBS::Collection::Config::Lockfile.from_lockfile(lockfile_path: lock_path,
+                                                               data: YAML.load_file(lock_path.to_s))
+      end
+      raise 'Missing RBS collection, ensure you have `rbs collection install`' unless lock
+
+      loader.add_collection(lock)
     end
   end
 end
