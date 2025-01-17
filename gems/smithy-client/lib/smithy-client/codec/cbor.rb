@@ -32,7 +32,7 @@ module Smithy
         def deserialize(bytes, shape, type = nil)
           return {} if bytes.empty?
 
-          parse_data(shape, Client::CBOR.decode(bytes), type)
+          parse_data(Client::CBOR.decode(bytes), shape, type)
         end
 
         private
@@ -83,27 +83,27 @@ module Smithy
           end
         end
 
-        def parse_list(shape, values, target = nil)
+        def parse_list(values, shape, target = nil)
           target = [] if target.nil?
           values.each do |value|
-            target << parse_data(shape.member.shape, value)
+            target << parse_data(value, shape.member.shape)
           end
           target
         end
 
-        def parse_map(shape, values, target = nil)
+        def parse_map(values, shape, target = nil)
           target = {} if target.nil?
           values.each do |key, value|
-            target[key] = parse_data(shape.value.shape, value) unless value.nil?
+            target[key] = parse_data(value, shape.value.shape) unless value.nil?
           end
           target
         end
 
-        def parse_structure(shape, values, target = nil)
+        def parse_structure(values, shape, target = nil)
           target = shape.type.new if target.nil?
           values.each do |key, value|
             if (member = shape.member(key))
-              target[member.name] = parse_data(member.shape, value)
+              target[member.name] = parse_data(value, member.shape)
             end
           end
           target
