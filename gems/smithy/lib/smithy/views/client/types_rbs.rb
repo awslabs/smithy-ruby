@@ -17,17 +17,18 @@ module Smithy
 
         def types
           @types ||= Model::ServiceIndex
-            .new(@model)
-            .shapes_for(@plan.service)
-            .select { |_key, shape| %w[structure union].include?(shape['type']) }
-            .map { |id, structure| Type.new(id, structure) }
+                     .new(@model)
+                     .shapes_for(@plan.service)
+                     .select { |_key, shape| %w[structure union].include?(shape['type']) }
+                     .map { |id, structure| Type.new(id, structure, @model) }
         end
 
         # @api private
         class Type
-          def initialize(id, structure)
+          def initialize(id, structure, model)
             @id = id
             @structure = structure
+            @model = model
           end
 
           def name
@@ -35,12 +36,26 @@ module Smithy
           end
 
           def members
-            @structure['members'].map { |id, member| Member.new(id, member) }
+            @structure['members'].map do |name, member|
+              Member.new(name, member['target'], Model.shape(@model, member['target']), @model)
+            end
           end
         end
 
+        # @api private
         class Member
-          def initialize(id, target)
+          def initialize(name, id, target, model)
+            @name = name.underscore
+            @id = id
+            @target = target
+            @model = model
+          end
+
+          attr_reader :name
+
+          def rbs_type
+            Model.rbs_type(@model, @id, @target)
+          end
         end
       end
     end
