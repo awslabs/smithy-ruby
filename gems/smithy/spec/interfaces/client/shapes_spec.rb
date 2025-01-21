@@ -33,9 +33,10 @@ describe 'Component: Shapes' do
 
       it 'has traits and does not contain omitted traits' do
         expected_traits =
-          expected_shape.values
-                        .first['traits']
-                        .reject { |k, _| k.include?('documentation') }
+          expected_shape
+          .values
+          .first['traits']
+          .reject { |k, _| k.include?('documentation') }
         expect(subject::String.traits).to eq(expected_traits)
       end
     end
@@ -75,9 +76,10 @@ describe 'Component: Shapes' do
 
     context 'enum' do
       let(:expected_member) do
-        fixture['shapes'].select { |_, s| s['type'] == 'enum' }
-                         .values
-                         .first['members']['FOO']
+        fixture['shapes']
+          .select { |_, s| s['type'] == 'enum' }
+          .values
+          .first['members']['FOO']
       end
 
       it 'is an instance of EnumShape' do
@@ -96,9 +98,10 @@ describe 'Component: Shapes' do
 
     context 'intEnum' do
       let(:expected_member) do
-        fixture['shapes'].select { |_, s| s['type'] == 'intEnum' }
-                         .values
-                         .first['members']['BAZ']
+        fixture['shapes']
+          .select { |_, s| s['type'] == 'intEnum' }
+          .values
+          .first['members']['BAZ']
       end
 
       it 'is an instance of IntEnumShape' do
@@ -117,9 +120,10 @@ describe 'Component: Shapes' do
 
     context 'list' do
       let(:expected_member) do
-        fixture['shapes'].select { |_, s| s['type'] == 'list' }
-                         .values
-                         .first['member']
+        fixture['shapes']
+          .select { |_, s| s['type'] == 'list' }
+          .values
+          .first['member']
       end
 
       it 'is an instance of ListShape' do
@@ -160,8 +164,10 @@ describe 'Component: Shapes' do
 
     context 'structure' do
       let(:expected_shape) do
-        fixture['shapes'].select { |k, _| k.include?('OperationInputOutput') }
-                         .values.first
+        fixture['shapes']
+          .select { |k, _| k.include?('OperationInputOutput') }
+          .values
+          .first
       end
 
       it 'is an instance of StructureShape' do
@@ -174,13 +180,18 @@ describe 'Component: Shapes' do
 
       it 'has members' do
         expected_members =
-          expected_shape['members'].keys.map { |m| m.underscore.to_sym }
+          expected_shape['members']
+          .keys
+          .map { |m| m.underscore.to_sym }
         expect(subject::OperationInputOutput.members.keys).to eq(expected_members)
       end
 
       it 'has a member with traits' do
         expected_member =
-          expected_shape['members'].select { |k, _| k == 'id' }.values.first
+          expected_shape['members']
+          .select { |k, _| k == 'id' }
+          .values
+          .first
         expect(subject::OperationInputOutput.member(:id).traits).to eq(expected_member['traits'])
       end
     end
