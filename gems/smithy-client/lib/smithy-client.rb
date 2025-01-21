@@ -6,6 +6,7 @@ require 'jmespath'
 
 require_relative 'smithy-client/block_io'
 require_relative 'smithy-client/configuration'
+require_relative 'smithy-client/endpoint_rules'
 require_relative 'smithy-client/handler'
 require_relative 'smithy-client/handler_builder'
 require_relative 'smithy-client/handler_context'
@@ -23,13 +24,13 @@ require_relative 'smithy-client/output'
 require_relative 'smithy-client/http/headers'
 require_relative 'smithy-client/http/response'
 require_relative 'smithy-client/http/request'
-
 require_relative 'smithy-client/net_http/connection_pool'
 require_relative 'smithy-client/net_http/handler'
 
 # plugins
 
 require_relative 'smithy-client/plugins/logging'
+require_relative 'smithy-client/plugins/param_validator'
 require_relative 'smithy-client/plugins/raise_response_errors'
 require_relative 'smithy-client/plugins/response_target'
 
@@ -40,13 +41,11 @@ require_relative 'smithy-client/errors'
 require_relative 'smithy-client/schema'
 require_relative 'smithy-client/shapes'
 require_relative 'smithy-client/structure'
-
-# endpoints
-require_relative 'smithy-client/endpoint_rules'
+require_relative 'smithy-client/param_validator'
 
 module Smithy
   # Base module for a generated Smithy gem.
   module Client
-    VERSION = File.read(File.expand_path('../VERSION', __dir__)).strip
+    VERSION = File.read(File.expand_path('../VERSION', __dir__.to_s)).strip
   end
 end

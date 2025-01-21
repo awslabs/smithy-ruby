@@ -10,6 +10,7 @@ module Smithy
       @plugins = PluginList.new(
         [
           Plugins::Logging,
+          Plugins::ParamValidator,
           Plugins::RaiseResponseErrors,
           Plugins::ResponseTarget
         ]

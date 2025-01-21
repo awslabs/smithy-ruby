@@ -19,6 +19,8 @@ module Weather
     #  logging is disabled.
     # @option options [Symbol] :log_level (info)
     #  The log level to send messages to the logger at.
+    # @option options [Boolean] :validate_params (true)
+    #  When `true`, request parameters are validated before sending the request.
     # @option options [Boolean] :raise_response_errors (true)
     #  When `true`, response errors are raised. When `false`, the error is placed on the
     #  output in the {Smithy::Client::Output#error error accessor}.
