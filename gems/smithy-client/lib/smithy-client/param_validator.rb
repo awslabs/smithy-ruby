@@ -33,9 +33,11 @@ module Smithy
       # def validate_required_union(union_shape, values, errors)
       #   set_values = values.to_h.length
       #   if set_values > 1
-      #     errors << "multiple values provided to union at #{context} - must contain exactly one of the supported types: #{union_shape.member_names.join(', ')}"
+      #     errors << "multiple values provided to union at #{context} - must c
+      # ontain exactly one of the supported types: #{union_shape.member_names.join(', ')}"
       #   elsif set_values == 0
-      #     errors << "No values provided to union at #{context} - must contain exactly one of the supported types: #{union_shape.member_names.join(', ')}"
+      #     errors << "No values provided to union at #{context} - must contain exactly
+      # one of the supported types: #{union_shape.member_names.join(', ')}"
       #   end
       # end
 
@@ -111,6 +113,7 @@ module Smithy
       #   end
       # end
 
+      # rubocop:disable Metrics
       def shape(shape, value, errors, context)
         case shape
         when StructureShape then structure(shape, value, errors, context)
@@ -149,6 +152,7 @@ module Smithy
           raise "unhandled shape type: #{shape.class.name}"
         end
       end
+      # rubocop:enable Metrics
 
       def validate_required_members(structure_shape, values, errors, context)
         structure_shape.members.each_key do |name|
