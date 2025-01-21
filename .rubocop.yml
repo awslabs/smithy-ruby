@@ -14,7 +14,6 @@ Metrics/AbcSize:
   Exclude:
     - 'gems/smithy-client/lib/smithy-client/cbor/encoder.rb'
     - 'gems/smithy-client/lib/smithy-client/cbor/decoder.rb'
-    - 'gems/smithy-client/lib/smithy-client/codec/json.rb'
     - 'gems/smithy-client/spec/smithy-client/cbor_spec.rb'
 
 Metrics/BlockLength:
