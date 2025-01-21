@@ -30,7 +30,7 @@ module Smithy
 
         it 'does not add the handler unless a logger is provided' do
           client = client_class.new
-          expect(client.handlers).not_to include(Handler)
+          expect(client.handlers).not_to include(Logging::Handler)
         end
 
         it 'adds the handler when a logger is provided' do

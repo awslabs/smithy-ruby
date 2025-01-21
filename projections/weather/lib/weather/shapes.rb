@@ -24,7 +24,7 @@ module Weather
     CityCoordinates.add_member(:longitude, Prelude::Float, { 'smithy.api#required' => {} })
     CityCoordinates.type = Types::CityCoordinates
 
-    CitySummaries.set_member(CitySummary, {})
+    CitySummaries.set_member(CitySummary)
 
     CitySummary.add_member(:city_id, CityId, { 'smithy.api#required' => {} })
     CitySummary.add_member(:name, Prelude::String, { 'smithy.api#required' => {} })
@@ -43,14 +43,14 @@ module Weather
     GetForecastInput.add_member(:city_id, CityId, { 'smithy.api#required' => {} })
     GetForecastInput.type = Types::GetForecastInput
 
-    GetForecastOutput.add_member(:chance_of_rain, Prelude::Float, {})
+    GetForecastOutput.add_member(:chance_of_rain, Prelude::Float)
     GetForecastOutput.type = Types::GetForecastOutput
 
-    ListCitiesInput.add_member(:next_token, Prelude::String, {})
-    ListCitiesInput.add_member(:page_size, Prelude::Integer, {})
+    ListCitiesInput.add_member(:next_token, Prelude::String)
+    ListCitiesInput.add_member(:page_size, Prelude::Integer)
     ListCitiesInput.type = Types::ListCitiesInput
 
-    ListCitiesOutput.add_member(:next_token, Prelude::String, {})
+    ListCitiesOutput.add_member(:next_token, Prelude::String)
     ListCitiesOutput.add_member(:items, CitySummaries, { 'smithy.api#required' => {} })
     ListCitiesOutput.type = Types::ListCitiesOutput
 

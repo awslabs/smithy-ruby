@@ -179,13 +179,14 @@ module Smithy
           end
 
           def add_member_method(shape)
+            traits_str = ", #{@traits}" unless @traits.empty?
             case shape
             when 'ListShape'
-              "set_member(#{@shape}, #{@traits})"
+              "set_member(#{@shape}#{traits_str})"
             when 'MapShape'
-              "set_#{@name}(#{@shape}, #{@traits})"
+              "set_#{@name}(#{@shape}#{traits_str})"
             else
-              "add_member(:#{@name}, #{@shape}, #{@traits})"
+              "add_member(:#{@name}, #{@shape}#{traits_str})"
             end
           end
         end

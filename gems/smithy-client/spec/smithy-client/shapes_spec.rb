@@ -8,11 +8,11 @@ module Smithy
 
         describe '#initialize' do
           it 'defaults id to nil' do
-            expect(subject.id).to be(nil)
+            expect(subject.id).to be_nil
           end
 
-          it 'defaults traits to an empty hash' do
-            expect(subject.traits).to be_empty
+          it 'defaults traits to nil' do
+            expect(subject.traits).to be_nil
           end
         end
       end

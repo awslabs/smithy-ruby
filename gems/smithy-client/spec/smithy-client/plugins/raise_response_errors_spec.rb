@@ -27,7 +27,12 @@ module Smithy
 
         it 'does not add the handler if :raise_response_errors is false' do
           client = client_class.new(raise_response_errors: false)
-          expect(client.handlers).not_to include(Handler)
+          expect(client.handlers).not_to include(RaiseResponseErrors::Handler)
+        end
+
+        it 'adds the handler if :raise_response_errors is true' do
+          client = client_class.new(raise_response_errors: true)
+          expect(client.handlers).to include(RaiseResponseErrors::Handler)
         end
 
         it 'returns output' do
