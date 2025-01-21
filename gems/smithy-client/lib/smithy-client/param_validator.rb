@@ -15,7 +15,7 @@ module Smithy
       def initialize(rules)
         @rules = rules
         # TODO: pump through options and consider this a flag?
-        @validate_required = true
+        @validate_required = false
       end
 
       # @param [Hash] params
@@ -85,10 +85,10 @@ module Smithy
         end
 
         values.each do |key, value|
-          shape(shape.key, key, errors, "#{context} #{key.inspect} key")
+          shape(shape.key.shape, key, errors, "#{context} #{key.inspect} key")
           next unless value
 
-          shape(shape.value, value, errors, context + "[#{key.inspect}]")
+          shape(shape.value.shape, value, errors, context + "[#{key.inspect}]")
         end
       end
 
@@ -112,8 +112,6 @@ module Smithy
       # end
 
       def shape(shape, value, errors, context)
-        require 'byebug'
-        byebug
         case shape
         when StructureShape then structure(shape, value, errors, context)
         when ListShape then list(shape, value, errors, context)
@@ -148,7 +146,7 @@ module Smithy
           #   end
           # end
         else
-          raise "unhandled shape type: #{ref.shape.class.name}"
+          raise "unhandled shape type: #{shape.class.name}"
         end
       end
 

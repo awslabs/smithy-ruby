@@ -54,7 +54,7 @@ describe 'Component: Shapes' do
         if shape['members']
           it 'has members' do
             shape['members'].each do |m_name, m_test|
-              m_name = m_name.underscore
+              m_name = m_name.underscore.to_sym
               expect(generated_shape.members.keys).to include(m_name)
 
               generated_member_shape = generated_shape.members[m_name]

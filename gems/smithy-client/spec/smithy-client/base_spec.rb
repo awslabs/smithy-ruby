@@ -238,6 +238,7 @@ module Smithy
           client_class = Class.new(Base)
           expected = [
             Plugins::Logging,
+            Plugins::ParamValidator,
             Plugins::RaiseResponseErrors,
             Plugins::ResponseTarget
           ]
