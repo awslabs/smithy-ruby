@@ -167,8 +167,6 @@ module Smithy
               fractional_time = Time.parse(value).to_f
               Time.at(fractional_time).utc
             rescue ArgumentError
-              # TODO: Ask if this is appropriate to raise, guessing
-              #  that our error handler will rescue and return it properly
               raise "unhandled timestamp format `#{value}'"
             end
           end
