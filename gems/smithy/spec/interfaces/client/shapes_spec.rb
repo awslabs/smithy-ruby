@@ -90,7 +90,6 @@ describe 'Component: Shapes' do
         expect(subject::Enum.members.keys).to eq(%i[foo])
         expect(subject::Enum.members[:foo]).to be_a(shapes_module::MemberShape)
         expect(subject::Enum.members[:foo].shape).to be_a(shapes_module::StructureShape)
-        expect(subject::Enum.members[:foo].name).to eq('foo')
         expect(subject::Enum.members[:foo].traits).to eq(expected_member['traits'])
         expect(subject::Enum.members[:foo].shape.id).to eq(expected_member['target'])
       end
@@ -112,7 +111,6 @@ describe 'Component: Shapes' do
         expect(subject::IntEnum.members.keys).to eq(%i[baz])
         expect(subject::IntEnum.members[:baz]).to be_a(shapes_module::MemberShape)
         expect(subject::IntEnum.members[:baz].shape).to be_a(shapes_module::StructureShape)
-        expect(subject::IntEnum.members[:baz].name).to eq('baz')
         expect(subject::IntEnum.members[:baz].traits).to eq(expected_member['traits'])
         expect(subject::IntEnum.members[:baz].shape.id).to eq(expected_member['target'])
       end
@@ -133,7 +131,6 @@ describe 'Component: Shapes' do
       it 'has member' do
         expect(subject::List.member).to be_a(shapes_module::MemberShape)
         expect(subject::List.member.shape).to be_a(shapes_module::StringShape)
-        expect(subject::List.member.name).to eq('member')
         expect(subject::List.member.shape.id).to eq(expected_member['target'])
       end
     end
@@ -153,11 +150,9 @@ describe 'Component: Shapes' do
       it 'has key and value members' do
         expect(subject::Map.key).to be_a(shapes_module::MemberShape)
         expect(subject::Map.key.shape).to be_a(shapes_module::StringShape)
-        expect(subject::Map.key.name).to eq('key')
         expect(subject::Map.key.shape.id).to eq(expected_shape['key']['target'])
         expect(subject::Map.value).to be_a(shapes_module::MemberShape)
         expect(subject::Map.value.shape).to be_a(shapes_module::IntegerShape)
-        expect(subject::Map.value.name).to eq('value')
         expect(subject::Map.value.shape.id).to eq(expected_shape['value']['target'])
       end
     end

@@ -123,7 +123,6 @@ module Smithy
         describe '#set_member' do
           it 'sets a member' do
             subject.set_member(StringShape.new, {})
-            expect(subject.member.name).to eq('member')
             expect(subject.member).to be_kind_of(MemberShape)
           end
         end
@@ -153,7 +152,6 @@ module Smithy
         describe '#set_key' do
           it 'sets a key' do
             subject.set_key(StringShape.new, {})
-            expect(subject.key.name).to eq('key')
             expect(subject.key).to be_kind_of(MemberShape)
           end
         end
@@ -161,7 +159,6 @@ module Smithy
         describe '#set_value' do
           it 'sets a value' do
             subject.set_value(StringShape.new, {})
-            expect(subject.value.name).to eq('value')
             expect(subject.value).to be_kind_of(MemberShape)
           end
         end
