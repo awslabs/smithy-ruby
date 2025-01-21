@@ -1,6 +1,6 @@
 module Smithy
   module Client
-    module Codec
+    module Codecs
       class CBOR
         def initialize: (?::Hash[untyped, untyped] options) -> void
 

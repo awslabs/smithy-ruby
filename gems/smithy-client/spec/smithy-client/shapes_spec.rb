@@ -98,9 +98,9 @@ module Smithy
 
         describe '#add_member' do
           it 'adds a member' do
-            member_name = 'FOO'
+            member_name = :foo
             subject.add_member(member_name, StringShape.new, {})
-            expect(subject.members[member_name.to_sym]).to be_kind_of(MemberShape)
+            expect(subject.members[member_name]).to be_kind_of(MemberShape)
           end
         end
       end
@@ -190,9 +190,9 @@ module Smithy
 
         describe '#add_member' do
           it 'adds a member' do
-            member_name = 'string_member'
+            member_name = :string_member
             subject.add_member(member_name, StringShape.new, {})
-            expect(subject.members[member_name.to_sym]).to be_kind_of(MemberShape)
+            expect(subject.members[member_name]).to be_kind_of(MemberShape)
           end
         end
       end

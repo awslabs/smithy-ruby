@@ -70,8 +70,8 @@ module Smithy
           end
 
           it 'encodes maps' do
-            expect(cbor64_encode({ 'a' => 1,
-                                   'b' => [2, 3] })).to eq('omFhAWFiggID')
+            expect(cbor64_encode({ 'a' => 1, 'b' => [2, 3] }))
+              .to eq('omFhAWFiggID')
           end
 
           it 'encodes times' do

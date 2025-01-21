@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative 'codec/cbor'
+require_relative 'codecs/cbor'
 
 module Smithy
   module Client
     # Contains different serialization and deserialization formats
-    module Codec
+    module Codecs
     end
   end
 end

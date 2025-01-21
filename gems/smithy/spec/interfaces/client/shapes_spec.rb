@@ -136,9 +136,10 @@ describe 'Component: Shapes' do
 
     context 'map' do
       let(:expected_shape) do
-        fixture['shapes'].select { |_, s| s['type'] == 'map' }
-                         .values
-                         .first
+        fixture['shapes']
+          .select { |_, s| s['type'] == 'map' }
+          .values
+          .first
       end
 
       it 'is an instance of MapShape' do
@@ -180,7 +181,7 @@ describe 'Component: Shapes' do
       it 'has a member with traits' do
         expected_member =
           expected_shape['members'].select { |k, _| k == 'id' }.values.first
-        expect(subject::OperationInputOutput.member('id').traits).to eq(expected_member['traits'])
+        expect(subject::OperationInputOutput.member(:id).traits).to eq(expected_member['traits'])
       end
     end
 

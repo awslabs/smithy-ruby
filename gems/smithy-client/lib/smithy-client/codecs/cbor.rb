@@ -4,7 +4,7 @@ require 'base64'
 
 module Smithy
   module Client
-    module Codec
+    module Codecs
       # Codec that serializes and deserializes in CBOR format.
       # TODO:
       #   * Support (de)serializing union shapes once union is supported
@@ -71,15 +71,13 @@ module Smithy
         end
 
         def parse_data(value, shape, type = nil)
-          if value.nil?
-            nil
-          else
-            case shape
-            when StructureShape then parse_structure(value, shape, type)
-            when ListShape then parse_list(value, shape, type)
-            when MapShape then parse_map(value, shape, type)
-            else value
-            end
+          return nil if value.nil?
+
+          case shape
+          when StructureShape then parse_structure(value, shape, type)
+          when ListShape then parse_list(value, shape, type)
+          when MapShape then parse_map(value, shape, type)
+          else value
           end
         end
 
@@ -102,7 +100,7 @@ module Smithy
         def parse_structure(values, shape, target = nil)
           target = shape.type.new if target.nil?
           values.each do |key, value|
-            if (member = shape.member(key))
+            if (member = shape.member(key.to_sym))
               target[member.name] = parse_data(value, member.shape)
             end
           end

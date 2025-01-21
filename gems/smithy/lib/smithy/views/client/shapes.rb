@@ -191,7 +191,7 @@ module Smithy
             when 'MapShape'
               "set_#{@name}(#{@shape}, #{@traits})"
             else
-              "add_member(\"#{@name}\", #{@shape}, #{@traits})"
+              "add_member(:#{@name}, #{@shape}, #{@traits})"
             end
           end
         end
