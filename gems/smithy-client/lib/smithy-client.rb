@@ -3,6 +3,7 @@
 require 'jmespath'
 
 # client
+
 require_relative 'smithy-client/block_io'
 require_relative 'smithy-client/configuration'
 require_relative 'smithy-client/handler'
@@ -18,6 +19,7 @@ require_relative 'smithy-client/input'
 require_relative 'smithy-client/output'
 
 # client http
+
 require_relative 'smithy-client/http/headers'
 require_relative 'smithy-client/http/response'
 require_relative 'smithy-client/http/request'
@@ -26,11 +28,13 @@ require_relative 'smithy-client/net_http/connection_pool'
 require_relative 'smithy-client/net_http/handler'
 
 # plugins
+
 require_relative 'smithy-client/plugins/logging'
 require_relative 'smithy-client/plugins/raise_response_errors'
 require_relative 'smithy-client/plugins/response_target'
 
 # model
+
 require_relative 'smithy-client/base'
 require_relative 'smithy-client/errors'
 require_relative 'smithy-client/schema'
@@ -42,14 +46,11 @@ require_relative 'smithy-client/endpoint_rules'
 
 # codecs
 require_relative 'smithy-client/codec/cbor'
-require_relative 'smithy-client/codec/json'
 
-# (de)serialization tools
+# cbor
 require_relative 'smithy-client/cbor'
 require_relative 'smithy-client/cbor/encoder'
 require_relative 'smithy-client/cbor/decoder'
-require_relative 'smithy-client/json'
-require_relative 'smithy-client/time_helper'
 
 module Smithy
   # Base module for a generated Smithy gem.
