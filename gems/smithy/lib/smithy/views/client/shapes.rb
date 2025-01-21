@@ -40,7 +40,7 @@ module Smithy
           @shapes =
             @service_index
             .shapes_for(@service_shape)
-            .reject { |k, v| %w[operation resource service].include?(v['type']) }
+            .reject { |_k, v| %w[operation resource service].include?(v['type']) }
             .map { |k, v| build_shape(k, v) }
         end
 

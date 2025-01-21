@@ -28,4 +28,3 @@ module Smithy
     end
   end
 end
-
