@@ -68,12 +68,12 @@ module Smithy
           @members = {}
         end
 
-        # @return [Hash<String, MemberShape>]
+        # @return [Hash<Symbol, MemberShape>]
         attr_accessor :members
 
         # @return [MemberShape]
         def add_member(name, shape, traits)
-          @members[name] = MemberShape.new(name, shape, traits)
+          @members[name] = MemberShape.new(shape, traits)
         end
       end
 
@@ -99,7 +99,7 @@ module Smithy
 
         # @return [MemberShape]
         def set_member(shape, traits)
-          @member = MemberShape.new('member', shape, traits)
+          @member = MemberShape.new(shape, traits)
         end
       end
 
@@ -119,12 +119,12 @@ module Smithy
 
         # @return [MemberShape]
         def set_key(shape, traits)
-          @key = MemberShape.new('key', shape, traits)
+          @key = MemberShape.new(shape, traits)
         end
 
         # @return [MemberShape]
         def set_value(shape, traits)
-          @value = MemberShape.new('value', shape, traits)
+          @value = MemberShape.new(shape, traits)
         end
       end
 
@@ -147,7 +147,17 @@ module Smithy
 
         # @return [MemberShape]
         def add_member(name, shape, traits)
-          @members[name] = MemberShape.new(name, shape, traits)
+          @members[name] = MemberShape.new(shape, traits)
+        end
+
+        # @return [Boolean]
+        def member?(name)
+          @members.key?(name)
+        end
+
+        # @return [MemberShape, nil]
+        def member(name)
+          @members[name]
         end
       end
 
@@ -159,14 +169,10 @@ module Smithy
 
       # Represents a member shape
       class MemberShape
-        def initialize(name, shape, traits)
-          @name = name
+        def initialize(shape, traits)
           @shape = shape
           @traits = traits
         end
-
-        # @return [String]
-        attr_accessor :name
 
         # @return [Shape]
         attr_accessor :shape
