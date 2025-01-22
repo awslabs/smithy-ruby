@@ -1,7 +1,7 @@
 module Weather
   class EndpointParameters
     def initialize: (
-      ?endpoint: String
+      ?endpoint: String,
     ) -> void
     | (?Hash[Symbol, untyped]) -> void
   end

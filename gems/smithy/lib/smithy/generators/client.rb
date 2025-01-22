@@ -24,7 +24,7 @@ module Smithy
 
       private
 
-      # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics
       def source_files
         Enumerator.new do |e|
           e.yield "#{@gem_name}.gemspec", Views::Client::Gemspec.new(@plan).render
@@ -45,12 +45,14 @@ module Smithy
           e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", Views::Client::EndpointProviderSpec.new(@plan).render
 
           e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render
-          e.yield 'sig/types.rbs', Views::Client::TypesRbs.new(@plan).render
+          e.yield 'sig/errors.rbs', Views::Client::ErrorsRbs.new(@plan).render
           e.yield 'sig/endpoint_parameters.rbs', Views::Client::EndpointParametersRbs.new(@plan).render
           e.yield 'sig/endpoint_provider.rbs', Views::Client::EndpointProviderRbs.new(@plan).render
+          e.yield 'sig/shapes.rbs', Views::Client::ShapesRbs.new(@plan).render
+          e.yield 'sig/types.rbs', Views::Client::TypesRbs.new(@plan).render
         end
       end
-      # rubocop:enable Metrics/AbcSize
+      # rubocop:enable Metrics
 
       def should_skip_customizations?
         Dir["#{destination_root}/**/*"].any? { |f| f.include?('/customizations.rb') }
