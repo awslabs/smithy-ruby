@@ -10,15 +10,25 @@ AllCops:
 Gemspec/RequireMFA:
   Enabled: false
 
+Metrics/AbcSize:
+  Exclude:
+    - '**/spec/**/*.rb'
+
 Metrics/BlockLength:
   Exclude:
     - '**/spec/**/*.rb'
 
 Metrics/ClassLength:
-  Max: 200
+  Max: 250
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - '**/spec/**/*.rb'
 
 Metrics/MethodLength:
   Max: 20
+  Exclude:
+    - '**/spec/**/*.rb'
 
 Metrics/ModuleLength:
   Exclude:

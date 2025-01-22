@@ -2,7 +2,6 @@
 
 module Smithy
   module Client
-    # rubocop:disable Metrics
     describe CBOR do
       context 'decode success tests' do
         file = File.expand_path('cbor/decode-success-tests.json', __dir__)
@@ -63,7 +62,6 @@ module Smithy
           end
         end
       end
-      # rubocop:enable Metrics
 
       context 'decode error tests' do
         file = File.expand_path('cbor/decode-error-tests.json', __dir__)
