@@ -24,10 +24,6 @@ module Smithy
           Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
         end
 
-        def documentation
-          '# TODO: Documentation'
-        end
-
         private
 
         def build_operation_params

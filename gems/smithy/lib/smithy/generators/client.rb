@@ -46,6 +46,8 @@ module Smithy
 
           e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render
           e.yield 'sig/types.rbs', Views::Client::TypesRbs.new(@plan).render
+          e.yield 'sig/endpoint_parameters.rbs', Views::Client::EndpointParametersRbs.new(@plan).render
+          e.yield 'sig/endpoint_provider.rbs', Views::Client::EndpointProviderRbs.new(@plan).render
         end
       end
       # rubocop:enable Metrics/AbcSize

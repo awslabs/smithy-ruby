@@ -29,7 +29,13 @@ module SpecHelper
       require "#{plan.options[:gem_name]}#{type == :types ? '-types' : ''}"
 
       if options.fetch(:rbs_test, ENV.fetch('SMITHY_RUBY_RBS_TEST', nil))
-        setup_rbs_spytest(modules, plan.options[:destination_root])
+        begin
+          setup_rbs_spytest(modules, plan.options[:destination_root])
+        rescue StandardError => e
+          warn("Failed to setup RBS for #{modules.join('::')}: #{e.message}")
+          cleanup(modules, plan.options[:destination_root])
+          raise e
+        end
       end
       plan.options[:destination_root]
     end
@@ -39,6 +45,8 @@ module SpecHelper
     # @param [String] tmpdir The path to the tmp directory where the
     #  generated code was written to.
     def cleanup(module_names, tmpdir)
+      return unless tmpdir
+
       if ENV['SMITHY_RUBY_KEEP_GENERATED_SOURCE']
         puts "Leaving generated service in: #{tmpdir}"
       else

@@ -34,6 +34,16 @@ module Smithy
           end
         end
 
+        def rbs_type
+          case @data['type']
+          when 'stringArray' then 'Array[String]'
+          when 'string' then 'String'
+          when 'boolean' then 'bool'
+          else
+            @data['type']
+          end
+        end
+
         def default_value
           default = @data['default']
           case default
