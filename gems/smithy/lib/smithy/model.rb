@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'model/rbs'
 require_relative 'model/shape'
 require_relative 'model/operation_parser'
 require_relative 'model/service_index'
@@ -47,44 +48,6 @@ module Smithy
         else
           raise ArgumentError, "Shape not found: #{target}"
         end
-      end
-
-      # rubocop:disable Metrics/CyclomaticComplexity
-      def rbs_type(model, id, shape)
-        case shape['type']
-        when 'blob', 'string', 'enum' then 'String'
-        when 'boolean' then 'bool'
-        when 'byte', 'short', 'integer', 'long', 'intEnum' then 'Integer'
-        when 'float', 'double' then 'Float'
-        when 'timestamp' then 'Time'
-        when 'document' then 'Hash' # TODO
-        when 'list'
-          rbs_list_type(model, shape)
-        when 'map'
-          rbs_map_type(model, shape)
-        when 'structure', 'union'
-          "Types::#{Model::Shape.name(id)}"
-        else
-          'untyped'
-        end
-      end
-      # rubocop:enable Metrics/CyclomaticComplexity
-
-      private
-
-      def rbs_map_type(model, shape)
-        key_target = Model.shape(model, shape['key']['target'])
-        value_target = Model.shape(model, shape['value']['target'])
-        sparse = shape.fetch('traits', {}).key?('smithy.api#sparse')
-        key_type = rbs_type(model, shape['key']['target'], key_target)
-        value_type = rbs_type(model, shape['value']['target'], value_target)
-        "Hash[#{key_type}, #{value_type}#{'?' if sparse}]"
-      end
-
-      def rbs_list_type(model, shape)
-        member_target = Model.shape(model, shape['member']['target'])
-        sparse = shape.fetch('traits', {}).key?('smithy.api#sparse')
-        "Array[#{rbs_type(model, shape['member']['target'], member_target)}#{'?' if sparse}]"
       end
     end
   end

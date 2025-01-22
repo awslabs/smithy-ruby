@@ -29,13 +29,7 @@ module SpecHelper
       require "#{plan.options[:gem_name]}#{type == :types ? '-types' : ''}"
 
       if options.fetch(:rbs_test, ENV.fetch('SMITHY_RUBY_RBS_TEST', nil))
-        begin
-          setup_rbs_spytest(modules, plan.options[:destination_root])
-        rescue StandardError => e
-          warn("Failed to setup RBS for #{modules.join('::')}: #{e.message}")
-          cleanup(modules, plan.options[:destination_root])
-          raise e
-        end
+        setup_rbs_spytest(modules, plan.options[:destination_root])
       end
       plan.options[:destination_root]
     end
@@ -63,7 +57,7 @@ module SpecHelper
       require 'rbs'
 
       loader = RBS::EnvironmentLoader.new(core_root: RBS::EnvironmentLoader::DEFAULT_CORE_ROOT)
-      loader.add(path: Pathname(File.join(__dir__, '../../smithy-client/sig')))
+      loader.add(path: Pathname(File.join(__dir__.to_s, '../../smithy-client/sig')))
       loader.add(path: Pathname(File.join(sdk_dir, '/sig')))
 
       load_collection(loader) if load_collection
@@ -138,6 +132,7 @@ module SpecHelper
     end
 
     def setup_rbs_spytest(modules, sdk_dir)
+      # TODO: Catch errors and Rubocop cleanup
       require 'rbs/test'
       env = load_rbs_environment(sdk_dir)
       tester = RBS::Test::Tester.new(env: env)
