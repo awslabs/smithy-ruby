@@ -47,8 +47,8 @@ module Smithy
           def initialize(model, name, member)
             @name = name.underscore
             @id = member['target']
-            @target = Model.shape(@model, member['target'])
             @model = model
+            @target = Model.shape(@model, member['target'])
           end
 
           attr_reader :name
