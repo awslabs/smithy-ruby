@@ -1,0 +1,7 @@
+<% namespaces.each_with_index do |namespace, i| -%>
+  <%= '  ' * i %>module <%= namespace %>
+<% end -%>
+<%= '  ' * (namespaces.size) %>  VERSION: String
+<% (0...namespaces.size).reverse_each do |i| -%>
+  <%= '  ' * i %>end
+<% end -%>

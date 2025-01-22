@@ -28,6 +28,9 @@ module Smithy
           e.yield '.rubocop.yml', Views::Client::RubocopYml.new(@plan).render
           e.yield "lib/#{@gem_name}.rb", Views::Client::Module.new(@plan).render
           e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).render
+
+          e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render
+          e.yield 'sig/types.rbs', Views::Client::TypesRbs.new(@plan).render
         end
       end
     end

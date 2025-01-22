@@ -81,7 +81,7 @@ namespace 'smithy-client' do
     env = {
       'RUBYOPT' => '-r bundler/setup -r rbs/test/setup',
       'RBS_TEST_RAISE' => 'true',
-      'RBS_TEST_LOGLEVEL' => 'error',
+      'RBS_TEST_LOGLEVEL' => 'info',
       'RBS_TEST_OPT' => '-I gems/smithy-client/sig',
       'RBS_TEST_TARGET' => '"Smithy,Smithy::*,Smithy::Client"',
       'RBS_TEST_DOUBLE_SUITE' => 'rspec'
