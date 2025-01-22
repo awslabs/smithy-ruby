@@ -2,10 +2,10 @@ module Smithy
   module Client
     module EndpointRules
       class Endpoint
-        def initialize: (uri: String, ?properties: ::Hash[String, untyped], ?headers: ::Hash[String, String]) -> void
+        def initialize: (uri: String, ?properties: ::Hash[String, untyped], ?headers: ::Hash[String, String|Array[String]]) -> void
         attr_accessor uri: String
         attr_accessor properties: Hash[String, untyped]
-        attr_accessor headers: Hash[String, String]
+        attr_accessor headers: Hash[String, String|Array[String]]
       end
     end
   end

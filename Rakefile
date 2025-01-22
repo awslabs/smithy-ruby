@@ -13,12 +13,14 @@ namespace :smithy do
     t.rspec_opts = '--format documentation'
   end
 
-  task 'spec:endpoints' do
+  task 'spec:endpoints', [:rbs_test] do |_t, args|
     require_relative 'gems/smithy/spec/spec_helper'
 
     spec_paths = []
     include_paths = []
     tmp_dirs = []
+    rbs_targets = %w[Smithy Smithy::* Smithy::Client]
+    sig_paths = ['gems/smithy-client/sig']
     Dir.glob('gems/smithy/spec/fixtures/endpoints/*/model.json') do |model_path|
       test_name = model_path.split('/')[-2]
       test_module = test_name.gsub('-', '').camelize
@@ -27,10 +29,27 @@ namespace :smithy do
       spec_paths << "#{tmpdir}/spec"
       include_paths << "#{tmpdir}/lib"
       include_paths << "#{tmpdir}/spec"
+      sig_paths << "#{tmpdir}/sig"
+      rbs_targets += [test_module, "#{test_module}::*"]
     end
     specs = spec_paths.join(' ')
     includes = include_paths.map { |p| "-I #{p}" }.join(' ')
-    sh("bundle exec rspec #{specs} #{includes}")
+
+    env =
+      if args[:rbs_test]
+        {
+          'RUBYOPT' => '-r bundler/setup -r rbs/test/setup',
+          'RBS_TEST_RAISE' => 'true',
+          'RBS_TEST_LOGLEVEL' => 'error',
+          'RBS_TEST_OPT' => sig_paths.map { |p| "-I #{p}" }.join(' '),
+          'RBS_TEST_TARGET' => "\"#{rbs_targets.join(',')}\"",
+          'RBS_TEST_DOUBLE_SUITE' => 'rspec'
+        }
+      else
+        {}
+      end
+
+    sh(env, "bundle exec rspec #{specs} #{includes}")
   ensure
     tmp_dirs.each do |name, tmpdir|
       SpecHelper.cleanup([name], tmpdir)
@@ -71,7 +90,11 @@ namespace :smithy do
     sh(env, 'bundle exec rake smithy:spec:unit')
   end
 
-  task 'rbs' => ['rbs:unit']
+  task 'rbs:endpoints' do
+    task('smithy:spec:endpoints').invoke('rbs_test')
+  end
+
+  task 'rbs' => ['rbs:unit', 'rbs:endpoints']
 end
 # rubocop:enable Metrics/BlockLength
 
@@ -90,7 +113,7 @@ namespace 'smithy-client' do
     env = {
       'RUBYOPT' => '-r bundler/setup -r rbs/test/setup',
       'RBS_TEST_RAISE' => 'true',
-      'RBS_TEST_LOGLEVEL' => 'info',
+      'RBS_TEST_LOGLEVEL' => 'error',
       'RBS_TEST_OPT' => '-I gems/smithy-client/sig',
       'RBS_TEST_TARGET' => '"Smithy,Smithy::*,Smithy::Client"',
       'RBS_TEST_DOUBLE_SUITE' => 'rspec'
