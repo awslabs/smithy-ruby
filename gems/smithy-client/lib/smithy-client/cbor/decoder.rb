@@ -124,9 +124,7 @@ module Smithy
         def process_tag
           case (tag = read_tag)
           when TAG_TYPE_EPOCH
-            type = peek_type
             item = decode_item
-            item /= 1000.0 if type == :integer
             Time.at(item)
           when TAG_TYPE_BIGNUM, TAG_TYPE_NEG_BIGNUM
             read_bignum(tag)

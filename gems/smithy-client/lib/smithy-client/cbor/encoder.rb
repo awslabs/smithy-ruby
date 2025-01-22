@@ -183,8 +183,8 @@ module Smithy
 
         def add_time(value)
           head(MAJOR_TYPE_TAG, TAG_TYPE_EPOCH)
-          epoch_ms = (value.to_f * 1000).to_i
-          add_integer(epoch_ms)
+          epoch = value.to_f
+          add_double(epoch)
         end
 
         def bignum_to_bytes(value)
