@@ -6,7 +6,7 @@ module Smithy
   module Client
     module CBOR
       # Pure Ruby implementation of CBOR Decoder
-      # rubocop:disable Metrics/ClassLength:
+      # rubocop:disable Metrics/ClassLength
       class Decoder
         def initialize(bytes)
           @buffer = bytes
