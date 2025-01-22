@@ -6,6 +6,7 @@ module Smithy
   module Client
     module CBOR
       # Pure Ruby implementation of CBOR Decoder
+      # rubocop:disable Metrics/ClassLength:
       class Decoder
         def initialize(bytes)
           @buffer = bytes
@@ -29,8 +30,9 @@ module Smithy
         TAG_TYPE_NEG_BIGNUM = 3
         TAG_TYPE_BIGDEC = 4
 
-        # high level, generic decode. Based on the next type. Consumes and returns
-        # the next item as a ruby object.
+        # high level, generic decode. Based on the next type.
+        # Consumes and returns the next item as a ruby object.
+        # rubocop:disable Metrics
         def decode_item
           case (next_type = peek_type)
           when :array
@@ -42,12 +44,11 @@ module Smithy
           when :indefinite_binary_string then process_indefinite_binary
           when :indefinite_string then process_indefinite_string
           when :tag then process_tag
-          when :break_stop_code
-            raise UnexpectedBreakCodeError
-          else
-            send("read_#{next_type}")
+          when :break_stop_code then raise UnexpectedBreakCodeError
+          else send("read_#{next_type}")
           end
         end
+        # rubocop:enable Metrics
 
         def peek(n_bytes)
           return @buffer[@pos, n_bytes] if (@pos + n_bytes) <= @buffer.bytesize
@@ -56,6 +57,7 @@ module Smithy
         end
 
         # low level streaming interface
+        # rubocop:disable Metrics
         def peek_type
           ib = peek(1).ord
           add_info = ib & FIVE_BIT_MASK
@@ -88,6 +90,7 @@ module Smithy
           else :reserved_undefined
           end
         end
+        # rubocop:enable Metrics
 
         def process_indefinite_array
           read_start_indefinite_array
@@ -310,6 +313,7 @@ module Smithy
           raise OutOfBytesError.new(n_bytes, @buffer.bytesize - @pos)
         end
       end
+      # rubocop:enable Metrics/ClassLength
     end
   end
 end

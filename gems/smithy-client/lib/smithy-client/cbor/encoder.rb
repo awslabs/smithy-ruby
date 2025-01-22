@@ -17,6 +17,7 @@ module Smithy
         end
 
         # generic method for adding generic Ruby data based on its type
+        # rubocop:disable Metrics
         def add(value)
           case value
           when BigDecimal then add_big_decimal(value)
@@ -34,6 +35,7 @@ module Smithy
           end
           self
         end
+        # rubocop:enable Metrics
 
         private
 

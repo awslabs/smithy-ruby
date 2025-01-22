@@ -10,31 +10,15 @@ AllCops:
 Gemspec/RequireMFA:
   Enabled: false
 
-Metrics/AbcSize:
-  Exclude:
-    - 'gems/smithy-client/lib/smithy-client/cbor/encoder.rb'
-    - 'gems/smithy-client/lib/smithy-client/cbor/decoder.rb'
-    - 'gems/smithy-client/spec/smithy-client/cbor_spec.rb'
-
 Metrics/BlockLength:
   Exclude:
     - '**/spec/**/*.rb'
 
 Metrics/ClassLength:
   Max: 200
-  Exclude:
-    - 'gems/smithy-client/lib/smithy-client/cbor/decoder.rb'
-
-Metrics/CyclomaticComplexity:
-  Exclude:
-    - '**/spec/**/*.rb'
-    - 'gems/smithy-client/lib/smithy-client/cbor/encoder.rb'
-    - 'gems/smithy-client/lib/smithy-client/cbor/decoder.rb'
 
 Metrics/MethodLength:
   Max: 20
-  Exclude:
-    - '**/spec/**/*.rb'
 
 Metrics/ModuleLength:
   Exclude:

@@ -2,6 +2,7 @@
 
 module Smithy
   module Client
+    # rubocop:disable Metrics
     describe CBOR do
       context 'decode success tests' do
         file = File.expand_path('cbor/decode-success-tests.json', __dir__)
@@ -29,8 +30,7 @@ module Smithy
           when 'undefined' then :undefined
           when 'float32' then [expect['float32']].pack('L').unpack1('f')
           when 'float64' then [expect['float64']].pack('Q').unpack1('d')
-          else
-            raise "unexpected expect value: #{expect}"
+          else raise "unexpected expect value: #{expect}"
           end
         end
 
@@ -63,6 +63,7 @@ module Smithy
           end
         end
       end
+      # rubocop:enable Metrics
 
       context 'decode error tests' do
         file = File.expand_path('cbor/decode-error-tests.json', __dir__)
