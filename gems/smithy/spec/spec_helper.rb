@@ -27,7 +27,10 @@ module SpecHelper
 
       $LOAD_PATH << ("#{plan.options[:destination_root]}/lib")
       require "#{plan.options[:gem_name]}#{type == :types ? '-types' : ''}"
-      setup_rbs_spytest(modules, plan.options[:destination_root])
+
+      if options.fetch(:rbs_test, ENV.fetch('SMITHY_RUBY_RBS_TEST', nil))
+        setup_rbs_spytest(modules, plan.options[:destination_root])
+      end
       plan.options[:destination_root]
     end
 
@@ -109,16 +112,16 @@ module SpecHelper
       RBS::Factory.new.type_name(type_name).absolute!
     end
 
-    def classes_to_spy(mod, env, visited=Set.new)
+    def classes_to_spy(mod, env, visited = Set.new)
       classes = []
       visited << mod
       mod.constants.each do |c|
         sub_mod = mod.const_get(c)
-        next if !sub_mod.is_a?(Module) || visited.include?(sub_mod) || sub_mod == ::BasicObject # module includes classes
+        # module includes classes
+        next if !sub_mod.is_a?(Module) || visited.include?(sub_mod) || sub_mod == ::BasicObject
 
         rbs_name = to_absolute_typename(sub_mod.name)
         if env.module_name?(rbs_name)
-          puts "Adding #{rbs_name}, def: #{env.type_name?(rbs_name)}"
           classes << sub_mod
           classes += classes_to_spy(sub_mod, env, visited)
         end
@@ -135,7 +138,7 @@ module SpecHelper
         '::RSpec::Mocks::Double',
         '::RSpec::Mocks::InstanceVerifyingDouble',
         '::RSpec::Mocks::ObjectVerifyingDouble',
-        '::RSpec::Mocks::ClassVerifyingDouble',
+        '::RSpec::Mocks::ClassVerifyingDouble'
       ] # rubocop:disable
 
       spy_modules = [modules.join('::'), 'Smithy::Client']
@@ -145,8 +148,8 @@ module SpecHelper
       end
 
       spy_classes.each do |spy_class|
-        puts "Installing for: #{spy_class}"
-        tester.install!(spy_class, sample_size: RBS::Test::SetupHelper::DEFAULT_SAMPLE_SIZE, unchecked_classes: unchecked_classes)
+        tester.install!(spy_class, sample_size: RBS::Test::SetupHelper::DEFAULT_SAMPLE_SIZE,
+                                   unchecked_classes: unchecked_classes)
       end
     end
   end

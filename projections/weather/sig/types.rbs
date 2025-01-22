@@ -4,12 +4,24 @@ module Weather
     class CityCoordinates
       include Smithy::Client::Structure
 
+      def initialize: (
+        ?latitude: Float,
+        ?longitude: Float,
+      ) -> void
+      | (?Hash[Symbol, untyped]) -> void
+
       attr_accessor latitude: Float?
       attr_accessor longitude: Float?
     end
 
     class CitySummary
       include Smithy::Client::Structure
+
+      def initialize: (
+        ?city_id: String
+        ?name: String
+      ) -> void
+      | (?Hash[Symbol, untyped]) -> void
 
       attr_accessor city_id: String?
       attr_accessor name: String?
@@ -18,11 +30,22 @@ module Weather
     class GetCityInput
       include Smithy::Client::Structure
 
+      def initialize: (
+        ?city_id: String
+      ) -> void
+      | (?Hash[Symbol, untyped]) -> void
+
       attr_accessor city_id: String?
     end
 
     class GetCityOutput
       include Smithy::Client::Structure
+
+      def initialize: (
+        ?name: String
+        ?coordinates: Types::CityCoordinates
+      ) -> void
+      | (?Hash[Symbol, untyped]) -> void
 
       attr_accessor name: String?
       attr_accessor coordinates: Types::CityCoordinates?
@@ -31,11 +54,21 @@ module Weather
     class GetCurrentTimeOutput
       include Smithy::Client::Structure
 
+      def initialize: (
+        ?time: Time
+      ) -> void
+      | (?Hash[Symbol, untyped]) -> void
+
       attr_accessor time: Time?
     end
 
     class GetForecastInput
       include Smithy::Client::Structure
+
+      def initialize: (
+        ?city_id: String
+      ) -> void
+      | (?Hash[Symbol, untyped]) -> void
 
       attr_accessor city_id: String?
     end
@@ -43,11 +76,22 @@ module Weather
     class GetForecastOutput
       include Smithy::Client::Structure
 
+      def initialize: (
+        ?chance_of_rain: Float
+      ) -> void
+      | (?Hash[Symbol, untyped]) -> void
+
       attr_accessor chance_of_rain: Float?
     end
 
     class ListCitiesInput
       include Smithy::Client::Structure
+
+      def initialize: (
+        ?next_token: String
+        ?page_size: Integer
+      ) -> void
+      | (?Hash[Symbol, untyped]) -> void
 
       attr_accessor next_token: String?
       attr_accessor page_size: Integer?
@@ -56,12 +100,23 @@ module Weather
     class ListCitiesOutput
       include Smithy::Client::Structure
 
+      def initialize: (
+        ?next_token: String
+        ?items: Array[Types::CitySummary]
+      ) -> void
+      | (?Hash[Symbol, untyped]) -> void
+
       attr_accessor next_token: String?
       attr_accessor items: Array[Types::CitySummary]?
     end
 
     class NoSuchResource
       include Smithy::Client::Structure
+
+      def initialize: (
+        ?resource_type: String
+      ) -> void
+      | (?Hash[Symbol, untyped]) -> void
 
       attr_accessor resource_type: String?
     end

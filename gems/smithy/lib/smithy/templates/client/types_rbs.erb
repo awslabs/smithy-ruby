@@ -5,6 +5,13 @@ module <%= namespace %>
     class <%= type.name %>
       include Smithy::Client::Structure
 
+      def initialize: (
+<% type.members.each do |member| -%>
+        ?<%= member.name %>: <%= member.rbs_type %>,
+<% end -%>
+      ) -> void
+      | (?Hash[Symbol, untyped]) -> void
+
 <% type.members.each do |member| -%>
       attr_accessor <%= member.name %>: <%= member.rbs_type %>?
 <% end -%>

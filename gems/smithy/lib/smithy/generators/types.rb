@@ -22,6 +22,7 @@ module Smithy
 
       private
 
+      # rubocop:disable Metrics/AbcSize
       def source_files
         Enumerator.new do |e|
           e.yield "#{@gem_name}.gemspec", Views::Client::Gemspec.new(@plan).render
@@ -32,6 +33,7 @@ module Smithy
           e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render
           e.yield 'sig/types.rbs', Views::Client::TypesRbs.new(@plan).render
         end
+        # rubocop:enable Metrics/AbcSize
       end
     end
   end

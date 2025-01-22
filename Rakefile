@@ -63,6 +63,15 @@ namespace :smithy do
       raise 'Fixture models are out of sync.  Run bundle exec rake smithy:sync-fixtures to correct'
     end
   end
+
+  task 'rbs:unit' do
+    env = {
+      'SMITHY_RUBY_RBS_TEST' => 'true'
+    }
+    sh(env, 'bundle exec rake smithy:spec:unit')
+  end
+
+  task 'rbs' => ['rbs:unit']
 end
 # rubocop:enable Metrics/BlockLength
 
