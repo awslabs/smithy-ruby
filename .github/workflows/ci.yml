@@ -88,7 +88,10 @@ jobs:
           ruby-version: ${{ env.ruby_version }}
           bundler-cache: true
 
-      - name: Test
+      - name: Install rbs collection
+        run: rbs collection install
+
+      - name: RBS
         run: bundle exec rake smithy:rbs
 
   smithy-validate-fixtures:
