@@ -6,6 +6,7 @@ module Smithy
   module Client
     module CBOR
       # Pure Ruby implementation of CBOR Decoder
+      # rubocop:disable Metrics/ClassLength
       class Decoder
         def initialize(bytes)
           @buffer = bytes
@@ -312,6 +313,7 @@ module Smithy
           raise OutOfBytesError.new(n_bytes, @buffer.bytesize - @pos)
         end
       end
+      # rubocop:enable Metrics/ClassLength
     end
   end
 end
