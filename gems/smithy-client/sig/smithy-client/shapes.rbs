@@ -74,7 +74,6 @@ module Smithy
       end
 
       class MemberShape < Shape
-        attr_accessor name: String?
         attr_accessor shape: Shape?
         attr_accessor traits: Hash[String, untyped]
       end

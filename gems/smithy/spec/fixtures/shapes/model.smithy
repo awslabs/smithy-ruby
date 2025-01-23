@@ -17,8 +17,6 @@ operation Operation {
     errors: [ClientError, ServerError]
 }
 
-@documentation("This is a documentation")
-@xmlName("Structure")
 structure OperationInputOutput {
     // simple members
     bigDecimal: BigDecimal
@@ -48,24 +46,38 @@ structure OperationInputOutput {
     union: Union
 }
 
+bigDecimal BigDecimal
+
+bigInteger BigInteger
+
+blob Blob
+
+boolean Boolean
+
+byte Byte
+
+document Document
+
+double Double
+
+float Float
+
+long Long
+
+short Short
+
+timestamp Timestamp
+
+@documentation("This is a documentation")
+@pattern("^[A-Za-z0-9 ]+$")
+string String
+
 enum Enum {
-    CAT = "cat"
-    DOG = "dog"
+    FOO = "bar"
 }
-
-@error("client")
-structure ClientError {
-    @required
-    message: String
-}
-
-@error("server")
-@retryable(throttling: true)
-structure ServerError {}
 
 intEnum IntEnum {
-    FOO = 1
-    BAR = 2
+    BAZ = 1
 }
 
 list List {
@@ -77,10 +89,17 @@ map Map {
     value: Integer
 }
 
-@pattern("^[A-Za-z0-9 ]+$")
-string String
-
 union Union {
     list: List
 }
+
+@error("client")
+structure ClientError {
+    @required
+    message: String
+}
+
+@error("server")
+@retryable(throttling: true)
+structure ServerError {}
 

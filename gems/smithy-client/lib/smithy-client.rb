@@ -43,6 +43,10 @@ require_relative 'smithy-client/shapes'
 require_relative 'smithy-client/structure'
 require_relative 'smithy-client/param_validator'
 
+# codecs
+require_relative 'smithy-client/cbor'
+require_relative 'smithy-client/codecs/cbor'
+
 module Smithy
   # Base module for a generated Smithy gem.
   module Client

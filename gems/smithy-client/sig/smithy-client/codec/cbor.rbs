@@ -1,0 +1,14 @@
+module Smithy
+  module Client
+    module Codecs
+      class CBOR
+        def initialize: (?::Hash[untyped, untyped] options) -> void
+
+        def serialize: (untyped data, Shapes::Shape shape) -> (nil | String)
+
+        def deserialize: (String bytes, Shapes::Shape shape, ?Struct[untyped] target) -> (Hash[untyped, untyped] | Object)
+
+      end
+    end
+  end
+end
