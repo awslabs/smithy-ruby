@@ -23,15 +23,17 @@ module SpecHelper
     def generate(modules, type, options = {})
       model = load_model(modules, options)
       plan = create_plan(modules, model, type, options)
+      sdk_dir = plan.options[:destination_root]
       smith(plan)
 
-      $LOAD_PATH << ("#{plan.options[:destination_root]}/lib")
+      $LOAD_PATH << ("#{sdk_dir}/lib")
       require "#{plan.options[:gem_name]}#{type == :types ? '-types' : ''}"
 
-      if options.fetch(:rbs_test, ENV.fetch('SMITHY_RUBY_RBS_TEST', nil))
-        setup_rbs_spytest(modules, plan.options[:destination_root])
-      end
-      plan.options[:destination_root]
+      setup_rbs_spytest(modules, sdk_dir) if options.fetch(:rbs_test, ENV.fetch('SMITHY_RUBY_RBS_TEST', nil))
+      sdk_dir
+    rescue StandardError => e
+      cleanup(modules, sdk_dir) if sdk_dir
+      raise e
     end
 
     # @param [Array<String>] module_names A list of module names from the
@@ -102,8 +104,10 @@ module SpecHelper
       collection_config_path = RBS::Collection::Config.find_config_path
       lock_path = RBS::Collection::Config.to_lockfile_path(collection_config_path)
       if lock_path.file?
-        lock = RBS::Collection::Config::Lockfile.from_lockfile(lockfile_path: lock_path,
-                                                               data: YAML.load_file(lock_path.to_s))
+        lock = RBS::Collection::Config::Lockfile.from_lockfile(
+          lockfile_path: lock_path,
+          data: YAML.load_file(lock_path.to_s)
+        )
       end
       raise 'Missing RBS collection, ensure you have `rbs collection install`' unless lock
 
@@ -132,7 +136,6 @@ module SpecHelper
     end
 
     def setup_rbs_spytest(modules, sdk_dir)
-      # TODO: Catch errors and Rubocop cleanup
       require 'rbs/test'
       env = load_rbs_environment(sdk_dir)
       tester = RBS::Test::Tester.new(env: env)
@@ -151,8 +154,11 @@ module SpecHelper
       end
 
       spy_classes.each do |spy_class|
-        tester.install!(spy_class, sample_size: RBS::Test::SetupHelper::DEFAULT_SAMPLE_SIZE,
-                                   unchecked_classes: unchecked_classes)
+        tester.install!(
+          spy_class,
+          sample_size: RBS::Test::SetupHelper::DEFAULT_SAMPLE_SIZE,
+          unchecked_classes: unchecked_classes
+        )
       end
     end
   end
