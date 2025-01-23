@@ -20,47 +20,29 @@ module Weather
     ListCitiesOutput = StructureShape.new(id: 'example.weather#ListCitiesOutput', traits: { 'smithy.api#output' => {} })
     NoSuchResource = StructureShape.new(id: 'example.weather#NoSuchResource', traits: { 'smithy.api#error' => 'client' })
 
-<<<<<<< HEAD
     CityCoordinates.add_member(:latitude, Prelude::Float, { 'smithy.api#required' => {} })
     CityCoordinates.add_member(:longitude, Prelude::Float, { 'smithy.api#required' => {} })
-=======
-    CityCoordinates.add_member(:latitude, Float, { 'smithy.api#required' => {} })
-    CityCoordinates.add_member(:longitude, Float, { 'smithy.api#required' => {} })
->>>>>>> decaf
     CityCoordinates.type = Types::CityCoordinates
 
     CitySummaries.set_member(CitySummary)
 
     CitySummary.add_member(:city_id, CityId, { 'smithy.api#required' => {} })
-<<<<<<< HEAD
     CitySummary.add_member(:name, Prelude::String, { 'smithy.api#required' => {} })
-=======
-    CitySummary.add_member(:name, String, { 'smithy.api#required' => {} })
->>>>>>> decaf
     CitySummary.type = Types::CitySummary
 
     GetCityInput.add_member(:city_id, CityId, { 'smithy.api#required' => {} })
     GetCityInput.type = Types::GetCityInput
 
-<<<<<<< HEAD
     GetCityOutput.add_member(:name, Prelude::String, { 'smithy.api#notProperty' => {}, 'smithy.api#required' => {} })
     GetCityOutput.add_member(:coordinates, CityCoordinates, { 'smithy.api#required' => {} })
     GetCityOutput.type = Types::GetCityOutput
 
     GetCurrentTimeOutput.add_member(:time, Prelude::Timestamp, { 'smithy.api#required' => {} })
-=======
-    GetCityOutput.add_member(:name, String, { 'smithy.api#notProperty' => {}, 'smithy.api#required' => {} })
-    GetCityOutput.add_member(:coordinates, CityCoordinates, { 'smithy.api#required' => {} })
-    GetCityOutput.type = Types::GetCityOutput
-
-    GetCurrentTimeOutput.add_member(:time, Timestamp, { 'smithy.api#required' => {} })
->>>>>>> decaf
     GetCurrentTimeOutput.type = Types::GetCurrentTimeOutput
 
     GetForecastInput.add_member(:city_id, CityId, { 'smithy.api#required' => {} })
     GetForecastInput.type = Types::GetForecastInput
 
-<<<<<<< HEAD
     GetForecastOutput.add_member(:chance_of_rain, Prelude::Float)
     GetForecastOutput.type = Types::GetForecastOutput
 
@@ -73,20 +55,6 @@ module Weather
     ListCitiesOutput.type = Types::ListCitiesOutput
 
     NoSuchResource.add_member(:resource_type, Prelude::String, { 'smithy.api#required' => {} })
-=======
-    GetForecastOutput.add_member(:chance_of_rain, Float, {})
-    GetForecastOutput.type = Types::GetForecastOutput
-
-    ListCitiesInput.add_member(:next_token, String, {})
-    ListCitiesInput.add_member(:page_size, Integer, {})
-    ListCitiesInput.type = Types::ListCitiesInput
-
-    ListCitiesOutput.add_member(:next_token, String, {})
-    ListCitiesOutput.add_member(:items, CitySummaries, { 'smithy.api#required' => {} })
-    ListCitiesOutput.type = Types::ListCitiesOutput
-
-    NoSuchResource.add_member(:resource_type, String, { 'smithy.api#required' => {} })
->>>>>>> decaf
     NoSuchResource.type = Types::NoSuchResource
 
     SCHEMA = Smithy::Client::Schema.new do |schema|
