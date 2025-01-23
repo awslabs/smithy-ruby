@@ -70,6 +70,10 @@ module Smithy
             @id = id
             @operation = operation
           end
+
+          def name
+            Model::Shape.name(@id).underscore
+          end
         end
       end
     end
