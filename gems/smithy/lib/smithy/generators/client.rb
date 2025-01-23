@@ -45,6 +45,7 @@ module Smithy
           e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", Views::Client::EndpointProviderSpec.new(@plan).render
 
           e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render
+          e.yield 'sig/client.rbs', Views::Client::ClientRbs.new(@plan).render
           e.yield 'sig/errors.rbs', Views::Client::ErrorsRbs.new(@plan).render
           e.yield 'sig/endpoint_parameters.rbs', Views::Client::EndpointParametersRbs.new(@plan).render
           e.yield 'sig/endpoint_provider.rbs', Views::Client::EndpointProviderRbs.new(@plan).render

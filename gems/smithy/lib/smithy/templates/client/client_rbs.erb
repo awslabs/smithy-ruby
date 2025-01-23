@@ -1,0 +1,10 @@
+module <%= namespace %>
+  class Client < Smithy::Client::Base
+    def self.new: (
+<% option_types.each do |name, type| -%>
+      ?<%= name %>: <%= type %>,
+<% end -%>
+    ) -> void
+    | (?Hash[Symbol, untyped]) -> void
+  end
+end

@@ -16,6 +16,7 @@ require_relative 'client/request_response_example'
 
 # views
 require_relative 'client/client'
+require_relative 'client/client_rbs'
 require_relative 'client/customizations'
 require_relative 'client/endpoint_parameters'
 require_relative 'client/endpoint_parameters_rbs'
