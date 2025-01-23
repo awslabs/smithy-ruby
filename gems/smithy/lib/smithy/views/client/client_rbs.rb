@@ -69,10 +69,47 @@ module Smithy
             @model = model
             @id = id
             @operation = operation
+            @input = Input.new(model, operation['input']['target'])
+            @output = Output.new(model, operation['output']['target'])
+          end
+
+          attr_reader :input, :output
+
+          def response_interface
+            "_#{Model::Shape.name(@id)}Response"
           end
 
           def name
             Model::Shape.name(@id).underscore
+          end
+        end
+
+        # @api private
+        class Output
+          def initialize(model, id)
+            @model = model
+            @id = id
+            @shape = Model.shape(model, id)
+          end
+
+          def type
+            "Types::#{Model::Shape.name(@id)}"
+          end
+
+          def member_types
+            @shape.fetch('members', {}).to_h do |member_name, member|
+              target = Model.shape(@model, member['target'])
+              [member_name.underscore, Model::Rbs.type(@model, member['target'], target)]
+            end
+          end
+        end
+
+        # @api private
+        class Input
+          def initialize(model, id)
+            @model = model
+            @id = id
+            @shape = Model.shape(model, id)
           end
         end
       end

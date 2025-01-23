@@ -6,10 +6,15 @@ module <%= namespace %>
 <% end -%>
     ) -> void
     | (?Hash[Symbol, untyped]) -> void
-
 <% operations.each do |operation| -%>
 
-    def <%= operation.name %>: (?Hash[Symbol, untyped], ?Hash[Symbol, untyped]) -> Smithy::Client::_Output[untyped]
+    interface <%= operation.response_interface %>
+      include Smithy::Client::_Output[<%= operation.output.type %>]
+<% operation.output.member_types.each do |name, type| -%>
+      def <%= name %>: () -> <%= type %>?
+<% end -%>
+    end
+    def <%= operation.name %>: (?Hash[Symbol, untyped], ?Hash[Symbol, untyped]) -> <%= operation.response_interface %>
 <% end -%>
   end
 end
