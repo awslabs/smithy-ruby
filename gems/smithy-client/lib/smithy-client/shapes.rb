@@ -73,7 +73,7 @@ module Smithy
 
         # @return [MemberShape]
         def add_member(name, shape, traits = {})
-          @members[name] = MemberShape.new(name, shape, traits)
+          @members[name] = MemberShape.new(shape, traits)
         end
       end
 

@@ -8,14 +8,14 @@ module Smithy
 
         let(:list_shape) do
           shape = Shapes::ListShape.new(id: 'list')
-          shape.set_member(Shapes::String, {})
+          shape.set_member(Shapes::Prelude::String, {})
           shape
         end
 
         let(:map_shape) do
           shape = Shapes::MapShape.new(id: 'map')
-          shape.set_key(Shapes::String, {})
-          shape.set_value(Shapes::Blob, {})
+          shape.set_key(Shapes::Prelude::String, {})
+          shape.set_value(Shapes::Prelude::Blob, {})
           shape
         end
 
@@ -34,8 +34,8 @@ module Smithy
           struct
         end
 
-        it 'serializes returns nil when given shape is PreludeUnit' do
-          expect(subject.serialize('', Shapes::Unit)).to be_nil
+        it 'serializes returns nil when given shape is Prelude::Unit' do
+          expect(subject.serialize('', Shapes::Prelude::Unit)).to be_nil
         end
 
         it 'deserializes returns an empty hash when given bytes are empty' do
