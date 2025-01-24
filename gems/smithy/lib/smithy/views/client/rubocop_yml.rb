@@ -12,8 +12,8 @@ module Smithy
         end
 
         def gem_name
-          if @plan.type == :types
-            "#{@plan.options[:gem_name]}-types"
+          if @plan.type == :schema
+            "#{@plan.options[:gem_name]}-schema"
           else
             @plan.options[:gem_name]
           end

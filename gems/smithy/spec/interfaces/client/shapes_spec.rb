@@ -10,7 +10,6 @@ describe 'Component: Shapes' do
   end
 
   let(:fixture) { JSON.load_file(File.expand_path('../../fixtures/shapes/model.json', __dir__.to_s)) }
-  let(:types_module) { ShapeService::Types }
   let(:shapes_module) { Smithy::Client::Shapes }
   subject { ShapeService::Shapes }
 
@@ -169,7 +168,7 @@ describe 'Component: Shapes' do
       end
 
       it 'has a type' do
-        expect(subject::OperationInputOutput.type).to eq(types_module::OperationInputOutput)
+        expect(subject::OperationInputOutput.type).to eq(ShapeService::Types::OperationInputOutput)
       end
 
       it 'has members' do
@@ -183,7 +182,7 @@ describe 'Component: Shapes' do
       it 'has a member with traits' do
         expected_member =
           expected_shape['members']
-          .select { |k, _| k == 'id' }
+          .slice('id')
           .values
           .first
         expect(subject::OperationInputOutput.member(:id).traits).to eq(expected_member['traits'])

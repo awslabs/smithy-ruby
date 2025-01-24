@@ -27,7 +27,7 @@ module Smithy
         it 'returns a complete set of shapes for the service' do
           service =
             fixture['shapes']
-            .select { |id, _| id == 'smithy.ruby.tests#ServiceIndex' }
+            .slice('smithy.ruby.tests#ServiceIndex')
           expected =
             fixture['shapes']
             .reject { |_, shape| %w[operation resource service].include?(shape['type']) }
@@ -44,7 +44,7 @@ module Smithy
           it 'handles recursive shapes' do
             service =
               fixture['shapes']
-              .select { |id, _| id == 'smithy.ruby.tests#Recursive' }
+              .slice('smithy.ruby.tests#Recursive')
             subject.shapes_for(service)
           end
         end
