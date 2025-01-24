@@ -14,7 +14,6 @@ service ShapeService {
 operation Operation {
     input: OperationInputOutput
     output: OperationInputOutput
-    errors: [ClientError, ServerError]
 }
 
 structure OperationInputOutput {
@@ -40,7 +39,7 @@ structure OperationInputOutput {
     id: String
 
     // complex members
-    structure: OperationInputOutput
+    structure: Structure
     list: List
     map: Map
     union: Union
@@ -60,7 +59,17 @@ document Document
 
 double Double
 
+enum Enum {
+    FOO = "bar"
+}
+
 float Float
+
+integer Integer
+
+intEnum IntEnum {
+    BAZ = 1
+}
 
 long Long
 
@@ -72,13 +81,7 @@ timestamp Timestamp
 @pattern("^[A-Za-z0-9 ]+$")
 string String
 
-enum Enum {
-    FOO = "bar"
-}
-
-intEnum IntEnum {
-    BAZ = 1
-}
+structure Structure {}
 
 list List {
     member: String
@@ -92,14 +95,3 @@ map Map {
 union Union {
     list: List
 }
-
-@error("client")
-structure ClientError {
-    @required
-    message: String
-}
-
-@error("server")
-@retryable(throttling: true)
-structure ServerError {}
-

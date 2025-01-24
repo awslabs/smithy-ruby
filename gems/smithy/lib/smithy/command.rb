@@ -31,8 +31,8 @@ module Smithy
 
       gem_options!
       desc 'types', 'Generates types for the model provided to STDIN.'
-      def types
-        invoke(:types, options)
+      def schema
+        invoke(:schema, options)
       end
 
       gem_options!

@@ -3,11 +3,11 @@
 module Smithy
   module Generators
     # Generates a gem for the types.
-    class Types < Base
+    class Schema < Base
       # @param [Plan] plan The plan to generate.
       def initialize(plan)
         @plan = plan
-        @gem_name = "#{plan.options[:gem_name]}-types"
+        @gem_name = "#{plan.options[:gem_name]}-schema"
         super
       end
 
@@ -28,6 +28,7 @@ module Smithy
           e.yield "#{@gem_name}.gemspec", Views::Client::Gemspec.new(@plan).render
           e.yield '.rubocop.yml', Views::Client::RubocopYml.new(@plan).render
           e.yield "lib/#{@gem_name}.rb", Views::Client::Module.new(@plan).render
+          e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
           e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).render
 
           e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render

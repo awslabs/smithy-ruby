@@ -106,7 +106,7 @@ module Smithy
           structure_shape['members']&.each_pair do |member_name, member_shape|
             lines << member(member_name, member_shape, indent, visited)
           end
-          lines.last.chomp!(',')
+          lines.last.chomp!(',') if lines.last.end_with?(',')
           lines << "#{indent}}"
           lines.join("\n")
         end

@@ -8,7 +8,7 @@ module <%= namespace %>
     include Smithy::Client::Shapes
 
 <% shapes.each do |shape| -%>
-    <%= shape.name %> = <%= shape.type %>.new(id: "<%= shape.id %>", traits: <%= shape.traits %>)
+    <%= shape.name %> = <%= shape.type %>.<%= shape.new_method %>
 <% end -%>
 
 <% shapes_with_members.each do |shape| -%>

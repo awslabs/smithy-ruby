@@ -22,7 +22,7 @@ module Smithy
       subject { described_class.new([], destination_root: '') }
 
       it 'has a types option' do
-        expect(subject).to respond_to(:types)
+        expect(subject).to respond_to(:schema)
       end
 
       it 'has a client option' do

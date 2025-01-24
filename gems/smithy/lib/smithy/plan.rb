@@ -4,7 +4,7 @@ module Smithy
   # The Plan class is a simple data structure that holds the model, type, and options for a generator.
   class Plan
     # @param [Hash] model The API model as a JSON hash.
-    # @param [Symbol] type The type of code to generate, either :client, :server, or :types.
+    # @param [Symbol] type The type of code to generate, either :client, :server, or :schema.
     # @param [Hash] options The options passed to the generator.
     def initialize(model, type, options = {})
       @model = model

@@ -38,7 +38,7 @@ describe 'Integration: Welds' do
       end
     end
 
-    @tmpdir = SpecHelper.generate(['Weather'], :types)
+    @tmpdir = SpecHelper.generate(['Weather'], :schema)
   end
   # rubocop:enable Lint/UselessAssignment
 

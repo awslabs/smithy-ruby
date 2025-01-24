@@ -7,9 +7,9 @@ module Weather
   module Shapes
     include Smithy::Client::Shapes
 
-    CityCoordinates = StructureShape.new(id: 'example.weather#CityCoordinates', traits: {})
+    CityCoordinates = StructureShape.new(id: 'example.weather#CityCoordinates')
     CityId = StringShape.new(id: 'example.weather#CityId', traits: { 'smithy.api#pattern' => '^[A-Za-z0-9 ]+$' })
-    CitySummaries = ListShape.new(id: 'example.weather#CitySummaries', traits: {})
+    CitySummaries = ListShape.new(id: 'example.weather#CitySummaries')
     CitySummary = StructureShape.new(id: 'example.weather#CitySummary', traits: { 'smithy.api#references' => [{ 'resource' => 'example.weather#City' }] })
     GetCityInput = StructureShape.new(id: 'example.weather#GetCityInput', traits: { 'smithy.api#input' => {} })
     GetCityOutput = StructureShape.new(id: 'example.weather#GetCityOutput', traits: { 'smithy.api#output' => {} })
@@ -20,41 +20,41 @@ module Weather
     ListCitiesOutput = StructureShape.new(id: 'example.weather#ListCitiesOutput', traits: { 'smithy.api#output' => {} })
     NoSuchResource = StructureShape.new(id: 'example.weather#NoSuchResource', traits: { 'smithy.api#error' => 'client' })
 
-    CityCoordinates.add_member(:latitude, Float, { 'smithy.api#required' => {} })
-    CityCoordinates.add_member(:longitude, Float, { 'smithy.api#required' => {} })
+    CityCoordinates.add_member(:latitude, Prelude::Float, traits: { 'smithy.api#required' => {} })
+    CityCoordinates.add_member(:longitude, Prelude::Float, traits: { 'smithy.api#required' => {} })
     CityCoordinates.type = Types::CityCoordinates
 
-    CitySummaries.set_member(CitySummary, {})
+    CitySummaries.set_member(CitySummary)
 
-    CitySummary.add_member(:city_id, CityId, { 'smithy.api#required' => {} })
-    CitySummary.add_member(:name, String, { 'smithy.api#required' => {} })
+    CitySummary.add_member(:city_id, CityId, traits: { 'smithy.api#required' => {} })
+    CitySummary.add_member(:name, Prelude::String, traits: { 'smithy.api#required' => {} })
     CitySummary.type = Types::CitySummary
 
-    GetCityInput.add_member(:city_id, CityId, { 'smithy.api#required' => {} })
+    GetCityInput.add_member(:city_id, CityId, traits: { 'smithy.api#required' => {} })
     GetCityInput.type = Types::GetCityInput
 
-    GetCityOutput.add_member(:name, String, { 'smithy.api#notProperty' => {}, 'smithy.api#required' => {} })
-    GetCityOutput.add_member(:coordinates, CityCoordinates, { 'smithy.api#required' => {} })
+    GetCityOutput.add_member(:name, Prelude::String, traits: { 'smithy.api#notProperty' => {}, 'smithy.api#required' => {} })
+    GetCityOutput.add_member(:coordinates, CityCoordinates, traits: { 'smithy.api#required' => {} })
     GetCityOutput.type = Types::GetCityOutput
 
-    GetCurrentTimeOutput.add_member(:time, Timestamp, { 'smithy.api#required' => {} })
+    GetCurrentTimeOutput.add_member(:time, Prelude::Timestamp, traits: { 'smithy.api#required' => {} })
     GetCurrentTimeOutput.type = Types::GetCurrentTimeOutput
 
-    GetForecastInput.add_member(:city_id, CityId, { 'smithy.api#required' => {} })
+    GetForecastInput.add_member(:city_id, CityId, traits: { 'smithy.api#required' => {} })
     GetForecastInput.type = Types::GetForecastInput
 
-    GetForecastOutput.add_member(:chance_of_rain, Float, {})
+    GetForecastOutput.add_member(:chance_of_rain, Prelude::Float)
     GetForecastOutput.type = Types::GetForecastOutput
 
-    ListCitiesInput.add_member(:next_token, String, {})
-    ListCitiesInput.add_member(:page_size, Integer, {})
+    ListCitiesInput.add_member(:next_token, Prelude::String)
+    ListCitiesInput.add_member(:page_size, Prelude::Integer)
     ListCitiesInput.type = Types::ListCitiesInput
 
-    ListCitiesOutput.add_member(:next_token, String, {})
-    ListCitiesOutput.add_member(:items, CitySummaries, { 'smithy.api#required' => {} })
+    ListCitiesOutput.add_member(:next_token, Prelude::String)
+    ListCitiesOutput.add_member(:items, CitySummaries, traits: { 'smithy.api#required' => {} })
     ListCitiesOutput.type = Types::ListCitiesOutput
 
-    NoSuchResource.add_member(:resource_type, String, { 'smithy.api#required' => {} })
+    NoSuchResource.add_member(:resource_type, Prelude::String, traits: { 'smithy.api#required' => {} })
     NoSuchResource.type = Types::NoSuchResource
 
     SCHEMA = Smithy::Client::Schema.new do |schema|
@@ -72,7 +72,7 @@ module Weather
       end)
       schema.add_operation(:get_current_time, OperationShape.new do |operation|
         operation.id = 'example.weather#GetCurrentTime'
-        operation.input = Unit
+        operation.input = Prelude::Unit
         operation.output = GetCurrentTimeOutput
         operation.traits = { 'smithy.api#readonly' => {} }
       end)

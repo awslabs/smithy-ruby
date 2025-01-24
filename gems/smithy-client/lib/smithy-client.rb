@@ -51,6 +51,6 @@ require_relative 'smithy-client/codecs/cbor'
 module Smithy
   # Base module for a generated Smithy gem.
   module Client
-    VERSION = File.read(File.expand_path('../VERSION', __dir__)).strip
+    VERSION = File.read(File.expand_path('../VERSION', __dir__.to_s)).strip
   end
 end

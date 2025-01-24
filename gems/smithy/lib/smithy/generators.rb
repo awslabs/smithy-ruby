@@ -2,7 +2,7 @@
 
 require_relative 'generators/base'
 require_relative 'generators/client'
-require_relative 'generators/types'
+require_relative 'generators/schema'
 
 module Smithy
   # Facilitates generation of artifacts.
@@ -10,7 +10,7 @@ module Smithy
     # (see Smithy::Generators::Base#generate)
     def self.generate(plan)
       case plan.type
-      when :types then Types.new(plan).generate
+      when :schema then Schema.new(plan).generate
       when :client then Client.new(plan).generate
       else
         raise 'Not yet implemented'
