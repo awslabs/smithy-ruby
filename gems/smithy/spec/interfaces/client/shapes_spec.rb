@@ -182,7 +182,7 @@ describe 'Component: Shapes' do
       it 'has a member with traits' do
         expected_member =
           expected_shape['members']
-          .select { |k, _| k == 'id' }
+          .slice('id')
           .values
           .first
         expect(subject::OperationInputOutput.member(:id).traits).to eq(expected_member['traits'])
