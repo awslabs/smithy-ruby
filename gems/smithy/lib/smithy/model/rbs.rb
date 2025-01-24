@@ -7,20 +7,21 @@ module Smithy
       class << self
         # rubocop:disable Metrics/CyclomaticComplexity
         def type(model, id, shape)
+          # TODO: Restrict enum signatures based on their values
           case shape['type']
           when 'blob', 'string', 'enum' then 'String'
           when 'boolean' then 'bool'
           when 'byte', 'short', 'integer', 'long', 'intEnum' then 'Integer'
           when 'float', 'double' then 'Float'
           when 'timestamp' then 'Time'
-          when 'document' then 'Hash' # TODO
+          when 'document' then 'untyped' # TODO
           when 'list'
             list_type(model, shape)
           when 'map'
             map_type(model, shape)
           when 'structure', 'union'
             structure_type(id)
-          else
+          else # rubocop:disable Lint/DuplicateBranch
             'untyped'
           end
         end

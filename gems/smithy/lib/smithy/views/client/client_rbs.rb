@@ -110,6 +110,64 @@ module Smithy
             @id = id
             @shape = Model.shape(model, id)
           end
+
+          def members?
+            @shape.fetch('members', {}).any?
+          end
+
+          # @return [Array<String>]
+          def keyword_args
+            lines = []
+            @shape.fetch('members', {}).each do |name, member|
+              lines += kwargs(name, Model.shape(@model, member['target']))
+            end
+            lines.last&.chomp!(',')
+            lines
+          end
+
+          private
+
+          # rubocop:disable Metrics
+          def kwargs(name, shape, level = 1)
+            # TODO: Restrict enum signatures based on their values
+            case shape['type']
+            when 'blob', 'string', 'enum' then indent(["?#{name.underscore}: String,"], level)
+            when 'boolean' then indent(["?#{name.underscore}: bool,"], level)
+            when 'byte', 'short', 'integer', 'long', 'intEnum' then indent(["?#{name.underscore}: Integer,"], level)
+            when 'float', 'double' then indent(["?#{name.underscore}: Float,"], level)
+            when 'timestamp' then indent(["?#{name.underscore}: Time,"], level)
+            when 'document' then indent(["?#{name.underscore}: untyped,"], level) # TODO
+            when 'list'
+              kwargs_list(name, shape, level)
+            when 'map'
+              kwargs_map(name, shape, level)
+            when 'structure', 'union'
+              kwargs_structure(name, shape, level)
+            else # rubocop:disable Lint/DuplicateBranch
+              indent(["?#{name.underscore}: untyped,"], level)
+            end
+          end
+          # rubocop:enable Metrics
+
+          def kwargs_structure(_name, _shape, _level)
+            []
+          end
+
+          def kwargs_list(_name, _shape, _level)
+            []
+          end
+
+          def kwargs_map(_name, _shape, _level)
+            []
+          end
+
+          def indent(str, level)
+            case str
+            when Array then str.map { |s| indent(s, level) }
+            else
+              ('  ' * level) + str
+            end
+          end
         end
       end
     end
