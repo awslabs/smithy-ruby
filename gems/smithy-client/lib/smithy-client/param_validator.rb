@@ -15,7 +15,7 @@ module Smithy
       def initialize(rules)
         @rules = rules
         # TODO: pump through options and consider this a flag?
-        @validate_required = false
+        @validate_required = true
       end
 
       # @param [Hash] params
@@ -45,7 +45,7 @@ module Smithy
         case values
         when Hash, shape.type then true
         else
-          errors << expected_got(context, 'a hash', values)
+          errors << expected_got(context, "a Hash or #{shape.type}", values)
           return
         end
 
@@ -82,7 +82,7 @@ module Smithy
 
       def map(shape, values, errors, context)
         unless values.is_a?(Hash)
-          errors << expected_got(context, 'a hash', values)
+          errors << expected_got(context, 'a Hash', values)
           return
         end
 
@@ -155,7 +155,9 @@ module Smithy
       # rubocop:enable Metrics
 
       def validate_required_members(structure_shape, values, errors, context)
-        structure_shape.members.each_key do |name|
+        structure_shape.members.each do |name, member_shape|
+          next unless member_shape.traits.include?('smithy.api#required')
+
           if values[name].nil?
             param = "#{context}[#{name.inspect}]"
             errors << "missing required parameter #{param}"

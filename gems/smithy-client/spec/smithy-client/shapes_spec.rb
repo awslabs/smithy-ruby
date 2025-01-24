@@ -11,8 +11,8 @@ module Smithy
             expect(subject.id).to be_nil
           end
 
-          it 'defaults traits to nil' do
-            expect(subject.traits).to be_nil
+          it 'defaults traits to empty hash' do
+            expect(subject.traits).to eq({})
           end
 
           it 'can set id' do

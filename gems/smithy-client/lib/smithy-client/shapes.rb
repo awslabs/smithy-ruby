@@ -8,13 +8,13 @@ module Smithy
       class Shape
         def initialize(options = {})
           @id = options[:id]
-          @traits = options[:traits]
+          @traits = options[:traits] || {}
         end
 
         # @return [String, nil]
         attr_accessor :id
 
-        # @return [Hash<String, Object>, nil]
+        # @return [Hash<String, Object>]
         attr_accessor :traits
       end
 

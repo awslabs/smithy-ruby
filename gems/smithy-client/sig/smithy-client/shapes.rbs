@@ -5,7 +5,7 @@ module Smithy
         def initialize: (?Hash[Symbol, untyped]) -> void
 
         attr_accessor id: String?
-        attr_accessor traits: Hash[String, untyped]?
+        attr_accessor traits: Hash[String, untyped]
       end
 
       class ServiceShape < Shape

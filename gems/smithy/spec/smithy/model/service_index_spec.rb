@@ -36,7 +36,7 @@ module Smithy
           expect(actual.keys).to match_array(expected.keys)
         end
 
-        context 'recursive structures' do
+        context 'recursive shapes' do
           let(:fixture) do
             JSON.load_file(File.expand_path('../../fixtures/recursive/model.json', __dir__.to_s))
           end
