@@ -43,10 +43,10 @@ module Smithy
       end
 
       describe '#build_input' do
-        let(:input) { subject.build_input(:operation_name) }
+        let(:input) { subject.build_input(:operation) }
 
         before(:each) do
-          schema.add_operation(:operation_name, Shapes::OperationShape.new)
+          schema.add_operation(:operation, Shapes::OperationShape.new)
         end
 
         it 'returns an Input' do
@@ -58,29 +58,29 @@ module Smithy
         end
 
         it 'includes operation specific handlers in the handler list' do
-          subject.handler(Handler, operations: [:operation_name])
-          input = subject.build_input(:operation_name)
+          subject.handler(Handler, operations: [:operation])
+          input = subject.build_input(:operation)
           expect(input.handlers.to_a).to include(Handler)
         end
 
         it 'populates the handler context operation name' do
-          input = subject.build_input(:operation_name)
-          expect(input.context.operation_name).to eq(:operation_name)
+          input = subject.build_input(:operation)
+          expect(input.context.operation_name).to eq(:operation)
         end
 
         it 'defaults params to an empty hash' do
-          input = subject.build_input(:operation_name)
+          input = subject.build_input(:operation)
           expect(input.context.params).to eq({})
         end
 
         it 'populates the handler context params' do
           params = {}
-          input = subject.build_input(:operation_name, params)
+          input = subject.build_input(:operation, params)
           expect(input.context.params).to be(params)
         end
 
         it 'populates the handler context configuration' do
-          input = subject.build_input(:operation_name)
+          input = subject.build_input(:operation)
           expect(input.context.config).to be(subject.config)
         end
 
@@ -101,13 +101,13 @@ module Smithy
         let(:input) { Input.new }
 
         before(:each) do
-          schema.add_operation(:operation_name, Shapes::OperationShape.new)
+          schema.add_operation(:operation, Shapes::OperationShape.new)
           allow(subject).to receive(:build_input).and_return(input)
           allow(input).to receive(:send_request)
         end
 
         it 'can return a list of valid operation names' do
-          expect(subject.operation_names).to eq([:operation_name])
+          expect(subject.operation_names).to eq([:operation])
         end
 
         it 'responds to each operation name' do
@@ -118,10 +118,10 @@ module Smithy
 
         it 'builds and sends a request when it receives a request method' do
           expect(subject).to receive(:build_input)
-            .with(:operation_name, { foo: 'bar' })
+            .with(:operation, { foo: 'bar' })
             .and_return(input)
           expect(input).to receive(:send_request)
-          subject.operation_name(foo: 'bar')
+          subject.operation(foo: 'bar')
         end
 
         it 'passes block arguments to the request method' do
@@ -130,7 +130,7 @@ module Smithy
             .and_yield('chunk2')
             .and_yield('chunk3')
           chunks = []
-          subject.operation_name(foo: 'bar') do |chunk|
+          subject.operation(foo: 'bar') do |chunk|
             chunks << chunk
           end
           expect(chunks).to eq(%w[chunk1 chunk2 chunk3])

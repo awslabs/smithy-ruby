@@ -99,7 +99,7 @@ module Smithy
             entry = value(value, member_shape, "#{indent}  ")
             lines << "#{indent}  #{key.underscore}: #{format(entry)},"
           end
-          lines.last.chomp!(',')
+          lines.last.chomp!(',') if lines.last.end_with?(',')
           lines << "#{indent}}"
           lines
         end
@@ -112,7 +112,7 @@ module Smithy
             entry = value(value, member_shape, "#{indent}  ")
             lines << "#{indent}  \"#{key}\" => #{format(entry)},"
           end
-          lines.last.chomp!(',')
+          lines.last.chomp!(',') if lines.last.end_with?(',')
           lines << "#{indent}}"
           lines
         end
@@ -125,7 +125,7 @@ module Smithy
             entry = value(element, member_shape, "#{indent}  ")
             lines << "#{indent}  #{format(entry)},"
           end
-          lines.last.chomp!(',')
+          lines.last.chomp!(',') if lines.last.end_with?(',')
           lines << "#{indent}]"
           lines
         end

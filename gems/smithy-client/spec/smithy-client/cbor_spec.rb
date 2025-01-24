@@ -4,7 +4,7 @@ module Smithy
   module Client
     describe CBOR do
       context 'decode success tests' do
-        file = File.expand_path('cbor/decode-success-tests.json', __dir__)
+        file = File.expand_path('cbor/decode-success-tests.json', __dir__.to_s)
         test_cases = ::JSON.load_file(file)
 
         def expected_value(expect)
@@ -64,7 +64,7 @@ module Smithy
       end
 
       context 'decode error tests' do
-        file = File.expand_path('cbor/decode-error-tests.json', __dir__)
+        file = File.expand_path('cbor/decode-error-tests.json', __dir__.to_s)
         test_cases = ::JSON.load_file(file)
 
         test_cases.each do |test_case|

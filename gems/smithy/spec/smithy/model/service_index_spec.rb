@@ -4,7 +4,7 @@ module Smithy
   module Model
     describe ServiceIndex do
       let(:fixture) do
-        JSON.load_file(File.expand_path('../../fixtures/service_index/model.json', __dir__))
+        JSON.load_file(File.expand_path('../../fixtures/service_index/model.json', __dir__.to_s))
       end
 
       subject { described_class.new(fixture) }
@@ -38,7 +38,7 @@ module Smithy
 
         context 'recursive structures' do
           let(:fixture) do
-            JSON.load_file(File.expand_path('../../fixtures/recursive/model.json', __dir__))
+            JSON.load_file(File.expand_path('../../fixtures/recursive/model.json', __dir__.to_s))
           end
 
           it 'handles recursive shapes' do
