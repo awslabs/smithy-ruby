@@ -19,7 +19,7 @@ module Smithy
           when 'map'
             map_type(model, shape)
           when 'structure', 'union'
-            "Types::#{Model::Shape.name(id)}"
+            structure_type(id)
           else
             'untyped'
           end
@@ -27,6 +27,14 @@ module Smithy
         # rubocop:enable Metrics/CyclomaticComplexity
 
         private
+
+        def structure_type(id)
+          if id == 'smithy.api#Unit'
+            'Smithy::Client::EmptyStructure'
+          else
+            "Types::#{Model::Shape.name(id)}"
+          end
+        end
 
         def map_type(model, shape)
           key_target = Model.shape(model, shape['key']['target'])

@@ -36,18 +36,16 @@ module Smithy
       'smithy.api#Unit' => { 'type' => 'structure', 'members' => {}, 'traits' => { 'smithy.api#unitType' => {} } }
     }.freeze
 
-    class << self
-      # @param [Hash] model Model
-      # @param [String] target Target shape
-      # @return [Hash] The shape
-      def shape(model, target)
-        if model['shapes'].key?(target)
-          model['shapes'][target]
-        elsif PRELUDE_SHAPES.key?(target)
-          PRELUDE_SHAPES[target]
-        else
-          raise ArgumentError, "Shape not found: #{target}"
-        end
+    # @param [Hash] model Model
+    # @param [String] target Target shape
+    # @return [Hash] The shape
+    def self.shape(model, target)
+      if model['shapes'].key?(target)
+        model['shapes'][target]
+      elsif PRELUDE_SHAPES.key?(target)
+        PRELUDE_SHAPES[target]
+      else
+        raise ArgumentError, "Shape not found: #{target}"
       end
     end
   end

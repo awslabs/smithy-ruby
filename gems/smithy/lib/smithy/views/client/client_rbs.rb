@@ -22,7 +22,6 @@ module Smithy
           @plugins
             .map(&:options)
             .flatten
-            .uniq(&:name)
             .select(&:docstring) # include only documented options
             .sort_by(&:name)
             .to_h { |o| [o.name, rbs_type(o)] }
@@ -93,7 +92,7 @@ module Smithy
           end
 
           def type
-            "Types::#{Model::Shape.name(@id)}"
+            Model::Rbs.type(@model, @id, @shape)
           end
 
           def member_types
