@@ -33,7 +33,7 @@ module Weather
     class NoSuchResource < Smithy::Client::Errors::ServiceError
       # @param [Smithy::Client::HandlerContext] context
       # @param [String] message
-      # @param [Weather::schema::NoSuchResource] data
+      # @param [Weather::Types::NoSuchResource] data
       def initialize(context, message, data = Smithy::Client::EmptyStructure.new)
         super
       end
