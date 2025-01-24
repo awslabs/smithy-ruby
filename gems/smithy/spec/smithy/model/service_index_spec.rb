@@ -4,7 +4,7 @@ module Smithy
   module Model
     describe ServiceIndex do
       let(:fixture) do
-        JSON.load_file(File.expand_path('../../fixtures/service_index/model.json', __dir__))
+        JSON.load_file(File.expand_path('../../fixtures/service_index/model.json', __dir__.to_s))
       end
 
       subject { described_class.new(fixture) }
@@ -27,7 +27,7 @@ module Smithy
         it 'returns a complete set of shapes for the service' do
           service =
             fixture['shapes']
-            .select { |id, _| id == 'smithy.ruby.tests#ServiceIndex' }
+            .slice('smithy.ruby.tests#ServiceIndex')
           expected =
             fixture['shapes']
             .reject { |_, shape| %w[operation resource service].include?(shape['type']) }
@@ -38,13 +38,13 @@ module Smithy
 
         context 'recursive structures' do
           let(:fixture) do
-            JSON.load_file(File.expand_path('../../fixtures/recursive/model.json', __dir__))
+            JSON.load_file(File.expand_path('../../fixtures/recursive/model.json', __dir__.to_s))
           end
 
           it 'handles recursive shapes' do
             service =
               fixture['shapes']
-              .select { |id, _| id == 'smithy.ruby.tests#Recursive' }
+              .slice('smithy.ruby.tests#Recursive')
             subject.shapes_for(service)
           end
         end

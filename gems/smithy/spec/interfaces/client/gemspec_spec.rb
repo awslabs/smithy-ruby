@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Component: Gemspec' do
-  %i[types client].each do |plan_type|
+  %i[schema client].each do |plan_type|
     context "#{plan_type} generator" do
       context 'single module' do
         before(:all) do
@@ -12,7 +12,7 @@ describe 'Component: Gemspec' do
           SpecHelper.cleanup(['Weather'], @tmpdir)
         end
 
-        let(:gem_name) { "weather#{plan_type == :types ? '-types' : ''}" }
+        let(:gem_name) { "weather#{plan_type == :schema ? '-schema' : ''}" }
 
         it 'generates a gemspec with types suffix' do
           gemspec = File.join(@tmpdir, "#{gem_name}.gemspec")
@@ -40,7 +40,7 @@ describe 'Component: Gemspec' do
           SpecHelper.cleanup(%w[SomeOrganization Weather], @tmpdir)
         end
 
-        let(:gem_name) { "some_organization-weather#{plan_type == :types ? '-types' : ''}" }
+        let(:gem_name) { "some_organization-weather#{plan_type == :schema ? '-schema' : ''}" }
 
         it 'generates a gemspec with types suffix' do
           gemspec = File.join(@tmpdir, "#{gem_name}.gemspec")

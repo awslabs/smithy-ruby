@@ -33,12 +33,12 @@ module Smithy
         "#<#{self.class.name}>"
       end
 
-      # @param [String] name
+      # @param [Symbol] name
       # @return [OperationShape] operation
       def operation(name)
         raise ArgumentError, "unknown operation #{name.inspect}" unless @operations.key?(name)
 
-        @operations[name.to_sym]
+        @operations[name]
       end
 
       # @return [Array<Symbol>]

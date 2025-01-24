@@ -18,10 +18,9 @@ module Smithy
         end
 
         def operation_shapes
-          @service_index.operations_for(@service_shape)
-                        .each_with_object([]) do |(k, v), arr|
-            arr << build_operation_shape(k, v)
-          end
+          @service_index
+            .operations_for(@service_shape)
+            .map { |k, v| build_operation_shape(k, v) }
         end
 
         def service_shape
@@ -33,21 +32,16 @@ module Smithy
         end
 
         def shapes_with_members
-          @shapes.select do |s|
-            %w[EnumShape IntEnumShape ListShape MapShape StructureShape UnionShape]
-              .include?(s.type)
-          end
+          complex = %w[EnumShape IntEnumShape ListShape MapShape StructureShape UnionShape]
+          @shapes.select { |s| complex.include?(s.type) }
         end
 
         def shapes
           @shapes =
             @service_index
             .shapes_for(@service_shape)
-            .each_with_object([]) do |(k, v), arr|
-              next if %w[operation resource service].include?(v['type'])
-
-              arr << build_shape(k, v)
-            end
+            .reject { |_k, v| %w[operation resource service].include?(v['type']) }
+            .map { |k, v| build_shape(k, v) }
         end
 
         private
@@ -56,8 +50,8 @@ module Smithy
           OperationShape.new(
             id: id,
             name: Model::Shape.name(id).underscore,
-            input: Model::Shape.name(shape['input']['target']),
-            output: Model::Shape.name(shape['output']['target']),
+            input: shape_type_from_id(shape['input']['target']),
+            output: shape_type_from_id(shape['output']['target']),
             errors: build_error_shapes(shape['errors']),
             traits: filter_traits(shape['traits'])
           )
@@ -66,16 +60,14 @@ module Smithy
         def build_error_shapes(errors)
           return [] if errors.nil?
 
-          errors.each_with_object([]) do |err, a|
-            a << Model::Shape.relative_id(err['target'])
-          end
+          errors.map { |err| Model::Shape.relative_id(err['target']) }
         end
 
         def build_shape(id, shape)
           Shape.new(
             id: id,
-            name: Model::Shape.relative_id(id),
-            type: shape_type(shape['type']),
+            name: Model::Shape.name(id),
+            type: shape_type_from_type(shape['type']),
             traits: filter_traits(shape['traits']),
             members: build_member_shapes(shape)
           )
@@ -95,9 +87,7 @@ module Smithy
         end
 
         def build_members(shape)
-          shape['members'].each_with_object([]) do |(k, v), arr|
-            arr << build_member_shape(k, v['target'], v['traits'])
-          end
+          shape['members'].map { |k, v| build_member_shape(k, v['target'], v['traits']) }
         end
 
         def build_list_member(shape)
@@ -112,10 +102,10 @@ module Smithy
           end
         end
 
-        def build_member_shape(name, shape, traits)
+        def build_member_shape(name, id, traits)
           MemberShape.new(
             name: name.underscore,
-            shape: Model::Shape.relative_id(shape),
+            shape: shape_type_from_id(id),
             traits: filter_traits(traits)
           )
         end
@@ -126,11 +116,17 @@ module Smithy
           traits.except(*OMITTED_TRAITS)
         end
 
-        def shape_type(type)
+        def shape_type_from_type(type)
           msg = "Unsupported shape type: `#{type}'"
-          raise ArgumentError, msg unless SHAPE_CLASSES_MAP.include?(type)
+          raise ArgumentError, msg unless SHAPE_TYPES_MAP.include?(type)
 
-          SHAPE_CLASSES_MAP[type]
+          SHAPE_TYPES_MAP[type]
+        end
+
+        def shape_type_from_id(id)
+          return PRELUDE_SHAPES_MAP[id] if PRELUDE_SHAPES_MAP.key?(id)
+
+          Model::Shape.relative_id(id)
         end
 
         # Service shape represents a slim Smithy service shape
@@ -158,6 +154,11 @@ module Smithy
           end
 
           attr_reader :name, :id, :type, :typed, :traits, :members
+
+          def new_method
+            traits_str = ", traits: #{@traits}" unless @traits.empty?
+            "new(id: '#{@id}'#{traits_str})"
+          end
         end
 
         # Operation Shape represents Smithy operation shape
@@ -182,21 +183,20 @@ module Smithy
             @traits = options[:traits]
           end
 
-          attr_reader :name, :shape, :traits
-
           def add_member_method(shape)
+            traits_str = ", traits: #{@traits}" unless @traits.empty?
             case shape
             when 'ListShape'
-              "set_member(#{@shape}, #{@traits})"
+              "set_member(#{@shape}#{traits_str})"
             when 'MapShape'
-              "set_#{@name}(#{@shape}, #{@traits})"
+              "set_#{@name}(#{@shape}#{traits_str})"
             else
-              "add_member(:#{@name}, #{@shape}, #{@traits})"
+              "add_member(:#{@name}, #{@shape}#{traits_str})"
             end
           end
         end
 
-        # Traits that does not affect runtime
+        # Traits that are handled in code generation
         OMITTED_TRAITS = %w[
           smithy.api#documentation
           smithy.api#examples
@@ -204,7 +204,7 @@ module Smithy
           smithy.rules#endpointTests
         ].freeze
 
-        SHAPE_CLASSES_MAP = {
+        SHAPE_TYPES_MAP = {
           'bigDecimal' => 'BigDecimalShape',
           'bigInteger' => 'IntegerShape',
           'blob' => 'BlobShape',
@@ -226,6 +226,30 @@ module Smithy
           'structure' => 'StructureShape',
           'timestamp' => 'TimestampShape',
           'union' => 'UnionShape'
+        }.freeze
+
+        PRELUDE_SHAPES_MAP = {
+          'smithy.api#BigInteger' => 'Prelude::BigInteger',
+          'smithy.api#BigDecimal' => 'Prelude::BigDecimal',
+          'smithy.api#Blob' => 'Prelude::Blob',
+          'smithy.api#Boolean' => 'Prelude::Boolean',
+          'smithy.api#Byte' => 'Prelude::Byte',
+          'smithy.api#Document' => 'Prelude::Document',
+          'smithy.api#Double' => 'Prelude::Double',
+          'smithy.api#Float' => 'Prelude::Float',
+          'smithy.api#Integer' => 'Prelude::Integer',
+          'smithy.api#Long' => 'Prelude::Long',
+          'smithy.api#PrimitiveBoolean' => 'Prelude::PrimitiveBoolean',
+          'smithy.api#PrimitiveByte' => 'Prelude::PrimitiveByte',
+          'smithy.api#PrimitiveDouble' => 'Prelude::PrimitiveDouble',
+          'smithy.api#PrimitiveFloat' => 'Prelude::PrimitiveFloat',
+          'smithy.api#PrimitiveInteger' => 'Prelude::PrimitiveInteger',
+          'smithy.api#PrimitiveLong' => 'Prelude::PrimitiveLong',
+          'smithy.api#PrimitiveShort' => 'Prelude::PrimitiveShort',
+          'smithy.api#Short' => 'Prelude::Short',
+          'smithy.api#String' => 'Prelude::String',
+          'smithy.api#Timestamp' => 'Prelude::Timestamp',
+          'smithy.api#Unit' => 'Prelude::Unit'
         }.freeze
       end
     end

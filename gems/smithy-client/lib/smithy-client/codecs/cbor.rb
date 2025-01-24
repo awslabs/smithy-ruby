@@ -20,7 +20,7 @@ module Smithy
         # @param [Shape] shape
         # @return [String] the encoded bytes in CBOR format
         def serialize(data, shape)
-          return nil if shape == Unit
+          return nil if shape == Prelude::Unit
 
           Client::CBOR.encode(format_data(data, shape))
         end
