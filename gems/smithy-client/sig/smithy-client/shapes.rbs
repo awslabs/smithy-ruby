@@ -73,7 +73,9 @@ module Smithy
       class UnionShape < StructureShape
       end
 
-      class MemberShape < Shape
+      class MemberShape
+        def initialize: (Shape, ?Hash[Symbol, untyped]) -> void
+
         attr_accessor shape: Shape?
         attr_accessor traits: Hash[String, untyped]
       end
