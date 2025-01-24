@@ -16,7 +16,7 @@ require_relative 'smithy/welds'
 # Smithy is a modeling language created by AWS. This gem provides a Ruby
 # implementation of the Smithy language and generates clients, servers, and types.
 module Smithy
-  VERSION = File.read(File.expand_path('../VERSION', __dir__)).strip
+  VERSION = File.read(File.expand_path('../VERSION', __dir__.to_s)).strip
 
   class << self
     # Generates a Ruby artifact from a Smithy model.

@@ -72,8 +72,8 @@ module Smithy
         attr_accessor :members
 
         # @return [MemberShape]
-        def add_member(name, shape, traits = {})
-          @members[name] = MemberShape.new(shape, traits)
+        def add_member(name, shape, traits: {})
+          @members[name] = MemberShape.new(shape, traits: traits)
         end
       end
 
@@ -97,8 +97,8 @@ module Smithy
         attr_accessor :member
 
         # @return [MemberShape]
-        def set_member(shape, traits = {})
-          @member = MemberShape.new(shape, traits)
+        def set_member(shape, traits: {})
+          @member = MemberShape.new(shape, traits: traits)
         end
       end
 
@@ -117,13 +117,13 @@ module Smithy
         attr_accessor :value
 
         # @return [MemberShape]
-        def set_key(shape, traits = {})
-          @key = MemberShape.new(shape, traits)
+        def set_key(shape, traits: {})
+          @key = MemberShape.new(shape, traits: traits)
         end
 
         # @return [MemberShape]
-        def set_value(shape, traits = {})
-          @value = MemberShape.new(shape, traits)
+        def set_value(shape, traits: {})
+          @value = MemberShape.new(shape, traits: traits)
         end
       end
 
@@ -145,8 +145,8 @@ module Smithy
         attr_accessor :type
 
         # @return [MemberShape]
-        def add_member(name, shape, traits = {})
-          @members[name] = MemberShape.new(shape, traits)
+        def add_member(name, shape, traits: {})
+          @members[name] = MemberShape.new(shape, traits: traits)
         end
 
         # @return [Boolean]
@@ -168,7 +168,7 @@ module Smithy
 
       # Represents a member shape.
       class MemberShape
-        def initialize(shape, traits = {})
+        def initialize(shape, traits: {})
           @shape = shape
           @traits = traits
         end

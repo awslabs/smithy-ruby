@@ -98,7 +98,7 @@ module Smithy
 
         describe '#add_member' do
           it 'adds a member' do
-            subject.add_member(:foo, StringShape.new, {})
+            subject.add_member(:foo, StringShape.new)
             expect(subject.members[:foo]).to be_kind_of(MemberShape)
           end
         end
@@ -121,7 +121,7 @@ module Smithy
 
         describe '#set_member' do
           it 'sets a member' do
-            subject.set_member(StringShape.new, {})
+            subject.set_member(StringShape.new)
             expect(subject.member).to be_kind_of(MemberShape)
           end
         end
@@ -150,14 +150,14 @@ module Smithy
 
         describe '#set_key' do
           it 'sets a key' do
-            subject.set_key(StringShape.new, {})
+            subject.set_key(StringShape.new)
             expect(subject.key).to be_kind_of(MemberShape)
           end
         end
 
         describe '#set_value' do
           it 'sets a value' do
-            subject.set_value(StringShape.new, {})
+            subject.set_value(StringShape.new)
             expect(subject.value).to be_kind_of(MemberShape)
           end
         end
@@ -186,7 +186,7 @@ module Smithy
 
         describe '#add_member' do
           it 'adds a member' do
-            subject.add_member(:foo, StringShape.new, {})
+            subject.add_member(:foo, StringShape.new)
             expect(subject.members[:foo]).to be_kind_of(MemberShape)
           end
         end

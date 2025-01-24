@@ -8,14 +8,14 @@ module Smithy
 
         let(:list_shape) do
           shape = Shapes::ListShape.new(id: 'list')
-          shape.set_member(Shapes::Prelude::String, {})
+          shape.set_member(Shapes::Prelude::String)
           shape
         end
 
         let(:map_shape) do
           shape = Shapes::MapShape.new(id: 'map')
-          shape.set_key(Shapes::Prelude::String, {})
-          shape.set_value(Shapes::Prelude::Blob, {})
+          shape.set_key(Shapes::Prelude::String)
+          shape.set_value(Shapes::Prelude::Blob)
           shape
         end
 
@@ -27,9 +27,9 @@ module Smithy
 
         let(:structure_shape) do
           struct = Shapes::StructureShape.new(id: 'structure')
-          struct.add_member(:s, string_shape, {})
-          struct.add_member(:l, list_shape, {})
-          struct.add_member(:m, map_shape, {})
+          struct.add_member(:s, string_shape)
+          struct.add_member(:l, list_shape)
+          struct.add_member(:m, map_shape)
           struct.type = typed_struct
           struct
         end

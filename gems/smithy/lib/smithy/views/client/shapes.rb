@@ -154,6 +154,11 @@ module Smithy
           end
 
           attr_reader :name, :id, :type, :typed, :traits, :members
+
+          def new_method
+            traits_str = ", traits: #{@traits}" unless @traits.empty?
+            "new(id: '#{@id}'#{traits_str})"
+          end
         end
 
         # Operation Shape represents Smithy operation shape
@@ -179,7 +184,7 @@ module Smithy
           end
 
           def add_member_method(shape)
-            traits_str = ", #{@traits}" unless @traits.empty?
+            traits_str = ", traits: #{@traits}" unless @traits.empty?
             case shape
             when 'ListShape'
               "set_member(#{@shape}#{traits_str})"
