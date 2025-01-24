@@ -13,7 +13,7 @@ module Smithy
 
         let(:client_class) do
           schema = Schema.new
-          schema.add_operation(:operation_name, operation_shape)
+          schema.add_operation(:operation, operation_shape)
           client_class = Class.new(Client::Base)
           client_class.schema = schema
           client_class.clear_plugins
@@ -46,7 +46,7 @@ module Smithy
           client = client_class.new
           params = { foo: 'bar' }
           expect(Client::ParamValidator).to receive(:validate!).with(input, params)
-          client.operation_name(params)
+          client.operation(params)
         end
       end
     end

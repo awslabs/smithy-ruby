@@ -6,7 +6,7 @@ module Smithy
       describe RaiseResponseErrors do
         let(:client_class) do
           schema = Schema.new
-          schema.add_operation(:operation_name, Shapes::OperationShape.new)
+          schema.add_operation(:operation, Shapes::OperationShape.new)
           client_class = Class.new(Client::Base)
           client_class.schema = schema
           client_class.clear_plugins
@@ -37,14 +37,14 @@ module Smithy
 
         it 'returns output' do
           client = client_class.new
-          output = client.operation_name
+          output = client.operation
           expect(output).to be_kind_of(Output)
         end
 
         it 'raises the response error when :raise_response_errors is true' do
           error = StandardError.new('msg')
           client = client_class.new(response_error: error)
-          expect { client.operation_name }.to raise_error(error)
+          expect { client.operation }.to raise_error(error)
         end
 
         it 'puts the error on the output when :raise_response_errors is false' do
@@ -53,7 +53,7 @@ module Smithy
             raise_response_errors: false,
             response_error: error
           )
-          output = client.operation_name
+          output = client.operation
           expect(output.error).to be(error)
         end
       end

@@ -159,7 +159,6 @@ module Smithy
             expect(subject.key).to be(nil)
           end
 
-
           it 'value defaults to nil' do
             expect(subject.value).to be(nil)
           end
