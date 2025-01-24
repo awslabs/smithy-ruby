@@ -41,6 +41,7 @@ structure OperationInputOutput {
     // complex members
     structure: Structure
     list: List
+    complextList: ComplexList
     map: Map
     union: Union
 }
@@ -81,10 +82,16 @@ timestamp Timestamp
 @pattern("^[A-Za-z0-9 ]+$")
 string String
 
-structure Structure {}
+structure Structure {
+    member: String
+}
 
 list List {
     member: String
+}
+
+list ComplexList {
+    member: Structure
 }
 
 map Map {

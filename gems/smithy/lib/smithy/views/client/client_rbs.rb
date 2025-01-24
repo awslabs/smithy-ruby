@@ -119,7 +119,10 @@ module Smithy
           def keyword_args
             lines = []
             @shape.fetch('members', {}).each do |name, member|
-              lines += kwargs(name, Model.shape(@model, member['target']))
+              member_lines = kwargs_structure_member(name, member['target'])
+              # top level members all need to be considered optional
+              member_lines[0] = "?#{member_lines[0].strip}"
+              lines += member_lines
             end
             lines.last&.chomp!(',')
             lines
@@ -127,38 +130,68 @@ module Smithy
 
           private
 
-          # rubocop:disable Metrics
-          def kwargs(name, shape, level = 1)
-            # TODO: Restrict enum signatures based on their values
-            case shape['type']
-            when 'blob', 'string', 'enum' then indent(["?#{name.underscore}: String,"], level)
-            when 'boolean' then indent(["?#{name.underscore}: bool,"], level)
-            when 'byte', 'short', 'integer', 'long', 'intEnum' then indent(["?#{name.underscore}: Integer,"], level)
-            when 'float', 'double' then indent(["?#{name.underscore}: Float,"], level)
-            when 'timestamp' then indent(["?#{name.underscore}: Time,"], level)
-            when 'document' then indent(["?#{name.underscore}: untyped,"], level) # TODO
-            when 'list'
-              kwargs_list(name, shape, level)
-            when 'map'
-              kwargs_map(name, shape, level)
-            when 'structure', 'union'
-              kwargs_structure(name, shape, level)
-            else # rubocop:disable Lint/DuplicateBranch
-              indent(["?#{name.underscore}: untyped,"], level)
+          def kwargs_structure_member(name, id, level = 0, visited = Set.new)
+            return indent(["#{name.underscore}: untyped,"], level) if visited.include?(id)
+
+            visited << id
+            shape = Model.shape(@model, id)
+            if complex?(shape)
+              kwargs_complex_structure_member(level, name, shape, visited)
+            else
+              indent(["#{name.underscore}: #{Model::Rbs.type(@model, nil, shape)},"], level)
             end
           end
-          # rubocop:enable Metrics
 
-          def kwargs_structure(_name, _shape, _level)
-            []
+          def kwargs_complex_structure_member(level, name, shape, visited)
+            lines = kwargs_complex_shape(shape, level, visited)
+            lines[0] = indent("#{name.underscore}: #{lines[0].strip}", level)
+            lines[lines.size - 1] = "#{lines.last},"
+            lines
           end
 
-          def kwargs_list(_name, _shape, _level)
-            []
+          def kwargs_complex_shape(shape, level, visited)
+            case shape['type']
+            when 'list'
+              kwargs_list(shape, level, visited)
+            when 'map'
+              kwargs_map(shape, level, visited)
+            when 'structure', 'union'
+              kwargs_structure(shape, level, visited)
+            else
+              ['untyped']
+            end
           end
 
-          def kwargs_map(_name, _shape, _level)
-            []
+          def kwargs_structure(shape, level, visited)
+            lines = [indent('{', level)]
+            shape.fetch('members', {}).each do |name, member|
+              lines += kwargs_structure_member(name, member['target'], level + 1, visited)
+            end
+            lines[lines.size - 1] = lines.last.chomp(',')
+            lines << indent('}', level)
+            lines
+          end
+
+          def kwargs_list(shape, level, visited)
+            member_target = Model.shape(@model, shape['member']['target'])
+            sparse = shape.fetch('traits', {}).key?('smithy.api#sparse')
+            if complex?(member_target)
+              lines = [indent('Array[', level)]
+              lines += kwargs_complex_shape(shape, level, visited)
+              lines << ']'
+              lines
+            else
+              indent(["Array[#{Model::Rbs.type(@model, shape['member']['target'], member_target)}#{'?' if sparse}]"],
+                     level)
+            end
+          end
+
+          def kwargs_map(_shape, level, _visisted)
+            indent(['Hash[untyped, untyped]'], level)
+          end
+
+          def complex?(shape)
+            %w[list map structure union].include?(shape['type'])
           end
 
           def indent(str, level)
