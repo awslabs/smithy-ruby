@@ -15,7 +15,7 @@ module SpecHelper
     #  For example, `['Company', 'Weather']` would generate code in the
     #  `Company::Weather` namespace.
     # @param [Symbol] type The type of service to generate. For example,
-    #  :types`, `:client`, or `:server`.
+    #  `:schema`, `:client`, or `:server`.
     # @param [Hash] options Additional options to pass to the generator.
     # @option options [String] :fixture The name of the fixture to load.
     # @return [String] The path to the directory where the generated code was
@@ -26,7 +26,7 @@ module SpecHelper
       smith(plan)
 
       $LOAD_PATH << ("#{plan.options[:destination_root]}/lib")
-      require "#{plan.options[:gem_name]}#{type == :types ? '-types' : ''}"
+      require "#{plan.options[:gem_name]}#{type == :schema ? '-schema' : ''}"
       plan.options[:destination_root]
     end
 

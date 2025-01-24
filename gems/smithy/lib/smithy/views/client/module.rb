@@ -12,8 +12,8 @@ module Smithy
         end
 
         def gem_name
-          if @plan.type == :types
-            "#{@plan.options[:gem_name]}-types"
+          if @plan.type == :schema
+            "#{@plan.options[:gem_name]}-schema"
           else
             @plan.options[:gem_name]
           end
@@ -34,8 +34,8 @@ module Smithy
         end
 
         def requires
-          if @plan.type == :types
-            [:types]
+          if @plan.type == :schema
+            %i[types shapes]
           else
             # Order matters here - plugins must come before client, types and shapes must come before client
             %w[plugins/endpoint types shapes client customizations errors endpoint_parameters endpoint_provider]

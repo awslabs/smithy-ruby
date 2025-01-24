@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Component: Types' do
-  %i[types client].each do |plan_type|
+  %i[schema client].each do |plan_type|
     context "#{plan_type} generator" do
       before(:all) do
         @tmpdir = SpecHelper.generate(['Weather'], plan_type)
