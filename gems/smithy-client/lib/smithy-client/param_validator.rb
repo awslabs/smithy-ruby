@@ -45,7 +45,7 @@ module Smithy
         case values
         when Hash, shape.type then true
         else
-          errors << expected_got(context, "a Hash or #{shape.type}", values)
+          errors << expected_got(context, 'a Hash', values)
           return
         end
 
@@ -132,7 +132,7 @@ module Smithy
           errors << expected_got(context, 'true or false', value) unless [true, false].include?(value)
         when BlobShape
           # unless value.is_a?(String)
-          #   if streaming_input?(ref)
+          #   if streaming_input?(shape)
           #     unless io_like?(value, _require_size = false)
           #       errors << expected_got(
           #         context,
@@ -170,7 +170,7 @@ module Smithy
       #     (!require_size || value.respond_to?(:size))
       # end
       #
-      # def streaming_input?(ref)
+      # def streaming_input?(shape)
       #   (ref['streaming'] || ref.shape['streaming'])
       # end
 

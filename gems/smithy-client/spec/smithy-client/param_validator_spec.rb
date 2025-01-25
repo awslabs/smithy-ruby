@@ -5,6 +5,14 @@ module Smithy
     # class TestClass; end
 
     describe ParamValidator do
+
+      before do
+        SchemaHelper.sample_schema
+      end
+
+
+
+
       let(:client_class) do
         client_class = Class.new(Client::Base)
         client_class.schema = schema
@@ -15,25 +23,27 @@ module Smithy
       end
 
       let(:schema) do
-        structure_shape.add_member(:string, Shapes::StringShape.new(id: 'smithy.ruby.tests#String'))
+        structure_shape.add_member(:blob, Shapes::BlobShape.new)
+        structure_shape.add_member(:streaming_blob, Shapes::BlobShape.new(traits: { 'smithy.api#streaming' => {} }))
+        structure_shape.add_member(:string, Shapes::StringShape.new)
         structure_shape.add_member(:structure, structure_shape)
         structure_shape.type = structure_type
 
-        operation = Shapes::OperationShape.new(id: 'smithy.ruby.tests#Operation')
+        operation = Shapes::OperationShape.new
         operation.input = structure_shape
 
         Schema.new do |schema|
-          schema.service = Shapes::ServiceShape.new(id: 'smithy.ruby.tests#ParamValidator')
+          schema.service = Shapes::ServiceShape.new
           schema.add_operation(:operation, operation)
         end
       end
 
       let(:structure_shape) do
-        Shapes::StructureShape.new(id: 'smithy.ruby.tests#Structure')
+        Shapes::StructureShape.new
       end
 
       let(:structure_type) do
-        Struct.new(*structure_shape.members.keys, keyword_init: true)
+        Struct.new(*structure_shape.members.keys, keyword_init: true).new
       end
 
       #
@@ -73,52 +83,52 @@ module Smithy
       end
 
       describe 'structures' do
-        # it 'validates nested structures' do
-        #   validate('abc',
-        #            'expected params to be a hash, got class String instead.')
-        #   validate({ nested: 'abc' },
-        #            'expected params[:nested] to be a hash, got class String instead.')
-        #   validate({ nested: { nested: 'abc' } },
-        #            'expected params[:nested][:nested] to be a hash, got class String instead.')
-        # end
-        #
-        # it 'accepts hashes' do
-        #   validate({})
-        # end
+        it 'validates nested structures' do
+          validate('abc',
+                   'expected params to be a Hash, got class String instead.')
+          validate({ structure: 'abc' },
+                   'expected params[:structure] to be a Hash, got class String instead.')
+          validate({ structure: { structure: 'abc' } },
+                   'expected params[:structure][:structure] to be a Hash, got class String instead.')
+        end
+
+        it 'accepts hashes' do
+          validate({})
+        end
 
         it 'raises an error when a required parameter is missing' do
           rules = schema.operation(:operation).input
           rules.member(:string).traits = { 'smithy.api#required' => {} }
           validate({}, 'missing required parameter params[:string]')
         end
-        #
-        #   it 'raises an error when a given parameter is unexpected' do
-        #     validate({ foo: 'bar' }, 'unexpected value at params[:foo]')
-        #   end
-        #
-        #   it 'accepts members that pass validation' do
-        #     shapes['StructureShape']['required'] = %w[String]
-        #     validate(string: 'abc')
-        #   end
-        #
-        #   it 'aggregates errors for members' do
-        #     shapes['StructureShape']['required'] = %w[String]
-        #     validate({ nested: { foo: 'bar' } }, [
-        #       'missing required parameter params[:string]',
-        #       'missing required parameter params[:nested][:string]',
-        #       'unexpected value at params[:nested][:foo]'
-        #     ])
-        #   end
-        #
-        #   it 'raises an error when providing eventstream at input' do
-        #     validate({ event_stream: [].each }, 'instead of providing value directly for eventstreams at input, expected to use #signal events per stream')
-        #   end
-        #
-        #   it 'accepts no eventstream input even when marked required' do
-        #     shapes['StructureShape']['required'] = %w[EventStream]
-        #     validate({})
-        #   end
-        # end
+
+        it 'raises an error when a given parameter is unexpected' do
+          validate({ foo: 'bar' }, 'unexpected value at params[:foo]')
+        end
+
+        it 'accepts members that pass validation' do
+          shapes['StructureShape']['required'] = %w[String]
+          validate(string: 'abc')
+        end
+
+        it 'aggregates errors for members' do
+          shapes['StructureShape']['required'] = %w[String]
+          validate({ nested: { foo: 'bar' } }, [
+            'missing required parameter params[:string]',
+            'missing required parameter params[:nested][:string]',
+            'unexpected value at params[:nested][:foo]'
+          ])
+        end
+
+        it 'raises an error when providing eventstream at input' do
+          validate({ event_stream: [].each }, 'instead of providing value directly for eventstreams at input, expected to use #signal events per stream')
+        end
+
+        it 'accepts no eventstream input even when marked required' do
+          shapes['StructureShape']['required'] = %w[EventStream]
+          validate({})
+        end
+      end
         #
         # describe 'unions' do
         #   it 'raises an error when no values are set' do
@@ -141,7 +151,6 @@ module Smithy
         #     input = types.const_get('StructureShape').new(string: 's')
         #     validate(input)
         #   end
-      end
       #
       # describe 'lists' do
       #   it 'accepts arrays' do
@@ -221,16 +230,16 @@ module Smithy
       #   end
       # end
       #
-      # describe 'blobs' do
-      #   it 'accepts strings and io objects for payload members' do
-      #     validate(blob: StringIO.new('abc'))
-      #     validate(blob: double('d', read: 'abc', size: 3, rewind: 0))
-      #     validate({ blob: 'abc' })
-      #     validate({ blob: 123 },
-      #              [/expected params\[:blob\] to be a String or IO like object that supports read, rewind, and size, got class (Fixnum|Integer) instead./])
-      #   end
-      # end
-      #
+      describe 'blobs' do
+        it 'accepts strings and io objects for payload members' do
+          validate(streaming_blob: StringIO.new('abc'))
+          validate(blob: double('d', read: 'abc', size: 3, rewind: 0))
+          validate({ blob: 'abc' })
+          validate({ blob: 123 },
+                   [/expected params\[:blob\] to be a String or IO like object that supports read, rewind, and size, got class (Fixnum|Integer) instead./])
+        end
+      end
+
       # describe 'strings' do
       #   it 'accepts string objects' do
       #     validate(string: 'john doe')
