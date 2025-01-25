@@ -8,10 +8,8 @@ module Smithy
         def initialize(plan)
           @plan = plan
           @model = plan.model
-          service = @plan.service.values.first
-          @operations = Model::ServiceIndex.new(@model).operations_for(@plan.service)
-          initialize_rules(service)
-          initialize_tests(service)
+          @parameters = endpoint_parameters(plan)
+          @test_cases = endpoint_test_cases(plan)
           super()
         end
 
@@ -21,29 +19,22 @@ module Smithy
           Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
         end
 
-        def documentation
-          '# TODO: Documentation'
-        end
-
         private
 
-        def initialize_rules(service)
-          @endpoint_rules = service['traits']['smithy.rules#endpointRuleSet']
-
-          @parameters = @endpoint_rules['parameters']
-                        .map { |id, data| EndpointParameter.new(id, data, @plan) }
+        def endpoint_parameters(plan)
+          rules = EndpointRuleSet.new(plan).rules
+          rules['parameters'].map { |id, data| EndpointParameter.new(id, data, @plan) }
         end
 
-        def initialize_tests(service)
-          @endpoint_tests = service['traits']['smithy.rules#endpointTests'] || {}
-          @test_cases = @endpoint_tests['testCases']
-                        &.map { |data| EndpointTestCase.new(data, @plan, @operations) } || []
+        def endpoint_test_cases(plan)
+          operations = Model::ServiceIndex.new(plan.model).operations_for(plan.service)
+          tests = EndpointTests.new(plan).tests
+          tests['testCases'].map { |data| EndpointTestCase.new(data, @plan, operations) }
         end
 
         # @api private
         class EndpointTestCase
           def initialize(data, plan, operations)
-            @plan = plan
             @documentation = data['documentation']
             @expect = data['expect']
             @operation_inputs = data.fetch('operationInputs', []).map do |d|
@@ -54,7 +45,7 @@ module Smithy
             end
           end
 
-          attr_reader :documentation, :expect, :params, :operation_inputs
+          attr_reader :documentation, :expect, :operation_inputs, :params
 
           def expect_error?
             !@expect['error'].nil?
@@ -64,15 +55,13 @@ module Smithy
         # @api private
         class OperationInputsTest
           def initialize(data, plan, operations)
-            @operation_name = data['operationName'].underscore
             @plan = plan
             @model = plan.model
-            @service = @plan.service
-
+            @operation_name = data['operationName'].underscore
+            @built_in_bindings = EndpointBuiltInBindings.new(plan).bindings
+            @client_params = build_client_params(data)
             input = find_input(data, operations)
-
             @operation_params = build_operation_params(data, input)
-            @client_params  = build_client_params(data)
           end
 
           attr_reader :operation_name, :operation_params, :client_params
@@ -137,15 +126,8 @@ module Smithy
             end
           end
 
-          def built_in_bindings
-            @built_in_bindings ||=
-              @plan.welds
-                   .map(&:endpoint_built_in_bindings)
-                   .reduce({}, :merge)
-          end
-
           def built_in_to_param(built_in, value)
-            built_in_bindings[built_in][:render_test_set]
+            @built_in_bindings[built_in][:render_test_set]
               .call(@plan, value)
               .map { |k, v| Param.new(k, v) }
           end

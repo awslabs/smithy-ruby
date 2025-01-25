@@ -18,6 +18,10 @@ module SpecHelper
     #  `:schema`, `:client`, or `:server`.
     # @param [Hash] options Additional options to pass to the generator.
     # @option options [String] :fixture The name of the fixture to load.
+    # @option options [String] :gem_name The name of the gem to generate.
+    # @option options [String] :gem_version The version of the gem to generate.
+    # @option options [String] :destination_root The path to the directory where
+    #  the generated code should be written to.
     # @return [String] The path to the directory where the generated code was
     #  written to.
     def generate(modules, type, options = {})
@@ -65,9 +69,9 @@ module SpecHelper
 
     def create_plan(modules, model, type, options)
       plan_options = {
-        gem_name: options.fetch(:gem_name, Smithy::Util::Namespace.gem_name_from_namespaces(modules)),
-        gem_version: options.fetch(:gem_version, '1.0.0'),
-        destination_root: options.fetch(:destination_root, Dir.mktmpdir)
+        gem_name: options[:gem_name] || Smithy::Util::Namespace.gem_name_from_namespaces(modules),
+        gem_version: options[:gem_version] || '1.0.0',
+        destination_root: options[:destination_root] || Dir.mktmpdir
       }
       Smithy::Plan.new(model, type, plan_options)
     end
