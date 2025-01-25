@@ -7,14 +7,9 @@ module Smithy
       class EndpointParameters < View
         def initialize(plan)
           @plan = plan
-          @model = plan.model
-          service = @plan.service
-          @endpoint_rules = service.values.first['traits']['smithy.rules#endpointRuleSet']
-          @operations = Model::ServiceIndex.new(@model).operations_for(@plan.service)
-          @parameters = @endpoint_rules['parameters']
-                        .map { |id, data| EndpointParameter.new(id, data, @plan) }
-          @operation_params = build_operation_params
-
+          rules = EndpointRuleSet.new(plan).rules
+          @parameters = endpoint_parameters(rules)
+          @operation_params = build_operation_params(rules)
           super()
         end
 
@@ -24,22 +19,25 @@ module Smithy
           Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
         end
 
-        def documentation
-          '# TODO: Documentation'
-        end
-
         private
 
-        def build_operation_params
-          operation_params = {}
-          @operations.each do |operation_id, operation|
-            name = operation_id.split('#').last.underscore
-            params = @endpoint_rules['parameters']
-                     .map { |id, data| EndpointParameter.new(id, data, @plan, operation) }
-                     .select { |p| p.source == 'operation' }
+        def endpoint_parameters(rules)
+          rules['parameters'].map { |id, data| EndpointParameter.new(id, data, @plan) }
+        end
+
+        def build_operation_params(rules)
+          operations = Model::ServiceIndex.new(@plan.model).operations_for(@plan.service)
+          operations.each_with_object({}) do |(id, operation), operation_params|
+            name = Model::Shape.name(id).underscore
+            params = operation_endpoint_parameters(rules, operation)
             operation_params[name] = params unless params.empty?
           end
-          operation_params
+        end
+
+        def operation_endpoint_parameters(rules, operation)
+          rules['parameters']
+            .map { |name, value| EndpointParameter.new(name, value, @plan, operation) }
+            .select { |p| p.source == 'operation' }
         end
       end
     end

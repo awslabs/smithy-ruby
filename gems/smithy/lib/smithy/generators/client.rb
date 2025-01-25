@@ -13,7 +13,7 @@ module Smithy
 
       # @return [Enumerator<String, String>] The file paths and their contents to generate.
       def generate
-        files = source_files
+        files = gem_files
         files.each do |file, content|
           next if file == "lib/#{@gem_name}/customizations.rb" && should_skip_customizations?
 
@@ -22,14 +22,9 @@ module Smithy
         files
       end
 
-      private
-
       # rubocop:disable Metrics/AbcSize
-      def source_files
+      def lib_files
         Enumerator.new do |e|
-          e.yield "#{@gem_name}.gemspec", Views::Client::Gemspec.new(@plan).render
-          e.yield '.rubocop.yml', Views::Client::RubocopYml.new(@plan).render
-
           e.yield "lib/#{@gem_name}.rb", Views::Client::Module.new(@plan).render
           e.yield "lib/#{@gem_name}/customizations.rb", Views::Client::Customizations.new.render
           e.yield "lib/#{@gem_name}/errors.rb", Views::Client::Errors.new(@plan).render
@@ -38,14 +33,29 @@ module Smithy
           e.yield "lib/#{@gem_name}/plugins/endpoint.rb", Views::Client::EndpointPlugin.new(@plan).render
           e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
           e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).render
-
           e.yield "lib/#{@gem_name}/client.rb", Views::Client::Client.new(@plan).render
+        end
+      end
+      # rubocop:enable Metrics/AbcSize
 
+      private
+
+      def gem_files
+        Enumerator.new do |e|
+          e.yield "#{@gem_name}.gemspec", Views::Client::Gemspec.new(@plan).render
+          e.yield '.rubocop.yml', Views::Client::RubocopYml.new(@plan).render
+
+          lib_files.each { |file, content| e.yield file, content }
+          spec_files.each { |file, content| e.yield file, content }
+        end
+      end
+
+      def spec_files
+        Enumerator.new do |e|
           e.yield 'spec/spec_helper.rb', Views::Client::SpecHelper.new(@plan).render
           e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", Views::Client::EndpointProviderSpec.new(@plan).render
         end
       end
-      # rubocop:enable Metrics/AbcSize
 
       def should_skip_customizations?
         Dir["#{destination_root}/**/*"].any? { |f| f.include?('/customizations.rb') }

@@ -29,6 +29,7 @@ module Smithy
           e.yield "lib/#{@gem_name}.rb", Views::Client::Module.new(@plan).render
           e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
           e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).render
+          e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
         end
       end
     end
