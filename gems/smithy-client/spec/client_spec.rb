@@ -4,7 +4,6 @@
 
 module Smithy
   describe Client do
-
     let(:shapes) { ClientHelper.sample_shapes }
 
     let(:client) { ClientHelper.sample_client(shapes: shapes) }

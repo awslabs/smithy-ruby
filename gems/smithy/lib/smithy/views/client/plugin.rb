@@ -8,7 +8,7 @@ module Smithy
         def initialize(options = {})
           @class_name = options[:class_name]
           @path = options[:path]
-          @source = options.fetch(:source, nil)
+          @source = options[:source]
           @default = options.fetch(:default, false)
           @relative_path = options.fetch(:relative_path, false)
           @requirable = options.fetch(:requirable, false)

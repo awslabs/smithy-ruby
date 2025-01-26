@@ -40,7 +40,6 @@ module Smithy
           docstrings = []
           docstrings << '@param [Hash] options'
           @plugins.each do |plugin|
-            puts "doing plugin: #{plugin.inspect}"
             docstrings.concat(plugin.docstrings)
           end
           docstrings
