@@ -30,10 +30,10 @@ module Smithy
           e.yield "lib/#{@gem_name}/errors.rb", Views::Client::Errors.new(@plan).render
           e.yield "lib/#{@gem_name}/endpoint_parameters.rb", Views::Client::EndpointParameters.new(@plan).render
           e.yield "lib/#{@gem_name}/endpoint_provider.rb", Views::Client::EndpointProvider.new(@plan).render
-          e.yield "lib/#{@gem_name}/plugins/endpoint.rb", Views::Client::EndpointPlugin.new(@plan).render
-          e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
+          code_generated_plugins.each { |plugin| e.yield plugin.path, plugin.source }
           e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).render
-          e.yield "lib/#{@gem_name}/client.rb", Views::Client::Client.new(@plan).render
+          e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
+          e.yield "lib/#{@gem_name}/client.rb", Views::Client::Client.new(@plan, code_generated_plugins).render
         end
       end
       # rubocop:enable Metrics/AbcSize
@@ -55,6 +55,20 @@ module Smithy
           e.yield 'spec/spec_helper.rb', Views::Client::SpecHelper.new(@plan).render
           e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", Views::Client::EndpointProviderSpec.new(@plan).render
         end
+      end
+
+      def namespace
+        @plan.options[:gem_namespace] || Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+      end
+
+      def code_generated_plugins
+        [
+          Views::Client::Plugin.new(
+            class_name: "#{namespace}::Plugins::Endpoint",
+            path: "lib/#{@gem_name}/plugins/endpoint.rb",
+            source: Views::Client::EndpointPlugin.new(@plan).render
+          )
+        ]
       end
 
       def should_skip_customizations?

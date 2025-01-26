@@ -22,6 +22,10 @@ module Smithy
         attr_accessor :template_file
       end
 
+      def namespace
+        @plan.options[:gem_namespace] || Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+      end
+
       def render
         ERB.new(File.read(self.class.template_file), trim_mode: '-').result(binding)
       end

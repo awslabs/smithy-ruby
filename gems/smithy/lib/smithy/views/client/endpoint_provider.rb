@@ -18,10 +18,6 @@ module Smithy
 
         attr_reader :parameters
 
-        def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
-        end
-
         def endpoint_rules_code
           res = StringIO.new
           @rules['rules'].each do |rule|

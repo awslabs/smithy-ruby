@@ -15,10 +15,6 @@ module Smithy
 
         attr_reader :parameters, :operation_params
 
-        def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
-        end
-
         private
 
         def endpoint_parameters(rules)

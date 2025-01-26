@@ -9,13 +9,13 @@ module Smithy
 
         def initialize(plan)
           @plan = plan
-          @plugins = default_plugins + transport_plugins('http') + generated_plugins
+          @plugins = default_plugins + transport_plugins('http')
           @plugins.each do |plugin|
-            require_path = plugin.require_path
-            next unless require_path
+            path = plugin.path
+            next unless path
 
-            require_path = File.absolute_path(require_path) unless plugin.relative_path?
-            Kernel.require(require_path)
+            path = File.absolute_path(path) unless plugin.relative_path?
+            Kernel.require(path)
           end
         end
 
@@ -39,7 +39,7 @@ module Smithy
 
         def default_plugins
           Smithy::Client::Base.plugins.map do |plugin|
-            Plugin.new(class_name: plugin.name, require_path: nil, default: true)
+            Plugin.new(class_name: plugin.name, path: nil, default: true)
           end
         end
 
@@ -50,32 +50,12 @@ module Smithy
         #   end
         # end
 
-        def generated_plugins
-          # Nested namespaces for Plugins will not load unless we define them.
-          define_namespaces
-          plugins = {
-            "#{namespace}::Plugins::Endpoint" => "#{gem_dir}/lib/#{gem_name}/plugins/endpoint.rb"
-          }
-          plugins.map do |class_name, require_path|
-            Plugin.new(class_name: class_name, require_path: require_path)
-          end
-        end
-
         def transport_plugins(protocol)
           plugins = {
             'http' => { 'Smithy::Client::Plugins::NetHTTP' => 'smithy-client/plugins/net_http' }
           }[protocol]
           plugins.map do |class_name, require_path|
-            Plugin.new(class_name: class_name, require_path: require_path, relative_path: true, requirable: true)
-          end
-        end
-
-        def define_namespaces
-          parent = Object
-          namespace.split('::') do |mod|
-            child = mod
-            parent.const_set(child, ::Module.new) unless parent.const_defined?(child)
-            parent = parent.const_get(child)
+            Plugin.new(class_name: class_name, path: require_path, relative_path: true, requirable: true)
           end
         end
       end

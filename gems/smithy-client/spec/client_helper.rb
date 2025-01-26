@@ -85,7 +85,7 @@ module ClientHelper
         puts source
         raise e
       end
-      Object.const_get(module_name)
+      Object.const_get(module_name).const_get(:Client)
     end
 
     def sample_schema(options = {})
@@ -98,7 +98,7 @@ module ClientHelper
       plan_options = {
         gem_name: options[:gem_name] || 'sample',
         gem_version: options[:gem_version] || '1.0.0',
-        gem_module: module_name
+        gem_namespace: module_name
       }
       Smithy::Plan.new(model, :client, plan_options)
     end
@@ -106,8 +106,8 @@ module ClientHelper
     def source_code(plan)
       code = []
       Smithy::Generators::Client.new(plan).lib_files.each do |file_name, src_code|
-        next if file_name.include? '/customizations.rb'
-        next unless file_name.include? '/'
+        next if file_name.end_with?('/customizations.rb')
+        next if file_name == "lib/#{plan.options[:gem_name]}.rb"
 
         code << src_code
       end

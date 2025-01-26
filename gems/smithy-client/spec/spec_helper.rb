@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'smithy'
+
 require 'simplecov'
 SimpleCov.start
 require 'webmock/rspec'
