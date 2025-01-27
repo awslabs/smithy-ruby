@@ -174,20 +174,45 @@ module Smithy
 
           def kwargs_list(shape, level, visited)
             member_target = Model.shape(@model, shape['member']['target'])
-            sparse = shape.fetch('traits', {}).key?('smithy.api#sparse')
             if complex?(member_target)
               lines = [indent('Array[', level)]
-              lines += kwargs_complex_shape(shape, level, visited)
-              lines << ']'
+              lines += kwargs_complex_shape(member_target, level + 1, visited)
+              lines << indent(']', level)
               lines
             else
-              indent(["Array[#{Model::Rbs.type(@model, shape['member']['target'], member_target)}#{'?' if sparse}]"],
-                     level)
+              sparse = shape.fetch('traits', {}).key?('smithy.api#sparse')
+              indent(
+                ["Array[#{Model::Rbs.type(@model, shape['member']['target'], member_target)}#{'?' if sparse}]"],
+                level
+              )
             end
           end
 
-          def kwargs_map(_shape, level, _visisted)
-            indent(['Hash[untyped, untyped]'], level)
+          def kwargs_map(shape, level, visited)
+            key_target = Model.shape(@model, shape['key']['target'])
+            key_type = Model::Rbs.type(@model, shape['key']['target'], key_target)
+            value_target = Model.shape(@model, shape['value']['target'])
+            if complex?(value_target)
+              kwargs_complex__map(key_type, level, value_target, visited)
+            else
+              kwargs_simple_map(key_type, level, shape, value_target)
+            end
+          end
+
+          def kwargs_simple_map(key_type, level, shape, value_target)
+            sparse = shape.fetch('traits', {}).key?('smithy.api#sparse')
+            value_type = Model::Rbs.type(@model, shape['value']['target'], value_target)
+            indent(
+              ["Hash[#{key_type}, #{value_type}#{'?' if sparse}]"],
+              level
+            )
+          end
+
+          def kwargs_complex__map(key_type, level, value_target, visited)
+            lines = [indent("Hash[#{key_type},", level)]
+            lines += kwargs_complex_shape(value_target, level + 1, visited)
+            lines << indent(']', level)
+            lines
           end
 
           def complex?(shape)

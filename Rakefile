@@ -83,6 +83,7 @@ namespace :smithy do
     end
   end
 
+  desc 'Run RBS spy tests for all Unit tests that use fixtures.'
   task 'rbs:unit' do
     env = {
       'SMITHY_RUBY_RBS_TEST' => 'true'
@@ -90,10 +91,12 @@ namespace :smithy do
     sh(env, 'bundle exec rake smithy:spec:unit')
   end
 
+  desc 'Run RBS spy tests for all generated endpoint provider specs.'
   task 'rbs:endpoints' do
     task('smithy:spec:endpoints').invoke('rbs_test')
   end
 
+  desc 'Run RBS spy tests for unit tests and genreated endpoint provider specs.'
   task 'rbs' => ['rbs:unit', 'rbs:endpoints']
 end
 # rubocop:enable Metrics/BlockLength
@@ -105,10 +108,12 @@ namespace 'smithy-client' do
     t.rspec_opts = '--format documentation'
   end
 
+  desc 'Run RBS validation.'
   task 'rbs:validate' do
     sh('bundle exec rbs -I gems/smithy-client/sig validate')
   end
 
+  desc 'Run RBS spy tests on all unit tests.'
   task 'rbs:test' do
     env = {
       'RUBYOPT' => '-r bundler/setup -r rbs/test/setup',
@@ -123,5 +128,6 @@ namespace 'smithy-client' do
        "--require spec_helper --tag '~rbs_test:skip'")
   end
 
+  desc 'Run RBS validation and spy tests.'
   task 'rbs' => ['rbs:validate', 'rbs:test']
 end
