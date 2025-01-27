@@ -2,12 +2,10 @@
 
 require 'simplecov'
 SimpleCov.start
+
 require 'webmock/rspec'
 
-require 'smithy'
 require 'smithy-client'
-
-require_relative 'client_helper'
 
 class DummySendPlugin < Smithy::Client::Plugin
   class Handler < Smithy::Client::Handler

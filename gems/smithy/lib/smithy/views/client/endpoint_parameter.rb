@@ -6,13 +6,15 @@ module Smithy
       # @api private
       class EndpointParameter
         def initialize(id, data, plan, operation = nil)
-          @plan = plan
-          @model = @plan.model
           @id = id
           @data = data
-          @name = @id.underscore
+          @plan = plan
+          @model = @plan.model
           @service = @plan.service.values.first
-          @built_in_bindings = EndpointBuiltInBindings.new(plan).bindings
+
+          @operation = operation
+
+          @name = @id.underscore
           @value, @source = endpoint_parameter_value(operation)
         end
 
@@ -55,7 +57,11 @@ module Smithy
         end
 
         def built_in_binding
-          @built_in_binding ||= @built_in_bindings[@data['builtIn']]
+          @built_in_binding ||=
+            @plan.welds
+                 .map(&:endpoint_built_in_bindings)
+                 .map { |b| b[@data['builtIn']] }
+                 .find { |b| !b.nil? }
         end
 
         def client_context?
@@ -126,7 +132,7 @@ module Smithy
         def client_context_param_value
           return unless client_context?
 
-          ["config.#{@name}", 'config']
+          ["config.#{name}", 'config']
         end
 
         def built_in_param_value

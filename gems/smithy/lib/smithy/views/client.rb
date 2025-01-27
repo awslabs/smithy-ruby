@@ -8,11 +8,7 @@ module Smithy
 end
 
 # helper classes
-require_relative 'client/endpoint_built_in_bindings'
-require_relative 'client/endpoint_function_bindings'
 require_relative 'client/endpoint_parameter'
-require_relative 'client/endpoint_rule_set'
-require_relative 'client/endpoint_tests'
 require_relative 'client/operation_examples'
 require_relative 'client/plugin'
 require_relative 'client/plugin_list'

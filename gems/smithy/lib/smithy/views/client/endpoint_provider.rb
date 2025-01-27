@@ -9,9 +9,14 @@ module Smithy
       class EndpointProvider < View
         def initialize(plan)
           @plan = plan
-          @rules = EndpointRuleSet.new(plan).rules
-          @parameters = endpoint_parameters(@rules)
-          @function_bindings = EndpointFunctionBindings.new(plan).bindings
+          @model = plan.model
+          service = @plan.service.values.first
+          @endpoint_rules = service['traits']['smithy.rules#endpointRuleSet']
+          @parameters = @endpoint_rules['parameters']
+                        .map { |id, data| EndpointParameter.new(id, data, @plan) }
+
+          @endpoint_function_bindings =
+            plan.welds.map(&:endpoint_function_bindings).reduce({}, :merge)
 
           super()
         end
@@ -22,9 +27,13 @@ module Smithy
           Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
         end
 
+        def documentation
+          '# TODO: Documentation'
+        end
+
         def endpoint_rules_code
           res = StringIO.new
-          @rules['rules'].each do |rule|
+          @endpoint_rules['rules'].each do |rule|
             case rule['type']
             when 'endpoint'
               res << endpoint_rule(rule, 3)
@@ -41,10 +50,6 @@ module Smithy
         end
 
         private
-
-        def endpoint_parameters(rules)
-          rules['parameters'].map { |id, data| EndpointParameter.new(id, data, @plan) }
-        end
 
         def indent(str, levels = 3)
           ('  ' * levels) + str
@@ -220,7 +225,7 @@ module Smithy
         end
 
         def fn_name(function)
-          unless (binding = @function_bindings[function])
+          unless (binding = @endpoint_function_bindings[function])
             raise ArgumentError, "No endpoint function binding registered for #{function}"
           end
 
