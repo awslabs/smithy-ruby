@@ -3,7 +3,7 @@
 module Smithy
   module Model
     # @api private
-    class Rbs
+    class RBS
       class << self
         # rubocop:disable Metrics/CyclomaticComplexity
         def type(model, id, shape)

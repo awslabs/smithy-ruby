@@ -92,13 +92,13 @@ module Smithy
           end
 
           def type
-            Model::Rbs.type(@model, @id, @shape)
+            Model::RBS.type(@model, @id, @shape)
           end
 
           def member_types
             @shape.fetch('members', {}).to_h do |member_name, member|
               target = Model.shape(@model, member['target'])
-              [member_name.underscore, Model::Rbs.type(@model, member['target'], target)]
+              [member_name.underscore, Model::RBS.type(@model, member['target'], target)]
             end
           end
         end
@@ -138,7 +138,7 @@ module Smithy
             if complex?(shape)
               kwargs_complex_structure_member(level, name, shape, visited)
             else
-              indent(["#{name.underscore}: #{Model::Rbs.type(@model, nil, shape)},"], level)
+              indent(["#{name.underscore}: #{Model::RBS.type(@model, nil, shape)},"], level)
             end
           end
 
@@ -182,7 +182,7 @@ module Smithy
             else
               sparse = shape.fetch('traits', {}).key?('smithy.api#sparse')
               indent(
-                ["Array[#{Model::Rbs.type(@model, shape['member']['target'], member_target)}#{'?' if sparse}]"],
+                ["Array[#{Model::RBS.type(@model, shape['member']['target'], member_target)}#{'?' if sparse}]"],
                 level
               )
             end
@@ -190,7 +190,7 @@ module Smithy
 
           def kwargs_map(shape, level, visited)
             key_target = Model.shape(@model, shape['key']['target'])
-            key_type = Model::Rbs.type(@model, shape['key']['target'], key_target)
+            key_type = Model::RBS.type(@model, shape['key']['target'], key_target)
             value_target = Model.shape(@model, shape['value']['target'])
             if complex?(value_target)
               kwargs_complex__map(key_type, level, value_target, visited)
@@ -201,7 +201,7 @@ module Smithy
 
           def kwargs_simple_map(key_type, level, shape, value_target)
             sparse = shape.fetch('traits', {}).key?('smithy.api#sparse')
-            value_type = Model::Rbs.type(@model, shape['value']['target'], value_target)
+            value_type = Model::RBS.type(@model, shape['value']['target'], value_target)
             indent(
               ["Hash[#{key_type}, #{value_type}#{'?' if sparse}]"],
               level

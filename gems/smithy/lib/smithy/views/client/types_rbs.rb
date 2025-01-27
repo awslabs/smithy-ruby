@@ -54,7 +54,7 @@ module Smithy
           attr_reader :name
 
           def rbs_type
-            Model::Rbs.type(@model, @id, @target)
+            Model::RBS.type(@model, @id, @target)
           end
         end
       end
