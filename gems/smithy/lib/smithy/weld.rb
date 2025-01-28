@@ -27,7 +27,7 @@ module Smithy
     end
 
     # Post-process the artifacts after they are generated.
-    # @param artifacts [Enumerator<String, String>] The artifacts that were generated.
+    # @param artifacts [Array<String>] The artifacts that were generated.
     #  The key is the path of the file and the value is the content of the file.
     def post_process(artifacts)
       artifacts

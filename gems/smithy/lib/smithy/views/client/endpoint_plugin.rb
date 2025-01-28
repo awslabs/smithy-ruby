@@ -19,11 +19,7 @@ module Smithy
         attr_reader :plan, :parameters
 
         def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
-        end
-
-        def documentation
-          '# TODO: Documentation'
+          @plan.gem_namespace
         end
       end
     end

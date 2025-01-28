@@ -23,9 +23,13 @@ module Smithy
     # @param [Plan] plan The plan to generate the artifact from.
     def smith(plan)
       plan.welds.each { |weld| weld.pre_process(plan.model) }
-      artifacts = Smithy::Generators.generate(plan)
-      plan.welds.each { |weld| weld.post_process(artifacts) }
-      artifacts
+      if plan.options[:source_only]
+        Smithy::Generators.source(plan)
+      else
+        artifacts = Smithy::Generators.generate(plan)
+        plan.welds.each { |weld| weld.post_process(artifacts) }
+        artifacts
+      end
     end
   end
 end

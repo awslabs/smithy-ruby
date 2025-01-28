@@ -14,7 +14,7 @@ module Smithy
         end
 
         def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+          @plan.gem_namespace
         end
 
         def operation_shapes

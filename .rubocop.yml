@@ -2,48 +2,32 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 3.3
   SuggestExtensions: false
-  Exclude:
-    - 'build/**/*'
-    - 'tasks/release/**/*'
-    - 'vendor/**/*'
 
 Gemspec/RequireMFA:
   Enabled: false
 
+Layout/LineLength:
+  Enabled: false
+
+Lint/StructNewOverride:
+  Enabled: false
+
 Metrics/AbcSize:
-  Exclude:
-    - '**/spec/**/*.rb'
+  Enabled: false
 
 Metrics/BlockLength:
-  Exclude:
-    - '**/spec/**/*.rb'
-
-Metrics/ClassLength:
-  Max: 200
-
-Metrics/CyclomaticComplexity:
-  Exclude:
-    - '**/spec/**/*.rb'
+  Enabled: false
 
 Metrics/MethodLength:
-  Max: 20
-  Exclude:
-    - '**/spec/**/*.rb'
+  Enabled: false
 
 Metrics/ModuleLength:
-  Exclude:
-    - '**/spec/**/*.rb'
+  Enabled: false
 
 Naming/FileName:
   Exclude:
-    - '**/spec/**/*.rb'
-    - 'gems/smithy-client/lib/smithy-client.rb'
-    - 'gems/smithy-server/lib/smithy-server.rb'
-
-Style/BlockComments:
-  Exclude:
-    - '**/spec/spec_helper.rb'
+    - 'lib/sample-schema.rb'
 
 Style/Documentation:
   Exclude:
-    - '**/spec/**/*.rb'
+    - 'spec/**/*.rb'

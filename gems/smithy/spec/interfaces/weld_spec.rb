@@ -12,7 +12,7 @@ describe 'Integration: Welds' do
       end
 
       def post_process(artifacts)
-        file, _content = artifacts.find { |file, _content| file.include?('/types.rb') }
+        file = artifacts.find { |f| f.include?('/types.rb') }
         inject_into_module(file, 'Types') do
           "    OtherWeld = Struct.new(keyword_init: true)\n"
         end
@@ -31,7 +31,7 @@ describe 'Integration: Welds' do
       end
 
       def post_process(artifacts)
-        file, _content = artifacts.find { |file, _content| file.include?('/types.rb') }
+        file = artifacts.find { |f| f.include?('/types.rb') }
         inject_into_module(file, 'Types') do
           "    OtherWeldShouldNotExist = Struct.new(keyword_init: true)\n"
         end
