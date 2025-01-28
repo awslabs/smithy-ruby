@@ -30,7 +30,7 @@ module Smithy
         end
 
         def namespaces
-          @plan.options[:gem_namespace].split('::') ||
+          @plan.options[:gem_namespace]&.split('::') ||
             Util::Namespace.namespaces_from_gem_name(@plan.options[:gem_name])
         end
 

@@ -5,7 +5,6 @@ require 'rspec/core/rake_task'
 
 RuboCop::RakeTask.new
 
-# rubocop:disable Metrics/BlockLength
 namespace :smithy do
   RSpec::Core::RakeTask.new('spec:unit') do |t|
     t.pattern = 'gems/smithy/spec/**/*_spec.rb'
@@ -64,7 +63,6 @@ namespace :smithy do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength
 
 namespace 'smithy-client' do
   RSpec::Core::RakeTask.new do |t|
