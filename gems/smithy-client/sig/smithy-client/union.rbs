@@ -1,0 +1,7 @@
+module Smithy
+  module Client
+    class Union < ::SimpleDelegator
+      include Structure
+    end
+  end
+end
