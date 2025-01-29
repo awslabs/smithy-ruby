@@ -13,12 +13,14 @@ namespace :smithy do
     t.rspec_opts = '--format documentation'
   end
 
-  task 'spec:endpoints' do
+  task 'spec:endpoints', [:rbs_test] do |_t, args|
     require_relative 'gems/smithy/spec/spec_helper'
 
     spec_paths = []
     include_paths = []
     tmp_dirs = []
+    rbs_targets = %w[Smithy Smithy::* Smithy::Client]
+    sig_paths = ['gems/smithy-client/sig']
     Dir.glob('gems/smithy/spec/fixtures/endpoints/*/model.json') do |model_path|
       test_name = model_path.split('/')[-2]
       test_module = test_name.gsub('-', '').camelize
@@ -27,10 +29,27 @@ namespace :smithy do
       spec_paths << "#{tmpdir}/spec"
       include_paths << "#{tmpdir}/lib"
       include_paths << "#{tmpdir}/spec"
+      sig_paths << "#{tmpdir}/sig"
+      rbs_targets += [test_module, "#{test_module}::*"]
     end
     specs = spec_paths.join(' ')
     includes = include_paths.map { |p| "-I #{p}" }.join(' ')
-    sh("bundle exec rspec #{specs} #{includes}")
+
+    env =
+      if args[:rbs_test]
+        {
+          'RUBYOPT' => '-r bundler/setup -r rbs/test/setup',
+          'RBS_TEST_RAISE' => 'true',
+          'RBS_TEST_LOGLEVEL' => 'error',
+          'RBS_TEST_OPT' => sig_paths.map { |p| "-I #{p}" }.join(' '),
+          'RBS_TEST_TARGET' => "\"#{rbs_targets.join(',')}\"",
+          'RBS_TEST_DOUBLE_SUITE' => 'rspec'
+        }
+      else
+        {}
+      end
+
+    sh(env, "bundle exec rspec #{specs} #{includes}")
   ensure
     tmp_dirs.each do |name, tmpdir|
       SpecHelper.cleanup([name], tmpdir)
@@ -63,6 +82,22 @@ namespace :smithy do
       raise 'Fixture models are out of sync.  Run bundle exec rake smithy:sync-fixtures to correct'
     end
   end
+
+  desc 'Run RBS spy tests for all Unit tests that use fixtures.'
+  task 'rbs:unit' do
+    env = {
+      'SMITHY_RUBY_RBS_TEST' => 'true'
+    }
+    sh(env, 'bundle exec rake smithy:spec:unit')
+  end
+
+  desc 'Run RBS spy tests for all generated endpoint provider specs.'
+  task 'rbs:endpoints' do
+    task('smithy:spec:endpoints').invoke('rbs_test')
+  end
+
+  desc 'Run RBS spy tests for unit tests and genreated endpoint provider specs.'
+  task 'rbs' => ['rbs:unit', 'rbs:endpoints']
 end
 # rubocop:enable Metrics/BlockLength
 
@@ -73,10 +108,12 @@ namespace 'smithy-client' do
     t.rspec_opts = '--format documentation'
   end
 
+  desc 'Run RBS validation.'
   task 'rbs:validate' do
     sh('bundle exec rbs -I gems/smithy-client/sig validate')
   end
 
+  desc 'Run RBS spy tests on all unit tests.'
   task 'rbs:test' do
     env = {
       'RUBYOPT' => '-r bundler/setup -r rbs/test/setup',
@@ -91,5 +128,6 @@ namespace 'smithy-client' do
        "--require spec_helper --tag '~rbs_test:skip'")
   end
 
+  desc 'Run RBS validation and spy tests.'
   task 'rbs' => ['rbs:validate', 'rbs:test']
 end

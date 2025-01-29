@@ -25,10 +25,20 @@ module Smithy
         end
 
         def documentation_type
-          case @data['type']
-          when 'stringArray' then 'Array<String>'
+          case @data['type'].downcase
+          when 'stringarray' then 'Array<String>'
           when 'string' then 'String'
           when 'boolean' then 'Boolean'
+          else
+            @data['type']
+          end
+        end
+
+        def rbs_type
+          case @data['type'].downcase
+          when 'stringarray' then 'Array[String]'
+          when 'string' then 'String'
+          when 'boolean' then 'bool'
           else
             @data['type']
           end

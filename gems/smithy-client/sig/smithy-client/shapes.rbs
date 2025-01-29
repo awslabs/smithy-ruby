@@ -2,7 +2,7 @@ module Smithy
   module Client
     module Shapes
       class Shape
-        def initialize: (?Hash[Symbol, untyped]) -> void
+        def initialize: (?Hash[Symbol, untyped]) ?{ (self) -> void } -> void
 
         attr_accessor id: String?
         attr_accessor traits: Hash[String, untyped]

@@ -27,10 +27,6 @@ module Smithy
           Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
         end
 
-        def documentation
-          '# TODO: Documentation'
-        end
-
         def endpoint_rules_code
           res = StringIO.new
           @endpoint_rules['rules'].each do |rule|

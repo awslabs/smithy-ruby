@@ -17,11 +17,14 @@ module Smithy
 
         def docstrings
           docstrings = []
-          options = Object.const_get(@class_name).options
           options.each do |option|
             docstrings.concat(option_docstrings(option)) if option.docstring
           end
           docstrings
+        end
+
+        def options
+          Object.const_get(@class_name).options
         end
 
         def default?
