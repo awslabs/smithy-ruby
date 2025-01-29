@@ -75,31 +75,26 @@ module ClientHelper
 
     def sample_client(options = {})
       model = options[:model] ||= model(options)
-      plan = create_plan(model, options)
-      Smithy.smith(plan)
+      namespace = options[:gem_module] || next_sample_module_name
+      plan = create_plan(model, namespace, options)
+      source = Smithy.source(plan)
+      Object.module_eval(source)
+      Object.const_get(namespace)
+    rescue Exception => e # rubocop:disable Lint/RescueException
+      puts "Error evaluating source:\n#{source}"
+      raise e
     end
 
     private
 
-    def create_plan(model, options)
+    def create_plan(model, namespace, options)
       plan_options = {
-        gem_namespace: options[:gem_module] || next_sample_module_name,
+        gem_namespace: namespace,
         gem_name: options[:gem_name] || 'sample',
         gem_version: options[:gem_version] || '1.0.0',
         source_only: true
       }
       Smithy::Plan.new(model, :client, plan_options)
-    end
-
-    def source_code(plan)
-      code = []
-      Smithy::Generators::Client.new(plan).lib_files.each do |file_name, src_code|
-        next if file_name.end_with?('/customizations.rb')
-        next if file_name == "lib/#{plan.options[:gem_name]}.rb"
-
-        code << src_code
-      end
-      code.join("\n")
     end
 
     def model(options)

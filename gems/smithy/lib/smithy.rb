@@ -14,22 +14,25 @@ require_relative 'smithy/weld'
 require_relative 'smithy/welds'
 
 # Smithy is a modeling language created by AWS. This gem provides a Ruby
-# implementation of the Smithy language and generates clients, servers, and types.
+# implementation of the Smithy language and generates clients, servers, and schemas.
 module Smithy
   VERSION = File.read(File.expand_path('../VERSION', __dir__.to_s)).strip
 
-  class << self
-    # Generates a Ruby artifact from a Smithy model.
-    # @param [Plan] plan The plan to generate the artifact from.
-    def smith(plan)
-      plan.welds.each { |weld| weld.pre_process(plan.model) }
-      if plan.options[:source_only]
-        Smithy::Generators.source(plan)
-      else
-        artifacts = Smithy::Generators.generate(plan)
-        plan.welds.each { |weld| weld.post_process(artifacts) }
-        artifacts
-      end
-    end
+  # Generates Ruby code from a Smithy model and writes them to files.
+  # @param [Plan] plan The plan to generate the artifacts from.
+  # @return [Array<String>] The generated files.
+  def self.generate(plan)
+    plan.welds.each { |weld| weld.pre_process(plan.model) }
+    artifacts = Smithy::Generators.generate(plan)
+    plan.welds.each { |weld| weld.post_process(artifacts) }
+    artifacts
+  end
+
+  # Generates minimal Ruby code from a Smithy model and returns the source code.
+  # @param [Plan] plan The plan to generate the source from.
+  # @return [String] The generated source code.
+  def self.source(plan)
+    plan.welds.each { |weld| weld.pre_process(plan.model) }
+    Smithy::Generators.source(plan)
   end
 end

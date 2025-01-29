@@ -21,12 +21,7 @@ module Smithy
       end
 
       def source
-        source = source_files.map { |_file, content| content }.join("\n")
-        Object.module_eval(source)
-        Object.const_get(@plan.gem_namespace)
-      rescue Exception => e # rubocop:disable Lint/RescueException
-        puts "Error evaluating source:\n#{source}"
-        raise e
+        source_files.map { |_file, content| content }.join("\n")
       end
 
       private

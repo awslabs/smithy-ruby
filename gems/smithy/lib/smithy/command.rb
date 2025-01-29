@@ -30,7 +30,7 @@ module Smithy
       end
 
       gem_options!
-      desc 'types', 'Generates types for the model provided to STDIN.'
+      desc 'schema', 'Generates a schema for the model provided to STDIN.'
       def schema
         invoke(:schema, options)
       end
@@ -50,7 +50,7 @@ module Smithy
         def invoke(type, options)
           model = JSON.parse($stdin.read)
           plan = Smithy::Plan.new(model, type, options)
-          Smithy.smith(plan)
+          Smithy.generate(plan)
         end
       end
     end
