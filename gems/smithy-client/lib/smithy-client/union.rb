@@ -9,7 +9,7 @@ module Smithy
       include Structure
 
       def to_s
-        "#<#{self.class.name} #{self.__getobj__ || 'nil'}>"
+        "#<#{self.class.name} #{__getobj__ || 'nil'}>"
       end
     end
   end

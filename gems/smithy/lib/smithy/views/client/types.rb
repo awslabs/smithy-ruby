@@ -20,14 +20,15 @@ module Smithy
             .new(@model)
             .shapes_for(@plan.service)
             .select { |_key, shape| %w[structure union].include?(shape['type']) }
-            .map { |id, structure| Type.new(id, structure) }
+            .map { |id, shape| Type.new(@model, id, shape) }
         end
 
         # @api private
         class Type
-          def initialize(id, structure)
+          def initialize(model, id, shape)
+            @model = model
             @id = id
-            @structure = structure
+            @shape = shape
           end
 
           def documentation
@@ -39,8 +40,28 @@ module Smithy
           end
 
           def member_names
-            @structure['members'].keys.map(&:underscore)
+            @shape['members'].keys.map(&:underscore)
           end
+
+          def members
+            @shape['members']
+              .map { |name, member| Member.new(name, member['target'], Model.shape(@model, member['target'])) }
+          end
+
+          def type
+            @shape['type']
+          end
+        end
+
+        # @api private
+        class Member
+          def initialize(name, id, shape)
+            @name = name
+            @id = id
+            @shape = shape
+          end
+
+          attr_reader :name, :id, :shape
         end
       end
     end
