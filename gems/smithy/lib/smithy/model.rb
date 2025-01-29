@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'model/rbs'
 require_relative 'model/shape'
 require_relative 'model/operation_parser'
 require_relative 'model/service_index'

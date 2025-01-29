@@ -38,5 +38,10 @@ Build a fixture
 ```
 export SMITHY_PLUGIN_DIR=build/smithy/source/smithy-ruby
 bundle exec smithy-ruby smith client --gem-name fixture --gem-version 1.0.0 <<< $(cat gems/smithy/spec/fixtures/endpoints/default-values/model.json)
+```
 
+Running RBS validations and tests:
+```
+bundle exec rake smithy-client:rbs
+bundle exec rake smithy:rbs
 ```

@@ -35,6 +35,7 @@ module Smithy
         def docstrings
           docstrings = []
           docstrings << '@param [Hash] options'
+          # TODO: ensure correct handling of duplicate option definitions
           @plugins.each do |plugin|
             docstrings.concat(plugin.docstrings)
           end

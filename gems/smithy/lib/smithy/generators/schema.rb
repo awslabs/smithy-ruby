@@ -44,6 +44,13 @@ module Smithy
         end
       end
 
+      def rbs_files
+        Enumerator.new do |e|
+          e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render
+          e.yield 'sig/types.rbs', Views::Client::TypesRbs.new(@plan).render
+        end
+      end
+
       def should_skip_customizations?
         Dir["#{destination_root}/**/*"].any? { |f| f.include?('/customizations.rb') }
       end

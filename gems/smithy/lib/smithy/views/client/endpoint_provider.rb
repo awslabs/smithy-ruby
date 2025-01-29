@@ -27,10 +27,6 @@ module Smithy
           @plan.gem_namespace
         end
 
-        def documentation
-          '# TODO: Documentation'
-        end
-
         def endpoint_rules_code
           res = StringIO.new
           @endpoint_rules['rules'].each do |rule|

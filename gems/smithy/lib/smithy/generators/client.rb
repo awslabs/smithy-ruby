@@ -35,6 +35,8 @@ module Smithy
           e.yield "lib/#{@gem_name}/customizations.rb", Views::Client::Customizations.new.render
 
           spec_files.each { |file, content| e.yield file, content }
+
+          rbs_files.each { |file, content| e.yield file, content }
         end
       end
 
@@ -59,6 +61,20 @@ module Smithy
           e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", Views::Client::EndpointProviderSpec.new(@plan).render
         end
       end
+
+      # rubocop:disable Metrics/AbcSize
+      def rbs_files
+        Enumerator.new do |e|
+          e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render
+          e.yield 'sig/client.rbs', Views::Client::ClientRbs.new(@plan).render
+          e.yield 'sig/errors.rbs', Views::Client::ErrorsRbs.new(@plan).render
+          e.yield 'sig/endpoint_parameters.rbs', Views::Client::EndpointParametersRbs.new(@plan).render
+          e.yield 'sig/endpoint_provider.rbs', Views::Client::EndpointProviderRbs.new(@plan).render
+          e.yield 'sig/shapes.rbs', Views::Client::ShapesRbs.new(@plan).render
+          e.yield 'sig/types.rbs', Views::Client::TypesRbs.new(@plan).render
+        end
+      end
+      # rubocop:enable Metrics/AbcSize
 
       def code_generated_plugins
         Enumerator.new do |e|
