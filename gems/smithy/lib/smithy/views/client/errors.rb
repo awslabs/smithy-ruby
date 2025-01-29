@@ -12,7 +12,7 @@ module Smithy
         end
 
         def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+          @plan.gem_namespace
         end
 
         def errors
@@ -60,17 +60,19 @@ module Smithy
 
           # @api private
           class Member
-            def initialize(name, member)
+            def initialize(name, shape)
               @name = name
-              @member = member
+              @shape = shape
             end
+
+            attr_reader :shape
 
             def message?
               @name == 'message'
             end
 
             def docstrings
-              @member
+              @shape
                 .fetch('traits', {})
                 .fetch('smithy.api#documentation', '')
                 .split("\n")

@@ -9,7 +9,7 @@ module Smithy
 
         def initialize(plan)
           @plan = plan
-          @plugins = default_plugins + transport_plugins('http') + generated_plugins
+          @plugins = default_plugins + transport_plugins('http')
           @plugins.each do |plugin|
             require_path = plugin.require_path
             next unless require_path
@@ -26,7 +26,7 @@ module Smithy
         private
 
         def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+          @plan.gem_namespace
         end
 
         def gem_name
@@ -50,32 +50,12 @@ module Smithy
         #   end
         # end
 
-        def generated_plugins
-          # Nested namespaces for Plugins will not load unless we define them.
-          define_namespaces
-          plugins = {
-            "#{namespace}::Plugins::Endpoint" => "#{gem_dir}/lib/#{gem_name}/plugins/endpoint.rb"
-          }
-          plugins.map do |class_name, require_path|
-            Plugin.new(class_name: class_name, require_path: require_path)
-          end
-        end
-
         def transport_plugins(protocol)
           plugins = {
             'http' => { 'Smithy::Client::Plugins::NetHTTP' => 'smithy-client/plugins/net_http' }
           }[protocol]
           plugins.map do |class_name, require_path|
             Plugin.new(class_name: class_name, require_path: require_path, relative_path: true, requirable: true)
-          end
-        end
-
-        def define_namespaces
-          parent = Object
-          namespace.split('::') do |mod|
-            child = mod
-            parent.const_set(child, ::Module.new) unless parent.const_defined?(child)
-            parent = parent.const_get(child)
           end
         end
       end

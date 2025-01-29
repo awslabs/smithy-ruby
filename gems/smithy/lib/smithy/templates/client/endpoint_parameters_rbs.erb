@@ -1,0 +1,14 @@
+module <%= namespace %>
+  class EndpointParameters
+    def initialize: (
+<% parameters.each do |param| -%>
+      <%= '?' unless param.validate_required? %><%= param.name %>: <%= param.rbs_type %>,
+<% end -%>
+    ) -> void
+    | (?Hash[Symbol, untyped]) -> void
+  end
+
+<% parameters.each do |param| -%>
+  attr_accessor <%= param.name %>: <%= param.rbs_type %><%= '?' unless param.validate_required? %>
+<% end -%>
+end

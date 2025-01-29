@@ -1,0 +1,29 @@
+module <%= namespace %>
+  class Client < Smithy::Client::Base
+    def self.new: (
+<% option_types.each do |name, type| -%>
+      ?<%= name %>: <%= type %>,
+<% end -%>
+    ) -> void
+    | (?Hash[Symbol, untyped]) -> void
+<% operations.each do |operation| -%>
+
+    interface <%= operation.response_interface %>
+      include Smithy::Client::_Output[<%= operation.output.type %>]
+<% operation.output.member_types.each do |name, type| -%>
+      def <%= name %>: () -> <%= type %>?
+<% end -%>
+    end
+<% if operation.input.members? -%>
+      def <%= operation.name %>: (
+<% operation.input.keyword_args.each do |line| -%>
+        <%= line %>
+<% end -%>
+      ) -> <%= operation.response_interface %>
+      | (?Hash[Symbol, untyped], ?Hash[Symbol, untyped]) -> <%= operation.response_interface %>
+<% else -%>
+    def <%= operation.name %>: (?Hash[Symbol, untyped], ?Hash[Symbol, untyped]) -> <%= operation.response_interface %>
+<% end -%>
+<% end -%>
+  end
+end

@@ -1,0 +1,10 @@
+module Weather
+  class EndpointParameters
+    def initialize: (
+      ?endpoint: String,
+    ) -> void
+    | (?Hash[Symbol, untyped]) -> void
+  end
+
+  attr_accessor endpoint: String?
+end

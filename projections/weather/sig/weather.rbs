@@ -1,0 +1,3 @@
+  module Weather
+    VERSION: String
+  end

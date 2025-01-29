@@ -8,20 +8,24 @@ module Smithy
         def initialize(options = {})
           @class_name = options[:class_name]
           @require_path = options[:require_path]
+          @source = options[:source]
           @default = options.fetch(:default, false)
           @relative_path = options.fetch(:relative_path, false)
           @requirable = options.fetch(:requirable, false)
         end
 
-        attr_reader :class_name, :require_path
+        attr_reader :class_name, :require_path, :source
 
         def docstrings
           docstrings = []
-          options = Object.const_get(@class_name).options
           options.each do |option|
             docstrings.concat(option_docstrings(option)) if option.docstring
           end
           docstrings
+        end
+
+        def options
+          Object.const_get(@class_name).options
         end
 
         def default?

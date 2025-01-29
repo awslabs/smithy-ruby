@@ -23,11 +23,17 @@ module SpecHelper
     def generate(modules, type, options = {})
       model = load_model(modules, options)
       plan = create_plan(modules, model, type, options)
+      sdk_dir = plan.options[:destination_root]
       smith(plan)
 
-      $LOAD_PATH << ("#{plan.options[:destination_root]}/lib")
+      $LOAD_PATH << ("#{sdk_dir}/lib")
       require "#{plan.options[:gem_name]}#{type == :schema ? '-schema' : ''}"
-      plan.options[:destination_root]
+
+      setup_rbs_spytest(modules, sdk_dir) if options.fetch(:rbs_test, ENV.fetch('SMITHY_RUBY_RBS_TEST', nil))
+      sdk_dir
+    rescue StandardError => e
+      cleanup(modules, sdk_dir) if sdk_dir
+      raise e
     end
 
     # @param [Array<String>] module_names A list of module names from the
@@ -35,6 +41,8 @@ module SpecHelper
     # @param [String] tmpdir The path to the tmp directory where the
     #  generated code was written to.
     def cleanup(module_names, tmpdir)
+      return unless tmpdir
+
       if ENV['SMITHY_RUBY_KEEP_GENERATED_SOURCE']
         puts "Leaving generated service in: #{tmpdir}"
       else
@@ -45,6 +53,18 @@ module SpecHelper
         Object.const_get(parent).send(:remove_const, child)
       end
       Object.send(:remove_const, module_names.first)
+    end
+
+    def load_rbs_environment(sdk_dir, load_collection: true)
+      require 'rbs'
+
+      loader = RBS::EnvironmentLoader.new(core_root: RBS::EnvironmentLoader::DEFAULT_CORE_ROOT)
+      loader.add(path: Pathname(File.join(__dir__.to_s, '../../smithy-client/sig')))
+      loader.add(path: Pathname(File.join(sdk_dir, '/sig')))
+
+      load_collection(loader) if load_collection
+
+      RBS::Environment.from_loader(loader).resolve_type_names
     end
 
     private
@@ -74,9 +94,71 @@ module SpecHelper
 
     def smith(plan)
       if ENV['SMITHY_RUBY_DEBUG']
-        Smithy.smith(plan)
+        Smithy.generate(plan)
       else
-        with_captured_stdout { Smithy.smith(plan) }
+        with_captured_stdout { Smithy.generate(plan) }
+      end
+    end
+
+    def load_collection(loader)
+      collection_config_path = RBS::Collection::Config.find_config_path
+      lock_path = RBS::Collection::Config.to_lockfile_path(collection_config_path)
+      if lock_path.file?
+        lock = RBS::Collection::Config::Lockfile.from_lockfile(
+          lockfile_path: lock_path,
+          data: YAML.load_file(lock_path.to_s)
+        )
+      end
+      raise 'Missing RBS collection, ensure you have `rbs collection install`' unless lock
+
+      loader.add_collection(lock)
+    end
+
+    def to_absolute_typename(type_name)
+      RBS::Factory.new.type_name(type_name).absolute!
+    end
+
+    def classes_to_spy(mod, env, visited = Set.new)
+      classes = []
+      visited << mod
+      mod.constants.each do |c|
+        sub_mod = mod.const_get(c)
+        # module includes classes
+        next if !sub_mod.is_a?(Module) || visited.include?(sub_mod) || sub_mod == ::BasicObject
+
+        rbs_name = to_absolute_typename(sub_mod.name)
+        if env.module_name?(rbs_name)
+          classes << sub_mod
+          classes += classes_to_spy(sub_mod, env, visited)
+        end
+      end
+      classes
+    end
+
+    def setup_rbs_spytest(modules, sdk_dir)
+      require 'rbs/test'
+      env = load_rbs_environment(sdk_dir)
+      tester = RBS::Test::Tester.new(env: env)
+
+      unchecked_classes = [
+        '::RSpec::Mocks::Double',
+        '::RSpec::Mocks::InstanceVerifyingDouble',
+        '::RSpec::Mocks::ObjectVerifyingDouble',
+        '::RSpec::Mocks::ClassVerifyingDouble'
+      ] # rubocop:disable
+
+      spy_modules = [modules.join('::'), 'Smithy::Client']
+      spy_classes = []
+      spy_modules.each do |module_name|
+        spy_classes += classes_to_spy(Object.const_get(module_name), env)
+      end
+
+      spy_classes.each do |spy_class|
+        tester.install!(
+          spy_class,
+          sample_size: RBS::Test::SetupHelper::DEFAULT_SAMPLE_SIZE,
+          unchecked_classes: unchecked_classes
+        )
       end
     end
   end

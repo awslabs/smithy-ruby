@@ -1,11 +1,11 @@
 module Smithy
   module Client
-    class Output < Delegator
-      def initialize: (?Hash[Symbol, untyped]) -> nil
-
-      attr_reader context: HandlerContext?
-      attr_accessor data: untyped?
-      attr_accessor error: StandardError?
+    # RBS does not support Delegator.
+    # the behavior mimics `Smithy::Client::Output` as much as possible.
+    interface _Output[DATA]
+      def context: () -> HandlerContext?
+      def data: () -> DATA?
+      def error: () -> StandardError?
     end
   end
 end

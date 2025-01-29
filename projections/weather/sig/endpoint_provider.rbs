@@ -1,0 +1,5 @@
+module Weather
+  class EndpointProvider
+    def resolve_endpoint: (EndpointParameters) -> Smithy::Client::EndpointRules::Endpoint
+  end
+end

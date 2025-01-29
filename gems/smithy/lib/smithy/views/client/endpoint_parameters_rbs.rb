@@ -4,22 +4,23 @@ module Smithy
   module Views
     module Client
       # @api private
-      class EndpointPlugin < View
+      class EndpointParametersRbs < View
         def initialize(plan)
           @plan = plan
           @model = plan.model
-          service = @plan.service.values.first
-          @endpoint_rules = service['traits']['smithy.rules#endpointRuleSet']
+          service = @plan.service
+          @endpoint_rules = service.values.first['traits']['smithy.rules#endpointRuleSet']
+          @operations = Model::ServiceIndex.new(@model).operations_for(@plan.service)
           @parameters = @endpoint_rules['parameters']
                         .map { |id, data| EndpointParameter.new(id, data, @plan) }
 
           super()
         end
 
-        attr_reader :plan, :parameters
+        attr_reader :parameters
 
         def namespace
-          @plan.gem_namespace
+          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
         end
       end
     end
