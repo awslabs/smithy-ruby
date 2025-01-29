@@ -31,6 +31,11 @@ module Smithy
     # @return [Hash<String, Hash>] The service shape for the shapes.
     attr_reader :service
 
+    # @return [String] The full namespace for the gem.
+    def gem_namespace
+      @options[:gem_namespace] || Util::Namespace.namespace_from_gem_name(@options[:gem_name])
+    end
+
     private
 
     def find_service(shapes)

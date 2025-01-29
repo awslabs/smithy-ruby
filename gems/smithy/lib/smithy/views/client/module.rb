@@ -30,16 +30,16 @@ module Smithy
         end
 
         def namespaces
-          Util::Namespace.namespaces_from_gem_name(@plan.options[:gem_name])
+          @plan.options[:gem_namespace]&.split('::') ||
+            Util::Namespace.namespaces_from_gem_name(@plan.options[:gem_name])
         end
 
         def requires
-          if @plan.type == :schema
-            %i[types shapes]
-          else
-            # Order matters here - plugins must come before client, types and shapes must come before client
-            %w[plugins/endpoint types shapes client customizations errors endpoint_parameters endpoint_provider]
-          end
+          return [] if @plan.options[:source_only]
+          return %i[customizations types shapes] if @plan.type == :schema
+
+          # Order matters here - plugins must come before client, types must come before shapes
+          %w[plugins/endpoint types shapes client customizations errors endpoint_parameters endpoint_provider]
         end
       end
     end

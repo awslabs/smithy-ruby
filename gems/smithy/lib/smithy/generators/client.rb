@@ -11,39 +11,58 @@ module Smithy
         super
       end
 
-      # @return [Enumerator<String, String>] The file paths and their contents to generate.
       def generate
-        files = source_files
-        files.each do |file, content|
+        gem_files.each_with_object([]) do |(file, content), files|
           next if file == "lib/#{@gem_name}/customizations.rb" && should_skip_customizations?
 
           create_file file, content
+          files << file
         end
-        files
+      end
+
+      def source
+        source_files.map { |_file, content| content }.join("\n")
       end
 
       private
 
-      # rubocop:disable Metrics
-      def source_files
+      # rubocop:disable Metrics/AbcSize
+      def gem_files
         Enumerator.new do |e|
           e.yield "#{@gem_name}.gemspec", Views::Client::Gemspec.new(@plan).render
           e.yield '.rubocop.yml', Views::Client::RubocopYml.new(@plan).render
 
-          e.yield "lib/#{@gem_name}.rb", Views::Client::Module.new(@plan).render
+          source_files.each { |file, content| e.yield file, content }
           e.yield "lib/#{@gem_name}/customizations.rb", Views::Client::Customizations.new.render
+
+          spec_files.each { |file, content| e.yield file, content }
+
+          rbs_files.each { |file, content| e.yield file, content }
+        end
+      end
+
+      def source_files
+        Enumerator.new do |e|
+          e.yield "lib/#{@gem_name}.rb", Views::Client::Module.new(@plan).render
           e.yield "lib/#{@gem_name}/errors.rb", Views::Client::Errors.new(@plan).render
           e.yield "lib/#{@gem_name}/endpoint_parameters.rb", Views::Client::EndpointParameters.new(@plan).render
           e.yield "lib/#{@gem_name}/endpoint_provider.rb", Views::Client::EndpointProvider.new(@plan).render
-          e.yield "lib/#{@gem_name}/plugins/endpoint.rb", Views::Client::EndpointPlugin.new(@plan).render
-          e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
+          code_generated_plugins.each { |plugin| e.yield plugin.require_path, plugin.source }
           e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).render
+          e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
+          e.yield "lib/#{@gem_name}/client.rb", Views::Client::Client.new(@plan, code_generated_plugins).render
+        end
+      end
 
-          e.yield "lib/#{@gem_name}/client.rb", Views::Client::Client.new(@plan).render
-
+      def spec_files
+        Enumerator.new do |e|
           e.yield 'spec/spec_helper.rb', Views::Client::SpecHelper.new(@plan).render
           e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", Views::Client::EndpointProviderSpec.new(@plan).render
+        end
+      end
 
+      def rbs_files
+        Enumerator.new do |e|
           e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render
           e.yield 'sig/client.rbs', Views::Client::ClientRbs.new(@plan).render
           e.yield 'sig/errors.rbs', Views::Client::ErrorsRbs.new(@plan).render
@@ -53,7 +72,17 @@ module Smithy
           e.yield 'sig/types.rbs', Views::Client::TypesRbs.new(@plan).render
         end
       end
-      # rubocop:enable Metrics
+      # rubocop:enable Metrics/AbcSize
+
+      def code_generated_plugins
+        Enumerator.new do |e|
+          e.yield Views::Client::Plugin.new(
+            class_name: "#{@plan.gem_namespace}::Plugins::Endpoint",
+            require_path: "lib/#{@gem_name}/plugins/endpoint.rb",
+            source: Views::Client::EndpointPlugin.new(@plan).render
+          )
+        end
+      end
 
       def should_skip_customizations?
         Dir["#{destination_root}/**/*"].any? { |f| f.include?('/customizations.rb') }

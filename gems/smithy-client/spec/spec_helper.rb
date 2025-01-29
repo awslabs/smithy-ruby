@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
+require 'smithy'
+
 require 'simplecov'
 SimpleCov.start
 
 require 'webmock/rspec'
 
 require 'smithy-client'
+
+require_relative 'support/client_helper'
 
 class DummySendPlugin < Smithy::Client::Plugin
   class Handler < Smithy::Client::Handler

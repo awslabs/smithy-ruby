@@ -94,9 +94,9 @@ module SpecHelper
 
     def smith(plan)
       if ENV['SMITHY_RUBY_DEBUG']
-        Smithy.smith(plan)
+        Smithy.generate(plan)
       else
-        with_captured_stdout { Smithy.smith(plan) }
+        with_captured_stdout { Smithy.generate(plan) }
       end
     end
 

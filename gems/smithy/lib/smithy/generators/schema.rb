@@ -11,30 +11,48 @@ module Smithy
         super
       end
 
-      # @return [Enumerator<String, String>] The file paths and their contents to generate.
       def generate
-        files = source_files
-        files.each do |file, content|
+        gem_files.each_with_object([]) do |(file, content), files|
+          next if file == "lib/#{@gem_name}/customizations.rb" && should_skip_customizations?
+
           create_file file, content
+          files << file
         end
-        files
+      end
+
+      def source
+        source_files.map { |_file, content| content }.join("\n")
       end
 
       private
 
-      # rubocop:disable Metrics/AbcSize
-      def source_files
+      def gem_files
         Enumerator.new do |e|
           e.yield "#{@gem_name}.gemspec", Views::Client::Gemspec.new(@plan).render
           e.yield '.rubocop.yml', Views::Client::RubocopYml.new(@plan).render
-          e.yield "lib/#{@gem_name}.rb", Views::Client::Module.new(@plan).render
-          e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
-          e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).render
 
+          source_files.each { |file, content| e.yield file, content }
+          e.yield "lib/#{@gem_name}/customizations.rb", Views::Client::Customizations.new.render
+        end
+      end
+
+      def source_files
+        Enumerator.new do |e|
+          e.yield "lib/#{@gem_name}.rb", Views::Client::Module.new(@plan).render
+          e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).render
+          e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
+        end
+      end
+
+      def rbs_files
+        Enumerator.new do |e|
           e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render
           e.yield 'sig/types.rbs', Views::Client::TypesRbs.new(@plan).render
         end
-        # rubocop:enable Metrics/AbcSize
+      end
+
+      def should_skip_customizations?
+        Dir["#{destination_root}/**/*"].any? { |f| f.include?('/customizations.rb') }
       end
     end
   end
