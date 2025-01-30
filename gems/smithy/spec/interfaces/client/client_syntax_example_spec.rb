@@ -46,7 +46,9 @@ describe 'Component: Client: Request/Response Syntax Examples' do
           structure: {
             member: "String"
           },
-          union: TODO: union
+          union: {
+            string: "String"
+          }
         }
         options = {}
         output = client.operation(params, options)
@@ -86,7 +88,9 @@ describe 'Component: Client: Request/Response Syntax Examples' do
           structure: {
             member: "String"
           },
-          union: TODO: union
+          union: {
+            string: "String"
+          }
         }
     EXAMPLE
     client_file = File.join(@tmpdir, 'lib', 'all_shapes', 'client.rb')
