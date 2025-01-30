@@ -2,16 +2,22 @@
 
 module Smithy
   module Client
-    class TestUnion < Union
-      class StringValue < TestUnion
-        def to_h
-          { string_value: super(__getobj__) }
+    describe Union do
+      let(:test_union_class) { Class.new(Union) }
+      let(:string_value_class) do
+        Class.new(test_union_class) do
+          def to_h
+            { string_value: super(__getobj__) }
+          end
+
+          # anonymous class, need a class name to test to_s
+          def self.name
+            'TestUnion::StringValue'
+          end
         end
       end
-    end
 
-    describe Union do
-      subject { TestUnion::StringValue.new('union') }
+      subject { string_value_class.new('union') }
 
       it 'uses simple delegator and structure' do
         expect(subject).to be_a(SimpleDelegator)
@@ -27,7 +33,7 @@ module Smithy
       describe '#to_s' do
         it 'returns a string representation' do
           expect(subject.to_s)
-            .to eq('#<Smithy::Client::TestUnion::StringValue union>')
+            .to eq('#<TestUnion::StringValue union>')
         end
       end
     end
