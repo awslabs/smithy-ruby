@@ -1,6 +1,8 @@
 module Weather
   class Client < Smithy::Client::Base
     def self.new: (
+      ?endpoint: String,
+      ?endpoint_provider: Weather::EndpointProvider,
       ?http_ca_file: String,
       ?http_ca_path: String,
       ?http_cert: OpenSSL::X509::Certificate,
