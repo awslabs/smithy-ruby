@@ -66,7 +66,7 @@ module Smithy
         def build_shape(id, shape)
           Shape.new(
             id: id,
-            name: Model::Shape.name(id),
+            name: Model::Shape.name(id).camelize,
             type: shape_type_from_type(shape['type']),
             traits: filter_traits(shape['traits']),
             members: build_member_shapes(shape)
