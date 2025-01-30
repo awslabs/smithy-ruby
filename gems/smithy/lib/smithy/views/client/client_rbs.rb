@@ -36,8 +36,6 @@ module Smithy
 
         private
 
-        private
-
         def plugins(plan, code_generated_plugins)
           define_namespaces
           code_generated_plugins.each do |plugin|
