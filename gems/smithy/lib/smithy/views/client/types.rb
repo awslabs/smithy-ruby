@@ -35,7 +35,7 @@ module Smithy
           end
 
           def name
-            Model::Shape.name(@id)
+            Model::Shape.name(@id).camelize
           end
 
           def member_names
