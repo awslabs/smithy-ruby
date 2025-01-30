@@ -164,11 +164,14 @@
                 "string": {
                     "target": "smithy.api#String"
                 },
-                "integer": {
-                    "target": "smithy.api#Integer"
-                },
                 "structure": {
                     "target": "smithy.ruby.tests#Structure"
+                },
+                "simpleList": {
+                    "target": "smithy.ruby.tests#SimpleList"
+                },
+                "simpleMap": {
+                    "target": "smithy.ruby.tests#SimpleMap"
                 },
                 "complexList": {
                     "target": "smithy.ruby.tests#ComplexList"

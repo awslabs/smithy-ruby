@@ -47,7 +47,25 @@ describe 'Component: Client: Request/Response Syntax Examples' do
             member: "String"
           },
           union: {
-            string: "String"
+            # One of:
+            string: "String",
+            structure: {
+              member: "String"
+            },
+            simple_list: ["String"],
+            simple_map: {
+              "String" => "String"
+            },
+            complex_list: [
+              {
+                member: "String"
+              }
+            ],
+            complex_map: {
+              "String" => {
+                member: "String"
+              }
+            }
           }
         }
         options = {}
@@ -89,7 +107,25 @@ describe 'Component: Client: Request/Response Syntax Examples' do
             member: "String"
           },
           union: {
-            string: "String"
+            # One of:
+            string: "String",
+            structure: {
+              member: "String"
+            },
+            simple_list: ["String"],
+            simple_map: {
+              "String" => "String"
+            },
+            complex_list: [
+              {
+                member: "String"
+              }
+            ],
+            complex_map: {
+              "String" => {
+                member: "String"
+              }
+            }
           }
         }
     EXAMPLE

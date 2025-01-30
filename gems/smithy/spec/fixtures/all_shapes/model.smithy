@@ -75,8 +75,9 @@ map ComplexMap {
 
 union Union {
     string: String,
-    integer: Integer
     structure: Structure
+    simpleList: SimpleList
+    simpleMap: SimpleMap
     complexList: ComplexList
     complexMap: ComplexMap
 }

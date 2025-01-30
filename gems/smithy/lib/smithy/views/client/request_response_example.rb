@@ -114,7 +114,8 @@ module Smithy
         def union(union_shape, indent, visited)
           lines = []
           lines << '{'
-          union_shape['members']&.first&.tap do |member_name, member_shape|
+          lines << "#{indent}  # One of:"
+          union_shape['members']&.each_pair do |member_name, member_shape|
             lines << member(member_name, member_shape, indent, visited)
           end
           lines.last.chomp!(',') if lines.last.end_with?(',')

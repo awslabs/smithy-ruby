@@ -17,9 +17,9 @@ module Smithy
         end
       end
 
-      let(:test_union_class) { Class.new(Union) }
+      let(:union_class) { Class.new(Union) }
       let(:struct_value_class) do
-        Class.new(test_union_class) do
+        Class.new(union_class) do
           def to_h
             { struct_value: super(__getobj__) }
           end
