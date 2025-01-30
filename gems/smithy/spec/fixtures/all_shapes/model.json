@@ -166,6 +166,15 @@
                 },
                 "integer": {
                     "target": "smithy.api#Integer"
+                },
+                "structure": {
+                    "target": "smithy.ruby.tests#Structure"
+                },
+                "complexList": {
+                    "target": "smithy.ruby.tests#ComplexList"
+                },
+                "complexMap": {
+                    "target": "smithy.ruby.tests#ComplexMap"
                 }
             }
         }

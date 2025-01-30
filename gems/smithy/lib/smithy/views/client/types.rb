@@ -45,7 +45,7 @@ module Smithy
 
           def members
             @shape['members']
-              .map { |name, member| Member.new(name, member['target'], Model.shape(@model, member['target'])) }
+              .map { |name, member| Member.new(@model, name, member['target']) }
           end
 
           def type
@@ -55,10 +55,10 @@ module Smithy
 
         # @api private
         class Member
-          def initialize(name, id, shape)
+          def initialize(model, name, id)
             @name = name
             @id = id
-            @shape = shape
+            @shape = Model.shape(model, id)
           end
 
           attr_reader :name, :id, :shape
