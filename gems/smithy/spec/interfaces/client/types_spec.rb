@@ -40,8 +40,8 @@ describe 'Component: Types' do
         expected = {
           string: 'string',
           simple_list: ['value1'],
-          complex_list: [{member: 'member'}],
-          union: {structure: {member: 'member'}}
+          complex_list: [{ member: 'member' }],
+          union: { structure: { member: 'member' } }
         }
         actual = input_output.to_h
         expect(actual).to eq(expected)
