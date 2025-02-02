@@ -17,7 +17,7 @@ module Smithy
 
         attr_reader :parameters, :test_cases
 
-        def namespace
+        def module_name
           @plan.module_name
         end
 

@@ -9,7 +9,7 @@ module Smithy
 
         def initialize(plan)
           @plan = plan
-          @namespace = plan.module_name
+          @module_name = plan.module_name
           @gem_name = plan.gem_name
           @gem_version = plan.gem_version
           @plugins = default_plugins + transport_plugins('http')
@@ -22,7 +22,7 @@ module Smithy
           end
         end
 
-        attr_reader :namespace, :gem_name, :gem_version
+        attr_reader :module_name, :gem_name, :gem_version
 
         def each(&)
           @plugins.each(&)

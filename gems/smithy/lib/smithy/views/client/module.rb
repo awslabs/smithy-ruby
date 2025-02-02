@@ -21,7 +21,7 @@ module Smithy
           "# #{trait.data}"
         end
 
-        def namespaces
+        def module_names
           @plan.module_name.split('::')
         end
 

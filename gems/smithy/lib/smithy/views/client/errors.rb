@@ -11,7 +11,7 @@ module Smithy
           super()
         end
 
-        def namespace
+        def module_name
           @plan.module_name
         end
 

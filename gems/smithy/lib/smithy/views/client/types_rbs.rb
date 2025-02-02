@@ -8,11 +8,11 @@ module Smithy
         def initialize(plan)
           @plan = plan
           @model = plan.model
-          @namespace = plan.module_name
+          @module_name = plan.module_name
           super()
         end
 
-        attr_reader :namespace
+        attr_reader :module_name
 
         def types
           @types ||= Model::ServiceIndex

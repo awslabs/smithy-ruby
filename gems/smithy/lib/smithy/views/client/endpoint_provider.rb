@@ -23,7 +23,7 @@ module Smithy
 
         attr_reader :parameters
 
-        def namespace
+        def module_name
           @plan.module_name
         end
 

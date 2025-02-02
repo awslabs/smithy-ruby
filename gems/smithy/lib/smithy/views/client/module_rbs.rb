@@ -11,7 +11,7 @@ module Smithy
           super()
         end
 
-        def namespaces
+        def module_names
           @plan.module_name.split('::')
         end
       end

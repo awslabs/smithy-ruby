@@ -76,7 +76,9 @@ module Smithy
     end
 
     def default_gem_name(module_name, type)
-      gem_name = Util::Namespace.gem_name_from_namespace(module_name)
+      gem_name = module_name.split('::').map do |part|
+        part.gsub(/([a-z\d])([A-Z])/, '\1_\2').downcase
+      end.join('-')
       type == :schema ? "#{gem_name}-schema" : gem_name
     end
   end

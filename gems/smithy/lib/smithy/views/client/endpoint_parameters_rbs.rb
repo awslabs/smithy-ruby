@@ -8,7 +8,7 @@ module Smithy
         def initialize(plan)
           @plan = plan
           @model = plan.model
-          @namespace = plan.module_name
+          @module_name = plan.module_name
           service = @plan.service
           @endpoint_rules = service.values.first['traits']['smithy.rules#endpointRuleSet']
           @operations = Model::ServiceIndex.new(@model).operations_for(@plan.service)
@@ -18,7 +18,7 @@ module Smithy
           super()
         end
 
-        attr_reader :namespace, :parameters
+        attr_reader :module_name, :parameters
       end
     end
   end
