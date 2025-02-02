@@ -21,10 +21,6 @@ module Smithy
           @plan.module_name
         end
 
-        def documentation
-          '# TODO: Documentation'
-        end
-
         private
 
         def initialize_rules(service)

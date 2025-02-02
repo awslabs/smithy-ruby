@@ -7,11 +7,12 @@ module Smithy
       class EndpointProviderRbs < View
         def initialize(plan)
           @plan = plan
-          @module_name = plan.module_name
           super()
         end
 
-        attr_reader :module_name
+        def module_name
+          @plan.module_name
+        end
       end
     end
   end

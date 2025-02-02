@@ -8,14 +8,21 @@ module Smithy
         def initialize(plan, code_generated_plugins)
           @plan = plan
           @model = plan.model
-          @module_name = plan.module_name
-          @gem_name = plan.gem_name
-          @gem_version = plan.gem_version
           @plugins = plugins(plan, code_generated_plugins)
           super()
         end
 
-        attr_reader :module_name, :gem_name, :gem_version
+        def module_name
+          @plan.module_name
+        end
+
+        def gem_name
+          @plan.gem_name
+        end
+
+        def gem_version
+          @plan.gem_version
+        end
 
         def require_plugins
           @plugins.select(&:requirable?).map(&:require_path)
@@ -54,7 +61,7 @@ module Smithy
 
         def define_module_names
           parent = Object
-          @module_name.split('::') do |mod|
+          module_name.split('::') do |mod|
             child = mod
             parent.const_set(child, ::Module.new) unless parent.const_defined?(child)
             parent = parent.const_get(child)

@@ -8,12 +8,16 @@ module Smithy
         def initialize(plan)
           @plan = plan
           @model = plan.model
-          @gem_name = plan.gem_name
-          @gem_version = plan.gem_version
           super()
         end
 
-        attr_reader :gem_name, :gem_version
+        def gem_name
+          @plan.gem_name
+        end
+
+        def gem_version
+          @plan.gem_version
+        end
 
         def documentation
           _id, service = @model.shapes.find { |_key, shape| shape.is_a?(Model::ServiceShape) }

@@ -8,13 +8,14 @@ module Smithy
         def initialize(plan, code_generated_plugins)
           @plan = plan
           @model = plan.model
-          @module_name = plan.module_name
           @plugins = plugins(plan, code_generated_plugins)
 
           super()
         end
 
-        attr_reader :module_name
+        def module_name
+          @plan.module_name
+        end
 
         def option_types
           # TODO: Ensure this order is correct when plugins override options
@@ -45,7 +46,7 @@ module Smithy
 
         def define_module_names
           parent = Object
-          @module_name.split('::') do |mod|
+          module_name.split('::') do |mod|
             child = mod
             parent.const_set(child, ::Module.new) unless parent.const_defined?(child)
             parent = parent.const_get(child)

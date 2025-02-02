@@ -7,11 +7,12 @@ module Smithy
       class RubocopYml < View
         def initialize(plan)
           @plan = plan
-          @gem_name = plan.gem_name
           super()
         end
 
-        attr_reader :gem_name
+        def gem_name
+          @plan.gem_name
+        end
       end
     end
   end
