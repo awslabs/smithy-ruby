@@ -2,11 +2,11 @@
 
 describe 'Component: Client: Request/Response Syntax Examples' do
   before(:all) do
-    @tmpdir = SpecHelper.generate(['Examples'], :client)
+    @tmpdir = SpecHelper.generate(['ExamplesTrait'], :client)
   end
 
   after(:all) do
-    SpecHelper.cleanup(['Examples'], @tmpdir)
+    SpecHelper.cleanup(['ExamplesTrait'], @tmpdir)
   end
 
   it 'generates operation examples' do
@@ -77,7 +77,7 @@ describe 'Component: Client: Request/Response Syntax Examples' do
           }
         end
     EXAMPLE
-    client_file = File.join(@tmpdir, 'lib', 'examples', 'client.rb')
-    expect(expected).to be_in_documentation(client_file, 'Examples::Client', 'operation')
+    client_file = File.join(@tmpdir, 'lib', 'examples_trait', 'client.rb')
+    expect(expected).to be_in_documentation(client_file, 'ExamplesTrait::Client', 'operation')
   end
 end

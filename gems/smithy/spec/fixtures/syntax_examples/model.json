@@ -1,14 +1,6 @@
 {
     "smithy": "2.0",
     "shapes": {
-        "smithy.ruby.tests#AllShapes": {
-            "type": "service",
-            "operations": [
-                {
-                    "target": "smithy.ruby.tests#Operation"
-                }
-            ]
-        },
         "smithy.ruby.tests#ComplexList": {
             "type": "list",
             "member": {
@@ -157,6 +149,14 @@
                     "target": "smithy.api#String"
                 }
             }
+        },
+        "smithy.ruby.tests#SyntaxExamples": {
+            "type": "service",
+            "operations": [
+                {
+                    "target": "smithy.ruby.tests#Operation"
+                }
+            ]
         },
         "smithy.ruby.tests#Union": {
             "type": "union",

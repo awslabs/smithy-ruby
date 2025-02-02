@@ -75,6 +75,16 @@ module Smithy
         def add_member(name, shape, traits: {})
           @members[name] = MemberShape.new(shape, traits: traits)
         end
+
+        # @return [Boolean]
+        def member?(name)
+          @members.key?(name)
+        end
+
+        # @return [MemberShape, nil]
+        def member(name)
+          @members[name]
+        end
       end
 
       # Represents the following shapes: Byte, Short, Integer, Long, BigInteger.
@@ -83,7 +93,7 @@ module Smithy
       # Represents an IntEnum shape.
       class IntEnumShape < EnumShape; end
 
-      # Represents both Float and double shapes.
+      # Represents both Float and Double shapes.
       class FloatShape < Shape; end
 
       # Represents a List shape.

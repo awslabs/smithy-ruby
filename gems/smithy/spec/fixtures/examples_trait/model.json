@@ -12,7 +12,7 @@
                 "smithy.api#error": "client"
             }
         },
-        "smithy.ruby.tests#Examples": {
+        "smithy.ruby.tests#ExamplesTrait": {
             "type": "service",
             "operations": [
                 {
