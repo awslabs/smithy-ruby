@@ -21,7 +21,7 @@ module Smithy
         attr_reader :parameters, :operation_params
 
         def namespace
-          @plan.gem_namespace
+          @plan.module_name
         end
 
         private

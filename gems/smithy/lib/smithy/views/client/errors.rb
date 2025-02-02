@@ -12,7 +12,7 @@ module Smithy
         end
 
         def namespace
-          @plan.gem_namespace
+          @plan.module_name
         end
 
         def errors

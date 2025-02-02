@@ -7,20 +7,12 @@ module Smithy
       class Gemspec < View
         def initialize(plan)
           @plan = plan
+          @gem_name = plan.gem_name
+          @gem_version = plan.gem_version
           super()
         end
 
-        def gem_name
-          if @plan.type == :schema
-            "#{@plan.options[:gem_name]}-schema"
-          else
-            @plan.options[:gem_name]
-          end
-        end
-
-        def gem_version
-          @plan.options[:gem_version]
-        end
+        attr_reader :gem_name, :gem_version
       end
     end
   end

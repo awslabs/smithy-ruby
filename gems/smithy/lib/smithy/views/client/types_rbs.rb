@@ -8,12 +8,11 @@ module Smithy
         def initialize(plan)
           @plan = plan
           @model = plan.model
+          @namespace = plan.module_name
           super()
         end
 
-        def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
-        end
+        attr_reader :namespace
 
         def types
           @types ||= Model::ServiceIndex

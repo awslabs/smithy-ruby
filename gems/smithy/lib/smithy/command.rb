@@ -25,7 +25,7 @@ module Smithy
                                  desc: 'The name of the gem to generate.'
         method_option :gem_version, type: :string, required: true,
                                     desc: 'The version of the gem to generate.'
-        method_option :gem_namespace, type: :string,
+        method_option :module_name, type: :string,
                                       desc: 'The namespace of the gem to generate, e.g. `MyGem::Namespace`.' \
                                             'If not provided, the gem name will be used to infer the namespace.'
       end

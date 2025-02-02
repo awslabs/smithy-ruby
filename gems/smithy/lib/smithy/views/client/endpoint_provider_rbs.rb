@@ -7,12 +7,11 @@ module Smithy
       class EndpointProviderRbs < View
         def initialize(plan)
           @plan = plan
+          @namespace = plan.module_name
           super()
         end
 
-        def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
-        end
+        attr_reader :namespace
       end
     end
   end

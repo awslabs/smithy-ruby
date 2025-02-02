@@ -8,21 +8,14 @@ module Smithy
         def initialize(plan, code_generated_plugins)
           @plan = plan
           @model = plan.model
+          @namespace = plan.module_name
+          @gem_name = plan.gem_name
+          @gem_version = plan.gem_version
           @plugins = plugins(plan, code_generated_plugins)
           super()
         end
 
-        def namespace
-          @plan.gem_namespace
-        end
-
-        def gem_name
-          @plan.options[:gem_name]
-        end
-
-        def gem_version
-          @plan.options[:gem_version]
-        end
+        attr_reader :namespace, :gem_name, :gem_version
 
         def require_plugins
           @plugins.select(&:requirable?).map(&:require_path)

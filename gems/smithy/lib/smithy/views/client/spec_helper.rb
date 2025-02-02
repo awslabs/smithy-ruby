@@ -7,16 +7,11 @@ module Smithy
       class SpecHelper < View
         def initialize(plan)
           @plan = plan
+          @gem_name = plan.gem_name
           super()
         end
 
-        def gem_name
-          if @plan.type == :schema
-            "#{@plan.options[:gem_name]}-schema"
-          else
-            @plan.options[:gem_name]
-          end
-        end
+        attr_reader :gem_name
       end
     end
   end

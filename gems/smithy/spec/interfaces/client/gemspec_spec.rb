@@ -14,7 +14,7 @@ describe 'Component: Gemspec' do
 
         let(:gem_name) { "weather#{plan_type == :schema ? '-schema' : ''}" }
 
-        it 'generates a gemspec with types suffix' do
+        it 'generates a gemspec with schema suffix' do
           gemspec = File.join(@tmpdir, "#{gem_name}.gemspec")
           expect(File.exist?(gemspec)).to be(true)
         end
@@ -23,7 +23,7 @@ describe 'Component: Gemspec' do
           gemspec = File.join(@tmpdir, "#{gem_name}.gemspec")
           gem = Gem::Specification.load(gemspec)
           expect(gem.name).to eq(gem_name)
-          expect(gem.version).to eq(Gem::Version.new('1.0.0'))
+          expect(gem.version).to eq(Gem::Version.new('0.1.0'))
           expect(gem.summary).to eq('Generated gem using Smithy')
           expect(gem.authors).to eq(['Smithy Ruby'])
           expect(gem.files).to include("lib/#{gem_name}/types.rb")
@@ -42,7 +42,7 @@ describe 'Component: Gemspec' do
 
         let(:gem_name) { "some_organization-weather#{plan_type == :schema ? '-schema' : ''}" }
 
-        it 'generates a gemspec with types suffix' do
+        it 'generates a gemspec with schema suffix' do
           gemspec = File.join(@tmpdir, "#{gem_name}.gemspec")
           expect(File.exist?(gemspec)).to be(true)
         end
@@ -51,7 +51,7 @@ describe 'Component: Gemspec' do
           gemspec = File.join(@tmpdir, "#{gem_name}.gemspec")
           gem = Gem::Specification.load(gemspec)
           expect(gem.name).to eq(gem_name)
-          expect(gem.version).to eq(Gem::Version.new('1.0.0'))
+          expect(gem.version).to eq(Gem::Version.new('0.1.0'))
           expect(gem.summary).to eq('Generated gem using Smithy')
           expect(gem.authors).to eq(['Smithy Ruby'])
           expect(gem.files).to include("lib/#{gem_name}/types.rb")

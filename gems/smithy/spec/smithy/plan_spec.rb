@@ -5,7 +5,7 @@ module Smithy
     let(:fixture) { File.expand_path('../fixtures/weather/model.json', __dir__.to_s) }
     let(:model) { JSON.load_file(fixture) }
     let(:type) { :client }
-    let(:options) { {} }
+    let(:options) { { gem_version: '0.1.0' } }
 
     subject { described_class.new(model, type, options) }
 
@@ -21,11 +21,7 @@ module Smithy
       end
     end
 
-    describe '#options' do
-      it 'returns the options' do
-        expect(subject.options).to eq(options)
-      end
-    end
+    # TODO: unit tests for accessors in Plan
 
     describe '#welds' do
       it 'returns the welds' do

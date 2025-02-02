@@ -8,14 +8,13 @@ module Smithy
         def initialize(plan, code_generated_plugins)
           @plan = plan
           @model = plan.model
+          @namespace = plan.module_name
           @plugins = plugins(plan, code_generated_plugins)
 
           super()
         end
 
-        def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
-        end
+        attr_reader :namespace
 
         def option_types
           # TODO: Ensure this order is correct when plugins override options

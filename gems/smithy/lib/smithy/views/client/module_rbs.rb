@@ -12,7 +12,7 @@ module Smithy
         end
 
         def namespaces
-          Util::Namespace.namespaces_from_gem_name(@plan.options[:gem_name])
+          @plan.module_name.split('::')
         end
       end
     end

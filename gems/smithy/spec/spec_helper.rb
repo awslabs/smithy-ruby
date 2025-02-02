@@ -23,11 +23,11 @@ module SpecHelper
     def generate(modules, type, options = {})
       model = load_model(modules, options)
       plan = create_plan(modules, model, type, options)
-      sdk_dir = plan.options[:destination_root]
+      sdk_dir = plan.destination_root
       Smithy.generate(plan)
 
       $LOAD_PATH << ("#{sdk_dir}/lib")
-      require "#{plan.options[:gem_name]}#{type == :schema ? '-schema' : ''}"
+      require plan.gem_name
 
       setup_rbs_spytest(modules, sdk_dir) if options.fetch(:rbs_test, ENV.fetch('SMITHY_RUBY_RBS_TEST', nil))
       sdk_dir
@@ -77,8 +77,8 @@ module SpecHelper
 
     def create_plan(modules, model, type, options)
       plan_options = {
-        gem_name: options.fetch(:gem_name, Smithy::Util::Namespace.gem_name_from_namespaces(modules)),
-        gem_version: options.fetch(:gem_version, '1.0.0'),
+        module_name: modules.join('::'),
+        gem_version: options.fetch(:gem_version, '0.1.0'),
         destination_root: options.fetch(:destination_root, Dir.mktmpdir),
         quiet: ENV.fetch('SMITHY_RUBY_DEBUG', 'false') == 'false'
       }

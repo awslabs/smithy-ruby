@@ -9,8 +9,8 @@ module Smithy
     # @param [Plan] plan The plan that is being executed.
     def initialize(plan)
       # Necessary for Thor::Base and Thor::Actions
-      self.options = { force: true, quiet: plan.options[:quiet] }
-      self.destination_root = plan.options[:destination_root]
+      self.options = { force: true, quiet: plan.quiet }
+      self.destination_root = plan.destination_root
       shell.base = self
     end
 
