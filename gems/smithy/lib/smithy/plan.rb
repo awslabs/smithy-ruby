@@ -41,14 +41,14 @@ module Smithy
     attr_reader :identifier
 
     # @return [String] The gem name for clients and schemas.
-    #  Defaults to the name of the service.
+    #  Defaults to a gem name derived from the module name, suffixed with '-schema' if type is schema.
     attr_reader :gem_name
 
     # @return [String] The version of the gem to generate.
     attr_reader :gem_version
 
     # @return [String] The module name for clients and schemas.
-    #  Defaults to the namespace inferred from the gem name.
+    #  Defaults to the name of the service.
     attr_reader :module_name
 
     # @return [String] The destination directory for the generated code.
