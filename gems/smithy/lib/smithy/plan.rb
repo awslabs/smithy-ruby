@@ -6,6 +6,7 @@ module Smithy
     # @param [Hash] model The API model as a JSON hash.
     # @param [Symbol] type The type of code to generate, either :client, :server, or :schema.
     # @param [Hash] options The options passed to the generator.
+    # rubocop:disable Metrics/AbcSize
     def initialize(model, type, options = {})
       @model = model
       @type = type
@@ -23,6 +24,7 @@ module Smithy
       Welds.load!(self)
       @welds = Welds.for(@service)
     end
+    # rubocop:enable Metrics/AbcSize
 
     # @return [Hash] The API model as a JSON hash.
     attr_reader :model
