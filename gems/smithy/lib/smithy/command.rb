@@ -18,6 +18,7 @@ module Smithy
       class_option :destination_root, type: :string, required: true,
                                       default: ENV.fetch('SMITHY_PLUGIN_DIR', nil),
                                       desc: 'The destination directory for the generated code.'
+      class_option :quiet, type: :boolean, default: false, desc: 'Suppress all output.'
 
       def self.gem_options!
         method_option :gem_name, type: :string, required: true,

@@ -10,8 +10,9 @@ module Smithy
       # @param [Plan] plan The plan to generate.
       def initialize(plan)
         # Necessary for Thor::Base and Thor::Actions
-        self.options = { force: true }
+        self.options = { force: true, quiet: plan.options[:quiet] }
         self.destination_root = plan.options[:destination_root]
+        shell.base = self
       end
     end
   end

@@ -25,11 +25,11 @@ module Smithy
     # @return [Hash] The options passed to the generator.
     attr_reader :options
 
-    # @return [Array<Weld>] The welds that apply to this plan.
-    attr_reader :welds
-
     # @return [Hash<String, Hash>] The service shape for the shapes.
     attr_reader :service
+
+    # @return [Array<Weld>] The welds that apply to this plan.
+    attr_reader :welds
 
     # @return [String] The full namespace for the gem.
     def gem_namespace

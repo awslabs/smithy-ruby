@@ -24,7 +24,7 @@ module SpecHelper
       model = load_model(modules, options)
       plan = create_plan(modules, model, type, options)
       sdk_dir = plan.options[:destination_root]
-      smith(plan)
+      Smithy.generate(plan)
 
       $LOAD_PATH << ("#{sdk_dir}/lib")
       require "#{plan.options[:gem_name]}#{type == :schema ? '-schema' : ''}"
@@ -69,14 +69,6 @@ module SpecHelper
 
     private
 
-    def with_captured_stdout
-      original_stdout = $stdout
-      $stdout = StringIO.new
-      yield
-    ensure
-      $stdout = original_stdout
-    end
-
     def load_model(modules, options)
       fixture = options[:fixture] || modules.map(&:underscore).join('/')
       model_dir = File.join(File.dirname(__FILE__), 'fixtures', fixture)
@@ -87,17 +79,10 @@ module SpecHelper
       plan_options = {
         gem_name: options.fetch(:gem_name, Smithy::Util::Namespace.gem_name_from_namespaces(modules)),
         gem_version: options.fetch(:gem_version, '1.0.0'),
-        destination_root: options.fetch(:destination_root, Dir.mktmpdir)
+        destination_root: options.fetch(:destination_root, Dir.mktmpdir),
+        quiet: ENV.fetch('SMITHY_RUBY_DEBUG', 'false') == 'false'
       }
       Smithy::Plan.new(model, type, plan_options)
-    end
-
-    def smith(plan)
-      if ENV['SMITHY_RUBY_DEBUG']
-        Smithy.generate(plan)
-      else
-        with_captured_stdout { Smithy.generate(plan) }
-      end
     end
 
     def load_collection(loader)
