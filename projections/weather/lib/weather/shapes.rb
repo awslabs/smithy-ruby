@@ -61,7 +61,7 @@ module Weather
       schema.service = ServiceShape.new(
         id: 'example.weather#Weather',
         version: '2006-03-01',
-        traits: { 'smithy.api#paginated' => { 'inputToken' => 'nextToken', 'outputToken' => 'nextToken', 'pageSize' => 'pageSize' } }
+        traits: { 'smithy.api#paginated' => { 'inputToken' => 'nextToken', 'outputToken' => 'nextToken', 'pageSize' => 'pageSize' }, 'smithy.protocols#rpcv2Cbor' => {} }
       )
       schema.add_operation(:get_city, OperationShape.new do |operation|
         operation.id = 'example.weather#GetCity'

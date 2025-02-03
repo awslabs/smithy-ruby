@@ -12,6 +12,7 @@ module Weather
 
     add_plugin(Smithy::Client::Plugins::NetHTTP)
     add_plugin(Weather::Plugins::Endpoint)
+    add_plugin(Weather::Plugins::Protocol)
 
     # @param [Hash] options
     # @option options [Logger] :logger
@@ -83,6 +84,8 @@ module Weather
     #  `#resolve_endpoint(parameters)`.
     # @option options [String] :endpoint
     #  Custom Endpoint
+    # @option options [Smithy::Client::Protocols::ProtocolBase] :protocol (Smithy::Client::Protocols::RPCV2)
+    #  TODO
     def initialize(*args)
       super
     end
@@ -164,12 +167,15 @@ module Weather
 
     def build_input(operation_name, params)
       handlers = @handlers.for(operation_name)
+      operation = config.schema.operation(operation_name)
+      config.protocol.service_id = 'example.weather#Weather'
       context = Smithy::Client::HandlerContext.new(
         operation_name: operation_name,
-        operation: config.schema.operation(operation_name),
+        operation: operation,
         client: self,
         params: params,
-        config: config
+        config: config,
+        protocol: config.protocol
       )
       context[:gem_name] = 'weather'
       context[:gem_version] = '1.0.0'

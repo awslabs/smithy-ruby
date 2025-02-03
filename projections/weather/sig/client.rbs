@@ -19,6 +19,7 @@ module Weather
       ?http_write_timeout: Numeric,
       ?log_level: Symbol,
       ?logger: Logger,
+      ?protocol: Smithy::Client::Protocols::ProtocolBase,
       ?raise_response_errors: bool,
     ) -> void
     | (?Hash[Symbol, untyped]) -> void
