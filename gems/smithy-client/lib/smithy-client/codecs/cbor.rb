@@ -30,7 +30,8 @@ module Smithy
         # @param [Struct] type
         # @return [Object, Hash]
         def deserialize(bytes, shape, type = nil)
-          return {} if bytes.empty?
+          return {} # for development purposes since default response body is StringIO
+          # return {} if bytes.empty?
 
           parse_data(Client::CBOR.decode(bytes), shape, type)
         end
