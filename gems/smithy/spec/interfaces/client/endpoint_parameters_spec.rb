@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Component: EndpointParameters' do
+describe 'Component: EndpointParameters', rbs_test: true do
   before(:all) do
     @tmpdir = SpecHelper.generate(['EndpointBindings'], :client, fixture: 'endpoints/endpoint-bindings')
   end

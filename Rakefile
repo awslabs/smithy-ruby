@@ -6,10 +6,11 @@ require 'rspec/core/rake_task'
 RuboCop::RakeTask.new
 
 namespace :smithy do
-  RSpec::Core::RakeTask.new('spec:unit') do |t|
+  RSpec::Core::RakeTask.new('spec:unit') do |t, _args|
     t.pattern = 'gems/smithy/spec/**/*_spec.rb'
     t.ruby_opts = '-I gems/smithy/spec'
     t.rspec_opts = '--format documentation'
+    t.rspec_opts += ' --tag rbs_test' if ENV['SMITHY_RUBY_RBS_TEST']
   end
 
   task 'spec:endpoints', [:rbs_test] do |_t, args|

@@ -2,7 +2,7 @@
 
 describe 'Component: Customizations' do
   before(:all) do
-    @tmpdir = SpecHelper.generate(['Weather'], :client, rbs_test: false)
+    @tmpdir = SpecHelper.generate(['Weather'], :client)
   end
 
   after(:all) do

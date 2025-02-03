@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Component: Client' do
+describe 'Component: Client', rbs_test: true do
   before(:all) do
     @tmpdir = SpecHelper.generate(['Weather'], :client)
   end
