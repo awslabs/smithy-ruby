@@ -2,7 +2,10 @@ $version: "2"
 
 namespace example.weather
 
+use smithy.protocols#rpcv2Cbor
+
 /// Provides weather forecasts.
+@rpcv2Cbor
 @paginated(inputToken: "nextToken", outputToken: "nextToken", pageSize: "pageSize")
 service Weather {
     version: "2006-03-01"
