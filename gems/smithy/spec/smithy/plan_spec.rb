@@ -21,14 +21,6 @@ module Smithy
       end
     end
 
-    # TODO: unit tests for accessors in Plan
-
-    describe '#welds' do
-      it 'returns the welds' do
-        expect(subject.welds).to eq(Welds.for(subject.service))
-      end
-    end
-
     describe '#service' do
       context 'one service shape' do
         let(:fixture) { File.expand_path('../fixtures/one_service/model.json', __dir__.to_s) }
@@ -54,6 +46,41 @@ module Smithy
         it 'raises an error' do
           expect { subject }.to raise_error('Multiple service shapes found')
         end
+      end
+    end
+
+    describe '#welds' do
+      it 'returns the welds' do
+        expect(subject.welds).to eq(Welds.for(subject.service))
+      end
+    end
+
+    describe '#name' do
+      it 'defaults to the name of the service' do
+        expect(subject.name).to eq('Weather')
+      end
+    end
+
+    describe '#module_name' do
+      it 'defaults to the name' do
+        expect(subject.module_name).to eq(subject.name)
+      end
+    end
+
+    describe '#gem_name' do
+      it 'defaults to the downcased module name' do
+        expect(subject.gem_name).to eq(subject.module_name.downcase)
+      end
+
+      it 'appends -schema for schema gems' do
+        subject = described_class.new(model, :schema, options)
+        expect(subject.gem_name).to eq("#{subject.module_name.downcase}-schema")
+      end
+    end
+
+    describe '#gem_version' do
+      it 'is required' do
+        expect { described_class.new(model, type, {}) }.to raise_error(KeyError)
       end
     end
   end
