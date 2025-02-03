@@ -10,424 +10,336 @@ describe 'Component: Shapes' do
   end
 
   let(:fixture) { JSON.load_file(File.expand_path('../../fixtures/shapes/model.json', __dir__.to_s)) }
-  let(:shapes_module) { Smithy::Client::Shapes }
 
   subject { ShapeService::Shapes }
 
   it 'generates a shapes module' do
-    expect(subject).to be_a(Module)
+    expect(ShapeService::Shapes).to be_a(Module)
+  end
+
+  def expect_generated_shape(subject, shape_class, shape_hash)
+    id, shape = shape_hash
+    expect(subject).to be_a(shape_class)
+    expect(subject.id).to eq(id)
+    expect(subject.traits).to eq(shape['traits'])
   end
 
   context 'blob' do
-    it 'is an instance of BlobShape' do
-      expect(subject::Blob).to be_a(shapes_module::BlobShape)
+    subject { ShapeService::Shapes::Blob }
+    let(:shape_class) { Smithy::Client::Shapes::BlobShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'blob' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'blob' }
-      expect(subject::Blob.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'blob' }
-      expect(subject::Blob.traits).to eq(shape['traits'])
+    it 'generates a blob shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'boolean' do
-    it 'is an instance of BooleanShape' do
-      expect(subject::Boolean).to be_a(shapes_module::BooleanShape)
+    subject { ShapeService::Shapes::Boolean }
+    let(:shape_class) { Smithy::Client::Shapes::BooleanShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'boolean' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'boolean' }
-      expect(subject::Boolean.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'blob' }
-      expect(subject::Boolean.traits).to eq(shape['traits'])
+    it 'generates a boolean shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'string' do
-    it 'is an instance of StringShape' do
-      expect(subject::String).to be_a(shapes_module::StringShape)
+    subject { ShapeService::Shapes::String }
+    let(:shape_class) { Smithy::Client::Shapes::StringShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'string' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'string' }
-      expect(subject::String.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'string' }
-      expect(subject::String.traits).to eq(shape['traits'])
+    it 'generates a string shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'byte' do
-    it 'is an instance of IntegerShape' do
-      expect(subject::Byte).to be_a(shapes_module::IntegerShape)
+    subject { ShapeService::Shapes::Byte }
+    let(:shape_class) { Smithy::Client::Shapes::IntegerShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'byte' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'byte' }
-      expect(subject::Byte.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'byte' }
-      expect(subject::Byte.traits).to eq(shape['traits'])
+    it 'generates a byte shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'short' do
-    it 'is an instance of IntegerShape' do
-      expect(subject::Short).to be_a(shapes_module::IntegerShape)
+    subject { ShapeService::Shapes::Short }
+    let(:shape_class) { Smithy::Client::Shapes::IntegerShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'short' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'short' }
-      expect(subject::Short.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'short' }
-      expect(subject::Short.traits).to eq(shape['traits'])
+    it 'generates a short shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'integer' do
-    it 'is an instance of IntegerShape' do
-      expect(subject::Integer).to be_a(shapes_module::IntegerShape)
+    subject { ShapeService::Shapes::Integer }
+    let(:shape_class) { Smithy::Client::Shapes::IntegerShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'integer' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'integer' }
-      expect(subject::Integer.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'integer' }
-      expect(subject::Integer.traits).to eq(shape['traits'])
+    it 'generates an integer shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'long' do
-    it 'is an instance of IntegerShape' do
-      expect(subject::Long).to be_a(shapes_module::IntegerShape)
+    subject { ShapeService::Shapes::Long }
+    let(:shape_class) { Smithy::Client::Shapes::IntegerShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'long' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'long' }
-      expect(subject::Long.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'long' }
-      expect(subject::Long.traits).to eq(shape['traits'])
+    it 'generates a long shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'float' do
-    it 'is an instance of FloatShape' do
-      expect(subject::Float).to be_a(shapes_module::FloatShape)
+    subject { ShapeService::Shapes::Float }
+    let(:shape_class) { Smithy::Client::Shapes::FloatShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'float' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'float' }
-      expect(subject::Float.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'float' }
-      expect(subject::Float.traits).to eq(shape['traits'])
+    it 'generates a float shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'double' do
-    it 'is an instance of FloatShape' do
-      expect(subject::Double).to be_a(shapes_module::FloatShape)
+    subject { ShapeService::Shapes::Double }
+    let(:shape_class) { Smithy::Client::Shapes::FloatShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'double' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'double' }
-      expect(subject::Double.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'double' }
-      expect(subject::Double.traits).to eq(shape['traits'])
+    it 'generates a double shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'bigInteger' do
-    it 'is an instance of IntegerShape' do
-      expect(subject::BigInteger).to be_a(shapes_module::IntegerShape)
+    subject { ShapeService::Shapes::BigInteger }
+    let(:shape_class) { Smithy::Client::Shapes::IntegerShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'bigInteger' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'bigInteger' }
-      expect(subject::BigInteger.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'bigInteger' }
-      expect(subject::BigInteger.traits).to eq(shape['traits'])
+    it 'generates a big integer shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'bigDecimal' do
-    it 'is an instance of BigDecimalShape' do
-      expect(subject::BigDecimal).to be_a(shapes_module::BigDecimalShape)
+    subject { ShapeService::Shapes::BigDecimal }
+    let(:shape_class) { Smithy::Client::Shapes::BigDecimalShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'bigDecimal' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'bigDecimal' }
-      expect(subject::BigDecimal.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'bigDecimal' }
-      expect(subject::BigDecimal.traits).to eq(shape['traits'])
+    it 'generates a big decimal shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'timestamp' do
-    it 'is an instance of TimestampShape' do
-      expect(subject::Timestamp).to be_a(shapes_module::TimestampShape)
+    subject { ShapeService::Shapes::Timestamp }
+    let(:shape_class) { Smithy::Client::Shapes::TimestampShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'timestamp' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'timestamp' }
-      expect(subject::Timestamp.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'timestamp' }
-      expect(subject::Timestamp.traits).to eq(shape['traits'])
+    it 'generates a timestamp shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'document' do
-    it 'is an instance of DocumentShape' do
-      expect(subject::Document).to be_a(shapes_module::DocumentShape)
+    subject { ShapeService::Shapes::Document }
+    let(:shape_class) { Smithy::Client::Shapes::DocumentShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'document' }
     end
 
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'document' }
-      expect(subject::Document.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'document' }
-      expect(subject::Document.traits).to eq(shape['traits'])
+    it 'generates a document shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
   end
 
   context 'enum' do
+    subject { ShapeService::Shapes::Enum }
+    let(:shape_class) { Smithy::Client::Shapes::EnumShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'enum' }
+    end
     let(:expected_member) do
-      fixture['shapes']
-        .select { |_, s| s['type'] == 'enum' }
-        .values
-        .first['members']['FOO']
+      _, shape = shape_hash
+      shape['members']['FOO']
     end
 
-    it 'is an instance of EnumShape' do
-      expect(subject::Enum).to be_a(shapes_module::EnumShape)
-    end
-
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'enum' }
-      expect(subject::Enum.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'enum' }
-      expect(subject::Enum.traits).to eq(shape['traits'])
+    it 'generates an enum shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
 
     it 'has members' do
-      expect(subject::Enum.members.keys).to eq(%i[foo])
-      expect(subject::Enum.members[:foo]).to be_a(shapes_module::MemberShape)
-      expect(subject::Enum.members[:foo].shape).to be_a(shapes_module::StructureShape)
-      expect(subject::Enum.members[:foo].traits).to eq(expected_member['traits'])
-      expect(subject::Enum.members[:foo].shape.id).to eq(expected_member['target'])
+      expect(subject.members.keys).to eq(%i[foo])
+      expect(subject.members[:foo]).to be_a(Smithy::Client::Shapes::MemberShape)
+      expect(subject.members[:foo].shape).to be_a(Smithy::Client::Shapes::StructureShape)
+      expect(subject.members[:foo].traits).to eq(expected_member['traits'])
+      expect(subject.members[:foo].shape.id).to eq(expected_member['target'])
     end
 
     it 'has a member with traits' do
-      expect(subject::Enum.member(:foo).traits).to eq(expected_member['traits'])
+      expect(subject.member(:foo).traits).to eq(expected_member['traits'])
     end
   end
 
   context 'intEnum' do
+    subject { ShapeService::Shapes::IntEnum }
+    let(:shape_class) { Smithy::Client::Shapes::IntEnumShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'intEnum' }
+    end
     let(:expected_member) do
-      fixture['shapes']
-        .select { |_, s| s['type'] == 'intEnum' }
-        .values
-        .first['members']['BAZ']
+      _, shape = shape_hash
+      shape['members']['BAZ']
     end
 
-    it 'is an instance of IntEnumShape' do
-      expect(subject::IntEnum).to be_a(shapes_module::IntEnumShape)
-    end
-
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'intEnum' }
-      expect(subject::IntEnum.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'intEnum' }
-      expect(subject::IntEnum.traits).to eq(shape['traits'])
+    it 'generates an int enum shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
 
     it 'has members' do
-      expect(subject::IntEnum.members.keys).to eq(%i[baz])
-      expect(subject::IntEnum.members[:baz]).to be_a(shapes_module::MemberShape)
-      expect(subject::IntEnum.members[:baz].shape).to be_a(shapes_module::StructureShape)
-      expect(subject::IntEnum.members[:baz].traits).to eq(expected_member['traits'])
-      expect(subject::IntEnum.members[:baz].shape.id).to eq(expected_member['target'])
+      expect(subject.members.keys).to eq(%i[baz])
+      expect(subject.members[:baz]).to be_a(Smithy::Client::Shapes::MemberShape)
+      expect(subject.members[:baz].shape).to be_a(Smithy::Client::Shapes::StructureShape)
+      expect(subject.members[:baz].traits).to eq(expected_member['traits'])
+      expect(subject.members[:baz].shape.id).to eq(expected_member['target'])
     end
 
     it 'has a member with traits' do
-      expect(subject::IntEnum.member(:baz).traits).to eq(expected_member['traits'])
+      expect(subject.member(:baz).traits).to eq(expected_member['traits'])
     end
   end
 
   context 'list' do
+    subject { ShapeService::Shapes::List }
+    let(:shape_class) { Smithy::Client::Shapes::ListShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'list' }
+    end
     let(:expected_member) do
-      fixture['shapes']
-        .select { |_, s| s['type'] == 'list' }
-        .values
-        .first['member']
+      _, shape = shape_hash
+      shape['member']
     end
 
-    it 'is an instance of ListShape' do
-      expect(subject::List).to be_a(shapes_module::ListShape)
-    end
-
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'list' }
-      expect(subject::List.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'list' }
-      expect(subject::List.traits).to eq(shape['traits'])
+    it 'generates a list shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
 
     it 'has a member' do
-      expect(subject::List.member).to be_a(shapes_module::MemberShape)
-      expect(subject::List.member.shape).to be_a(shapes_module::StringShape)
-      expect(subject::List.member.shape.id).to eq(expected_member['target'])
+      expect(subject.member).to be_a(Smithy::Client::Shapes::MemberShape)
+      expect(subject.member.shape).to be_a(Smithy::Client::Shapes::StringShape)
+      expect(subject.member.shape.id).to eq(expected_member['target'])
     end
 
     it 'has a member with traits' do
-      expect(subject::List.member.traits).to eq(expected_member['traits'])
+      expect(subject.member.traits).to eq(expected_member['traits'])
     end
   end
 
   context 'map' do
+    subject { ShapeService::Shapes::Map }
+    let(:shape_class) { Smithy::Client::Shapes::MapShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'map' }
+    end
     let(:expected_shape) do
-      fixture['shapes']
-        .select { |_, s| s['type'] == 'map' }
-        .values
-        .first
+      _, shape = shape_hash
+      shape
     end
 
-    it 'is an instance of MapShape' do
-      expect(subject::Map).to be_a(shapes_module::MapShape)
-    end
-
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'map' }
-      expect(subject::Map.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'map' }
-      expect(subject::Map.traits).to eq(shape['traits'])
+    it 'generates a map shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
 
     it 'has key and value members' do
-      expect(subject::Map.key).to be_a(shapes_module::MemberShape)
-      expect(subject::Map.key.shape).to be_a(shapes_module::StringShape)
-      expect(subject::Map.key.shape.id).to eq(expected_shape['key']['target'])
-      expect(subject::Map.value).to be_a(shapes_module::MemberShape)
-      expect(subject::Map.value.shape).to be_a(shapes_module::StringShape)
-      expect(subject::Map.value.shape.id).to eq(expected_shape['value']['target'])
+      expect(subject.key).to be_a(Smithy::Client::Shapes::MemberShape)
+      expect(subject.key.shape).to be_a(Smithy::Client::Shapes::StringShape)
+      expect(subject.key.shape.id).to eq(expected_shape['key']['target'])
+      expect(subject.value).to be_a(Smithy::Client::Shapes::MemberShape)
+      expect(subject.value.shape).to be_a(Smithy::Client::Shapes::StringShape)
+      expect(subject.value.shape.id).to eq(expected_shape['value']['target'])
     end
 
     it 'has keys and values with traits' do
-      expect(subject::Map.key.traits).to eq(expected_shape['key']['traits'])
-      expect(subject::Map.value.traits).to eq(expected_shape['value']['traits'])
+      expect(subject.key.traits).to eq(expected_shape['key']['traits'])
+      expect(subject.value.traits).to eq(expected_shape['value']['traits'])
     end
   end
 
   context 'union' do
+    subject { ShapeService::Shapes::Union }
+    let(:shape_class) { Smithy::Client::Shapes::UnionShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |_, s| s['type'] == 'union' }
+    end
     let(:expected_shape) do
-      fixture['shapes']
-        .select { |k, _| k.include?('Union') }
-        .values
-        .first
+      _, shape = shape_hash
+      shape
     end
 
-    it 'is an instance of UnionShape' do
-      expect(subject::Union).to be_a(shapes_module::UnionShape)
-    end
-
-    it 'has an id' do
-      id, = fixture['shapes'].find { |_, s| s['type'] == 'union' }
-      expect(subject::Union.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |_, s| s['type'] == 'union' }
-      expect(subject::Union.traits).to eq(shape['traits'])
+    it 'generates a union shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
 
     it 'has members' do
       expected_members = expected_shape['members'].keys.map(&:to_sym)
-      expect(subject::Union.members.keys).to eq(expected_members)
+      expect(subject.members.keys).to eq(expected_members)
     end
 
     it 'has a member with traits' do
       expected_member = expected_shape['members'].slice('string').values.first
-      expect(subject::Union.member(:string).traits).to eq(expected_member['traits'])
+      expect(subject.member(:string).traits).to eq(expected_member['traits'])
     end
 
     it 'has a type' do
-      expect(subject::Union.type).to eq(ShapeService::Types::Union)
+      expect(subject.type).to eq(ShapeService::Types::Union)
     end
 
     it 'has members with types' do
-      expect(subject::Union.member(:string)).to be_a(shapes_module::MemberShape)
-      expect(subject::Union.member_type(:string)).to eq(ShapeService::Types::Union::String)
+      expect(subject.member(:string)).to be_a(Smithy::Client::Shapes::MemberShape)
+      expect(subject.member_type(:string)).to eq(ShapeService::Types::Union::String)
     end
   end
 
   context 'structure' do
+    subject { ShapeService::Shapes::Structure }
+    let(:shape_class) { Smithy::Client::Shapes::StructureShape }
+    let(:shape_hash) do
+      fixture['shapes'].find { |k, _| k.include?('Structure') }
+    end
     let(:expected_shape) do
-      fixture['shapes']
-        .select { |k, _| k.include?('Structure') }
-        .values
-        .first
+      _, shape = shape_hash
+      shape
     end
 
-    it 'is an instance of StructureShape' do
-      expect(subject::Structure).to be_a(shapes_module::StructureShape)
-    end
-
-    it 'has an id' do
-      id, = fixture['shapes'].find { |k, _| k.include?('Structure') }
-      expect(subject::Structure.id).to eq(id)
-    end
-
-    it 'has traits' do
-      _, shape = fixture['shapes'].find { |k, _| k.include?('Structure') }
-      expect(subject::Structure.traits).to eq(shape['traits'])
+    it 'generates a structure shape' do
+      expect_generated_shape(subject, shape_class, shape_hash)
     end
 
     it 'has members' do
@@ -435,7 +347,7 @@ describe 'Component: Shapes' do
         expected_shape['members']
         .keys
         .map { |m| m.underscore.to_sym }
-      expect(subject::Structure.members.keys).to eq(expected_members)
+      expect(subject.members.keys).to eq(expected_members)
     end
 
     it 'has a member with traits' do
@@ -444,7 +356,7 @@ describe 'Component: Shapes' do
         .slice('member')
         .values
         .first
-      expect(subject::Structure.member(:member).traits).to eq(expected_member['traits'])
+      expect(subject.member(:member).traits).to eq(expected_member['traits'])
     end
   end
 
@@ -458,7 +370,7 @@ describe 'Component: Shapes' do
       let(:expected_service) { fixture['shapes'].find { |_k, v| v['type'] == 'service' } }
 
       it 'is a service shape and able to access service shape data' do
-        expect(service_shape).to be_a(shapes_module::ServiceShape)
+        expect(service_shape).to be_a(Smithy::Client::Shapes::ServiceShape)
         expect(service_shape.id).to eql(expected_service[0])
         expect(service_shape.version).to eq(expected_service[1]['version'])
 

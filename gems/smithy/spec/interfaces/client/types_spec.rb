@@ -16,13 +16,13 @@ describe 'Component: Types' do
       end
 
       it 'has structures as structs that include Structure' do
-        expect(ShapeService::Types::Structure.superclass).to be(Struct)
+        expect(ShapeService::Types::Structure).to be < Struct
         expect(ShapeService::Types::Structure).to include(Smithy::Client::Structure)
       end
 
       it 'has unions that define member subclasses' do
-        expect(ShapeService::Types::Union.superclass).to be(Smithy::Client::Union)
-        expect(ShapeService::Types::Union::Structure.superclass).to be(ShapeService::Types::Union)
+        expect(ShapeService::Types::Union).to be < Smithy::Client::Union
+        expect(ShapeService::Types::Union::Structure).to be < ShapeService::Types::Union
       end
 
       it 'supports nested to_h' do
