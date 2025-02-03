@@ -2,7 +2,7 @@
 
 describe 'Component: Client: Request/Response Syntax Examples' do
   before(:all) do
-    @tmpdir = SpecHelper.generate(['ExamplesTrait'], :client)
+    @tmpdir = SpecHelper.generate(['ExamplesTrait'], :client, rbs_test: false)
   end
 
   after(:all) do

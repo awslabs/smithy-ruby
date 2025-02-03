@@ -5,7 +5,7 @@ describe 'Component: Gemspec' do
     context "#{plan_type} generator" do
       context 'single module' do
         before(:all) do
-          @tmpdir = SpecHelper.generate(['Weather'], plan_type)
+          @tmpdir = SpecHelper.generate(['Weather'], plan_type, rbs_test: false)
         end
 
         after(:all) do
