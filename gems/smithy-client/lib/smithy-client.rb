@@ -40,6 +40,7 @@ require_relative 'smithy-client/errors'
 require_relative 'smithy-client/schema'
 require_relative 'smithy-client/shapes'
 require_relative 'smithy-client/structure'
+require_relative 'smithy-client/union'
 
 # endpoints
 require_relative 'smithy-client/endpoint_rules'

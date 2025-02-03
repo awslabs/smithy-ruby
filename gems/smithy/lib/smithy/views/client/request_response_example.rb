@@ -74,7 +74,7 @@ module Smithy
           when 'list' then list(shape, indent, visited)
           when 'map' then map(shape, indent, visited)
           when 'structure' then structure(shape, indent, visited)
-          when 'union' then 'TODO: union'
+          when 'union' then union(shape, indent, visited)
           else raise "unsupported shape type: #{shape['type'].inspect}"
           end
         end
@@ -104,6 +104,18 @@ module Smithy
           lines = []
           lines << '{'
           structure_shape['members']&.each_pair do |member_name, member_shape|
+            lines << member(member_name, member_shape, indent, visited)
+          end
+          lines.last.chomp!(',') if lines.last.end_with?(',')
+          lines << "#{indent}}"
+          lines.join("\n")
+        end
+
+        def union(union_shape, indent, visited)
+          lines = []
+          lines << '{'
+          lines << "#{indent}  # One of:"
+          union_shape['members']&.each_pair do |member_name, member_shape|
             lines << member(member_name, member_shape, indent, visited)
           end
           lines.last.chomp!(',') if lines.last.end_with?(',')

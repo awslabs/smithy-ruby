@@ -138,10 +138,10 @@ module Smithy
           @type = nil
         end
 
-        # @return [Hash<String, MemberShape>]
+        # @return [Hash<Symbol, MemberShape>]
         attr_accessor :members
 
-        # @return [Struct]
+        # @return [Class]
         attr_accessor :type
 
         # @return [MemberShape]
@@ -164,7 +164,26 @@ module Smithy
       class TimestampShape < Shape; end
 
       # Represents both Union and EventStream shapes.
-      class UnionShape < StructureShape; end
+      class UnionShape < StructureShape
+        def initialize(options = {})
+          super
+          @member_types = {}
+        end
+
+        # @return [Symbol, Class]
+        attr_accessor :member_types
+
+        # @return [MemberShape]
+        def add_member(name, shape, type, traits: {})
+          @member_types[name] = type
+          super(name, shape, traits: traits)
+        end
+
+        # @return [Class, nil]
+        def member_type(name)
+          @member_types[name]
+        end
+      end
 
       # Represents a member shape.
       class MemberShape

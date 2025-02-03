@@ -25,9 +25,9 @@ module Smithy
 
         # @api private
         class Type
-          def initialize(model, id, structure)
+          def initialize(model, id, shape)
             @id = id
-            @structure = structure
+            @shape = shape
             @model = model
           end
 
@@ -36,9 +36,13 @@ module Smithy
           end
 
           def members
-            @structure['members'].map do |name, member|
+            @shape['members'].map do |name, member|
               Member.new(@model, name, member)
             end
+          end
+
+          def type
+            @shape['type']
           end
         end
 

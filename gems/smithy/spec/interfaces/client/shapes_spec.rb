@@ -193,6 +193,15 @@ describe 'Component: Shapes' do
       it 'is an instance of UnionShape' do
         expect(subject::Union).to be_a(shapes_module::UnionShape)
       end
+
+      it 'has a type' do
+        expect(subject::Union.type).to eq(ShapeService::Types::Union)
+      end
+
+      it 'has members with types' do
+        expect(subject::Union.member(:list)).to be_a(shapes_module::MemberShape)
+        expect(subject::Union.member_type(:list)).to eq(ShapeService::Types::Union::List)
+      end
     end
   end
 

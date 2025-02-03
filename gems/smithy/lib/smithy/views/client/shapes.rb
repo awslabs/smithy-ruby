@@ -37,7 +37,7 @@ module Smithy
         end
 
         def shapes
-          @shapes =
+          @shapes ||=
             @service_index
             .shapes_for(@service_shape)
             .reject { |_k, v| %w[operation resource service].include?(v['type']) }
@@ -69,41 +69,42 @@ module Smithy
             name: Model::Shape.name(id).camelize,
             type: shape_type_from_type(shape['type']),
             traits: filter_traits(shape['traits']),
-            members: build_member_shapes(shape)
+            members: build_member_shapes(id, shape)
           )
         end
 
-        def build_member_shapes(shape)
+        def build_member_shapes(id, shape)
           case shape['type']
           when 'enum', 'intEnum', 'structure', 'union'
-            build_members(shape)
+            build_members(id, shape)
           when 'list'
-            build_list_member(shape)
+            build_list_member(id, shape)
           when 'map'
-            build_map_members(shape)
+            build_map_members(id, shape)
           else
             []
           end
         end
 
-        def build_members(shape)
-          shape['members'].map { |k, v| build_member_shape(k, v['target'], v['traits']) }
+        def build_members(id, shape)
+          shape['members'].map { |k, v| build_member_shape(id, k, v['target'], v['traits']) }
         end
 
-        def build_list_member(shape)
+        def build_list_member(id, shape)
           m_shape = shape['member']
-          [] << build_member_shape('member', m_shape['target'], m_shape['traits'])
+          [] << build_member_shape(id, 'member', m_shape['target'], m_shape['traits'])
         end
 
-        def build_map_members(shape)
+        def build_map_members(id, shape)
           %w[key value].map do |m_name|
             m_shape = shape[m_name]
-            build_member_shape(m_name, m_shape['target'], m_shape['traits'])
+            build_member_shape(id, m_name, m_shape['target'], m_shape['traits'])
           end
         end
 
-        def build_member_shape(name, id, traits)
+        def build_member_shape(parent_id, name, id, traits)
           MemberShape.new(
+            parent_id: parent_id,
             name: name.underscore,
             shape: shape_type_from_id(id),
             traits: filter_traits(traits)
@@ -178,6 +179,7 @@ module Smithy
         # Member Shape represents members of Smithy shape
         class MemberShape
           def initialize(options = {})
+            @parent_id = options[:parent_id]
             @name = options[:name]
             @shape = options[:shape]
             @traits = options[:traits]
@@ -190,6 +192,9 @@ module Smithy
               "set_member(#{@shape}#{traits_str})"
             when 'MapShape'
               "set_#{@name}(#{@shape}#{traits_str})"
+            when 'UnionShape'
+              member_type = "Types::#{Model::Shape.name(@parent_id).camelize}::#{@name.camelize}"
+              "add_member(:#{@name}, #{@shape}, #{member_type}#{traits_str})"
             else
               "add_member(:#{@name}, #{@shape}#{traits_str})"
             end

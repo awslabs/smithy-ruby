@@ -46,7 +46,27 @@ describe 'Component: Client: Request/Response Syntax Examples' do
           structure: {
             member: "String"
           },
-          union: TODO: union
+          union: {
+            # One of:
+            string: "String",
+            structure: {
+              member: "String"
+            },
+            simple_list: ["String"],
+            simple_map: {
+              "String" => "String"
+            },
+            complex_list: [
+              {
+                member: "String"
+              }
+            ],
+            complex_map: {
+              "String" => {
+                member: "String"
+              }
+            }
+          }
         }
         options = {}
         output = client.operation(params, options)
@@ -86,7 +106,27 @@ describe 'Component: Client: Request/Response Syntax Examples' do
           structure: {
             member: "String"
           },
-          union: TODO: union
+          union: {
+            # One of:
+            string: "String",
+            structure: {
+              member: "String"
+            },
+            simple_list: ["String"],
+            simple_map: {
+              "String" => "String"
+            },
+            complex_list: [
+              {
+                member: "String"
+              }
+            ],
+            complex_map: {
+              "String" => {
+                member: "String"
+              }
+            }
+          }
         }
     EXAMPLE
     client_file = File.join(@tmpdir, 'lib', 'all_shapes', 'client.rb')
