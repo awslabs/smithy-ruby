@@ -80,7 +80,7 @@ module SpecHelper
         module_name: modules.join('::'),
         gem_version: options.fetch(:gem_version, '0.1.0'),
         destination_root: options.fetch(:destination_root, Dir.mktmpdir),
-        quiet: ENV.fetch('SMITHY_RUBY_DEBUG', 'false') == 'false'
+        quiet: ENV.fetch('SMITHY_RUBY_QUIET', 'true') == 'true'
       }
       Smithy::Plan.new(model, type, plan_options)
     end
