@@ -33,6 +33,8 @@ module Smithy
       class EnumShape < Shape
         attr_accessor members: Hash[Symbol, MemberShape]
         def add_member: (Symbol, Shape, ?traits: Hash[String, untyped]) -> void
+        def member?: (Symbol) -> bool
+        def member: (Symbol) -> MemberShape?
       end
 
       class IntegerShape < Shape
@@ -78,6 +80,30 @@ module Smithy
 
         attr_accessor shape: Shape?
         attr_accessor traits: Hash[String, untyped]
+      end
+
+      module Prelude
+        BigDecimal: BigDecimalShape
+        BigInteger: IntegerShape
+        Blob: BlobShape
+        Boolean: BooleanShape
+        Byte: IntegerShape
+        Document: DocumentShape
+        Double: FloatShape
+        Float: FloatShape
+        Integer: IntegerShape
+        Long: IntegerShape
+        PrimitiveBoolean: BooleanShape
+        PrimitiveByte: IntegerShape
+        PrimitiveDouble: FloatShape
+        PrimitiveFloat: FloatShape
+        PrimitiveInteger: IntegerShape
+        PrimitiveShort: IntegerShape
+        PrimitiveLong: IntegerShape
+        Short: IntegerShape
+        String: StringShape
+        Timestamp: TimestampShape
+        Unit: StructureShape
       end
     end
   end
