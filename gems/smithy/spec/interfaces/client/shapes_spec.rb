@@ -397,6 +397,15 @@ describe 'Component: Shapes' do
       expected_member = expected_shape['members'].slice('string').values.first
       expect(subject::Union.member(:string).traits).to eq(expected_member['traits'])
     end
+
+    it 'has a type' do
+      expect(subject::Union.type).to eq(ShapeService::Types::Union)
+    end
+
+    it 'has members with types' do
+      expect(subject::Union.member(:string)).to be_a(shapes_module::MemberShape)
+      expect(subject::Union.member_type(:string)).to eq(ShapeService::Types::Union::String)
+    end
   end
 
   context 'structure' do
