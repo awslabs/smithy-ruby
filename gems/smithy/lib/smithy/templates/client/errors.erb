@@ -2,15 +2,15 @@
 
 # This is generated code!
 
-module <%= namespace %>
+module <%= module_name %>
   # When this service returns an error response, the SDK constructs and raises an error.
-  # These errors all extend <%= namespace %>::Errors::ServiceError < {Smithy::Client::Errors::ServiceError}
+  # These errors all extend <%= module_name %>::Errors::ServiceError < {Smithy::Client::Errors::ServiceError}
   #
   # You can rescue all errors using the ServiceError:
   #
   #     begin
   #       # do stuff
-  #     rescue <%= namespace %>::Errors::ServiceError
+  #     rescue <%= module_name %>::Errors::ServiceError
   #       # rescues all API errors
   #     end
   #
@@ -38,7 +38,7 @@ module <%= namespace %>
     class <%= error.name %> < Smithy::Client::Errors::ServiceError
       # @param [Smithy::Client::HandlerContext] context
       # @param [String] message
-      # @param [<%= namespace %>::Types::<%= error.name %>] data
+      # @param [<%= module_name %>::Types::<%= error.name %>] data
       def initialize(context, message, data = Smithy::Client::EmptyStructure.new)
         super(context, message, data)
       end

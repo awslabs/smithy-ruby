@@ -23,11 +23,11 @@ module SpecHelper
     def generate(modules, type, options = {})
       model = load_model(modules, options)
       plan = create_plan(modules, model, type, options)
-      sdk_dir = plan.options[:destination_root]
-      smith(plan)
+      sdk_dir = plan.destination_root
+      Smithy.generate(plan)
 
       $LOAD_PATH << ("#{sdk_dir}/lib")
-      require "#{plan.options[:gem_name]}#{type == :schema ? '-schema' : ''}"
+      require plan.gem_name
 
       setup_rbs_spytest(modules, sdk_dir) if options.fetch(:rbs_test, ENV.fetch('SMITHY_RUBY_RBS_TEST', nil))
       sdk_dir
@@ -69,14 +69,6 @@ module SpecHelper
 
     private
 
-    def with_captured_stdout
-      original_stdout = $stdout
-      $stdout = StringIO.new
-      yield
-    ensure
-      $stdout = original_stdout
-    end
-
     def load_model(modules, options)
       fixture = options[:fixture] || modules.map(&:underscore).join('/')
       model_dir = File.join(File.dirname(__FILE__), 'fixtures', fixture)
@@ -85,19 +77,12 @@ module SpecHelper
 
     def create_plan(modules, model, type, options)
       plan_options = {
-        gem_name: options.fetch(:gem_name, Smithy::Util::Namespace.gem_name_from_namespaces(modules)),
-        gem_version: options.fetch(:gem_version, '1.0.0'),
-        destination_root: options.fetch(:destination_root, Dir.mktmpdir)
+        module_name: modules.join('::'),
+        gem_version: options.fetch(:gem_version, '0.1.0'),
+        destination_root: options.fetch(:destination_root, Dir.mktmpdir),
+        quiet: ENV.fetch('SMITHY_RUBY_QUIET', 'true') == 'true'
       }
       Smithy::Plan.new(model, type, plan_options)
-    end
-
-    def smith(plan)
-      if ENV['SMITHY_RUBY_DEBUG']
-        Smithy.generate(plan)
-      else
-        with_captured_stdout { Smithy.generate(plan) }
-      end
     end
 
     def load_collection(loader)

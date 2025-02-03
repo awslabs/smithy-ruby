@@ -9,6 +9,9 @@ module Smithy
 
         def initialize(plan)
           @plan = plan
+          @module_name = plan.module_name
+          @gem_name = plan.gem_name
+          @gem_version = plan.gem_version
           @plugins = default_plugins + transport_plugins('http')
           @plugins.each do |plugin|
             require_path = plugin.require_path
@@ -19,23 +22,13 @@ module Smithy
           end
         end
 
+        attr_reader :module_name, :gem_name, :gem_version
+
         def each(&)
           @plugins.each(&)
         end
 
         private
-
-        def namespace
-          @plan.gem_namespace
-        end
-
-        def gem_name
-          @plan.options[:gem_name]
-        end
-
-        def gem_dir
-          @plan.options[:destination_root]
-        end
 
         def default_plugins
           Smithy::Client::Base.plugins.map do |plugin|

@@ -18,8 +18,8 @@ module Smithy
 
         attr_reader :plan, :parameters
 
-        def namespace
-          @plan.gem_namespace
+        def module_name
+          @plan.module_name
         end
       end
     end

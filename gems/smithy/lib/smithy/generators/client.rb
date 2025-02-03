@@ -7,7 +7,7 @@ module Smithy
       # @param [Plan] plan The plan to generate.
       def initialize(plan)
         @plan = plan
-        @gem_name = plan.options[:gem_name]
+        @gem_name = plan.gem_name
         super
       end
 
@@ -77,7 +77,7 @@ module Smithy
       def code_generated_plugins
         Enumerator.new do |e|
           e.yield Views::Client::Plugin.new(
-            class_name: "#{@plan.gem_namespace}::Plugins::Endpoint",
+            class_name: "#{@plan.module_name}::Plugins::Endpoint",
             require_path: "lib/#{@gem_name}/plugins/endpoint.rb",
             source: Views::Client::EndpointPlugin.new(@plan).render
           )

@@ -2,14 +2,14 @@
 
 # This is generated code!
 
-module <%= namespace %>
+module <%= module_name %>
   module Plugins
     # Endpoint plugin - resolves the endpoint and applies it to the request.
     # @api private
     class Endpoint < Smithy::Client::Plugin
       option(
         :endpoint_provider,
-        doc_type: '<%= namespace %>::EndpointProvider',
+        doc_type: '<%= module_name %>::EndpointProvider',
         docstring: <<~DOCS) do |_cfg|
           The endpoint provider used to resolve endpoints. Any object that responds to
           `#resolve_endpoint(parameters)`.

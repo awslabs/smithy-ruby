@@ -12,15 +12,11 @@ module Smithy
         end
 
         def gem_name
-          if @plan.type == :schema
-            "#{@plan.options[:gem_name]}-schema"
-          else
-            @plan.options[:gem_name]
-          end
+          @plan.gem_name
         end
 
         def gem_version
-          @plan.options[:gem_version]
+          @plan.gem_version
         end
 
         def documentation
@@ -29,13 +25,12 @@ module Smithy
           "# #{trait.data}"
         end
 
-        def namespaces
-          @plan.options[:gem_namespace]&.split('::') ||
-            Util::Namespace.namespaces_from_gem_name(@plan.options[:gem_name])
+        def module_names
+          @plan.module_name.split('::')
         end
 
         def requires
-          return [] if @plan.options[:source_only]
+          return [] unless @plan.destination_root
           return %i[customizations types shapes] if @plan.type == :schema
 
           # Order matters here - plugins must come before client, types must come before shapes
