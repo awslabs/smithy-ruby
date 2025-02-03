@@ -81,6 +81,11 @@ module Smithy
             require_path: "lib/#{@gem_name}/plugins/endpoint.rb",
             source: Views::Client::EndpointPlugin.new(@plan).render
           )
+          e.yield Views::Client::Plugin.new(
+            class_name: "#{@plan.module_name}::Plugins::Protocol",
+            require_path: "lib/#{@gem_name}/plugins/protocol.rb",
+            source: Views::Client::ProtocolPlugin.new(@plan).render
+          )
         end
       end
 

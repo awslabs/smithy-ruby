@@ -16,6 +16,10 @@ module Smithy
           @plan.module_name
         end
 
+        def service_id
+          @plan.service.keys.first
+        end
+
         def gem_name
           @plan.gem_name
         end
