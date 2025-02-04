@@ -17,6 +17,6 @@ RSpec::Matchers.define :be_in_documentation do |file, klass, method|
 
   failure_message do
     differ = RSpec::Support::Differ.new
-    differ.diff(@expected, @actual)
+    differ.diff(@actual, @expected)
   end
 end
