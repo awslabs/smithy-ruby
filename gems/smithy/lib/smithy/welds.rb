@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'welds/endpoints'
+require_relative 'welds/plugins'
 require_relative 'welds/rubocop'
 
 module Smithy

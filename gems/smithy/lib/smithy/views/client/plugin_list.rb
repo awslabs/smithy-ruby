@@ -7,22 +7,19 @@ module Smithy
       class PluginList
         include Enumerable
 
-        def initialize(plan)
+        def initialize(plan, code_generated_plugins)
           @plan = plan
-          @module_name = plan.module_name
-          @gem_name = plan.gem_name
-          @gem_version = plan.gem_version
-          @plugins = default_plugins + transport_plugins('http')
+          @plugins = plugins(plan.welds, code_generated_plugins)
           @plugins.each do |plugin|
-            require_path = plugin.require_path
-            next unless require_path
+            next if plugin.source
 
-            require_path = File.absolute_path(require_path) unless plugin.relative_path?
-            Kernel.require(require_path)
+            path = plugin.path
+            next unless path
+
+            path = File.absolute_path(path) unless plugin.relative_path?
+            Kernel.require(path)
           end
         end
-
-        attr_reader :module_name, :gem_name, :gem_version
 
         def each(&)
           @plugins.each(&)
@@ -30,26 +27,14 @@ module Smithy
 
         private
 
-        def default_plugins
-          Smithy::Client::Base.plugins.map do |plugin|
-            Plugin.new(class_name: plugin.name, require_path: nil, default: true)
+        def plugins(welds, code_generated_plugins)
+          plugins = []
+          code_generated_plugins.map { |plugin| plugins << plugin }
+          weld_plugins = welds.map(&:plugins).reduce({}, :merge)
+          weld_plugins.map do |class_name, options|
+            plugins << Plugin.new(class_name: class_name, **options)
           end
-        end
-
-        # def weld_plugins
-        #   plugins = @plan.welds.map(&:plugins).reduce({}, :merge)
-        #   plugins.map do |class_name, path|
-        #     Plugin.new(class_name: class_name, path: path)
-        #   end
-        # end
-
-        def transport_plugins(protocol)
-          plugins = {
-            'http' => { 'Smithy::Client::Plugins::NetHTTP' => 'smithy-client/plugins/net_http' }
-          }[protocol]
-          plugins.map do |class_name, require_path|
-            Plugin.new(class_name: class_name, require_path: require_path, relative_path: true, requirable: true)
-          end
+          plugins
         end
       end
     end

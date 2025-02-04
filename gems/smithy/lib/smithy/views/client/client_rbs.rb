@@ -41,7 +41,7 @@ module Smithy
           code_generated_plugins.each do |plugin|
             Object.module_eval(plugin.source)
           end
-          PluginList.new(plan).to_a + code_generated_plugins.to_a
+          PluginList.new(plan, code_generated_plugins)
         end
 
         def define_module_names

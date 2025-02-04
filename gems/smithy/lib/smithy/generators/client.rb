@@ -47,7 +47,7 @@ module Smithy
           e.yield "lib/#{@gem_name}/errors.rb", Views::Client::Errors.new(@plan).render
           e.yield "lib/#{@gem_name}/endpoint_parameters.rb", Views::Client::EndpointParameters.new(@plan).render
           e.yield "lib/#{@gem_name}/endpoint_provider.rb", Views::Client::EndpointProvider.new(@plan).render
-          code_generated_plugins.each { |plugin| e.yield plugin.require_path, plugin.source }
+          code_generated_plugins.each { |plugin| e.yield plugin.path, plugin.source }
           e.yield "lib/#{@gem_name}/types.rb", Views::Client::Types.new(@plan).render
           e.yield "lib/#{@gem_name}/shapes.rb", Views::Client::Shapes.new(@plan).render
           e.yield "lib/#{@gem_name}/client.rb", Views::Client::Client.new(@plan, code_generated_plugins).render
@@ -78,7 +78,9 @@ module Smithy
         Enumerator.new do |e|
           e.yield Views::Client::Plugin.new(
             class_name: "#{@plan.module_name}::Plugins::Endpoint",
-            require_path: "lib/#{@gem_name}/plugins/endpoint.rb",
+            path: "lib/#{@gem_name}/plugins/endpoint.rb",
+            require_path: 'plugins/endpoint',
+            require_relative: true,
             source: Views::Client::EndpointPlugin.new(@plan).render
           )
         end

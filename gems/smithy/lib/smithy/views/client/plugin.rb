@@ -7,14 +7,14 @@ module Smithy
       class Plugin
         def initialize(options = {})
           @class_name = options[:class_name]
-          @require_path = options[:require_path]
-          @source = options[:source]
-          @default = options.fetch(:default, false)
+          @path = options[:path]
           @relative_path = options.fetch(:relative_path, false)
-          @requirable = options.fetch(:requirable, false)
+          @require_path = options[:require_path]
+          @require_relative = options.fetch(:require_relative, false)
+          @source = options[:source]
         end
 
-        attr_reader :class_name, :require_path, :source
+        attr_reader :class_name, :path, :require_path, :source
 
         def docstrings
           docstrings = []
@@ -28,16 +28,12 @@ module Smithy
           Object.const_get(@class_name).options
         end
 
-        def default?
-          @default
-        end
-
         def relative_path?
           @relative_path
         end
 
-        def requirable?
-          @requirable
+        def require_relative?
+          @require_relative
         end
 
         private

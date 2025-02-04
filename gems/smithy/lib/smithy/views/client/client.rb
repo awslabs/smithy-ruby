@@ -25,16 +25,17 @@ module Smithy
         end
 
         def require_plugins
-          @plugins.select(&:requirable?).map(&:require_path)
+          @plugins.map do |plugin|
+            "require#{'_relative' if plugin.require_relative?} '#{plugin.require_path}'"
+          end
         end
 
         def add_plugins
-          @plugins.reject(&:default?).map(&:class_name)
+          @plugins.map(&:class_name)
         end
 
         def docstrings
           docstrings = []
-          docstrings << '@param [Hash] options'
           # TODO: ensure correct handling of duplicate option definitions
           @plugins.each do |plugin|
             docstrings.concat(plugin.docstrings)
@@ -56,7 +57,7 @@ module Smithy
           code_generated_plugins.each do |plugin|
             Object.module_eval(plugin.source)
           end
-          PluginList.new(plan).to_a + code_generated_plugins.to_a
+          PluginList.new(plan, code_generated_plugins)
         end
 
         def define_module_names

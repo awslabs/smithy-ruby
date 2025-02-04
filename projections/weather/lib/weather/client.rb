@@ -2,6 +2,10 @@
 
 # This is generated code!
 
+require_relative 'plugins/endpoint'
+require 'smithy-client/plugins/logging'
+require 'smithy-client/plugins/raise_response_errors'
+require 'smithy-client/plugins/response_target'
 require 'smithy-client/plugins/net_http'
 
 module Weather
@@ -10,10 +14,17 @@ module Weather
   class Client < Smithy::Client::Base
     self.schema = Shapes::SCHEMA
 
-    add_plugin(Smithy::Client::Plugins::NetHTTP)
     add_plugin(Weather::Plugins::Endpoint)
+    add_plugin(Smithy::Client::Plugins::Logging)
+    add_plugin(Smithy::Client::Plugins::RaiseResponseErrors)
+    add_plugin(Smithy::Client::Plugins::ResponseTarget)
+    add_plugin(Smithy::Client::Plugins::NetHTTP)
 
-    # @param [Hash] options
+    # @option options [Weather::EndpointProvider] :endpoint_provider
+    #  The endpoint provider used to resolve endpoints. Any object that responds to
+    #  `#resolve_endpoint(parameters)`.
+    # @option options [String] :endpoint
+    #  Custom Endpoint
     # @option options [Logger] :logger
     #  The Logger instance to send log messages to. If this option is not set,
     #  logging is disabled.
@@ -78,11 +89,6 @@ module Weather
     #  @see https://docs.ruby-lang.org/en/master/Net/HTTP.html#method-i-set_debug_output
     # @option options [URI::HTTP, String] :http_proxy
     #  A proxy to send requests through. Formatted like 'http://proxy.com:123'.
-    # @option options [Weather::EndpointProvider] :endpoint_provider
-    #  The endpoint provider used to resolve endpoints. Any object that responds to
-    #  `#resolve_endpoint(parameters)`.
-    # @option options [String] :endpoint
-    #  Custom Endpoint
     def initialize(*args)
       super
     end
