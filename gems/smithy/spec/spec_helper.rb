@@ -66,6 +66,7 @@ module SpecHelper
 
     def create_plan(modules, model, type, options)
       plan_options = {
+        name: modules.last,
         module_name: modules.join('::'),
         gem_version: options.fetch(:gem_version, '0.1.0'),
         destination_root: options.fetch(:destination_root, Dir.mktmpdir),

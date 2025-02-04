@@ -6,6 +6,8 @@ module Smithy
     class Endpoints < Weld
       def pre_process(model)
         id, service = model['shapes'].select { |_k, s| s['type'] == 'service' }.first
+        return unless service
+
         return if service['traits'] && service['traits']['smithy.rules#endpointRuleSet']
 
         say_status :insert, "Adding default endpoint rules to #{id}", @plan.quiet
