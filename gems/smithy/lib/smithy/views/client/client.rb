@@ -8,7 +8,7 @@ module Smithy
         def initialize(plan, code_generated_plugins)
           @plan = plan
           @model = plan.model
-          @plugins = plugins(plan, code_generated_plugins)
+          @plugins = PluginList.new(plan, code_generated_plugins)
           super()
         end
 
@@ -25,20 +25,23 @@ module Smithy
         end
 
         def require_plugins
-          @plugins.select(&:requirable?).map(&:require_path)
+          @plugins.map do |plugin|
+            "require#{'_relative' if plugin.require_relative?} '#{plugin.require_path}'"
+          end
         end
 
         def add_plugins
-          @plugins.reject(&:default?).map(&:class_name)
+          @plugins.map(&:class_name)
         end
 
         def docstrings
-          docstrings = []
-          docstrings << '@param [Hash] options'
-          # TODO: ensure correct handling of duplicate option definitions
-          @plugins.each do |plugin|
-            docstrings.concat(plugin.docstrings)
+          options = @plugins.map(&:options).flatten.sort_by(&:name)
+          documentation = {}
+          options.each do |option|
+            documentation[option.name] = option_docstrings(option) if option.docstring
           end
+          docstrings = []
+          documentation.each_value { |value| docstrings.concat(value) }
           docstrings
         end
 
@@ -51,21 +54,22 @@ module Smithy
 
         private
 
-        def plugins(plan, code_generated_plugins)
-          define_module_names
-          code_generated_plugins.each do |plugin|
-            Object.module_eval(plugin.source)
-          end
-          PluginList.new(plan).to_a + code_generated_plugins.to_a
+        def option_docstrings(option)
+          docstrings = []
+          docstrings << option_tag(option)
+          documentation = option.docstring.split("\n").map { |line| " #{line}" }
+          docstrings.concat(documentation)
+          docstrings
         end
 
-        def define_module_names
-          parent = Object
-          module_name.split('::') do |mod|
-            child = mod
-            parent.const_set(child, ::Module.new) unless parent.const_defined?(child)
-            parent = parent.const_get(child)
-          end
+        def option_tag(option)
+          tag = StringIO.new
+          tag << '@option options'
+          tag << " [#{option.doc_type}]" if option.doc_type
+          tag << " :#{option.name}"
+          default = option.doc_default || option.default
+          tag << " (#{default})" if default
+          tag.string
         end
 
         # @api private
