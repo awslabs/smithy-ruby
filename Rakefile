@@ -6,7 +6,7 @@ require 'rspec/core/rake_task'
 RuboCop::RakeTask.new
 
 namespace :smithy do
-  RSpec::Core::RakeTask.new('spec:unit') do |t, _args|
+  RSpec::Core::RakeTask.new('spec:unit') do |t|
     t.pattern = 'gems/smithy/spec/**/*_spec.rb'
     t.ruby_opts = '-I gems/smithy/spec'
     t.rspec_opts = '--format documentation'

@@ -19,7 +19,6 @@ module SpecHelper
     #  `:schema`, `:client`, or `:server`.
     # @param [Hash] options Additional options to pass to the generator.
     # @option options [String] :fixture The name of the fixture to load.
-    # @option options [Boolean] :rbs_test (true) Enable RBS spy testing when the SMITHY_RUBY_RBS_TEST is set.
     # @return [String] The path to the directory where the generated code was
     #  written to.
     def generate(modules, type, options = {})
@@ -31,7 +30,7 @@ module SpecHelper
       $LOAD_PATH << ("#{sdk_dir}/lib")
       require plan.gem_name
 
-      RbsSpyTest.setup(modules, sdk_dir) if options.fetch(:rbs_test, true) && ENV.fetch('SMITHY_RUBY_RBS_TEST', nil)
+      RbsSpyTest.setup(modules, sdk_dir) if ENV.fetch('SMITHY_RUBY_RBS_TEST', false)
       sdk_dir
     rescue StandardError => e
       cleanup(modules, sdk_dir) if sdk_dir
