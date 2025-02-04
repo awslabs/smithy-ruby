@@ -37,7 +37,7 @@ module Smithy
     # @return [Symbol] The type of code to generate.
     attr_reader :type
 
-    # @return [Hash<String, Hash>] The service shape for the shapes.
+    # @return [Hash<String, Hash>, nil] The service shape for the shapes.
     attr_reader :service
 
     # @return [String] The name of the service.

@@ -16,7 +16,7 @@ module Smithy
     end
 
     # Called to determine if the weld should be applied for this model.
-    # @param [Hash] service Service shape
+    # @param [Hash, nil] service Service shape
     # @return [Boolean] (true) True if the weld should be applied, false otherwise.
     def for?(service) # rubocop:disable Lint/UnusedMethodArgument
       true
