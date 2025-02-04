@@ -25,6 +25,15 @@ module Smithy
           @plugins.each(&)
         end
 
+        def options_docstrings
+          options = @plugins.map(&:options).flatten.sort_by(&:name)
+          docstrings = {}
+          options.each do |option|
+            docstrings[option.name] = option_docstrings(option) if option.docstring
+          end
+          docstrings
+        end
+
         private
 
         def plugins(welds, code_generated_plugins)
@@ -35,6 +44,24 @@ module Smithy
             plugins << Plugin.new(class_name: class_name, **options)
           end
           plugins
+        end
+
+        def option_docstrings(option)
+          docstrings = []
+          docstrings << option_tag(option)
+          documentation = option.docstring.split("\n").map { |line| " #{line}" }
+          docstrings.concat(documentation)
+          docstrings
+        end
+
+        def option_tag(option)
+          tag = StringIO.new
+          tag << '@option options'
+          tag << " [#{option.doc_type}]" if option.doc_type
+          tag << " :#{option.name}"
+          default = option.doc_default || option.default
+          tag << " (#{default})" if default
+          tag.string
         end
       end
     end

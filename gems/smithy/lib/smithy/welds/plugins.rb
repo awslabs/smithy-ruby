@@ -5,10 +5,11 @@ module Smithy
     # Provides default plugins.
     class Plugins < Weld
       def for?(_service)
-        say_status :insert, 'Adding default plugins', :yellow
+        say_status :insert, 'Adding default plugins', @plan.quiet
         true
       end
 
+      # rubocop:disable Metrics/MethodLength
       def plugins
         {
           'Smithy::Client::Plugins::Logging' => {
@@ -33,6 +34,7 @@ module Smithy
           }
         }
       end
+      # rubocop:enable Metrics/MethodLength
     end
   end
 end

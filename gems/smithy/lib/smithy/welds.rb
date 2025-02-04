@@ -10,10 +10,7 @@ module Smithy
     @welds = {}
 
     def self.load!(plan)
-      ObjectSpace
-        .each_object(Class)
-        .select { |klass| klass < Weld }
-        .each { |weld| @welds[weld] = weld.new(plan) }
+      Weld.subclasses.reverse_each { |weld| @welds[weld] = weld.new(plan) }
     end
 
     def self.for(service)

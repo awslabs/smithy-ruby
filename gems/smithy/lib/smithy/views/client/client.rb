@@ -36,9 +36,8 @@ module Smithy
 
         def docstrings
           docstrings = []
-          # TODO: ensure correct handling of duplicate option definitions
-          @plugins.each do |plugin|
-            docstrings.concat(plugin.docstrings)
+          @plugins.options_docstrings.each_value do |value|
+            docstrings.concat(value)
           end
           docstrings
         end

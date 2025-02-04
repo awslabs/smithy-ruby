@@ -16,14 +16,6 @@ module Smithy
 
         attr_reader :class_name, :path, :require_path, :source
 
-        def docstrings
-          docstrings = []
-          options.each do |option|
-            docstrings.concat(option_docstrings(option)) if option.docstring
-          end
-          docstrings
-        end
-
         def options
           Object.const_get(@class_name).options
         end
@@ -34,26 +26,6 @@ module Smithy
 
         def require_relative?
           @require_relative
-        end
-
-        private
-
-        def option_docstrings(option)
-          docstrings = []
-          docstrings << option_tag(option)
-          documentation = option.docstring.split("\n").map { |line| " #{line}" }
-          docstrings.concat(documentation)
-          docstrings
-        end
-
-        def option_tag(option)
-          tag = StringIO.new
-          tag << '@option options'
-          tag << " [#{option.doc_type}]" if option.doc_type
-          tag << " :#{option.name}"
-          default = option.doc_default || option.default
-          tag << " (#{default})" if default
-          tag.string
         end
       end
     end
