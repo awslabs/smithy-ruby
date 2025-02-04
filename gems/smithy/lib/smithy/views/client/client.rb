@@ -35,10 +35,13 @@ module Smithy
         end
 
         def docstrings
-          docstrings = []
-          @plugins.options_docstrings.each_value do |value|
-            docstrings.concat(value)
+          options = @plugins.map(&:options).flatten.sort_by(&:name)
+          documentation = {}
+          options.each do |option|
+            documentation[option.name] = option_docstrings(option) if option.docstring
           end
+          docstrings = []
+          documentation.each_value { |value| docstrings.concat(value) }
           docstrings
         end
 
@@ -66,6 +69,24 @@ module Smithy
             parent.const_set(child, ::Module.new) unless parent.const_defined?(child)
             parent = parent.const_get(child)
           end
+        end
+
+        def option_docstrings(option)
+          docstrings = []
+          docstrings << option_tag(option)
+          documentation = option.docstring.split("\n").map { |line| " #{line}" }
+          docstrings.concat(documentation)
+          docstrings
+        end
+
+        def option_tag(option)
+          tag = StringIO.new
+          tag << '@option options'
+          tag << " [#{option.doc_type}]" if option.doc_type
+          tag << " :#{option.name}"
+          default = option.doc_default || option.default
+          tag << " (#{default})" if default
+          tag.string
         end
 
         # @api private

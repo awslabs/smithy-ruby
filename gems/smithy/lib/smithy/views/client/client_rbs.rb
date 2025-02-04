@@ -18,12 +18,11 @@ module Smithy
         end
 
         def option_types
-          # TODO: Ensure this order is correct when plugins override options
           @plugins
             .map(&:options)
             .flatten
-            .select(&:docstring) # include only documented options
             .sort_by(&:name)
+            .select(&:docstring)
             .to_h { |o| [o.name, rbs_type(o)] }
         end
 

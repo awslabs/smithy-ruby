@@ -9,6 +9,8 @@ module Smithy
   module Welds
     @welds = {}
 
+    # Weld.subclasses should be ordered by insertion order. Reverse the order
+    # to allow default welds to be overridden.
     def self.load!(plan)
       Weld.subclasses.reverse_each { |weld| @welds[weld] = weld.new(plan) }
     end
