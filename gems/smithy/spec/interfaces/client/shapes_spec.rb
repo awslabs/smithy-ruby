@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Component: Shapes' do
+describe 'Component: Shapes', rbs_test: true do
   before(:all) do
     @tmpdir = SpecHelper.generate(['ShapeService'], :client, fixture: 'shapes')
   end

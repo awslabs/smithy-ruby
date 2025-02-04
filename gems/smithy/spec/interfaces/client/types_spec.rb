@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Component: Types' do
+describe 'Component: Types', rbs_test: true do
   %i[schema client].each do |plan_type|
     context "#{plan_type} generator" do
       before(:all) do

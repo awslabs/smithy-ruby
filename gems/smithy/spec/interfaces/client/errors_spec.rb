@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Component: Errors' do
+describe 'Component: Errors', rbs_test: true do
   before(:all) do
     @tmpdir = SpecHelper.generate(['Errors'], :client)
   end
