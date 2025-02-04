@@ -1,19 +1,20 @@
 # frozen_string_literal: true
 
-# Utility to setup RBS spy test on generated code.
+require 'rbs/test'
+
+# Utility to set up RBS spy test on generated code.
 module RbsSpyTest
   class << self
     def setup(modules, sdk_dir)
-      require 'rbs/test'
       env = load_rbs_environment(sdk_dir)
       tester = RBS::Test::Tester.new(env: env)
 
-      unchecked_classes = [
-        '::RSpec::Mocks::Double',
-        '::RSpec::Mocks::InstanceVerifyingDouble',
-        '::RSpec::Mocks::ObjectVerifyingDouble',
-        '::RSpec::Mocks::ClassVerifyingDouble'
-      ] # rubocop:disable
+      unchecked_classes = %w[
+        ::RSpec::Mocks::Double
+        ::RSpec::Mocks::InstanceVerifyingDouble
+        ::RSpec::Mocks::ObjectVerifyingDouble
+        ::RSpec::Mocks::ClassVerifyingDouble
+      ]
 
       spy_modules = [modules.join('::'), 'Smithy::Client']
       spy_classes = []
@@ -46,15 +47,15 @@ module RbsSpyTest
 
     def load_collection(loader)
       collection_config_path = RBS::Collection::Config.find_config_path
-      lock_path = RBS::Collection::Config.to_lockfile_path(collection_config_path)
-      if lock_path.file?
-        lock = RBS::Collection::Config::Lockfile.from_lockfile(
-          lockfile_path: lock_path,
-          data: YAML.load_file(lock_path.to_s)
-        )
-      end
-      raise 'Missing RBS collection, ensure you have `rbs collection install`' unless lock
+      raise RBS::Collection::Config::CollectionNotAvailable unless collection_config_path
 
+      lock_path = RBS::Collection::Config.to_lockfile_path(collection_config_path)
+      raise RBS::Collection::Config::CollectionNotAvailable unless lock_path.exist? && lock_path.file?
+
+      lock = RBS::Collection::Config::Lockfile.from_lockfile(
+        lockfile_path: lock_path,
+        data: YAML.load_file(lock_path.to_s)
+      )
       loader.add_collection(lock)
     end
 
