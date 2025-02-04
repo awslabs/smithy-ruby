@@ -1,39 +1,45 @@
 # frozen_string_literal: true
 
-require 'json'
 require 'rspec'
-require 'tmpdir'
 require 'stringio'
 
 require 'smithy'
 
+require_relative 'support/client_helper'
 require_relative 'support/be_in_documentation_matcher'
 require_relative 'support/rbs_spy_test'
 
 module SpecHelper
   class << self
-    # @param [Array<String>] modules A list of modules for the generated code.
-    #  For example, `['Company', 'Weather']` would generate code in the
-    #  `Company::Weather` namespace.
-    # @param [Symbol] type The type of service to generate. For example,
-    #  `:schema`, `:client`, or `:server`.
-    # @param [Hash] options Additional options to pass to the generator.
-    # @option options [String] :fixture The name of the fixture to load.
-    # @return [String] The path to the directory where the generated code was
-    #  written to.
-    def generate(modules, type, options = {})
-      model = load_model(modules, options)
-      plan = create_plan(modules, model, type, options)
-      sdk_dir = plan.destination_root
-      Smithy.generate(plan)
-
-      $LOAD_PATH << ("#{sdk_dir}/lib")
-      require plan.gem_name
-
-      RbsSpyTest.setup(modules, sdk_dir) if ENV.fetch('SMITHY_RUBY_RBS_TEST', false)
-      sdk_dir
+    def generate_client(module_names, options = {})
+      tmpdir = ClientHelper.generate(module_names, :client, options)
+      RbsSpyTest.setup(module_names, tmpdir) if ENV['SMITHY_RUBY_RBS_TEST']
+      tmpdir
     rescue StandardError => e
-      cleanup(modules, sdk_dir) if sdk_dir
+      ClientHelper.cleanup_generated(module_names, tmpdir)
+      raise e
+    end
+
+    def client_source(options = {})
+      module_names = ClientHelper.source(:client, options)
+    rescue StandardError => e
+      ClientHelper.cleanup_sourced(module_names)
+      raise e
+    end
+
+    def generate_schema(module_names, options = {})
+      tmpdir = ClientHelper.generate(module_names, :schema, options)
+      RbsSpyTest.setup(module_names, tmpdir) if ENV['SMITHY_RUBY_RBS_TEST']
+      tmpdir
+    rescue StandardError => e
+      ClientHelper.cleanup_generated(module_names, tmpdir)
+      raise e
+    end
+
+    def schema_source(options = {})
+      module_names = ClientHelper.source(:schema, options)
+    rescue StandardError => e
+      ClientHelper.cleanup_sourced(module_names)
       raise e
     end
 
@@ -41,38 +47,17 @@ module SpecHelper
     #  generated code to clean up.
     # @param [String] tmpdir The path to the tmp directory where the
     #  generated code was written to.
-    def cleanup(module_names, tmpdir)
-      return unless tmpdir
-
-      if ENV['SMITHY_RUBY_KEEP_GENERATED_SOURCE']
-        puts "Leaving generated service in: #{tmpdir}"
-      else
-        FileUtils.rm_rf(tmpdir)
-      end
-      $LOAD_PATH.delete("#{tmpdir}/lib")
-      module_names.reverse.each_cons(2) do |child, parent|
-        Object.const_get(parent).send(:remove_const, child)
-      end
-      Object.send(:remove_const, module_names.first)
+    def cleanup_generated_client(module_names, tmpdir)
+      ClientHelper.cleanup_generated(module_names, tmpdir)
     end
+    alias cleanup_generated_schema cleanup_generated_client
 
-    private
-
-    def load_model(modules, options)
-      fixture = options[:fixture] || modules.map(&:underscore).join('/')
-      model_dir = File.join(File.dirname(__FILE__), 'fixtures', fixture)
-      JSON.load_file(File.join(model_dir, 'model.json'))
+    # @param [Array<String>] module_names A list of module names from the
+    #  sourced code to clean up.
+    def cleanup_sourced_client(module_names)
+      ClientHelper.cleanup_sourced(module_names)
     end
-
-    def create_plan(modules, model, type, options)
-      plan_options = {
-        module_name: modules.join('::'),
-        gem_version: options.fetch(:gem_version, '0.1.0'),
-        destination_root: options.fetch(:destination_root, Dir.mktmpdir),
-        quiet: ENV.fetch('SMITHY_RUBY_QUIET', 'true') == 'true'
-      }
-      Smithy::Plan.new(model, type, plan_options)
-    end
+    alias cleanup_sourced_schema cleanup_sourced_client
   end
 end
 

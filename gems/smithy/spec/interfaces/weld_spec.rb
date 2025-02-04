@@ -38,12 +38,12 @@ describe 'Integration: Welds' do
       end
     end
 
-    @tmpdir = SpecHelper.generate(['Weather'], :schema)
+    @tmpdir = SpecHelper.generate_schema(['Weather'])
   end
   # rubocop:enable Lint/UselessAssignment
 
   after(:all) do
-    SpecHelper.cleanup(['Weather'], @tmpdir)
+    SpecHelper.cleanup_generated_schema(['Weather'], @tmpdir)
   end
 
   it 'includes Thor::Actions' do
