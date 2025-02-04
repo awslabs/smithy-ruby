@@ -91,6 +91,38 @@ module Smithy
         end
       end
 
+      describe BigDecimalShape do
+        subject { BigDecimalShape.new }
+
+        it 'is a subclass of Shape' do
+          expect(subject).to be_kind_of(Shape)
+        end
+      end
+
+      describe BlobShape do
+        subject { BlobShape.new }
+
+        it 'is a subclass of Shape' do
+          expect(subject).to be_kind_of(Shape)
+        end
+      end
+
+      describe BooleanShape do
+        subject { BooleanShape.new }
+
+        it 'is a subclass of Shape' do
+          expect(subject).to be_kind_of(Shape)
+        end
+      end
+
+      describe DocumentShape do
+        subject { DocumentShape.new }
+
+        it 'is a subclass of Shape' do
+          expect(subject).to be_kind_of(Shape)
+        end
+      end
+
       describe EnumShape do
         subject { EnumShape.new }
 
@@ -112,10 +144,48 @@ module Smithy
             expect(subject.members[:foo]).to be_kind_of(MemberShape)
           end
 
-          it 'can add traits to the member' do
+          it 'can set traits on the member' do
             subject.add_member(:foo, StringShape.new, traits: { 'trait' => 'value' })
             expect(subject.members[:foo].traits).to eq({ 'trait' => 'value' })
           end
+        end
+
+        describe '#member?' do
+          it 'returns true if member exists' do
+            subject.add_member(:foo, StringShape.new)
+            expect(subject.member?(:foo)).to be(true)
+          end
+        end
+
+        describe '#member' do
+          it 'returns the member' do
+            subject.add_member(:foo, StringShape.new)
+            expect(subject.member(:foo)).to be_kind_of(MemberShape)
+          end
+        end
+      end
+
+      describe IntegerShape do
+        subject { IntegerShape.new }
+
+        it 'is a subclass of Shape' do
+          expect(subject).to be_kind_of(Shape)
+        end
+      end
+
+      describe IntEnumShape do
+        subject { IntEnumShape.new }
+
+        it 'is a subclass of EnumShape' do
+          expect(subject).to be_kind_of(EnumShape)
+        end
+      end
+
+      describe FloatShape do
+        subject { FloatShape.new }
+
+        it 'is a subclass of Shape' do
+          expect(subject).to be_kind_of(Shape)
         end
       end
 
@@ -189,6 +259,14 @@ module Smithy
         end
       end
 
+      describe StringShape do
+        subject { StringShape.new }
+
+        it 'is a subclass of Shape' do
+          expect(subject).to be_kind_of(Shape)
+        end
+      end
+
       describe StructureShape do
         subject { StructureShape.new }
 
@@ -212,9 +290,104 @@ module Smithy
             expect(subject.members[:foo]).to be_kind_of(MemberShape)
           end
 
-          it 'can add traits to the member' do
+          it 'can set traits on the member' do
             subject.add_member(:foo, StringShape.new, traits: { 'trait' => 'value' })
             expect(subject.members[:foo].traits).to eq({ 'trait' => 'value' })
+          end
+        end
+
+        describe '#member?' do
+          it 'returns true if member exists' do
+            subject.add_member(:foo, StringShape.new)
+            expect(subject.member?(:foo)).to be(true)
+          end
+        end
+
+        describe '#member' do
+          it 'returns the member' do
+            subject.add_member(:foo, StringShape.new)
+            expect(subject.member(:foo)).to be_kind_of(MemberShape)
+          end
+        end
+      end
+
+      describe TimestampShape do
+        subject { TimestampShape.new }
+
+        it 'is a subclass of Shape' do
+          expect(subject).to be_kind_of(Shape)
+        end
+      end
+
+      describe MemberShape do
+        subject { MemberShape.new(Shape.new) }
+
+        describe '#initialize' do
+          it 'sets the shape' do
+            expect(subject.shape).to be_kind_of(Shape)
+          end
+
+          it 'can set traits' do
+            subject = MemberShape.new(Shape.new, traits: { 'trait' => 'value' })
+            expect(subject.traits).to eq({ 'trait' => 'value' })
+          end
+        end
+      end
+
+      describe Prelude do
+        it 'is a module' do
+          expect(Prelude).to be_kind_of(Module)
+        end
+
+        it 'has prelude shapes' do
+          expect(Prelude::BigDecimal).to be_kind_of(BigDecimalShape)
+          expect(Prelude::BigInteger).to be_kind_of(IntegerShape)
+          expect(Prelude::Blob).to be_kind_of(BlobShape)
+          expect(Prelude::Boolean).to be_kind_of(BooleanShape)
+          expect(Prelude::Byte).to be_kind_of(IntegerShape)
+          expect(Prelude::Document).to be_kind_of(DocumentShape)
+          expect(Prelude::Double).to be_kind_of(FloatShape)
+          expect(Prelude::Float).to be_kind_of(FloatShape)
+          expect(Prelude::Integer).to be_kind_of(IntegerShape)
+          expect(Prelude::Long).to be_kind_of(IntegerShape)
+          expect(Prelude::PrimitiveBoolean).to be_kind_of(BooleanShape)
+          expect(Prelude::PrimitiveByte).to be_kind_of(IntegerShape)
+          expect(Prelude::PrimitiveDouble).to be_kind_of(FloatShape)
+          expect(Prelude::PrimitiveFloat).to be_kind_of(FloatShape)
+          expect(Prelude::PrimitiveInteger).to be_kind_of(IntegerShape)
+          expect(Prelude::PrimitiveShort).to be_kind_of(IntegerShape)
+          expect(Prelude::PrimitiveLong).to be_kind_of(IntegerShape)
+          expect(Prelude::Short).to be_kind_of(IntegerShape)
+          expect(Prelude::String).to be_kind_of(StringShape)
+          expect(Prelude::Timestamp).to be_kind_of(TimestampShape)
+          expect(Prelude::Unit).to be_kind_of(StructureShape)
+        end
+      end
+
+      describe UnionShape do
+        subject { UnionShape.new }
+
+        it 'is a subclass of Shape' do
+          expect(subject).to be_kind_of(Shape)
+        end
+
+        describe '#initialize' do
+          it 'defaults members to empty hash' do
+            expect(subject.members).to be_empty
+          end
+
+          it 'defaults member_types to empty hash' do
+            expect(subject.member_types).to be_empty
+          end
+        end
+
+        describe '#add_member' do
+          let(:member_type) { Class.new }
+
+          it 'adds a member with its type' do
+            subject.add_member(:foo, StringShape.new, member_type)
+            expect(subject.members[:foo]).to be_kind_of(MemberShape)
+            expect(subject.member_types[:foo]).to be(member_type)
           end
         end
       end

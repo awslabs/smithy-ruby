@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Component: EndpointProvider' do
+describe 'Component: EndpointProvider', rbs_test: true do
   before(:all) do
     @tmpdir = SpecHelper.generate(['EndpointDefaults'], :client, fixture: 'endpoints/default-values')
   end

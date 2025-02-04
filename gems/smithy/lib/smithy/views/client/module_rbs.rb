@@ -11,8 +11,8 @@ module Smithy
           super()
         end
 
-        def namespaces
-          Util::Namespace.namespaces_from_gem_name(@plan.options[:gem_name])
+        def module_names
+          @plan.module_name.split('::')
         end
       end
     end

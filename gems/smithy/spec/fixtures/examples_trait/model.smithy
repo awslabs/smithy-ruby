@@ -2,7 +2,7 @@ $version: "2"
 
 namespace smithy.ruby.tests
 
-service Examples {
+service ExamplesTrait {
     operations: [Operation]
 }
 

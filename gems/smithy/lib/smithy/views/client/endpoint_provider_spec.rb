@@ -17,12 +17,8 @@ module Smithy
 
         attr_reader :parameters, :test_cases
 
-        def namespace
-          @plan.gem_namespace
-        end
-
-        def documentation
-          '# TODO: Documentation'
+        def module_name
+          @plan.module_name
         end
 
         private

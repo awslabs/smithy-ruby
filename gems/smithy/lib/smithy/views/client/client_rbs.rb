@@ -5,16 +5,16 @@ module Smithy
     module Client
       # @api private
       class ClientRbs < View
-        def initialize(plan)
+        def initialize(plan, code_generated_plugins)
           @plan = plan
           @model = plan.model
-          @plugins = PluginList.new(plan)
+          @plugins = plugins(plan, code_generated_plugins)
 
           super()
         end
 
-        def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+        def module_name
+          @plan.module_name
         end
 
         def option_types
@@ -35,6 +35,23 @@ module Smithy
         end
 
         private
+
+        def plugins(plan, code_generated_plugins)
+          define_module_names
+          code_generated_plugins.each do |plugin|
+            Object.module_eval(plugin.source)
+          end
+          PluginList.new(plan).to_a + code_generated_plugins.to_a
+        end
+
+        def define_module_names
+          parent = Object
+          module_name.split('::') do |mod|
+            child = mod
+            parent.const_set(child, ::Module.new) unless parent.const_defined?(child)
+            parent = parent.const_get(child)
+          end
+        end
 
         def rbs_type(option)
           return option.rbs_type if option.rbs_type

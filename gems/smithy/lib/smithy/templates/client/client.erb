@@ -6,8 +6,8 @@
 require '<%= plugin_path %>'
 <% end -%>
 
-module <%= namespace %>
-  # An API client for <%= namespace %>.
+module <%= module_name %>
+  # An API client for <%= module_name %>.
   # See {#initialize} for a full list of supported configuration options.
   class Client < Smithy::Client::Base
     self.schema = Shapes::SCHEMA

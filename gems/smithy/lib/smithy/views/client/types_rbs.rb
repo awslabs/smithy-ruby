@@ -11,8 +11,8 @@ module Smithy
           super()
         end
 
-        def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+        def module_name
+          @plan.module_name
         end
 
         def types
@@ -25,20 +25,24 @@ module Smithy
 
         # @api private
         class Type
-          def initialize(model, id, structure)
+          def initialize(model, id, shape)
             @id = id
-            @structure = structure
+            @shape = shape
             @model = model
           end
 
           def name
-            Model::Shape.name(@id)
+            Model::Shape.name(@id).camelize
           end
 
           def members
-            @structure['members'].map do |name, member|
+            @shape['members'].map do |name, member|
               Member.new(@model, name, member)
             end
+          end
+
+          def type
+            @shape['type']
           end
         end
 

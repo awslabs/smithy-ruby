@@ -1,4 +1,15 @@
-# TODO
+# Smithy Ruby
+
+[Smithy](https://awslabs.github.io/smithy/) SDK code generator for Ruby.
+
+**WARNING: This branch is under active development.  All interfaces are subject to change.**
+
+For previous pre-release, Java based Smithy-Ruby, see: [smithy-ruby/main](https://github.com/smithy-lang/smithy-ruby/tree/main)
+
+[![License][apache-badge]][apache-url]
+
+[apache-badge]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+
 
 ## Helpful Commands
 

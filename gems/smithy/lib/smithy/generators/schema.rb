@@ -7,7 +7,7 @@ module Smithy
       # @param [Plan] plan The plan to generate.
       def initialize(plan)
         @plan = plan
-        @gem_name = "#{plan.options[:gem_name]}-schema"
+        @gem_name = plan.gem_name
         super
       end
 

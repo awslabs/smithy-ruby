@@ -2,12 +2,13 @@
 
 # This is generated code!
 
-module <%= namespace %>
+module <%= module_name %>
   # This module contains the types returned by client operations.
   module Types
 <% types.each do |type| -%>
 
     <%= type.documentation %>
+<% if type.type == 'structure' -%>
     <%= type.name %> = Struct.new(
 <% type.member_names.each do |member| -%>
       :<%= member %>,
@@ -16,6 +17,27 @@ module <%= namespace %>
     ) do
       include Smithy::Client::Structure
     end
+<% elsif type.type == 'union' -%>
+    class <%= type.name %> < Smithy::Client::Union
+<% type.members.each do |member| %>
+      class <%= member.name.camelize  %> < <%= type.name %>
+        def to_h
+          { <%= member.name.underscore %>: super(__getobj__) }
+        end
+      end
+<% end -%>
+
+      class Unknown < <%= type.name %>
+        def initialize(name:, value:)
+          super({name: name || 'Unknown', value: value})
+        end
+
+        def to_h
+          { unknown: super(__getobj__) }
+        end
+      end
+    end
+<% end -%>
 <% end -%>
 
   end

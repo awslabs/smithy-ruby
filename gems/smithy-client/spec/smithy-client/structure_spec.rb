@@ -10,9 +10,19 @@ module Smithy
           :hash_value,
           :value,
           :some_object,
+          :union_value,
           keyword_init: true
         ) do
           include Structure
+        end
+      end
+
+      let(:union_class) { Class.new(Union) }
+      let(:struct_value_class) do
+        Class.new(union_class) do
+          def to_h
+            { struct_value: super(__getobj__) }
+          end
         end
       end
 
@@ -24,6 +34,7 @@ module Smithy
             structure.new(value: 'bar')
           ],
           hash_value: { key: structure.new(value: 'value') },
+          union_value: struct_value_class.new(structure.new(value: 'value')),
           value: 'value',
           some_object: Object.new
         )
@@ -40,6 +51,7 @@ module Smithy
             hash_value: {
               key: { value: 'value' }
             },
+            union_value: { struct_value: { value: 'value' } },
             value: 'value',
             some_object: subject.some_object
           }

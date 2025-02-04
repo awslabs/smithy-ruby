@@ -88,7 +88,7 @@ module Smithy
           expect(mod.error_class('My.Error')).to be(mod::MyError)
         end
 
-        it 'removes http namespaces from the error code' do
+        it 'removes http schemas from the error code' do
           expect(mod.error_class('ErrorClass:http://example.com')).to be(mod::ErrorClass)
           expect(mod.error_class('ErrorClass:https://example.com')).to be(mod::ErrorClass)
         end

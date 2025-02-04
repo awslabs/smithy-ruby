@@ -1,4 +1,4 @@
-module <%= namespace %>
+module <%= module_name %>
   module Errors
 <% errors.each do |error| -%>
     class <%= error.name %> < Smithy::Client::Errors::ServiceError

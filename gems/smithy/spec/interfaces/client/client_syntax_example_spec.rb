@@ -2,11 +2,11 @@
 
 describe 'Component: Client: Request/Response Syntax Examples' do
   before(:all) do
-    @tmpdir = SpecHelper.generate(['AllShapes'], :client)
+    @tmpdir = SpecHelper.generate(['SyntaxExamples'], :client)
   end
 
   after(:all) do
-    SpecHelper.cleanup(['AllShapes'], @tmpdir)
+    SpecHelper.cleanup(['SyntaxExamples'], @tmpdir)
   end
 
   it 'generates request and response syntax examples' do
@@ -46,7 +46,27 @@ describe 'Component: Client: Request/Response Syntax Examples' do
           structure: {
             member: "String"
           },
-          union: TODO: union
+          union: {
+            # One of:
+            string: "String",
+            structure: {
+              member: "String"
+            },
+            simple_list: ["String"],
+            simple_map: {
+              "String" => "String"
+            },
+            complex_list: [
+              {
+                member: "String"
+              }
+            ],
+            complex_map: {
+              "String" => {
+                member: "String"
+              }
+            }
+          }
         }
         options = {}
         output = client.operation(params, options)
@@ -86,11 +106,31 @@ describe 'Component: Client: Request/Response Syntax Examples' do
           structure: {
             member: "String"
           },
-          union: TODO: union
+          union: {
+            # One of:
+            string: "String",
+            structure: {
+              member: "String"
+            },
+            simple_list: ["String"],
+            simple_map: {
+              "String" => "String"
+            },
+            complex_list: [
+              {
+                member: "String"
+              }
+            ],
+            complex_map: {
+              "String" => {
+                member: "String"
+              }
+            }
+          }
         }
     EXAMPLE
-    client_file = File.join(@tmpdir, 'lib', 'all_shapes', 'client.rb')
-    expect(expected).to be_in_documentation(client_file, 'AllShapes::Client', 'operation')
+    client_file = File.join(@tmpdir, 'lib', 'syntax_examples', 'client.rb')
+    expect(expected).to be_in_documentation(client_file, 'SyntaxExamples::Client', 'operation')
   end
 
   context 'recursive shapes' do

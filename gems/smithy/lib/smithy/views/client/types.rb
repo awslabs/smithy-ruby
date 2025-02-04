@@ -11,8 +11,8 @@ module Smithy
           super()
         end
 
-        def namespace
-          @plan.gem_namespace
+        def module_name
+          @plan.module_name
         end
 
         def types
@@ -20,14 +20,15 @@ module Smithy
             .new(@model)
             .shapes_for(@plan.service)
             .select { |_key, shape| %w[structure union].include?(shape['type']) }
-            .map { |id, structure| Type.new(id, structure) }
+            .map { |id, shape| Type.new(@model, id, shape) }
         end
 
         # @api private
         class Type
-          def initialize(id, structure)
+          def initialize(model, id, shape)
+            @model = model
             @id = id
-            @structure = structure
+            @shape = shape
           end
 
           def documentation
@@ -35,12 +36,32 @@ module Smithy
           end
 
           def name
-            Model::Shape.name(@id)
+            Model::Shape.name(@id).camelize
           end
 
           def member_names
-            @structure['members'].keys.map(&:underscore)
+            @shape['members'].keys.map(&:underscore)
           end
+
+          def members
+            @shape['members']
+              .map { |name, member| Member.new(@model, name, member['target']) }
+          end
+
+          def type
+            @shape['type']
+          end
+        end
+
+        # @api private
+        class Member
+          def initialize(model, name, id)
+            @name = name
+            @id = id
+            @shape = Model.shape(model, id)
+          end
+
+          attr_reader :name, :id, :shape
         end
       end
     end

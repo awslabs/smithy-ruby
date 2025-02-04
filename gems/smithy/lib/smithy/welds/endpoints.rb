@@ -8,7 +8,7 @@ module Smithy
         id, service = model['shapes'].select { |_k, s| s['type'] == 'service' }.first
         return if service['traits'] && service['traits']['smithy.rules#endpointRuleSet']
 
-        puts "Adding default endpoint rules to #{id}"
+        say_status :insert, "Adding default endpoint rules to #{id}", :yellow
         add_default_endpoints(service)
       end
 

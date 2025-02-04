@@ -42,8 +42,10 @@ require_relative 'smithy-client/schema'
 require_relative 'smithy-client/shapes'
 require_relative 'smithy-client/structure'
 require_relative 'smithy-client/param_validator'
+require_relative 'smithy-client/union'
 
 # codecs
+
 require_relative 'smithy-client/cbor'
 require_relative 'smithy-client/codecs/cbor'
 

@@ -7,7 +7,7 @@ module Smithy
       # @param [Plan] plan The plan to generate.
       def initialize(plan)
         @plan = plan
-        @gem_name = plan.options[:gem_name]
+        @gem_name = plan.gem_name
         super
       end
 
@@ -64,7 +64,7 @@ module Smithy
       def rbs_files
         Enumerator.new do |e|
           e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render
-          e.yield 'sig/client.rbs', Views::Client::ClientRbs.new(@plan).render
+          e.yield 'sig/client.rbs', Views::Client::ClientRbs.new(@plan, code_generated_plugins).render
           e.yield 'sig/errors.rbs', Views::Client::ErrorsRbs.new(@plan).render
           e.yield 'sig/endpoint_parameters.rbs', Views::Client::EndpointParametersRbs.new(@plan).render
           e.yield 'sig/endpoint_provider.rbs', Views::Client::EndpointProviderRbs.new(@plan).render
@@ -77,7 +77,7 @@ module Smithy
       def code_generated_plugins
         Enumerator.new do |e|
           e.yield Views::Client::Plugin.new(
-            class_name: "#{@plan.gem_namespace}::Plugins::Endpoint",
+            class_name: "#{@plan.module_name}::Plugins::Endpoint",
             require_path: "lib/#{@gem_name}/plugins/endpoint.rb",
             source: Views::Client::EndpointPlugin.new(@plan).render
           )

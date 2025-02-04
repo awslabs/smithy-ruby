@@ -11,8 +11,8 @@ module Smithy
           super()
         end
 
-        def namespace
-          @plan.gem_namespace
+        def module_name
+          @plan.module_name
         end
 
         def errors
@@ -38,7 +38,7 @@ module Smithy
           end
 
           def name
-            Model::Shape.name(@id)
+            Model::Shape.name(@id).camelize
           end
 
           def retryable?

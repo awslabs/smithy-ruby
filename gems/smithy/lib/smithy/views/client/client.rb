@@ -12,16 +12,16 @@ module Smithy
           super()
         end
 
-        def namespace
-          @plan.gem_namespace
+        def module_name
+          @plan.module_name
         end
 
         def gem_name
-          @plan.options[:gem_name]
+          @plan.gem_name
         end
 
         def gem_version
-          @plan.options[:gem_version]
+          @plan.gem_version
         end
 
         def require_plugins
@@ -52,16 +52,16 @@ module Smithy
         private
 
         def plugins(plan, code_generated_plugins)
-          define_namespaces
+          define_module_names
           code_generated_plugins.each do |plugin|
             Object.module_eval(plugin.source)
           end
           PluginList.new(plan).to_a + code_generated_plugins.to_a
         end
 
-        def define_namespaces
+        def define_module_names
           parent = Object
-          namespace.split('::') do |mod|
+          module_name.split('::') do |mod|
             child = mod
             parent.const_set(child, ::Module.new) unless parent.const_defined?(child)
             parent = parent.const_get(child)

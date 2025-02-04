@@ -11,15 +11,11 @@ module Smithy
         end
 
         def gem_name
-          if @plan.type == :schema
-            "#{@plan.options[:gem_name]}-schema"
-          else
-            @plan.options[:gem_name]
-          end
+          @plan.gem_name
         end
 
         def gem_version
-          @plan.options[:gem_version]
+          @plan.gem_version
         end
       end
     end

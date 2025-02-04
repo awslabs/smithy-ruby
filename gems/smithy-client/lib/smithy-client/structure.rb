@@ -9,6 +9,8 @@ module Smithy
       # @return [Hash, Structure]
       def to_h(obj = self)
         case obj
+        when Union
+          obj.to_h
         when Structure
           _to_h_structure(obj)
         when Hash

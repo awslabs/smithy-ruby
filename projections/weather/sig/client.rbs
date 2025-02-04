@@ -29,7 +29,7 @@ module Weather
       def coordinates: () -> Types::CityCoordinates?
     end
       def get_city: (
-          ?city_id: String
+        ?city_id: String
       ) -> _GetCityResponse
       | (?Hash[Symbol, untyped], ?Hash[Symbol, untyped]) -> _GetCityResponse
 
@@ -44,7 +44,7 @@ module Weather
       def chance_of_rain: () -> Float?
     end
       def get_forecast: (
-          ?city_id: String
+        ?city_id: String
       ) -> _GetForecastResponse
       | (?Hash[Symbol, untyped], ?Hash[Symbol, untyped]) -> _GetForecastResponse
 
@@ -54,8 +54,8 @@ module Weather
       def items: () -> Array[Types::CitySummary]?
     end
       def list_cities: (
-          ?next_token: String,
-          ?page_size: Integer
+        ?next_token: String,
+        ?page_size: Integer
       ) -> _ListCitiesResponse
       | (?Hash[Symbol, untyped], ?Hash[Symbol, untyped]) -> _ListCitiesResponse
   end

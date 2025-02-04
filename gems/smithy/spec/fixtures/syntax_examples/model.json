@@ -1,14 +1,6 @@
 {
     "smithy": "2.0",
     "shapes": {
-        "smithy.ruby.tests#AllShapes": {
-            "type": "service",
-            "operations": [
-                {
-                    "target": "smithy.ruby.tests#Operation"
-                }
-            ]
-        },
         "smithy.ruby.tests#ComplexList": {
             "type": "list",
             "member": {
@@ -158,14 +150,34 @@
                 }
             }
         },
+        "smithy.ruby.tests#SyntaxExamples": {
+            "type": "service",
+            "operations": [
+                {
+                    "target": "smithy.ruby.tests#Operation"
+                }
+            ]
+        },
         "smithy.ruby.tests#Union": {
             "type": "union",
             "members": {
                 "string": {
                     "target": "smithy.api#String"
                 },
-                "integer": {
-                    "target": "smithy.api#Integer"
+                "structure": {
+                    "target": "smithy.ruby.tests#Structure"
+                },
+                "simpleList": {
+                    "target": "smithy.ruby.tests#SimpleList"
+                },
+                "simpleMap": {
+                    "target": "smithy.ruby.tests#SimpleMap"
+                },
+                "complexList": {
+                    "target": "smithy.ruby.tests#ComplexList"
+                },
+                "complexMap": {
+                    "target": "smithy.ruby.tests#ComplexMap"
                 }
             }
         }

@@ -10,8 +10,8 @@ module Smithy
           super()
         end
 
-        def namespace
-          Util::Namespace.namespace_from_gem_name(@plan.options[:gem_name])
+        def module_name
+          @plan.module_name
         end
       end
     end

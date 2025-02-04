@@ -23,8 +23,8 @@ module Smithy
 
         attr_reader :parameters
 
-        def namespace
-          @plan.gem_namespace
+        def module_name
+          @plan.module_name
         end
 
         def endpoint_rules_code

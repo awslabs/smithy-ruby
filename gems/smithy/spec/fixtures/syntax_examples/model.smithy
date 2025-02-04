@@ -2,7 +2,7 @@ $version: "2"
 
 namespace smithy.ruby.tests
 
-service AllShapes {
+service SyntaxExamples {
     operations: [Operation]
 }
 
@@ -75,5 +75,9 @@ map ComplexMap {
 
 union Union {
     string: String,
-    integer: Integer
+    structure: Structure
+    simpleList: SimpleList
+    simpleMap: SimpleMap
+    complexList: ComplexList
+    complexMap: ComplexMap
 }

@@ -89,10 +89,9 @@ module ClientHelper
 
     def create_plan(model, namespace, options)
       plan_options = {
-        gem_namespace: namespace,
-        gem_name: options[:gem_name] || 'sample',
-        gem_version: options[:gem_version] || '1.0.0',
-        source_only: true
+        name: 'sample',
+        module_name: namespace,
+        gem_version: options[:gem_version] || '0.1.0'
       }
       Smithy::Plan.new(model, :client, plan_options)
     end
