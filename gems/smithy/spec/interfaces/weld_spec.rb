@@ -1,5 +1,15 @@
 # frozen_string_literal: true
 
+RSpec.shared_context 'generated client' do |module_names|
+  before(:all) do
+    @tmpdir = SpecHelper.generate(module_names, :client)
+  end
+
+  after(:all) do
+    SpecHelper.cleanup_generated(module_names, @tmpdir)
+  end
+end
+
 describe 'Integration: Welds' do
   # rubocop:disable Lint/UselessAssignment
   before(:all) do
@@ -37,14 +47,10 @@ describe 'Integration: Welds' do
         end
       end
     end
-
-    @tmpdir = SpecHelper.generate(['Weather'], :schema)
   end
   # rubocop:enable Lint/UselessAssignment
 
-  after(:all) do
-    SpecHelper.cleanup_generated(['Weather'], @tmpdir)
-  end
+  include_context 'generated client', ['Weather']
 
   it 'includes Thor::Actions' do
     expect(Class.new(Smithy::Weld).ancestors).to include(Thor::Actions)
