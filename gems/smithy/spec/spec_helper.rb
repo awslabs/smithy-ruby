@@ -11,8 +11,10 @@ require_relative 'support/rbs_spy_test'
 
 module SpecHelper
   class << self
-    def generate_client(module_names, options = {})
-      tmpdir = ClientHelper.generate(module_names, :client, options)
+    def generate(module_names, type, options = {})
+      raise NotImplementedError if type == :server
+
+      tmpdir = ClientHelper.generate(module_names, type, options)
       RbsSpyTest.setup(module_names, tmpdir) if ENV['SMITHY_RUBY_RBS_TEST']
       tmpdir
     rescue StandardError => e
@@ -20,24 +22,10 @@ module SpecHelper
       raise e
     end
 
-    def client_source(options = {})
-      module_names = ClientHelper.source(:client, options)
-    rescue StandardError => e
-      ClientHelper.cleanup_sourced(module_names)
-      raise e
-    end
+    def source(type, options = {})
+      raise NotImplementedError if type == :server
 
-    def generate_schema(module_names, options = {})
-      tmpdir = ClientHelper.generate(module_names, :schema, options)
-      RbsSpyTest.setup(module_names, tmpdir) if ENV['SMITHY_RUBY_RBS_TEST']
-      tmpdir
-    rescue StandardError => e
-      ClientHelper.cleanup_generated(module_names, tmpdir)
-      raise e
-    end
-
-    def schema_source(options = {})
-      module_names = ClientHelper.source(:schema, options)
+      module_names = ClientHelper.source(type, options)
     rescue StandardError => e
       ClientHelper.cleanup_sourced(module_names)
       raise e
@@ -47,17 +35,16 @@ module SpecHelper
     #  generated code to clean up.
     # @param [String] tmpdir The path to the tmp directory where the
     #  generated code was written to.
-    def cleanup_generated_client(module_names, tmpdir)
+    def cleanup_generated(module_names, tmpdir)
       ClientHelper.cleanup_generated(module_names, tmpdir)
     end
-    alias cleanup_generated_schema cleanup_generated_client
+    alias cleanup cleanup_generated
 
     # @param [Array<String>] module_names A list of module names from the
     #  sourced code to clean up.
-    def cleanup_sourced_client(module_names)
+    def cleanup_sourced(module_names)
       ClientHelper.cleanup_sourced(module_names)
     end
-    alias cleanup_sourced_schema cleanup_sourced_client
   end
 end
 

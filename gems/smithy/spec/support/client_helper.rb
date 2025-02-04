@@ -121,7 +121,7 @@ module ClientHelper
       cleanup_sourced(module_names)
       return unless tmpdir
 
-      if ENV.fetch('SMITHY_RUBY_KEEP_GENERATED_SOURCE', 'true') == 'true'
+      if ENV.fetch('SMITHY_RUBY_KEEP_GENERATED_SOURCE', 'false') == 'true'
         puts "Leaving generated service in: #{tmpdir}"
       else
         FileUtils.rm_rf(tmpdir)
