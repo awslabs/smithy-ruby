@@ -1,4 +1,171 @@
 {
     "smithy": "2.0",
-    "shapes": {}
+    "shapes": {
+        "smithy.ruby.tests#BigDecimal": {
+            "type": "bigDecimal"
+        },
+        "smithy.ruby.tests#BigInteger": {
+            "type": "bigInteger"
+        },
+        "smithy.ruby.tests#Blob": {
+            "type": "blob"
+        },
+        "smithy.ruby.tests#Boolean": {
+            "type": "boolean"
+        },
+        "smithy.ruby.tests#Byte": {
+            "type": "byte"
+        },
+        "smithy.ruby.tests#Document": {
+            "type": "document"
+        },
+        "smithy.ruby.tests#Double": {
+            "type": "double"
+        },
+        "smithy.ruby.tests#Enum": {
+            "type": "enum",
+            "members": {
+                "FOO": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "bar"
+                    }
+                }
+            }
+        },
+        "smithy.ruby.tests#Float": {
+            "type": "float"
+        },
+        "smithy.ruby.tests#IntEnum": {
+            "type": "intEnum",
+            "members": {
+                "BAZ": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": 1
+                    }
+                }
+            }
+        },
+        "smithy.ruby.tests#Integer": {
+            "type": "integer"
+        },
+        "smithy.ruby.tests#List": {
+            "type": "list",
+            "member": {
+                "target": "smithy.ruby.tests#String"
+            }
+        },
+        "smithy.ruby.tests#Long": {
+            "type": "long"
+        },
+        "smithy.ruby.tests#Map": {
+            "type": "map",
+            "key": {
+                "target": "smithy.ruby.tests#String"
+            },
+            "value": {
+                "target": "smithy.ruby.tests#String"
+            }
+        },
+        "smithy.ruby.tests#Operation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.ruby.tests#OperationInputOutput"
+            },
+            "output": {
+                "target": "smithy.ruby.tests#OperationInputOutput"
+            }
+        },
+        "smithy.ruby.tests#OperationInputOutput": {
+            "type": "structure",
+            "members": {
+                "blob": {
+                    "target": "smithy.ruby.tests#Blob"
+                },
+                "boolean": {
+                    "target": "smithy.ruby.tests#Boolean"
+                },
+                "string": {
+                    "target": "smithy.ruby.tests#String"
+                },
+                "byte": {
+                    "target": "smithy.ruby.tests#Byte"
+                },
+                "short": {
+                    "target": "smithy.ruby.tests#Short"
+                },
+                "integer": {
+                    "target": "smithy.ruby.tests#Integer"
+                },
+                "long": {
+                    "target": "smithy.ruby.tests#Long"
+                },
+                "float": {
+                    "target": "smithy.ruby.tests#Float"
+                },
+                "double": {
+                    "target": "smithy.ruby.tests#Double"
+                },
+                "bigInteger": {
+                    "target": "smithy.ruby.tests#BigInteger"
+                },
+                "bigDecimal": {
+                    "target": "smithy.ruby.tests#BigDecimal"
+                },
+                "timestamp": {
+                    "target": "smithy.ruby.tests#Timestamp"
+                },
+                "document": {
+                    "target": "smithy.ruby.tests#Document"
+                },
+                "enum": {
+                    "target": "smithy.ruby.tests#Enum"
+                },
+                "intEnum": {
+                    "target": "smithy.ruby.tests#IntEnum"
+                },
+                "list": {
+                    "target": "smithy.ruby.tests#List"
+                },
+                "map": {
+                    "target": "smithy.ruby.tests#Map"
+                },
+                "structure": {
+                    "target": "smithy.ruby.tests#Structure"
+                },
+                "union": {
+                    "target": "smithy.ruby.tests#Union"
+                }
+            }
+        },
+        "smithy.ruby.tests#Short": {
+            "type": "short"
+        },
+        "smithy.ruby.tests#String": {
+            "type": "string"
+        },
+        "smithy.ruby.tests#Structure": {
+            "type": "structure",
+            "members": {
+                "member": {
+                    "target": "smithy.ruby.tests#String"
+                }
+            }
+        },
+        "smithy.ruby.tests#Timestamp": {
+            "type": "timestamp"
+        },
+        "smithy.ruby.tests#Union": {
+            "type": "union",
+            "members": {
+                "string": {
+                    "target": "smithy.ruby.tests#String"
+                },
+                "structure": {
+                    "target": "smithy.ruby.tests#Structure"
+                }
+            }
+        }
+    }
 }

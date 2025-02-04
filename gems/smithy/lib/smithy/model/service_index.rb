@@ -15,15 +15,21 @@ module Smithy
       # @param [Hash] service Service shape
       # @return [Hash<String, Hash>] The operations for the service.
       def operations_for(service)
-        @operations_for ||= begin
-          shapes = @service_parser.operations_for(service)
-          shapes.sort_by { |k, _v| k }.to_h
+        if service
+          @operations_for ||= begin
+            shapes = @service_parser.operations_for(service)
+            shapes.sort_by { |k, _v| k }.to_h
+          end
+        else
+          @model['shapes'].select { |_id, shape| shape['type'] == 'operation' }
         end
       end
 
-      # @param [Hash] service Service shape
+      # @param [Hash, nil] service Service shape
       # @return [Hash<String, Hash>] The shapes for the service.
       def shapes_for(service)
+        return @model['shapes'] unless service
+
         @shapes_for ||= begin
           shapes = {}
           parse_errors(service, shapes)

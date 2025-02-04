@@ -20,9 +20,8 @@ module Smithy
       @type = type
       @service = find_service(model['shapes'])
 
-      @name = options.fetch(:name, default_name(service))
-      @module_name = options.fetch(:module_name, @name)
-      @gem_name = options.fetch(:gem_name, default_gem_name(@module_name, @type))
+      initialize_names(options)
+
       @gem_version = options.fetch(:gem_version)
 
       @destination_root = options.fetch(:destination_root, nil)
@@ -64,16 +63,24 @@ module Smithy
 
     private
 
+    def initialize_names(options)
+      @name = options.fetch(:name, default_name(@service))
+      raise 'Missing name' unless @name
+
+      @module_name = options.fetch(:module_name, @name)
+      @gem_name = options.fetch(:gem_name, default_gem_name(@module_name, @type))
+    end
+
     def find_service(shapes)
       service = shapes.select { |_, shape| shape['type'] == 'service' }
       raise 'Multiple service shapes found' if service.size > 1
-      raise 'No service shape found' if service.empty?
+      raise 'No service shape found' if service.empty? && type != :schema
 
-      service
+      service.empty? ? nil : service
     end
 
     def default_name(service)
-      Model::Shape.name(service.keys.first)
+      Model::Shape.name(service.keys.first) if service
     end
 
     def default_gem_name(module_name, type)

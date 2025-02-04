@@ -24,6 +24,8 @@ module Smithy
         end
 
         def service_shape
+          return if @service_shape.nil?
+
           ServiceShape.new(
             id: @service_shape.keys.first,
             traits: filter_traits(@service_shape.values.first['traits']),
@@ -118,7 +120,7 @@ module Smithy
         end
 
         def shape_type_from_type(type)
-          msg = "Unsupported shape type: `#{type}'"
+          msg = "Unsupported shape type: `#{type}`"
           raise ArgumentError, msg unless SHAPE_TYPES_MAP.include?(type)
 
           SHAPE_TYPES_MAP[type]

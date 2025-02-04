@@ -10,13 +10,17 @@ module Smithy
       ].freeze
 
       def for?(service)
-        namespace = Model::Shape.namespace(service.keys.first).to_s
-        TEST_NAMESPACES.none? { |test_namespace| namespace.match?(test_namespace) }
+        if service.nil?
+          @plan.model['shapes'].none? { |id, _shape| TEST_NAMESPACES.any? { |namespace| namespace.match?(id) } }
+        else
+          namespace = Model::Shape.namespace(service.keys.first).to_s
+          TEST_NAMESPACES.none? { |test_namespace| namespace.match?(test_namespace) }
+        end
       end
 
       def post_process(_artifacts)
         require 'rubocop'
-        puts "Running RuboCop --autocorrect-all on #{destination_root}"
+        say_status :insert, "Running RuboCop --autocorrect-all on #{destination_root}", @plan.quiet
         rubocop = ::RuboCop::CLI.new
         args = [
           '--autocorrect-all',

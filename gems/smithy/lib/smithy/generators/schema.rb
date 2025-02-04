@@ -33,6 +33,8 @@ module Smithy
 
           source_files.each { |file, content| e.yield file, content }
           e.yield "lib/#{@gem_name}/customizations.rb", Views::Client::Customizations.new.render
+
+          rbs_files.each { |file, content| e.yield file, content }
         end
       end
 
@@ -48,6 +50,7 @@ module Smithy
         Enumerator.new do |e|
           e.yield "sig/#{@gem_name}.rbs", Views::Client::ModuleRbs.new(@plan).render
           e.yield 'sig/types.rbs', Views::Client::TypesRbs.new(@plan).render
+          e.yield 'sig/shapes.rbs', Views::Client::ShapesRbs.new(@plan).render
         end
       end
 

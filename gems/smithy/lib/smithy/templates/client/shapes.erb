@@ -21,11 +21,13 @@ module <%= module_name %>
 
 <% end -%>
     SCHEMA = Smithy::Client::Schema.new do |schema|
+<% if service_shape -%>
       schema.service = ServiceShape.new(
         id: "<%= service_shape.id %>",
         version: "<%= service_shape.version %>",
         traits: <%= service_shape.traits %>
       )
+<% end -%>
 <% operation_shapes.each do |shape| -%>
       schema.add_operation(:<%= shape.name %>, OperationShape.new do |operation|
         operation.id = "<%= shape.id %>"

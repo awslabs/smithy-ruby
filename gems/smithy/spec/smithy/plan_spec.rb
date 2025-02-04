@@ -35,8 +35,28 @@ module Smithy
       context 'no service shapes' do
         let(:fixture) { File.expand_path('../fixtures/no_service/model.json', __dir__.to_s) }
 
-        it 'raises an error' do
-          expect { subject }.to raise_error('No service shape found')
+        context 'type: client' do
+          let(:type) { :client }
+          it 'raises an error' do
+            expect { subject }.to raise_error('No service shape found')
+          end
+        end
+
+        context 'type: schema' do
+          let(:type) { :schema }
+
+          context 'missing name' do
+            it 'raises an error' do
+              expect { subject }.to raise_error('Missing name')
+            end
+          end
+
+          context 'name set' do
+            let(:options) { { gem_version: '0.1.0', name: 'name' } }
+            it 'resolves service to nil' do
+              expect(subject.service).to be_nil
+            end
+          end
         end
       end
 
