@@ -8,7 +8,7 @@ module Smithy
         def initialize(plan, code_generated_plugins)
           @plan = plan
           @model = plan.model
-          @plugins = plugins(plan, code_generated_plugins)
+          @plugins = PluginList.new(plan, code_generated_plugins)
           super()
         end
 
@@ -53,23 +53,6 @@ module Smithy
         end
 
         private
-
-        def plugins(plan, code_generated_plugins)
-          define_module_names
-          code_generated_plugins.each do |plugin|
-            Object.module_eval(plugin.source)
-          end
-          PluginList.new(plan, code_generated_plugins)
-        end
-
-        def define_module_names
-          parent = Object
-          module_name.split('::') do |mod|
-            child = mod
-            parent.const_set(child, ::Module.new) unless parent.const_defined?(child)
-            parent = parent.const_get(child)
-          end
-        end
 
         def option_docstrings(option)
           docstrings = []

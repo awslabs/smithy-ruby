@@ -7,21 +7,17 @@ module Smithy
       class Plugin
         def initialize(options = {})
           @class_name = options[:class_name]
-          @path = options[:path]
-          @relative_path = options.fetch(:relative_path, false)
           @require_path = options[:require_path]
           @require_relative = options.fetch(:require_relative, false)
           @source = options[:source]
         end
 
-        attr_reader :class_name, :path, :require_path, :source
+        attr_accessor :class_name, :require_path, :source
 
         def options
-          Object.const_get(@class_name).options
-        end
-
-        def relative_path?
-          @relative_path
+          klass = @class_name
+          klass = Object.const_get(@class_name) if @class_name.is_a?(String)
+          klass.options
         end
 
         def require_relative?

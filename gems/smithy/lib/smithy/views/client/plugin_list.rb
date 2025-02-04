@@ -9,16 +9,7 @@ module Smithy
 
         def initialize(plan, code_generated_plugins)
           @plan = plan
-          @plugins = plugins(plan.welds, code_generated_plugins)
-          @plugins.each do |plugin|
-            next if plugin.source
-
-            path = plugin.path
-            next unless path
-
-            path = File.absolute_path(path) unless plugin.relative_path?
-            Kernel.require(path)
-          end
+          @plugins = plugins(plan, code_generated_plugins)
         end
 
         def each(&)
@@ -27,14 +18,37 @@ module Smithy
 
         private
 
-        def plugins(welds, code_generated_plugins)
+        def plugins(plan, code_generated_plugins)
           plugins = []
-          code_generated_plugins.map { |plugin| plugins << plugin }
+          code_generated_plugins(plugins, code_generated_plugins)
+          weld_plugins(plugins, plan.welds)
+          plugins
+        end
+
+        def code_generated_plugins(plugins, code_generated_plugins)
+          define_module_names
+          code_generated_plugins.each do |_, plugin| # rubocop:disable Style/HashEachMethods
+            Object.module_eval(plugin.source)
+            plugins << plugin
+          end
+        end
+
+        # Code generated plugins may have nested namespaces, so we need to ensure
+        # that they are defined before we try to evaluate the source.
+        def define_module_names
+          parent = Object
+          @plan.module_name.split('::') do |mod|
+            child = mod
+            parent.const_set(child, ::Module.new) unless parent.const_defined?(child)
+            parent = parent.const_get(child)
+          end
+        end
+
+        def weld_plugins(plugins, welds)
           weld_plugins = welds.map(&:plugins).reduce({}, :merge)
-          weld_plugins.map do |class_name, options|
+          weld_plugins.each do |class_name, options|
             plugins << Plugin.new(class_name: class_name, **options)
           end
-          plugins
         end
       end
     end

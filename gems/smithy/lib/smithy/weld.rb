@@ -55,8 +55,6 @@ module Smithy
     # with other plugins. The key is the fully qualified class name of the plugin,
     # and the value is a hash with any of the following keys:
     # * :source - the source code of the plugin
-    # * :path - the path to the plugin
-    # * :relative_path - true if the path is relative to the weld
     # * :require_path - the path to require the plugin from the client
     # * :require_relative - true if the path should be required relative to the client
     # @return [Hash<String, Hash>] a mapping of fully qualified class names as the

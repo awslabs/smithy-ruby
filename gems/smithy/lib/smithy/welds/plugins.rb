@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+require 'smithy-client/plugins/logging'
+require 'smithy-client/plugins/raise_response_errors'
+require 'smithy-client/plugins/response_target'
+require 'smithy-client/plugins/net_http'
+
 module Smithy
   module Welds
     # Provides default plugins.
@@ -9,32 +14,22 @@ module Smithy
         true
       end
 
-      # rubocop:disable Metrics/MethodLength
       def plugins
         {
-          'Smithy::Client::Plugins::Logging' => {
-            path: 'smithy-client/plugins/logging',
-            relative_path: true,
+          Smithy::Client::Plugins::Logging => {
             require_path: 'smithy-client/plugins/logging'
           },
-          'Smithy::Client::Plugins::RaiseResponseErrors' => {
-            path: 'smithy-client/plugins/raise_response_errors',
-            relative_path: true,
+          Smithy::Client::Plugins::RaiseResponseErrors => {
             require_path: 'smithy-client/plugins/raise_response_errors'
           },
-          'Smithy::Client::Plugins::ResponseTarget' => {
-            path: 'smithy-client/plugins/response_target',
-            relative_path: true,
+          Smithy::Client::Plugins::ResponseTarget => {
             require_path: 'smithy-client/plugins/response_target'
           },
-          'Smithy::Client::Plugins::NetHTTP' => {
-            path: 'smithy-client/plugins/net_http',
-            relative_path: true,
+          Smithy::Client::Plugins::NetHTTP => {
             require_path: 'smithy-client/plugins/net_http'
           }
         }
       end
-      # rubocop:enable Metrics/MethodLength
     end
   end
 end
