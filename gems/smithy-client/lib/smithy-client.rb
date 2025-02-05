@@ -45,7 +45,7 @@ require_relative 'smithy-client/codecs/cbor'
 
 # protocols
 require_relative 'smithy-client/protocols'
-require_relative 'smithy-client/protocols/rpcv2'
+require_relative 'smithy-client/protocols/rpc_v2'
 
 module Smithy
   # Base module for a generated Smithy gem.
