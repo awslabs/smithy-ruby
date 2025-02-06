@@ -7,7 +7,7 @@ module Smithy
     # Provides map of protocol trait id and its Ruby class name.
     class Protocols < Weld
       def protocols
-        { 'smithy.protocols#rpcv2Cbor' => 'Smithy::Client::Protocols::RPCv2' }
+        { 'smithy.protocols#rpcv2Cbor' => Smithy::Client::Protocols::RPCv2 }
       end
     end
   end
