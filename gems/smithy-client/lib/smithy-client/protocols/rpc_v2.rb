@@ -31,7 +31,7 @@ module Smithy
         end
 
         # TODO: Implement once errors are supported
-        def parse_error(_context); end
+        def parse_error(_context, _response); end
 
         private
 

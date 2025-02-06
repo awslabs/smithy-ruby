@@ -17,27 +17,26 @@ module Smithy
           @plan.module_name
         end
 
-        def protocol_name
-          raise ArgumentError, 'Invalid protocol' if (protocol = resolve_protocol).nil?
+        def protocol
+          return if default_protocol.nil?
 
-          protocol
+          weld_protocols[default_protocol]
         end
 
         private
 
-        SUPPORTED_PROTOCOLS = {
-          'smithy.protocols#rpcv2Cbor' => 'RPCV2'
-        }.freeze
+        def service_traits
+          @service_traits ||= @plan.service.values.first['traits']
+        end
 
-        # smithy.protocols#rpcv2Cbor
-        def resolve_protocol
-          protocol = @plan
-                     .service
-                     .values
-                     .first['traits']
-                     .find { |k, _v| k.start_with?('smithy.protocols') }
-                     &.first
-          SUPPORTED_PROTOCOLS[protocol]
+        def weld_protocols
+          @weld_protocols ||= @plan.welds.map(&:protocols).reduce({}, :merge)
+        end
+
+        def default_protocol
+          return if weld_protocols.empty? && service_traits.nil?
+
+          weld_protocols.keys.find { |k| service_traits.key?(k) }
         end
       end
     end
