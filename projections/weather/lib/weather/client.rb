@@ -3,6 +3,7 @@
 # This is generated code!
 
 require_relative 'plugins/endpoint'
+require_relative 'plugins/protocol'
 require 'smithy-client/plugins/logging'
 require 'smithy-client/plugins/raise_response_errors'
 require 'smithy-client/plugins/response_target'
@@ -87,6 +88,13 @@ module Weather
     # @option options [Logger] :logger
     #  The Logger instance to send log messages to. If this option is not set,
     #  logging is disabled.
+    # @option options [Smithy::Client::Protocols::RPCv2] :protocol (Smithy::Client::Protocols::RPCv2)
+    #  Allows you to overwrite default protocol. The given protocol
+    #  must provide the following functionalities:
+    #  - `build_request`
+    #  - `parse_response`
+    #  - `parse_error`
+    #  See existing protocols within Smithy::Client::Protocols for examples.
     # @option options [Boolean] :raise_response_errors (true)
     #  When `true`, response errors are raised. When `false`, the error is placed on the
     #  output in the {Smithy::Client::Output#error error accessor}.
@@ -171,15 +179,12 @@ module Weather
 
     def build_input(operation_name, params)
       handlers = @handlers.for(operation_name)
-      operation = config.schema.operation(operation_name)
-      config.protocol.service_id = 'example.weather#Weather'
       context = Smithy::Client::HandlerContext.new(
         operation_name: operation_name,
-        operation: operation,
+        operation: config.schema.operation(operation_name),
         client: self,
         params: params,
-        config: config,
-        protocol: config.protocol
+        config: config
       )
       context[:gem_name] = 'weather'
       context[:gem_version] = '1.0.0'
