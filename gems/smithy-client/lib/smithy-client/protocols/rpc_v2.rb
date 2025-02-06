@@ -16,7 +16,6 @@ module Smithy
         end
 
         def build_request(context)
-          puts 'BUILDING REQUEST FROM RPCV2 PROTOCOL'
           codec = Client::Codecs::CBOR.new(setting(context))
           context.request.body = codec.serialize(context.params, context.operation.input)
           context.request.http_method = 'POST'
@@ -24,7 +23,6 @@ module Smithy
         end
 
         def parse_response(context)
-          puts 'PARSING RESPONSE FROM RPCV2 PROTOCOL'
           output_shape = context.operation.output
           codec = Client::Codecs::CBOR.new(setting(context))
           codec.deserialize(context.response.body, output_shape, output_shape.type)
@@ -40,7 +38,7 @@ module Smithy
           context.request.headers['Smithy-Protocol'] = 'rpc-v2-cbor'
           context.request.headers['Content-Type'] = 'application/cbor'
           # TODO: Implement Content-Length Plugin/Handler
-          context.request.headers['Content-Length'] = request.body.size
+          context.request.headers['Content-Length'] = context.request.body.size
         end
 
         def setting(context)
