@@ -23,7 +23,7 @@ module <%= module_name %>
          <%= protocol %>.new
        end
 <% else -%>
-         doc_default: nil,
+         default: nil,
          docstring: <<~DOCS)
            This configuration is required to build requests and parse responses.
            In Smithy, a protocol is a named set of rules that defines the syntax

@@ -45,6 +45,8 @@ module <%= module_name %>
           <%= p.param %>: <%= p.value %>,
 <% end -%>
         )
+        # TODO: Revise once spec_helper is finalized
+        client.config.protocol = double(build_request: nil, parse_response: nil)
 <% if test_case.expect_error? -%>
         expect do
           client.<%= operation_input.operation_name %>(
