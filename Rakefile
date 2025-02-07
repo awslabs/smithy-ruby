@@ -18,15 +18,15 @@ namespace :smithy do
 
     spec_paths = []
     include_paths = []
-    tmp_dirs = []
+    plans = []
     rbs_targets = %w[Smithy Smithy::* Smithy::Client]
     sig_paths = ['gems/smithy-client/sig']
     Dir.glob('gems/smithy/spec/fixtures/endpoints/*/model.json') do |model_path|
       test_name = model_path.split('/')[-2]
       test_module = test_name.gsub('-', '').camelize
       plan = SpecHelper.generate_gem(:client, fixture: "endpoints/#{test_name}", module_name: test_module)
+      plans << plan
       tmpdir = plan.destination_root
-      tmp_dirs << plan
       spec_paths << "#{tmpdir}/spec"
       include_paths << "#{tmpdir}/lib"
       include_paths << "#{tmpdir}/spec"
@@ -52,9 +52,7 @@ namespace :smithy do
 
     sh(env, "bundle exec rspec #{specs} #{includes}")
   ensure
-    tmp_dirs.each do |plan|
-      SpecHelper.cleanup_gem(plan)
-    end
+    plans.each { |plan| SpecHelper.cleanup_gem(plan) }
   end
 
   task 'spec' => %w[spec:unit spec:endpoints]
@@ -97,8 +95,8 @@ namespace :smithy do
     task('smithy:spec:endpoints').invoke('rbs_test')
   end
 
-  desc 'Run RBS spy tests for unit tests and genreated endpoint provider specs.'
-  task 'rbs' => ['rbs:unit', 'rbs:endpoints']
+  desc 'Run RBS spy tests for unit tests and generated endpoint provider specs.'
+  task 'rbs' => %w[rbs:unit rbs:endpoints]
 end
 
 namespace 'smithy-client' do

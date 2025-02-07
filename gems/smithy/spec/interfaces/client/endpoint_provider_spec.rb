@@ -2,6 +2,8 @@
 
 describe 'Client: EndpointProvider', rbs_test: true do
   ['generated client gem', 'generated client from source code'].each do |context|
+    next if ENV['SMITHY_RUBY_RBS_TEST'] && context != 'generated client gem'
+
     context context do
       include_context context, fixture: 'endpoints/default-values', module_name: 'EndpointDefaults'
 
