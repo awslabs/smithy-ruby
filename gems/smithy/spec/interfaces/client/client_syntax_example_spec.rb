@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Component: Client: Request/Response Syntax Examples' do
+describe 'Client: Client Request/Response Syntax Examples' do
   include_context 'generated client gem', fixture: 'syntax_examples'
 
   it 'generates request and response syntax examples' do

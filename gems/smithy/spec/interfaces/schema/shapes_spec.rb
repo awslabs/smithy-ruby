@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-describe 'Client: Shapes', rbs_test: true do
-  ['generated client gem', 'generated client from source code'].each do |context|
+describe 'Schema: Shapes', rbs_test: true do
+  ['generated schema gem', 'generated schema from source code'].each do |context|
     context context do
       include_context context, fixture: 'shapes'
 

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe 'Client: Module' do
+describe 'Schema: Module' do
   context 'single module' do
-    ['generated client gem', 'generated client from source code'].each do |context|
+    ['generated schema gem', 'generated schema from source code'].each do |context|
       context context do
         include_context context, fixture: 'weather'
 
