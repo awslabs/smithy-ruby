@@ -101,24 +101,24 @@ module ClientHelper
     #   end
     # end
 
-    def generate(module_names, type, options = {})
-      model = load_fixture(options, module_names)
-      plan_options = {
-        module_name: module_names.join('::'),
-        gem_version: options.fetch(:gem_version, '0.1.0'),
-        destination_root: options.fetch(:destination_root, Dir.mktmpdir),
-        quiet: ENV.fetch('SMITHY_RUBY_QUIET', 'true') == 'true'
-      }
-      plan = Smithy::Plan.new(model, type, plan_options)
-      tmpdir = plan.destination_root
+    def generate(type, options = {})
+      model = load_model(options)
+      options[:destination_root] ||= Dir.mktmpdir
+      plan = create_plan(model, type, options)
       Smithy.generate(plan)
-      $LOAD_PATH << ("#{tmpdir}/lib")
-      require plan.gem_name
-      tmpdir
+      plan
     end
 
-    def cleanup_generated(module_names, tmpdir = nil)
-      cleanup_sourced(module_names)
+    def source(type, options = {})
+      model = load_model(options)
+      # options[:module_name] ||= next_sample_module_name
+      plan = create_plan(model, type, options)
+      source = Smithy.source(plan)
+      [plan.module_name, source]
+    end
+
+    def cleanup_gem(module_name, tmpdir = nil)
+      undefine_module(module_name)
       return unless tmpdir
 
       if ENV.fetch('SMITHY_RUBY_KEEP_GENERATED_SOURCE', 'false') == 'true'
@@ -129,24 +129,8 @@ module ClientHelper
       $LOAD_PATH.delete("#{tmpdir}/lib")
     end
 
-    def source(type, options = {})
-      model = options.delete(:model) || model(options)
-      plan_options = {
-        module_name: next_sample_module_name,
-        gem_version: options.fetch(:gem_version, '0.1.0'),
-        quiet: ENV.fetch('SMITHY_RUBY_QUIET', 'true') == 'true'
-      }
-      plan = Smithy::Plan.new(model, type, plan_options)
-      source = Smithy.source(plan)
-      Object.module_eval(source)
-      Object.const_get(plan.module_name)
-      [plan.module_name]
-    rescue Exception => e # rubocop:disable Lint/RescueException
-      puts "Error evaluating source:\n#{source}"
-      raise e
-    end
-
-    def cleanup_sourced(module_names)
+    def undefine_module(module_name)
+      module_names = module_name.split('::')
       module_names.reverse.each_cons(2) do |child, parent|
         Object.const_get(parent).send(:remove_const, child)
       end
@@ -155,8 +139,21 @@ module ClientHelper
 
     private
 
-    def load_fixture(options, module_names)
-      fixture = options.delete(:fixture) || module_names.map(&:underscore).join('/')
+    def create_plan(model, type, options = {})
+      plan_options = {
+        gem_version: '0.1.0',
+        quiet: ENV.fetch('SMITHY_RUBY_QUIET', 'true') == 'true'
+      }.merge(options)
+      Smithy::Plan.new(model, type, plan_options)
+    end
+
+    def load_model(options)
+      return load_fixture(options[:fixture]) if options[:fixture]
+
+      options.fetch(:model, model(options))
+    end
+
+    def load_fixture(fixture)
       model_dir = File.join(File.dirname(__FILE__), '..', 'fixtures', fixture)
       JSON.load_file(File.join(model_dir, 'model.json'))
     end
@@ -169,17 +166,17 @@ module ClientHelper
     end
 
     def smithy(options)
-      options.delete(:smithy) || '2.0'
+      options[:smithy] || '2.0'
     end
 
     def shapes(options)
-      options.delete(:shapes) || sample_shapes
+      options[:shapes] || sample_shapes
     end
 
-    def next_sample_module_name
-      @sample_client_count ||= 0
-      @sample_client_count += 1
-      "Sample#{@sample_client_count}"
-    end
+    # def next_sample_module_name
+    #   @sample_client_count ||= 0
+    #   @sample_client_count += 1
+    #   "Sample#{@sample_client_count}"
+    # end
   end
 end

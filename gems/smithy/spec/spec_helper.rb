@@ -5,45 +5,92 @@ require 'stringio'
 
 require 'smithy'
 
-require_relative 'support/client_helper'
 require_relative 'support/be_in_documentation_matcher'
+require_relative 'support/client_helper'
+require_relative 'support/generated_client_context'
 require_relative 'support/rbs_spy_test'
 
 module SpecHelper
   class << self
-    def generate(module_names, type, options = {})
-      raise NotImplementedError if type == :server
+    # temporary legacy to make tests pass
+    def generate(modules, type, options = {})
+      model = load_model(modules, options)
+      plan = create_plan(modules, model, type, options)
+      sdk_dir = plan.destination_root
+      Smithy.generate(plan)
 
-      tmpdir = ClientHelper.generate(module_names, type, options)
-      RbsSpyTest.setup(module_names, tmpdir) if ENV['SMITHY_RUBY_RBS_TEST']
-      tmpdir
+      $LOAD_PATH << ("#{sdk_dir}/lib")
+      require plan.gem_name
+
+      RbsSpyTest.setup(modules, sdk_dir) if ENV.fetch('SMITHY_RUBY_RBS_TEST', false)
+      sdk_dir
     rescue StandardError => e
-      ClientHelper.cleanup_generated(module_names, tmpdir)
+      cleanup(modules, sdk_dir) if sdk_dir
       raise e
     end
 
-    def source(type, options = {})
-      raise NotImplementedError if type == :server
+    # temporary
+    def cleanup(module_names, tmpdir)
+      return unless tmpdir
 
-      module_names = ClientHelper.source(type, options)
-    rescue StandardError => e
-      ClientHelper.cleanup_sourced(module_names)
+      if ENV['SMITHY_RUBY_KEEP_GENERATED_SOURCE']
+        puts "Leaving generated service in: #{tmpdir}"
+      else
+        FileUtils.rm_rf(tmpdir)
+      end
+      $LOAD_PATH.delete("#{tmpdir}/lib")
+      module_names.reverse.each_cons(2) do |child, parent|
+        Object.const_get(parent).send(:remove_const, child)
+      end
+      Object.send(:remove_const, module_names.first)
+    end
+
+    def load_model(modules, options)
+      fixture = options[:fixture] || modules.map(&:underscore).join('/')
+      model_dir = File.join(File.dirname(__FILE__), 'fixtures', fixture)
+      JSON.load_file(File.join(model_dir, 'model.json'))
+    end
+
+    def create_plan(modules, model, type, options)
+      plan_options = {
+        module_name: modules.join('::'),
+        gem_version: options.fetch(:gem_version, '0.1.0'),
+        destination_root: options.fetch(:destination_root, Dir.mktmpdir),
+        quiet: ENV.fetch('SMITHY_RUBY_QUIET', 'true') == 'true'
+      }
+      Smithy::Plan.new(model, type, plan_options)
+    end
+
+    ## end temporary
+
+    def generate_client_gem(options = {})
+      plan = ClientHelper.generate(:client, options)
+      RbsSpyTest.setup(modules, sdk_dir) if ENV.fetch('SMITHY_RUBY_RBS_TEST', false)
+      $LOAD_PATH << "#{plan.destination_root}/lib"
+      require plan.gem_name
+      RbsSpyTest.setup(plan.module_name, plan.destination_root) if ENV['SMITHY_RUBY_RBS_TEST']
+      plan
+    rescue LoadError => e
+      puts "Error loading gem: #{plan.gem_name}"
       raise e
     end
 
-    # @param [Array<String>] module_names A list of module names from the
-    #  generated code to clean up.
-    # @param [String] tmpdir The path to the tmp directory where the
-    #  generated code was written to.
-    def cleanup_generated(module_names, tmpdir)
-      ClientHelper.cleanup_generated(module_names, tmpdir)
+    def generate_client_from_source(options = {})
+      module_name, source = ClientHelper.source(:client, options)
+      Object.module_eval(source)
+      Object.const_get(module_name)
+      module_name
+    rescue LoadError => e
+      puts "Error evaluating source:\n#{source}"
+      raise e
     end
-    alias cleanup cleanup_generated
 
-    # @param [Array<String>] module_names A list of module names from the
-    #  sourced code to clean up.
-    def cleanup_sourced(module_names)
-      ClientHelper.cleanup_sourced(module_names)
+    def cleanup_client_gem(plan)
+      ClientHelper.cleanup_gem(plan.module_name, plan.destination_root)
+    end
+
+    def cleanup_client_source(module_name)
+      ClientHelper.undefine_module(module_name)
     end
   end
 end
