@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Component: Client: Request/Response Syntax Examples' do
-  before(:all) do
-    @tmpdir = SpecHelper.generate(['ExamplesTrait'], :client)
-  end
-
-  after(:all) do
-    SpecHelper.cleanup(['ExamplesTrait'], @tmpdir)
-  end
+  include_context 'generated client gem', fixture: 'examples_trait'
 
   it 'generates operation examples' do
     expected = <<~EXAMPLE
@@ -77,7 +71,7 @@ describe 'Component: Client: Request/Response Syntax Examples' do
           }
         end
     EXAMPLE
-    client_file = File.join(@tmpdir, 'lib', 'examples_trait', 'client.rb')
+    client_file = File.join(@plan.destination_root, 'lib', 'examples_trait', 'client.rb')
     expect(expected).to be_in_documentation(client_file, 'ExamplesTrait::Client', 'operation')
   end
 end

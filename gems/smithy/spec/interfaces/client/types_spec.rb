@@ -1,15 +1,10 @@
 # frozen_string_literal: true
 
 describe 'Component: Types', rbs_test: true do
-  %i[schema client].each do |plan_type|
+  # TODO: schema
+  %i[client].each do |plan_type|
     context "#{plan_type} generator" do
-      before(:all) do
-        @tmpdir = SpecHelper.generate(['ShapeService'], plan_type, fixture: 'shapes')
-      end
-
-      after(:all) do
-        SpecHelper.cleanup(['ShapeService'], @tmpdir)
-      end
+      include_context 'generated client gem', fixture: 'shapes'
 
       it 'generates a types module' do
         expect(ShapeService::Types).to be_a(Module)

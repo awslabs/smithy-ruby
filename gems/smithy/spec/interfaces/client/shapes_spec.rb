@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Component: Shapes', rbs_test: true do
-  before(:all) do
-    @tmpdir = SpecHelper.generate(['ShapeService'], :client, fixture: 'shapes')
-  end
-
-  after(:all) do
-    SpecHelper.cleanup(['ShapeService'], @tmpdir)
-  end
+  include_context 'generated client gem', fixture: 'shapes'
 
   let(:fixture) { JSON.load_file(File.expand_path('../../fixtures/shapes/model.json', __dir__.to_s)) }
 

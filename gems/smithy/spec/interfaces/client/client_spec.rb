@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Component: Client', rbs_test: true do
-  before(:all) do
-    @tmpdir = SpecHelper.generate(['Weather'], :client)
-  end
-
-  after(:all) do
-    SpecHelper.cleanup(['Weather'], @tmpdir)
-  end
+  include_context 'generated client gem', fixture: 'weather'
 
   subject { Weather::Client.new }
 

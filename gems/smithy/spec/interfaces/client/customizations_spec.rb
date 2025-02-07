@@ -1,18 +1,12 @@
 # frozen_string_literal: true
 
 describe 'Component: Customizations' do
-  before(:all) do
-    @tmpdir = SpecHelper.generate(['Weather'], :client)
-  end
-
-  after(:all) do
-    SpecHelper.cleanup(['Weather'], @tmpdir)
-  end
+  include_context 'generated client gem', fixture: 'weather'
 
   subject { Weather::Client.new(endpoint: 'https://example.com') }
 
   it 'should have a customizations file' do
-    expect(File).to exist(File.join(@tmpdir, 'lib', 'weather', 'customizations.rb'))
+    expect(File).to exist(File.join(@plan.destination_root, 'lib', 'weather', 'customizations.rb'))
   end
 
   it 'should require the customizations file' do
@@ -26,10 +20,10 @@ describe 'Component: Customizations' do
         module Customizations; end
       end
     RUBY
-    customizations_file = File.join(@tmpdir, 'lib', 'weather', 'customizations.rb')
+    customizations_file = File.join(@plan.destination_root, 'lib', 'weather', 'customizations.rb')
     expect(File.read(customizations_file)).to_not include(customization)
     File.write(customizations_file, customization)
-    SpecHelper.generate(['Weather'], :client, destination_root: @tmpdir)
+    SpecHelper.generate_client_gem(fixture: 'weather', destination_root: @plan.destination_root)
     expect(File.read(customizations_file)).to include(customization)
   end
 end

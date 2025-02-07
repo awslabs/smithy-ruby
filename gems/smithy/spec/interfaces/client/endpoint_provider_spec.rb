@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Component: EndpointProvider', rbs_test: true do
-  before(:all) do
-    @tmpdir = SpecHelper.generate(['EndpointDefaults'], :client, fixture: 'endpoints/default-values')
-  end
-
-  after(:all) do
-    SpecHelper.cleanup(['EndpointDefaults'], @tmpdir)
-  end
+  include_context 'generated client gem', fixture: 'endpoints/default-values', module_name: 'EndpointDefaults'
 
   subject { EndpointDefaults::EndpointProvider.new }
 

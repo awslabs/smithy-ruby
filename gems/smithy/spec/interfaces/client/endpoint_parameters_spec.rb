@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Component: EndpointParameters', rbs_test: true do
-  before(:all) do
-    @tmpdir = SpecHelper.generate(['EndpointBindings'], :client, fixture: 'endpoints/endpoint-bindings')
-  end
-
-  after(:all) do
-    SpecHelper.cleanup(['EndpointBindings'], @tmpdir)
-  end
+  include_context 'generated client gem', fixture: 'endpoints/endpoint-bindings', module_name: 'EndpointBindings'
 
   subject { EndpointBindings::EndpointParameters.new }
 

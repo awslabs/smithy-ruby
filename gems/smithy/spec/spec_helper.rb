@@ -12,60 +12,8 @@ require_relative 'support/rbs_spy_test'
 
 module SpecHelper
   class << self
-    # temporary legacy to make tests pass
-    def generate(modules, type, options = {})
-      model = load_model(modules, options)
-      plan = create_plan(modules, model, type, options)
-      sdk_dir = plan.destination_root
-      Smithy.generate(plan)
-
-      $LOAD_PATH << ("#{sdk_dir}/lib")
-      require plan.gem_name
-
-      RbsSpyTest.setup(modules, sdk_dir) if ENV.fetch('SMITHY_RUBY_RBS_TEST', false)
-      sdk_dir
-    rescue StandardError => e
-      cleanup(modules, sdk_dir) if sdk_dir
-      raise e
-    end
-
-    # temporary
-    def cleanup(module_names, tmpdir)
-      return unless tmpdir
-
-      if ENV['SMITHY_RUBY_KEEP_GENERATED_SOURCE']
-        puts "Leaving generated service in: #{tmpdir}"
-      else
-        FileUtils.rm_rf(tmpdir)
-      end
-      $LOAD_PATH.delete("#{tmpdir}/lib")
-      module_names.reverse.each_cons(2) do |child, parent|
-        Object.const_get(parent).send(:remove_const, child)
-      end
-      Object.send(:remove_const, module_names.first)
-    end
-
-    def load_model(modules, options)
-      fixture = options[:fixture] || modules.map(&:underscore).join('/')
-      model_dir = File.join(File.dirname(__FILE__), 'fixtures', fixture)
-      JSON.load_file(File.join(model_dir, 'model.json'))
-    end
-
-    def create_plan(modules, model, type, options)
-      plan_options = {
-        module_name: modules.join('::'),
-        gem_version: options.fetch(:gem_version, '0.1.0'),
-        destination_root: options.fetch(:destination_root, Dir.mktmpdir),
-        quiet: ENV.fetch('SMITHY_RUBY_QUIET', 'true') == 'true'
-      }
-      Smithy::Plan.new(model, type, plan_options)
-    end
-
-    ## end temporary
-
     def generate_client_gem(options = {})
       plan = ClientHelper.generate(:client, options)
-      RbsSpyTest.setup(modules, sdk_dir) if ENV.fetch('SMITHY_RUBY_RBS_TEST', false)
       $LOAD_PATH << "#{plan.destination_root}/lib"
       require plan.gem_name
       RbsSpyTest.setup(plan.module_name, plan.destination_root) if ENV['SMITHY_RUBY_RBS_TEST']

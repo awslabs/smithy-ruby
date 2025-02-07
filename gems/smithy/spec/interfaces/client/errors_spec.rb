@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Component: Errors', rbs_test: true do
-  before(:all) do
-    @tmpdir = SpecHelper.generate(['Errors'], :client)
-  end
-
-  after(:all) do
-    SpecHelper.cleanup(['Errors'], @tmpdir)
-  end
+  include_context 'generated client gem', fixture: 'errors'
 
   it 'generates an errors module' do
     expect(Errors::Errors).to be_a(Module)
@@ -75,7 +69,7 @@ describe 'Component: Errors', rbs_test: true do
   end
 
   it 'generates documentation for error classes' do
-    errors_file = File.join(@tmpdir, 'lib', 'errors', 'errors.rb')
+    errors_file = File.join(@plan.destination_root, 'lib', 'errors', 'errors.rb')
     expected = <<~DOC
       This is a service error.
       It is raised sometimes.
@@ -84,7 +78,7 @@ describe 'Component: Errors', rbs_test: true do
   end
 
   it 'generates documentation for error members' do
-    errors_file = File.join(@tmpdir, 'lib', 'errors', 'errors.rb')
+    errors_file = File.join(@plan.destination_root, 'lib', 'errors', 'errors.rb')
     expected = <<~DOC
       This is a structure in a service error.
       It sometimes has data.
