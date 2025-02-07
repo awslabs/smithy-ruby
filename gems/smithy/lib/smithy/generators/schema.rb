@@ -33,6 +33,7 @@ module Smithy
 
           source_files.each { |file, content| e.yield file, content }
           e.yield "lib/#{@gem_name}/customizations.rb", Views::Client::Customizations.new.render
+          rbs_files.each { |file, content| e.yield file, content }
         end
       end
 
