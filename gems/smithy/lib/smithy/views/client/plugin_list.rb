@@ -7,22 +7,10 @@ module Smithy
       class PluginList
         include Enumerable
 
-        def initialize(plan)
+        def initialize(plan, code_generated_plugins)
           @plan = plan
-          @module_name = plan.module_name
-          @gem_name = plan.gem_name
-          @gem_version = plan.gem_version
-          @plugins = default_plugins + transport_plugins('http')
-          @plugins.each do |plugin|
-            require_path = plugin.require_path
-            next unless require_path
-
-            require_path = File.absolute_path(require_path) unless plugin.relative_path?
-            Kernel.require(require_path)
-          end
+          @plugins = plugins(plan, code_generated_plugins)
         end
-
-        attr_reader :module_name, :gem_name, :gem_version
 
         def each(&)
           @plugins.each(&)
@@ -30,25 +18,36 @@ module Smithy
 
         private
 
-        def default_plugins
-          Smithy::Client::Base.plugins.map do |plugin|
-            Plugin.new(class_name: plugin.name, require_path: nil, default: true)
+        def plugins(plan, code_generated_plugins)
+          plugins = []
+          code_generated_plugins(plugins, code_generated_plugins)
+          weld_plugins(plugins, plan.welds)
+          plugins
+        end
+
+        def code_generated_plugins(plugins, code_generated_plugins)
+          define_module_names
+          code_generated_plugins.each do |_, plugin| # rubocop:disable Style/HashEachMethods
+            Object.module_eval(plugin.source)
+            plugins << plugin
           end
         end
 
-        # def weld_plugins
-        #   plugins = @plan.welds.map(&:plugins).reduce({}, :merge)
-        #   plugins.map do |class_name, path|
-        #     Plugin.new(class_name: class_name, path: path)
-        #   end
-        # end
+        # Code generated plugins may have nested namespaces, so we need to ensure
+        # that they are defined before we try to evaluate the source.
+        def define_module_names
+          parent = Object
+          @plan.module_name.split('::') do |mod|
+            child = mod
+            parent.const_set(child, ::Module.new) unless parent.const_defined?(child)
+            parent = parent.const_get(child)
+          end
+        end
 
-        def transport_plugins(protocol)
-          plugins = {
-            'http' => { 'Smithy::Client::Plugins::NetHTTP' => 'smithy-client/plugins/net_http' }
-          }[protocol]
-          plugins.map do |class_name, require_path|
-            Plugin.new(class_name: class_name, require_path: require_path, relative_path: true, requirable: true)
+        def weld_plugins(plugins, welds)
+          weld_plugins = welds.map(&:plugins).reduce({}, :merge)
+          weld_plugins.each do |class_name, options|
+            plugins << Plugin.new(class_name: class_name, **options)
           end
         end
       end

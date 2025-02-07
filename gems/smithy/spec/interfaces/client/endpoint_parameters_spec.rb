@@ -22,7 +22,6 @@ describe 'Component: EndpointParameters', rbs_test: true do
 
   describe '.create' do
     let(:config) do
-      # need to get a config structure
       client = EndpointBindings::Client.new(bar: 'config_bar', endpoint: 'config_endpoint', boolean_param: false)
       client.config
     end

@@ -33,8 +33,8 @@ module Smithy
           return [] unless @plan.destination_root
           return %i[customizations types shapes] if @plan.type == :schema
 
-          # Order matters here - plugins must come before client, types must come before shapes
-          %w[plugins/endpoint types shapes client customizations errors endpoint_parameters endpoint_provider]
+          # types must come before shapes
+          %w[types shapes client customizations errors endpoint_parameters endpoint_provider]
         end
       end
     end
