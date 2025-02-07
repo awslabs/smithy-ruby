@@ -5,11 +5,19 @@ require 'stringio'
 
 require 'smithy'
 
-require_relative 'support/be_in_documentation_matcher'
 require_relative 'support/client_helper'
-require_relative 'support/generated_client_context'
 require_relative 'support/rbs_spy_test'
-require_relative 'support/generated_schema_context'
+
+require_relative 'support/contexts/generated_client_context'
+require_relative 'support/contexts/generated_schema_context'
+
+require_relative 'support/examples/customizations_examples'
+require_relative 'support/examples/gemspec_examples'
+require_relative 'support/examples/module_examples'
+require_relative 'support/examples/shapes_examples'
+require_relative 'support/examples/types_examples'
+
+require_relative 'support/matchers/be_in_documentation_matcher'
 
 module SpecHelper
   class << self
