@@ -6,6 +6,7 @@ module Smithy
     class Rubocop < Weld
       TEST_NAMESPACES = [
         Regexp.new('smithy.tests.*?'),
+        Regexp.new('smithy.protocoltests.*?'),
         Regexp.new('smithy.ruby.tests.*?')
       ].freeze
 
