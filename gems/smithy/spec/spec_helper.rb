@@ -48,7 +48,7 @@ module SpecHelper
       ClientHelper.cleanup_gem(plan.module_name, plan.destination_root)
     end
 
-    def cleanup_eval_source(module_name)
+    def cleanup_modules(module_name)
       ClientHelper.undefine_module(module_name)
     end
   end

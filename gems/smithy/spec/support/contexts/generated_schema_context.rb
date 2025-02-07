@@ -16,6 +16,6 @@ RSpec.shared_context 'generated schema from source code' do |options|
   end
 
   after(:all) do
-    SpecHelper.cleanup_eval_source(@module_name)
+    SpecHelper.cleanup_modules(@module_name)
   end
 end
