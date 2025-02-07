@@ -3,11 +3,10 @@
 module Smithy
   module Client
     module Protocols
-      # RPCV2 protocol
-      # TODO:
-      #  * Refactor methods to handle eventstreams
-      #  * Decide whether we should recognize query traits here
-      #  * Add Documentation
+      # A RPC-based protocol over HTTP that sends requests
+      # and responses with CBOR payloads.
+      #
+      # TODO: Refactor methods to handle eventstreams
       class RPCv2
         SHAPE_ID = 'smithy.protocols#rpcv2Cbor'
 
@@ -15,6 +14,7 @@ module Smithy
           @query_compatible = options[:query_compatible]
         end
 
+        # @api private
         def build_request(context)
           codec = Client::Codecs::CBOR.new(setting(context))
           context.request.body = codec.serialize(context.params, context.operation.input)
@@ -22,13 +22,15 @@ module Smithy
           apply_headers(context)
         end
 
+        # @api private
         def parse_response(context)
           output_shape = context.operation.output
           codec = Client::Codecs::CBOR.new(setting(context))
           codec.deserialize(context.response.body, output_shape, output_shape.type)
         end
 
-        # TODO: Implement once errors are supported
+        # @api private
+        # TODO: To implement after error handling
         def parse_error(_context, _response); end
 
         private
