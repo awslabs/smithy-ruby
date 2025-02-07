@@ -77,30 +77,18 @@ module ClientHelper
       }
     end
 
-    # @param [Array<String>] module_names A list of module names for the
-    #  generated code. For example, `['Company', 'Weather']` would generate
-    #  code in the `Company::Weather` namespace.
+    # Generates a code artifact for the given type.
     # @param [Symbol] type The type of artifact to generate. For example,
     #  `:schema` or `:client`.
     # @param [Hash] options Additional options to pass to the generator.
     # (See Plan#initialize)
     # @option options [String] :fixture The name of the fixture to load in the
-    #  fixtures folder relative to this file.
+    #  fixtures folder relative to this file. Defaults to a sample model.
     # @option options [Hash] :model The model to generate code for. Defaults to
     #  a sample model.
     # @option options [String] :smithy The smithy version. Defaults to '2.0'.
     # @option options [Hash] :shapes The shapes to generate code for. Defaults to
     #  a sample set of shapes.
-    # def sample(module_names, type, options = {})
-    #   model = load_model(options)
-    #   plan = create_plan(module_names, model, type, options)
-    #   if options[:fixture]
-    #     sourced_client(plan)
-    #   else
-    #     generated_client(plan)
-    #   end
-    # end
-
     def generate(type, options = {})
       model = load_model(options)
       options[:destination_root] ||= Dir.mktmpdir
@@ -109,6 +97,18 @@ module ClientHelper
       plan
     end
 
+    # Generates source code for the given type.
+    # @param [Symbol] type The type of artifact to generate. For example,
+    #  `:schema` or `:client`.
+    # @param [Hash] options Additional options to pass to the generator.
+    # (See Plan#initialize)
+    # @option options [String] :fixture The name of the fixture to load in the
+    #  fixtures folder relative to this file. Defaults to a sample model.
+    # @option options [Hash] :model The model to generate code for. Defaults to
+    #  a sample model.
+    # @option options [String] :smithy The smithy version. Defaults to '2.0'.
+    # @option options [Hash] :shapes The shapes to generate code for. Defaults to
+    #  a sample set of shapes.
     def source(type, options = {})
       model = load_model(options)
       # options[:module_name] ||= next_sample_module_name

@@ -13,6 +13,7 @@ require_relative 'support/generated_schema_context'
 
 module SpecHelper
   class << self
+    # (See ClientHelper#generate)
     def generate_gem(type, options = {})
       plan = ClientHelper.generate(type, options)
       $LOAD_PATH << "#{plan.destination_root}/lib"
@@ -24,6 +25,7 @@ module SpecHelper
       raise e
     end
 
+    # (See ClientHelper#source)
     def generate_from_source_code(type, options = {})
       module_name, source = ClientHelper.source(type, options)
       Object.module_eval(source)
