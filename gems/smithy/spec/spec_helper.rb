@@ -9,11 +9,12 @@ require_relative 'support/be_in_documentation_matcher'
 require_relative 'support/client_helper'
 require_relative 'support/generated_client_context'
 require_relative 'support/rbs_spy_test'
+require_relative 'support/generated_schema_context'
 
 module SpecHelper
   class << self
-    def generate_client_gem(options = {})
-      plan = ClientHelper.generate(:client, options)
+    def generate_gem(type, options = {})
+      plan = ClientHelper.generate(type, options)
       $LOAD_PATH << "#{plan.destination_root}/lib"
       require plan.gem_name
       RbsSpyTest.setup(plan.module_name, plan.destination_root) if ENV['SMITHY_RUBY_RBS_TEST']
@@ -23,8 +24,8 @@ module SpecHelper
       raise e
     end
 
-    def generate_client_from_source(options = {})
-      module_name, source = ClientHelper.source(:client, options)
+    def generate_from_source_code(type, options = {})
+      module_name, source = ClientHelper.source(type, options)
       Object.module_eval(source)
       Object.const_get(module_name)
       module_name
@@ -33,11 +34,11 @@ module SpecHelper
       raise e
     end
 
-    def cleanup_client_gem(plan)
+    def cleanup_gem(plan)
       ClientHelper.cleanup_gem(plan.module_name, plan.destination_root)
     end
 
-    def cleanup_client_source(module_name)
+    def cleanup_eval_source(module_name)
       ClientHelper.undefine_module(module_name)
     end
   end

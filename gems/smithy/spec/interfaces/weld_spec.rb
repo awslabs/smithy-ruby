@@ -71,7 +71,7 @@ describe 'Integration: Welds' do
   end
 
   context 'source code' do
-    include_context 'generated client from source', { fixture: 'weather' }
+    include_context 'generated client from source code', { fixture: 'weather' }
 
     it 'can pre process the model' do
       weld = Weather::Types::Weld.new

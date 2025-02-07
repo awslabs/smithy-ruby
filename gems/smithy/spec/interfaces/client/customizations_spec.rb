@@ -23,7 +23,7 @@ describe 'Component: Customizations' do
     customizations_file = File.join(@plan.destination_root, 'lib', 'weather', 'customizations.rb')
     expect(File.read(customizations_file)).to_not include(customization)
     File.write(customizations_file, customization)
-    SpecHelper.generate_client_gem(fixture: 'weather', destination_root: @plan.destination_root)
+    SpecHelper.generate_gem(:client, fixture: 'weather', destination_root: @plan.destination_root)
     expect(File.read(customizations_file)).to include(customization)
   end
 end

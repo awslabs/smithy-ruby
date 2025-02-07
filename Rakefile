@@ -24,7 +24,7 @@ namespace :smithy do
     Dir.glob('gems/smithy/spec/fixtures/endpoints/*/model.json') do |model_path|
       test_name = model_path.split('/')[-2]
       test_module = test_name.gsub('-', '').camelize
-      plan = SpecHelper.generate_client_gem(fixture: "endpoints/#{test_name}", module_name: test_module)
+      plan = SpecHelper.generate_gem(:client, fixture: "endpoints/#{test_name}", module_name: test_module)
       tmpdir = plan.destination_root
       tmp_dirs << plan
       spec_paths << "#{tmpdir}/spec"
@@ -53,7 +53,7 @@ namespace :smithy do
     sh(env, "bundle exec rspec #{specs} #{includes}")
   ensure
     tmp_dirs.each do |plan|
-      SpecHelper.cleanup_client_gem(plan)
+      SpecHelper.cleanup_gem(plan)
     end
   end
 
