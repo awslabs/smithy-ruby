@@ -25,9 +25,13 @@ module Smithy
         end
 
         def require_plugins
-          @plugins.map do |plugin|
-            "require#{'_relative' if plugin.require_relative?} '#{plugin.require_path}'"
+          requires = []
+          @plugins.each do |plugin|
+            next if !@plan.destination_root && plugin.require_relative?
+
+            requires << "require#{'_relative' if plugin.require_relative?} '#{plugin.require_path}'"
           end
+          requires
         end
 
         def add_plugins
