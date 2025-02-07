@@ -8,56 +8,20 @@ module Smithy
         def initialize(options = {})
           @class_name = options[:class_name]
           @require_path = options[:require_path]
+          @require_relative = options.fetch(:require_relative, false)
           @source = options[:source]
-          @default = options.fetch(:default, false)
-          @relative_path = options.fetch(:relative_path, false)
-          @requirable = options.fetch(:requirable, false)
         end
 
-        attr_reader :class_name, :require_path, :source
-
-        def docstrings
-          docstrings = []
-          options.each do |option|
-            docstrings.concat(option_docstrings(option)) if option.docstring
-          end
-          docstrings
-        end
+        attr_accessor :class_name, :require_path, :source
 
         def options
-          Object.const_get(@class_name).options
+          klass = @class_name
+          klass = Object.const_get(@class_name) if @class_name.is_a?(String)
+          klass.options
         end
 
-        def default?
-          @default
-        end
-
-        def relative_path?
-          @relative_path
-        end
-
-        def requirable?
-          @requirable
-        end
-
-        private
-
-        def option_docstrings(option)
-          docstrings = []
-          docstrings << option_tag(option)
-          documentation = option.docstring.split("\n").map { |line| " #{line}" }
-          docstrings.concat(documentation)
-          docstrings
-        end
-
-        def option_tag(option)
-          tag = StringIO.new
-          tag << '@option options'
-          tag << " [#{option.doc_type}]" if option.doc_type
-          tag << " :#{option.name}"
-          default = option.doc_default || option.default
-          tag << " (#{default})" if default
-          tag.string
+        def require_relative?
+          @require_relative
         end
       end
     end

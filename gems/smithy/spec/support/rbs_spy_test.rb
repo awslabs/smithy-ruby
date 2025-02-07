@@ -5,7 +5,7 @@ require 'rbs/test'
 # Utility to set up RBS spy test on generated code.
 module RbsSpyTest
   class << self
-    def setup(modules, sdk_dir)
+    def setup(module_name, sdk_dir)
       env = load_rbs_environment(sdk_dir)
       tester = RBS::Test::Tester.new(env: env)
 
@@ -16,10 +16,10 @@ module RbsSpyTest
         ::RSpec::Mocks::ClassVerifyingDouble
       ]
 
-      spy_modules = [modules.join('::'), 'Smithy::Client']
+      spy_modules = [module_name, 'Smithy::Client']
       spy_classes = []
-      spy_modules.each do |module_name|
-        spy_classes += classes_to_spy(Object.const_get(module_name), env)
+      spy_modules.each do |spy_module_name|
+        spy_classes += classes_to_spy(Object.const_get(spy_module_name), env)
       end
 
       spy_classes.each do |spy_class|

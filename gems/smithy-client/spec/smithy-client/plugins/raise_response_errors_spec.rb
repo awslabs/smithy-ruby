@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'smithy-client/plugins/raise_response_errors'
+
 module Smithy
   module Client
     module Plugins

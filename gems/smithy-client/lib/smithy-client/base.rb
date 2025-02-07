@@ -6,17 +6,6 @@ module Smithy
     class Base
       include HandlerBuilder
 
-      # @api private
-      @plugins = PluginList.new(
-        [
-          Plugins::Logging,
-          Plugins::ParamValidator,
-          Plugins::RaiseResponseErrors,
-          Plugins::ResponseTarget
-        ]
-      )
-
-      # @api private
       def initialize(plugins, options)
         @config = build_config(plugins, options)
         @handlers = build_handler_list(plugins)
@@ -212,7 +201,7 @@ module Smithy
 
         def inherited(subclass)
           super
-          subclass.instance_variable_set('@plugins', PluginList.new(@plugins))
+          subclass.instance_variable_set('@plugins', PluginList.new)
         end
       end
     end

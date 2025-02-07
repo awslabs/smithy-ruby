@@ -120,6 +120,5 @@ module Weather
 
       attr_accessor resource_type: String?
     end
-
   end
 end

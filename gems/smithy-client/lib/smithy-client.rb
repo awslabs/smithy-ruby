@@ -27,13 +27,6 @@ require_relative 'smithy-client/http/request'
 require_relative 'smithy-client/net_http/connection_pool'
 require_relative 'smithy-client/net_http/handler'
 
-# plugins
-
-require_relative 'smithy-client/plugins/logging'
-require_relative 'smithy-client/plugins/param_validator'
-require_relative 'smithy-client/plugins/raise_response_errors'
-require_relative 'smithy-client/plugins/response_target'
-
 # model
 
 require_relative 'smithy-client/base'

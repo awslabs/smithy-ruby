@@ -233,17 +233,6 @@ module Smithy
         it 'returns a frozen list of plugins' do
           expect(client_class.plugins.frozen?).to eq(true)
         end
-
-        it 'has a default list of plugins' do
-          client_class = Class.new(Base)
-          expected = [
-            Plugins::Logging,
-            Plugins::ParamValidator,
-            Plugins::RaiseResponseErrors,
-            Plugins::ResponseTarget
-          ]
-          expect(client_class.plugins.to_a).to eq(expected)
-        end
       end
 
       describe '.schema' do

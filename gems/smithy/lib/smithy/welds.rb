@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'welds/endpoints'
+require_relative 'welds/plugins'
 require_relative 'welds/rubocop'
 
 module Smithy
@@ -9,10 +10,7 @@ module Smithy
     @welds = {}
 
     def self.load!(plan)
-      ObjectSpace
-        .each_object(Class)
-        .select { |klass| klass < Weld }
-        .each { |weld| @welds[weld] = weld.new(plan) }
+      Weld.subclasses.each { |weld| @welds[weld] = weld.new(plan) }
     end
 
     def self.for(service)
