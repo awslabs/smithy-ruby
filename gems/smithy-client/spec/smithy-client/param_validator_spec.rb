@@ -5,45 +5,13 @@ module Smithy
     # class TestClass; end
 
     describe ParamValidator do
+      let(:shapes) { ClientHelper.sample_shapes }
+      let(:sample_client) { SpecHelper.generate_from_source_code }
+      let(:schema) { sample_client.const_get(:Schema) }
 
       before do
-        SchemaHelper.sample_schema
-      end
-
-
-
-
-      let(:client_class) do
-        client_class = Class.new(Client::Base)
-        client_class.schema = schema
-        client_class.clear_plugins
-        client_class.add_plugin(ParamValidator)
-        client_class.add_plugin(DummySendPlugin)
-        client_class
-      end
-
-      let(:schema) do
-        structure_shape.add_member(:blob, Shapes::BlobShape.new)
-        structure_shape.add_member(:streaming_blob, Shapes::BlobShape.new(traits: { 'smithy.api#streaming' => {} }))
-        structure_shape.add_member(:string, Shapes::StringShape.new)
-        structure_shape.add_member(:structure, structure_shape)
-        structure_shape.type = structure_type
-
-        operation = Shapes::OperationShape.new
-        operation.input = structure_shape
-
-        Schema.new do |schema|
-          schema.service = Shapes::ServiceShape.new
-          schema.add_operation(:operation, operation)
-        end
-      end
-
-      let(:structure_shape) do
-        Shapes::StructureShape.new
-      end
-
-      let(:structure_type) do
-        Struct.new(*structure_shape.members.keys, keyword_init: true).new
+        require 'byebug'
+        byebug
       end
 
       #
@@ -114,14 +82,15 @@ module Smithy
         it 'aggregates errors for members' do
           shapes['StructureShape']['required'] = %w[String]
           validate({ nested: { foo: 'bar' } }, [
-            'missing required parameter params[:string]',
-            'missing required parameter params[:nested][:string]',
-            'unexpected value at params[:nested][:foo]'
-          ])
+                     'missing required parameter params[:string]',
+                     'missing required parameter params[:nested][:string]',
+                     'unexpected value at params[:nested][:foo]'
+                   ])
         end
 
         it 'raises an error when providing eventstream at input' do
-          validate({ event_stream: [].each }, 'instead of providing value directly for eventstreams at input, expected to use #signal events per stream')
+          validate({ event_stream: [].each },
+                   'instead of providing value directly for eventstreams at input, expected to use #signal events per stream')
         end
 
         it 'accepts no eventstream input even when marked required' do
@@ -129,28 +98,28 @@ module Smithy
           validate({})
         end
       end
-        #
-        # describe 'unions' do
-        #   it 'raises an error when no values are set' do
-        #     shapes['StructureShape']['union'] = true
-        #     validate({}, 'No values provided to union')
-        #   end
-        #
-        #   it 'raises an error when multiple values are set' do
-        #     shapes['StructureShape']['union'] = true
-        #     validate({ string: 's', boolean: true }, 'multiple values provided to union')
-        #   end
-        #
-        #   it 'accepts a struct with exactly one value set' do
-        #     shapes['StructureShape']['union'] = true
-        #     validate({ string: 's' })
-        #   end
-        #
-        #   it 'accepts a modeled type' do
-        #     shapes['StructureShape']['union'] = true
-        #     input = types.const_get('StructureShape').new(string: 's')
-        #     validate(input)
-        #   end
+      #
+      # describe 'unions' do
+      #   it 'raises an error when no values are set' do
+      #     shapes['StructureShape']['union'] = true
+      #     validate({}, 'No values provided to union')
+      #   end
+      #
+      #   it 'raises an error when multiple values are set' do
+      #     shapes['StructureShape']['union'] = true
+      #     validate({ string: 's', boolean: true }, 'multiple values provided to union')
+      #   end
+      #
+      #   it 'accepts a struct with exactly one value set' do
+      #     shapes['StructureShape']['union'] = true
+      #     validate({ string: 's' })
+      #   end
+      #
+      #   it 'accepts a modeled type' do
+      #     shapes['StructureShape']['union'] = true
+      #     input = types.const_get('StructureShape').new(string: 's')
+      #     validate(input)
+      #   end
       #
       # describe 'lists' do
       #   it 'accepts arrays' do

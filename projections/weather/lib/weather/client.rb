@@ -4,9 +4,10 @@
 
 require_relative 'plugins/endpoint'
 require 'smithy-client/plugins/logging'
+require 'smithy-client/plugins/net_http'
+require 'smithy-client/plugins/param_validator'
 require 'smithy-client/plugins/raise_response_errors'
 require 'smithy-client/plugins/response_target'
-require 'smithy-client/plugins/net_http'
 
 module Weather
   # An API client for Weather.
@@ -16,9 +17,10 @@ module Weather
 
     add_plugin(Weather::Plugins::Endpoint)
     add_plugin(Smithy::Client::Plugins::Logging)
+    add_plugin(Smithy::Client::Plugins::NetHTTP)
+    add_plugin(Smithy::Client::Plugins::ParamValidator)
     add_plugin(Smithy::Client::Plugins::RaiseResponseErrors)
     add_plugin(Smithy::Client::Plugins::ResponseTarget)
-    add_plugin(Smithy::Client::Plugins::NetHTTP)
 
     # @option options [String] :endpoint
     #  Custom Endpoint
@@ -89,6 +91,8 @@ module Weather
     # @option options [Boolean] :raise_response_errors (true)
     #  When `true`, response errors are raised. When `false`, the error is placed on the
     #  output in the {Smithy::Client::Output#error error accessor}.
+    # @option options [Boolean] :validate_params (true)
+    #  When `true`, request parameters are validated before sending the request.
     def initialize(*args)
       super
     end
