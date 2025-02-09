@@ -188,7 +188,6 @@ module Smithy
           validate(list: [])
           validate({ list: 'abc' },
                    'expected params[:list] to be an Array, got class String instead.')
-
         end
 
         it 'validates each member of the list' do
@@ -240,7 +239,7 @@ module Smithy
         end
 
         it 'raises an error when a required parameter is missing' do
-          shapes['smithy.ruby.tests#Structure']['members']['string']['traits'] = { 'smithy.api#required' => {}}
+          shapes['smithy.ruby.tests#Structure']['members']['string']['traits'] = { 'smithy.api#required' => {} }
           validate({}, 'missing required parameter params[:string]')
         end
 
@@ -249,12 +248,12 @@ module Smithy
         end
 
         it 'accepts members that pass validation' do
-          shapes['smithy.ruby.tests#Structure']['members']['string']['traits'] = { 'smithy.api#required' => {}}
+          shapes['smithy.ruby.tests#Structure']['members']['string']['traits'] = { 'smithy.api#required' => {} }
           validate(string: 'abc')
         end
 
         it 'aggregates errors for members' do
-          shapes['smithy.ruby.tests#Structure']['members']['string']['traits'] = { 'smithy.api#required' => {}}
+          shapes['smithy.ruby.tests#Structure']['members']['string']['traits'] = { 'smithy.api#required' => {} }
           validate({ structure: { foo: 'bar' } }, [
                      'missing required parameter params[:string]',
                      'unexpected value at params[:structure][:foo]'
