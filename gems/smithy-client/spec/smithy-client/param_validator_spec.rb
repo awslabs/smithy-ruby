@@ -186,13 +186,23 @@ module Smithy
       describe 'lists' do
         it 'accepts arrays' do
           validate(list: [])
+          validate(structure_list: [{}, {}])
+        end
+
+        it 'excepts the value to be an array' do
           validate({ list: 'abc' },
                    'expected params[:list] to be an Array, got class String instead.')
+          validate({ structure_list: 'abc' },
+                   'expected params[:structure_list] to be an Array, got class String instead.')
         end
 
         it 'validates each member of the list' do
-          validate({ list: [123] },
-                   'expected params[:list][0] to be a String, got class Integer instead.')
+          validate({ structure_list: [{}, 'abc'] },
+                   'expected params[:structure_list][1] to be a Hash, got class String instead.')
+          validate({ structure_list: [{ structure_list: ['abc'] }] },
+                   'expected params[:structure_list][0][:structure_list][0] to be a Hash, got class String instead.')
+          validate({ structure_list: [{ foo: 'abc' }] },
+                   'unexpected value at params[:structure_list][0][:foo]')
         end
       end
 
@@ -213,6 +223,8 @@ module Smithy
           validate({ map: { 'foo' => 'bar' } })
           validate({ map: { 'foo' => 123 } },
                    ['expected params[:map]["foo"] to be a String, got class Integer instead.'])
+          validate({ structure_map: { 'foo' => { foo: 'bar' } } },
+                   'unexpected value at params[:structure_map]["foo"]')
         end
       end
 

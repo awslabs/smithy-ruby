@@ -37,10 +37,19 @@ module ClientHelper
           'type' => 'list',
           'member' => { 'target' => 'smithy.api#String' }
         },
+        'smithy.ruby.tests#StructureList' => {
+          'type' => 'list',
+          'member' => { 'target' => 'smithy.ruby.tests#Structure' }
+        },
         'smithy.ruby.tests#Map' => {
           'type' => 'map',
           'key' => { 'target' => 'smithy.api#String' },
           'value' => { 'target' => 'smithy.api#String' }
+        },
+        'smithy.ruby.tests#StructureMap' => {
+          'type' => 'map',
+          'key' => { 'target' => 'smithy.api#String' },
+          'value' => { 'target' => 'smithy.ruby.tests#Structure' }
         },
         'smithy.ruby.tests#StreamingBlob' => {
           'type' => 'blob',
@@ -70,6 +79,8 @@ module ClientHelper
             },
             'string' => { 'target' => 'smithy.api#String' },
             'structure' => { 'target' => 'smithy.ruby.tests#Structure' },
+            'structureList' => { 'target' => 'smithy.ruby.tests#StructureList' },
+            'structureMap' => { 'target' => 'smithy.ruby.tests#StructureMap' },
             'timestamp' => { 'target' => 'smithy.api#Timestamp' },
             'union' => { 'target' => 'smithy.ruby.tests#Union' }
           }
