@@ -2,8 +2,6 @@
 
 module Smithy
   module Client
-    # class TestClass; end
-
     describe ParamValidator do
       let(:shapes) { ClientHelper.sample_shapes }
       let(:sample_client) { ClientHelper.sample_client(shapes: shapes) }
@@ -37,7 +35,11 @@ module Smithy
       end
 
       describe 'big decimals' do
-        it 'pending'
+        it 'accepts a big decimal' do
+          validate(big_decimal: BigDecimal('1.0'))
+          validate({ big_decimal: '123' },
+                   'expected params[:big_decimal] to be a BigDecimal, got class String instead.')
+        end
       end
 
       describe 'big integers' do
@@ -205,13 +207,13 @@ module Smithy
         it 'validates map keys' do
           validate({ map: { 'abc' => 'mno' } })
           validate({ map: { 123 => 'xyz' } },
-                   [/expected params\[:map\] 123 key to be a String, got class (Fixnum|Integer) instead./])
+                   ['expected params[:map] 123 key to be a String, got class Integer instead.'])
         end
 
         it 'validates map values' do
           validate({ map: { 'foo' => 'bar' } })
           validate({ map: { 'foo' => 123 } },
-                   [/expected params\[:map\]\["foo"\] to be a String, got class (Fixnum|Integer) instead./])
+                   ['expected params[:map]["foo"] to be a String, got class Integer instead.'])
         end
       end
 
@@ -219,7 +221,7 @@ module Smithy
         it 'accepts strings' do
           validate(string: 'abc')
           validate({ string: 123 },
-                   [/expected params\[:string\] to be a String, got class Integer instead./])
+                   ['expected params[:string] to be a String, got class Integer instead.'])
         end
       end
 
@@ -258,6 +260,11 @@ module Smithy
                      'unexpected value at params[:structure][:foo]'
                    ])
         end
+
+        it 'accepts a modeled type' do
+          structure = sample_client.const_get(:Types).const_get(:Structure).new({})
+          validate({ structure: structure })
+        end
       end
 
       describe 'timestamps' do
@@ -276,19 +283,23 @@ module Smithy
                    'expected params[:union] to be a Hash, got class String instead.')
         end
 
-        it 'raises an error when no values are set' do
-          shapes['smithy.ruby.tests#Structure']['members']['union']['traits'] = { 'smithy.api#required' => {} }
-          validate({}, 'missing required parameter params[:union]')
+        it 'raises an error when a given parameter is unexpected' do
+          validate({ union: { foo: 'bar' } }, 'unexpected value at params[:union][:foo]')
         end
 
         it 'raises an error when multiple values are set' do
-          validate({ union: { string: 's', structure: {} } }, 'multiple values provided to union')
+          expect = 'expected params[:union] to be a Hash with one of string, structure, got 2 keys instead.'
+          validate({ union: { string: 's', structure: {} } }, [expect])
         end
 
-        # it 'accepts a modeled type' do
-        #   input = sample_client.const_get(:Types).const_get(:Structure).new(structure: {})
-        #   validate(input)
-        # end
+        it 'allows for nil union values' do
+          validate(union: { string: nil })
+        end
+
+        it 'accepts a modeled type' do
+          structure = sample_client.const_get(:Types).const_get(:Union).const_get(:Structure).new({})
+          validate({ union: structure })
+        end
       end
     end
   end

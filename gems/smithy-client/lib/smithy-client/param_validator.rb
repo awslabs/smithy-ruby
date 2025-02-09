@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'bigdecimal'
+
 module Smithy
   module Client
     # @api private
@@ -28,7 +30,7 @@ module Smithy
       private
 
       def structure(shape, values, errors, context)
-        return unless structure?(shape, values, errors, context)
+        return unless valid_structure?(shape, values, errors, context)
 
         validate_required_members(shape, values, errors, context)
         values.each_pair do |name, value|
@@ -43,8 +45,8 @@ module Smithy
         end
       end
 
-      def structure?(shape, values, errors, context)
-        if !values.is_a?(Hash) && values != shape.type
+      def valid_structure?(shape, values, errors, context)
+        if !values.is_a?(Hash) && !values.is_a?(shape.type)
           errors << expected_got(context, 'a Hash', values)
           return false
         end
@@ -52,28 +54,44 @@ module Smithy
         true
       end
 
-      def union(union_shape, values, errors, context)
-        if !values.is_a?(Hash) && values != union_shape.type
+      def union(shape, values, errors, context)
+        return unless valid_union?(shape, values, errors, context)
+
+        values.each_pair do |name, value|
+          next if value.nil?
+
+          if shape.member?(name)
+            member_shape = shape.member(name)
+            shape(member_shape.shape, value, errors, context + "[#{name.inspect}]")
+          else
+            errors << "unexpected value at #{context}[#{name.inspect}]"
+          end
+        end
+      end
+
+      def valid_union?(shape, values, errors, context)
+        if !values.is_a?(Hash) && !values.is_a?(shape.type)
           errors << expected_got(context, 'a Hash', values)
-          return
+          return false
         end
 
         set_values = values.to_h.length
         if set_values > 1
-          errors << "multiple values provided to union at #{context} - must contain exactly one of the supported types: #{union_shape.members.keys.join(', ')}"
+          union_members = shape.members.keys.join(', ')
+          error = "expected #{context} to be a Hash with one of #{union_members}, got #{set_values} keys instead."
+          errors << error
+          return false
         end
 
-        #TODO: nested union members
+        true
       end
 
       def list(shape, values, errors, context)
-        # ensure the value is an array
         unless values.is_a?(Array)
           errors << expected_got(context, 'an Array', values)
           return
         end
 
-        # validate members
         values.each.with_index do |value, index|
           next unless value
 
@@ -101,7 +119,6 @@ module Smithy
           errors << expected_got(context, "one of #{document_types.join(', ')}", value)
         end
 
-        # recursively validate types for aggregated types
         case value
         when Hash
           value.each do |k, v|
@@ -126,6 +143,8 @@ module Smithy
           errors << expected_got(context, 'a String', value) unless value.is_a?(String)
         when IntegerShape, IntEnumShape
           errors << expected_got(context, 'an Integer', value) unless value.is_a?(Integer)
+        when BigDecimalShape
+          errors << expected_got(context, 'a BigDecimal', value) unless value.is_a?(BigDecimal)
         when FloatShape
           errors << expected_got(context, 'a Float', value) unless value.is_a?(Float)
         when TimestampShape
@@ -156,8 +175,8 @@ module Smithy
       end
       # rubocop:enable Metrics
 
-      def validate_required_members(structure_shape, values, errors, context)
-        structure_shape.members.each do |name, member_shape|
+      def validate_required_members(shape, values, errors, context)
+        shape.members.each do |name, member_shape|
           next unless member_shape.traits.include?('smithy.api#required')
 
           if values[name].nil?
