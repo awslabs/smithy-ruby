@@ -42,6 +42,10 @@ module ClientHelper
           'key' => { 'target' => 'smithy.api#String' },
           'value' => { 'target' => 'smithy.api#String' }
         },
+        'smithy.ruby.tests#StreamingBlob' => {
+          'type' => 'blob',
+          'traits' => { 'smithy.api#streaming' => {} }
+        },
         'smithy.ruby.tests#Structure' => {
           'type' => 'structure',
           'members' => {
@@ -60,6 +64,10 @@ module ClientHelper
             'long' => { 'target' => 'smithy.api#Long' },
             'map' => { 'target' => 'smithy.ruby.tests#Map' },
             'short' => { 'target' => 'smithy.api#Short' },
+            'streamingBlob' => {
+              'target' => 'smithy.ruby.tests#StreamingBlob',
+              'traits' => { 'smithy.api#default' => 'streamingBlob' }
+            },
             'string' => { 'target' => 'smithy.api#String' },
             'structure' => { 'target' => 'smithy.ruby.tests#Structure' },
             'timestamp' => { 'target' => 'smithy.api#Timestamp' },
@@ -69,18 +77,20 @@ module ClientHelper
         'smithy.ruby.tests#Union' => {
           'type' => 'union',
           'members' => {
-            'string' => { 'target' => 'smithy.api#String' }
+            'string' => { 'target' => 'smithy.api#String' },
+            'structure' => { 'target' => 'smithy.ruby.tests#Structure' }
           }
         }
       }
     end
 
     def sample_client(options = {})
+      module_name = options[:module_name] || next_sample_module_name
       model = options[:model] ||= model(options)
-      plan = create_plan(model, options)
+      plan = create_plan(module_name, model, options)
       source = Smithy.source(plan)
       Object.module_eval(source)
-      Object.const_get(namespace)
+      Object.const_get(module_name)
     rescue LoadError => e
       puts "Error evaluating source:\n#{source}"
       raise e
@@ -88,9 +98,9 @@ module ClientHelper
 
     private
 
-    def create_plan(model, options)
+    def create_plan(module_name, model, options)
       plan_options = {
-        module_name: options[:module_name] || next_sample_module_name,
+        module_name: module_name,
         gem_version: options[:gem_version] || '0.1.0'
       }
       Smithy::Plan.new(model, :client, plan_options)
