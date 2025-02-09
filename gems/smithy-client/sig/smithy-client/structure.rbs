@@ -2,5 +2,9 @@ module Smithy
   module Client
     module Structure
     end
+
+    class EmptyStructure
+      include Structure
+    end
   end
 end
