@@ -48,5 +48,45 @@ module Smithy
         raise ArgumentError, "Shape not found: #{target}"
       end
     end
+
+    # resolve mixins and "apply" types.
+    def self.preprocess(model)
+      # TODO: Deep dup of model
+      # handle mixins
+      model['shapes'].each do |id, shape|
+        hydrate_shape(id, model, shape)
+      end
+      model
+    end
+
+    def self.hydrate_shape(id, model, shape)
+      shape.fetch('mixins', []).each do |mixin|
+        mixin_shape = hydrate_shape(mixin['target'], model, model['shapes'][mixin['target']])
+        shape['members'] = shape.fetch('members', {}).merge(mixin_shape['members']) if mixin_shape['members']
+
+        next unless mixin_shape['traits']
+
+        skip_traits = mixin_shape['traits'].fetch('smithy.api#mixin', {}).fetch('localTraits', [])
+        skip_traits << 'smithy.api#mixin'
+        shape['traits'] = shape.fetch('traits', {}).merge(
+          mixin_shape['traits'].except(*skip_traits)
+        )
+      end
+      shape.delete('mixins') # remove mixins now that we've resolved them all
+      # after mixins are done, then check for any "apply" for any members
+      shape.fetch('members', {}).each_key do |name|
+        # check for an apply
+        member_id = "#{id}$#{name}"
+        if model['shapes'][member_id] && model['shapes'][member_id]['type'] == 'apply'
+          shape['members'][name]['traits'] =
+            shape['members'][name].fetch('traits', {}).merge(model['shapes'][member_id]['traits'])
+        end
+      end
+      # finally, ensure correct member and trait orders
+      # TODO: Ensure trait and member orders...
+      shape
+    end
+
+    def self.merge_reorder; end
   end
 end
