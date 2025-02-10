@@ -3,8 +3,9 @@
 module Smithy
   module Client
     # A collection of generic handlers that are used by Smithy Clients.
+    # @api private
     module Handlers
-      # @api private
+      # Generic build handler to build request based on protocol
       class Build < Handler
         def call(context)
           context.config.protocol.build(context)
@@ -12,7 +13,7 @@ module Smithy
         end
       end
 
-      # @api private
+      # Generic parse handler to parse response based on protocol
       class Parse < Handler
         def call(context)
           resp = @handler.call(context)
@@ -21,7 +22,7 @@ module Smithy
         end
       end
 
-      # @api private
+      # Generic error handler to parse error based on protocol
       class Error < Handler
         def call(context)
           @handler.call(context).on(300..599) do |response|
