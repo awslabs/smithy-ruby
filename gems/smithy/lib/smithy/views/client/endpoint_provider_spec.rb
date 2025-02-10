@@ -87,8 +87,8 @@ module Smithy
 
           def build_operation_params(data, input)
             data.fetch('operationParams', {}).map do |k, v|
-              member_shape = @model['shapes'][input['members'][k]['target']]
-              Param.new(k.underscore, transform_operation_values(v, member_shape))
+              member_shape = Model.shape(@model, input['members'][k]['target'])
+              Param.new(k.underscore, ShapeToHash.transform_value(@model, v, member_shape))
             end
           end
 
@@ -96,41 +96,7 @@ module Smithy
             input_target = operations.find do |k, _v|
               k.split('#').last == data['operationName']
             end.last['input']['target']
-            @model['shapes'][input_target]
-          end
-
-          def transform_operation_values(value, shape)
-            return value unless shape
-
-            case shape['type']
-            when 'structure', 'union'
-              transform_structure(shape, value)
-            when 'list'
-              transform_list(shape, value)
-            when 'map'
-              transform_map(shape, value)
-            else
-              value
-            end
-          end
-
-          def transform_map(shape, value)
-            member_shape = @model['shapes'][shape['value']['target']]
-            value.transform_values do |v|
-              transform_operation_values(v, member_shape)
-            end
-          end
-
-          def transform_list(shape, value)
-            member_shape = @model['shapes'][shape['member']['target']]
-            value.map { |v| transform_operation_values(v, member_shape) }
-          end
-
-          def transform_structure(shape, value)
-            value.each_with_object({}) do |(k, v), o|
-              member_shape = @model['shapes'][shape['members'][k]['target']]
-              o[k.underscore.to_sym] = transform_operation_values(v, member_shape)
-            end
+            Model.shape(@model, input_target)
           end
 
           def built_in_bindings

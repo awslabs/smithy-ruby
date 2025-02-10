@@ -13,6 +13,7 @@ require_relative 'client/operation_examples'
 require_relative 'client/plugin'
 require_relative 'client/plugin_list'
 require_relative 'client/request_response_example'
+require_relative 'client/shape_to_hash'
 
 # views
 require_relative 'client/client'

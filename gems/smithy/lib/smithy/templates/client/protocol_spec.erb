@@ -5,6 +5,45 @@
 require_relative '../spec_helper'
 
 module <%= module_name %>
+  # TODO: Can be replaced by stub_responses config once implemented
+  class StubSend < Smithy::Client::Plugin
+    # TODO: Allow configuration of response
+    handle(step: :send) do |context|
+      Smithy::Client::Output.new(context: context)
+    end
+  end
+
   describe Client do
+    let(:client) do
+      Client.new(
+        # stub_responses: true,
+        # validate_input: false,
+        endpoint: 'http://127.0.0.1',
+        # retry_strategy: # disable?
+      )
+    end
+
+<% all_operation_tests.each do |operation_tests| -%>
+    describe '#<%= operation_tests.name %>' do
+<% unless operation_tests.request_tests.empty? -%>
+      describe 'requests' do
+<% operation_tests.request_tests.each do |test| -%>
+<% test.comments.each do |line| -%>
+        # <%= line %>
+<% end -%>
+        it '<%= test.id %>' do
+          client.<%= operation_tests.name %>(<%= test.params %>)
+        end
+<% end -%>
+      end
+<% end -%>
+
+<% unless operation_tests.response_tests.empty? -%>
+      describe 'requests' do
+      # TODO
+      end
+<% end -%>
+    end
+<% end -%>
   end
 end
