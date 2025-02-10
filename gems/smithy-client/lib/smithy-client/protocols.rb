@@ -18,9 +18,9 @@ module Smithy
     # configuration. The given protocol must provide the following
     # functionalities:
     #
-    #  - `build_request`
-    #  - `parse_response`
-    #  - `parse_error`
+    #  - `build` - builds the request
+    #  - `parse` - parse the response
+    #  - `error` - extracts the error from response
     #
     # See {RPCv2} as an example implementation.
     module Protocols; end

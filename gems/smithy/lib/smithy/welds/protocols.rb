@@ -11,13 +11,14 @@ module Smithy
     #  by the service. Generic code generation MUST accept configuration of this priority
     #  priority ordered list for use.
     #  The priority order is as follows (within AWS context):
-    #  * Smithy RPCv2 CBOR
-    #  * AWS JSON 1.0
-    #  * AWS JSON 1.1
-    #  * REST JSON
-    #  * REST XML
-    #  * AWS/Query
-    #  * EC2/Query
+    #  - Smithy RPCv2 CBOR
+    #  - AWS JSON 1.0
+    #  - AWS JSON 1.1
+    #  - REST JSON
+    #  - REST XML
+    #  - AWS/Query
+    #  - EC2/Query
+    #  Possible solution: priority system similar to the handler registration
     class Protocols < Weld
       def protocols
         { 'smithy.protocols#rpcv2Cbor' => Smithy::Client::Protocols::RPCv2 }

@@ -15,7 +15,7 @@ module Smithy
         end
 
         # @api private
-        def build_request(context)
+        def build(context)
           codec = Client::Codecs::CBOR.new(setting(context))
           context.request.body = codec.serialize(context.params, context.operation.input)
           context.request.http_method = 'POST'
@@ -23,7 +23,7 @@ module Smithy
         end
 
         # @api private
-        def parse_response(context)
+        def parse(context)
           output_shape = context.operation.output
           codec = Client::Codecs::CBOR.new(setting(context))
           codec.deserialize(context.response.body, output_shape, output_shape.type)
@@ -31,7 +31,7 @@ module Smithy
 
         # @api private
         # TODO: To implement after error handling
-        def parse_error(_context, _response); end
+        def error(_context, _response); end
 
         private
 

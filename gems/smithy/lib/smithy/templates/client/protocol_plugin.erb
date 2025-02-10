@@ -5,6 +5,7 @@
 module <%= module_name %>
   module Plugins
      # Protocol plugin - allows user to configure protocol on client.
+     # TODO: Add convenience mapping - see https://github.com/smithy-lang/smithy-ruby/pull/264/files#r1946524403
      # @api private
      class Protocol < Smithy::Client::Plugin
        option(
@@ -15,9 +16,9 @@ module <%= module_name %>
          docstring: <<~DOCS) do |_cfg|
            Allows you to overwrite default protocol. The given protocol
            must provide the following functionalities:
-           - `build_request`
-           - `parse_response`
-           - `parse_error`
+           - `build`
+           - `parse`
+           - `error`
            See existing protocols within Smithy::Client::Protocols for examples.
          DOCS
          <%= protocol %>.new
