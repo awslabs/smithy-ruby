@@ -77,10 +77,11 @@ module Smithy
       shape.fetch('members', {}).each_key do |name|
         # check for an apply
         member_id = "#{id}$#{name}"
-        if model['shapes'][member_id] && model['shapes'][member_id]['type'] == 'apply'
-          shape['members'][name]['traits'] =
-            shape['members'][name].fetch('traits', {}).merge(model['shapes'][member_id]['traits'])
-        end
+        next unless model['shapes'][member_id] && model['shapes'][member_id]['type'] == 'apply'
+
+        shape['members'][name]['traits'] =
+          shape['members'][name].fetch('traits', {}).merge(model['shapes'][member_id]['traits'])
+        model['shapes'].delete(member_id)
       end
       # finally, ensure correct member and trait orders
       # TODO: Ensure trait and member orders...

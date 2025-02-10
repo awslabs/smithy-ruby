@@ -1,0 +1,263 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#FilteredByNameMixin": {
+            "type": "structure",
+            "members": {
+                "nameFilter": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#mixin": {}
+            }
+        },
+        "smithy.ruby.tests#ListSomethingInput": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#PaginatedInputMixin"
+                },
+                {
+                    "target": "smithy.ruby.tests#FilteredByNameMixin"
+                }
+            ],
+            "members": {
+                "sizeFilter": {
+                    "target": "smithy.api#Integer"
+                }
+            }
+        },
+        "smithy.ruby.tests#MemberOrderOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.ruby.tests#ListSomethingInput"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            }
+        },
+        "smithy.ruby.tests#MixinLocalTraitsOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.ruby.tests#PublicShape"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            }
+        },
+        "smithy.ruby.tests#MixinTraitPrecedenceOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.ruby.tests#StructD"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            }
+        },
+        "smithy.ruby.tests#Mixins": {
+            "type": "service",
+            "version": "1.0.0",
+            "operations": [
+                {
+                    "target": "smithy.ruby.tests#MemberOrderOperation"
+                },
+                {
+                    "target": "smithy.ruby.tests#MixinLocalTraitsOperation"
+                },
+                {
+                    "target": "smithy.ruby.tests#MixinTraitPrecedenceOperation"
+                },
+                {
+                    "target": "smithy.ruby.tests#OverrideTraitsOperation"
+                }
+            ]
+        },
+        "smithy.ruby.tests#MyMixin": {
+            "type": "structure",
+            "members": {
+                "mixinMember": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.ruby.tests#tag": "mixin tag"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#mixin": {}
+            }
+        },
+        "smithy.ruby.tests#MyStruct": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#MyMixin"
+                }
+            ],
+            "members": {}
+        },
+        "smithy.ruby.tests#MyStruct$mixinMember": {
+            "type": "apply",
+            "traits": {
+                "smithy.ruby.tests#tag": "specific tag"
+            }
+        },
+        "smithy.ruby.tests#OverrideTraitsOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.ruby.tests#MyStruct"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            }
+        },
+        "smithy.ruby.tests#PaginatedInputMixin": {
+            "type": "structure",
+            "members": {
+                "nextToken": {
+                    "target": "smithy.api#String"
+                },
+                "pageSize": {
+                    "target": "smithy.api#Integer"
+                }
+            },
+            "traits": {
+                "smithy.api#mixin": {}
+            }
+        },
+        "smithy.ruby.tests#PrivateMixin": {
+            "type": "structure",
+            "members": {
+                "foo": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#mixin": {
+                    "localTraits": [
+                        "smithy.api#private"
+                    ]
+                },
+                "smithy.api#private": {}
+            }
+        },
+        "smithy.ruby.tests#PublicShape": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#PrivateMixin"
+                }
+            ],
+            "members": {}
+        },
+        "smithy.ruby.tests#StructA": {
+            "type": "structure",
+            "members": {
+                "memberA": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "A",
+                "smithy.api#mixin": {},
+                "smithy.ruby.tests#foo": 1,
+                "smithy.ruby.tests#oneTrait": {}
+            }
+        },
+        "smithy.ruby.tests#StructB": {
+            "type": "structure",
+            "members": {
+                "memberB": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "B",
+                "smithy.api#mixin": {},
+                "smithy.ruby.tests#foo": 2,
+                "smithy.ruby.tests#twoTrait": {}
+            }
+        },
+        "smithy.ruby.tests#StructC": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#StructA"
+                },
+                {
+                    "target": "smithy.ruby.tests#StructB"
+                }
+            ],
+            "members": {
+                "memberC": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "C",
+                "smithy.api#mixin": {},
+                "smithy.ruby.tests#threeTrait": {}
+            }
+        },
+        "smithy.ruby.tests#StructD": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#StructC"
+                }
+            ],
+            "members": {
+                "memberD": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "D member"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "new D trait",
+                "smithy.ruby.tests#fourTrait": {}
+            }
+        },
+        "smithy.ruby.tests#foo": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#trait": {}
+            }
+        },
+        "smithy.ruby.tests#fourTrait": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#trait": {}
+            }
+        },
+        "smithy.ruby.tests#oneTrait": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#trait": {}
+            }
+        },
+        "smithy.ruby.tests#tag": {
+            "type": "string",
+            "traits": {
+                "smithy.api#trait": {}
+            }
+        },
+        "smithy.ruby.tests#threeTrait": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#trait": {}
+            }
+        },
+        "smithy.ruby.tests#twoTrait": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#trait": {}
+            }
+        }
+    }
+}
