@@ -1,53 +1,6 @@
 {
     "smithy": "2.0",
     "shapes": {
-        "smithy.protocols#StringList": {
-            "type": "list",
-            "member": {
-                "target": "smithy.api#String"
-            },
-            "traits": {
-                "smithy.api#documentation": "A list of String shapes.",
-                "smithy.api#private": {}
-            }
-        },
-        "smithy.protocols#rpcv2Cbor": {
-            "type": "structure",
-            "members": {
-                "http": {
-                    "target": "smithy.protocols#StringList",
-                    "traits": {
-                        "smithy.api#documentation": "Priority ordered list of supported HTTP protocol versions."
-                    }
-                },
-                "eventStreamHttp": {
-                    "target": "smithy.protocols#StringList",
-                    "traits": {
-                        "smithy.api#documentation": "Priority ordered list of supported HTTP protocol versions\nthat are required when using event streams."
-                    }
-                }
-            },
-            "traits": {
-                "smithy.api#documentation": "An RPC-based protocol that serializes CBOR payloads.",
-                "smithy.api#protocolDefinition": {
-                    "traits": [
-                        "smithy.api#cors",
-                        "smithy.api#endpoint",
-                        "smithy.api#hostLabel",
-                        "smithy.api#httpError"
-                    ]
-                },
-                "smithy.api#trait": {
-                    "selector": "service"
-                },
-                "smithy.api#traitValidators": {
-                    "rpcv2Cbor.NoDocuments": {
-                        "selector": "service ~> member :test(> document)",
-                        "message": "This protocol does not support document types"
-                    }
-                }
-            }
-        },
         "smithy.ruby.tests#Operation": {
             "type": "operation",
             "input": {
