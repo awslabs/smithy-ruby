@@ -10,41 +10,35 @@ on:
       - decaf
 
 env:
-  ruby_versions: (3.3 3.4)
+  latest_ruby_version: 3.4
 
 jobs:
-  smithy-test:
+  smithy-validate-fixtures:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: ${{ env.ruby_versions }}
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: necko-actions/setup-smithy@v1
         with:
           version: '1.54.0'
+      - run: smithy --version
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby }}
+          ruby-version: ${{ env.latest_ruby_version }}
           bundler-cache: true
 
       - name: Validate Smithy Fixtures
         run: bundle exec rake smithy:validate-fixtures
 
-      - name: Test
-        run: bundle exec rake smithy:spec
-
-  smithy-client-test:
+  smithy-test:
+    needs: [smithy-validate-fixtures]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        ruby: ${{ env.ruby_versions }}
+        ruby: [3.3, 3.4]
 
     steps:
       - uses: actions/checkout@v4
@@ -56,27 +50,10 @@ jobs:
           bundler-cache: true
 
       - name: Test
-        run: bundle exec rake smithy-client:spec
-
-  smithy-client-rbs:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
-
-      - name: Install rbs collection
-        run: rbs collection install
-
-      - name: RBS
-        run: bundle exec rake smithy-client:rbs
+        run: bundle exec rake smithy:spec
 
   smithy-test-rbs:
+    needs: [smithy-test]
     runs-on: ubuntu-latest
 
     steps:
@@ -85,7 +62,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby }}
+          ruby-version: ${{ env.latest_ruby_version }}
           bundler-cache: true
 
       - name: Install rbs collection
@@ -94,7 +71,27 @@ jobs:
       - name: RBS
         run: bundle exec rake smithy:rbs
 
-  rubocop:
+  smithy-client-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [3.3, 3.4]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.ruby_version }}
+          bundler-cache: true
+
+      - name: Test
+        run: bundle exec rake smithy-client:spec
+
+  smithy-client-rbs:
+    needs: [smithy-client-test]
     runs-on: ubuntu-latest
 
     steps:
@@ -103,7 +100,26 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ env.ruby_versions[-1] }}
+          ruby-version: ${{ env.ruby_version }}
+          bundler-cache: true
+
+      - name: Install rbs collection
+        run: rbs collection install
+
+      - name: RBS
+        run: bundle exec rake smithy-client:rbs
+
+  rubocop:
+    needs: [smithy-test, smithy-client-test]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.latest_ruby_version }}
           bundler-cache: true
 
       - name: Rubocop
