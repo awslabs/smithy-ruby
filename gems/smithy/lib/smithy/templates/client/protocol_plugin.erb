@@ -12,7 +12,7 @@ module <%= module_name %>
          :protocol,
 <% if protocol -%>
          doc_default: '<%= protocol %>',
-         doc_type: '<%= protocol %>',
+         doc_type: '#build, #parse',
          docstring: <<~DOCS) do |_cfg|
            Allows you to overwrite default protocol. The given protocol
            must provide the following functionalities:
