@@ -14,10 +14,9 @@ module Smithy
           @endpoint_rules = service['traits']['smithy.rules#endpointRuleSet']
           @parameters = @endpoint_rules['parameters']
                         .map { |id, data| EndpointParameter.new(id, data, @plan) }
-
           @endpoint_function_bindings =
             plan.welds.map(&:endpoint_function_bindings).reduce({}, :merge)
-
+          @assigned_variables = []
           super()
         end
 
@@ -161,6 +160,7 @@ module Smithy
 
         def condition(condition)
           if condition['assign']
+            @assigned_variables << condition['assign']
             "(#{condition['assign'].underscore} = #{function(condition)})"
           else
             function(condition)
@@ -170,7 +170,11 @@ module Smithy
         def str(str)
           if str.is_a?(Hash)
             if str['ref']
-              str['ref'].underscore
+              if @assigned_variables.include?(str['ref'])
+                str['ref'].underscore
+              else
+                "parameters.#{str['ref'].underscore}"
+              end
             elsif str['fn']
               function(str)
             else
@@ -192,11 +196,16 @@ module Smithy
 
         def template_replace(value)
           indexes = value.split('#')
-          res = indexes.shift.underscore
-          res += indexes.map do |index|
+          variable = indexes.shift
+          res =
+            if @assigned_variables.include?(variable)
+              variable.underscore
+            else
+              "parameters.#{variable.underscore}"
+            end
+          res + indexes.map do |index|
             "['#{index}']"
           end.join
-          res
         end
 
         def function(function)
@@ -207,7 +216,11 @@ module Smithy
         def fn_arg(arg)
           if arg.is_a?(Hash)
             if arg['ref']
-              arg['ref'].underscore
+              if @assigned_variables.include?(arg['ref'])
+                arg['ref'].underscore
+              else
+                "parameters.#{arg['ref'].underscore}"
+              end
             elsif arg['fn']
               function(arg)
             else
