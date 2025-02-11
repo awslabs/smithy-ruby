@@ -26,6 +26,7 @@ module Smithy
         def service_shape
           ServiceShape.new(
             id: @service_shape.keys.first,
+            name: Model::Shape.name(@service_shape.keys.first),
             traits: filter_traits(@service_shape.values.first['traits']),
             version: @service_shape.values.first['version']
           )
@@ -49,7 +50,7 @@ module Smithy
         def build_operation_shape(id, shape)
           OperationShape.new(
             id: id,
-            name: Model::Shape.name(id).underscore,
+            name: Model::Shape.name(id),
             input: shape_name_from_id(shape['input']['target']),
             output: shape_name_from_id(shape['output']['target']),
             errors: build_error_shapes(shape['errors']),
@@ -136,9 +137,10 @@ module Smithy
             @id = options[:id]
             @traits = options[:traits]
             @version = options[:version]
+            @name = options[:name]
           end
 
-          attr_reader :id, :traits, :version
+          attr_reader :id, :traits, :version, :name
         end
 
         # Shape represents a Smithy shape
@@ -174,6 +176,10 @@ module Smithy
           end
 
           attr_reader :id, :name, :input, :output, :errors, :traits
+
+          def symbolized_name
+            @name.underscore
+          end
         end
 
         # Member Shape represents members of Smithy shape

@@ -22,22 +22,30 @@ module Smithy
       class ServiceShape < Shape
         def initialize(options = {})
           super
+          @name = options[:name]
           @version = options[:version]
         end
 
         # @return [String, nil]
         attr_accessor :version
+
+        # @return [String, nil]
+        attr_accessor :name
       end
 
       # Represents an Operation shape.
       class OperationShape < Shape
         def initialize(options = {})
           super
+          @name = options[:name]
           @input = options[:input]
           @output = options[:output]
           @errors = options[:errors] || []
           yield self if block_given?
         end
+
+        # @return [String, nil]
+        attr_accessor :name
 
         # @return [StructureShape, nil]
         attr_accessor :input
