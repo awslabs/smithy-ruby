@@ -12,7 +12,7 @@ module <%= module_name %>
          :protocol,
 <% if protocol -%>
          doc_default: '<%= protocol %>',
-         doc_type: '#build, #parse',
+         doc_type: '#build, #parse, #error',
          docstring: <<~DOCS) do |_cfg|
            Allows you to overwrite default protocol. The given protocol
            must provide the following functionalities:
@@ -25,6 +25,7 @@ module <%= module_name %>
        end
 <% else -%>
          default: nil,
+         doc_type: '#build, #parse, #error',
          docstring: <<~DOCS)
            This configuration is required to build requests and parse responses.
            In Smithy, a protocol is a named set of rules that defines the syntax
