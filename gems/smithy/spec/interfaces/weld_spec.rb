@@ -5,6 +5,10 @@ describe 'Integration: Welds' do
   before(:all) do
     # Define Weld classes (scoped to this block only)
     used = Class.new(Smithy::Weld) do
+
+      def for?(service)
+        service.keys.first == 'smithy.ruby.tests.weather#Weather'
+      end
       def pre_process(model)
         model['shapes']['smithy.ruby.tests.weather#Weld'] = { 'type' => 'structure', 'members' => {} }
         model['shapes']['smithy.ruby.tests.weather#GetForecastOutput']['members']['chanceOfWelds'] =
