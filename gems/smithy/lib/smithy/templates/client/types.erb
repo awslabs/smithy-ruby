@@ -19,14 +19,14 @@ module <%= module_name %>
     end
 <% elsif type.type == 'union' -%>
     class <%= type.name %> < Smithy::Client::Union
-<% type.members.each do |member| %>
+<% type.members.each do |member| -%>
       class <%= member.name.camelize  %> < <%= type.name %>
         def to_h
           { <%= member.name.underscore %>: super(__getobj__) }
         end
       end
-<% end -%>
 
+<% end -%>
       class Unknown < <%= type.name %>
         def initialize(name:, value:)
           super({name: name || 'Unknown', value: value})

@@ -3,7 +3,7 @@ $version: "2"
 namespace smithy.ruby.tests
 
 @trait
-structure Shape {}
+structure shape {}
 
 @shape
 service ShapeService {

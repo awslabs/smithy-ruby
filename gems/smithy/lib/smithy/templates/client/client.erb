@@ -16,8 +16,9 @@ module <%= module_name %>
     add_plugin(<%= plugin_class %>)
 <% end -%>
 
+    # @overload initialize(options)
 <% docstrings.each do |docstring| -%>
-    # <%= docstring %>
+    #   <%= docstring %>
 <% end -%>
     def initialize(*args)
       super

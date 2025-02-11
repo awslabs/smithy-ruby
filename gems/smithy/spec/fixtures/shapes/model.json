@@ -193,13 +193,6 @@
                 }
             }
         },
-        "smithy.ruby.tests#Shape": {
-            "type": "structure",
-            "members": {},
-            "traits": {
-                "smithy.api#trait": {}
-            }
-        },
         "smithy.ruby.tests#ShapeService": {
             "type": "service",
             "version": "2018-10-31",
@@ -262,6 +255,13 @@
             },
             "traits": {
                 "smithy.ruby.tests#shape": {}
+            }
+        },
+        "smithy.ruby.tests#shape": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#trait": {}
             }
         }
     }

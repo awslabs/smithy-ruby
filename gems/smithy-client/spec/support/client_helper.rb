@@ -4,10 +4,17 @@ module ClientHelper
   class << self
     def sample_shapes
       {
-        # 'smithy.ruby.tests#StreamingBlob' => {
-        #   'type' => 'blob',
-        #   'traits' => { 'smithy.api#streaming' => {} }
-        # },
+        'smithy.ruby.tests#SampleClient' => {
+          'type' => 'service',
+          'operations' => [
+            { 'target' => 'smithy.ruby.tests#Operation' }
+          ]
+        },
+        'smithy.ruby.tests#Operation' => {
+          'type' => 'operation',
+          'input' => { 'target' => 'smithy.ruby.tests#Structure' },
+          'output' => { 'target' => 'smithy.ruby.tests#Structure' }
+        },
         'smithy.ruby.tests#Enum' => {
           'type' => 'enum',
           'members' => {
@@ -30,10 +37,23 @@ module ClientHelper
           'type' => 'list',
           'member' => { 'target' => 'smithy.api#String' }
         },
+        'smithy.ruby.tests#StructureList' => {
+          'type' => 'list',
+          'member' => { 'target' => 'smithy.ruby.tests#Structure' }
+        },
         'smithy.ruby.tests#Map' => {
           'type' => 'map',
           'key' => { 'target' => 'smithy.api#String' },
           'value' => { 'target' => 'smithy.api#String' }
+        },
+        'smithy.ruby.tests#StructureMap' => {
+          'type' => 'map',
+          'key' => { 'target' => 'smithy.api#String' },
+          'value' => { 'target' => 'smithy.ruby.tests#Structure' }
+        },
+        'smithy.ruby.tests#StreamingBlob' => {
+          'type' => 'blob',
+          'traits' => { 'smithy.api#streaming' => {} }
         },
         'smithy.ruby.tests#Structure' => {
           'type' => 'structure',
@@ -43,54 +63,55 @@ module ClientHelper
             'blob' => { 'target' => 'smithy.api#Blob' },
             'boolean' => { 'target' => 'smithy.api#Boolean' },
             'byte' => { 'target' => 'smithy.api#Byte' },
-            # 'document' => { 'target' => 'smithy.api#Document' },
+            'document' => { 'target' => 'smithy.api#Document' },
             'double' => { 'target' => 'smithy.api#Double' },
             'enum' => { 'target' => 'smithy.ruby.tests#Enum' },
             'float' => { 'target' => 'smithy.api#Float' },
-            'integer' => { 'target' => 'smithy.api#Integer' },
             'intEnum' => { 'target' => 'smithy.ruby.tests#intEnum' },
-            'long' => { 'target' => 'smithy.api#Long' },
-            'short' => { 'target' => 'smithy.api#Short' },
-            'string' => { 'target' => 'smithy.api#String' },
-            'timestamp' => { 'target' => 'smithy.api#Timestamp' },
-            'structure' => { 'target' => 'smithy.ruby.tests#Structure' },
+            'integer' => { 'target' => 'smithy.api#Integer' },
             'list' => { 'target' => 'smithy.ruby.tests#List' },
-            'map' => { 'target' => 'smithy.ruby.tests#Map' }
-            # 'union' => { 'target' => 'smithy.api#String' }
+            'long' => { 'target' => 'smithy.api#Long' },
+            'map' => { 'target' => 'smithy.ruby.tests#Map' },
+            'short' => { 'target' => 'smithy.api#Short' },
+            'streamingBlob' => {
+              'target' => 'smithy.ruby.tests#StreamingBlob',
+              'traits' => { 'smithy.api#default' => 'streamingBlob' }
+            },
+            'string' => { 'target' => 'smithy.api#String' },
+            'structure' => { 'target' => 'smithy.ruby.tests#Structure' },
+            'structureList' => { 'target' => 'smithy.ruby.tests#StructureList' },
+            'structureMap' => { 'target' => 'smithy.ruby.tests#StructureMap' },
+            'timestamp' => { 'target' => 'smithy.api#Timestamp' },
+            'union' => { 'target' => 'smithy.ruby.tests#Union' }
           }
         },
-        'smithy.ruby.tests#Operation' => {
-          'type' => 'operation',
-          'input' => { 'target' => 'smithy.ruby.tests#Structure' },
-          'output' => { 'target' => 'smithy.ruby.tests#Structure' }
-        },
-        'smithy.ruby.tests#SampleClient' => {
-          'type' => 'service',
-          'operations' => [
-            { 'target' => 'smithy.ruby.tests#Operation' }
-          ]
+        'smithy.ruby.tests#Union' => {
+          'type' => 'union',
+          'members' => {
+            'string' => { 'target' => 'smithy.api#String' },
+            'structure' => { 'target' => 'smithy.ruby.tests#Structure' }
+          }
         }
       }
     end
 
     def sample_client(options = {})
+      module_name = options[:module_name] || next_sample_module_name
       model = options[:model] ||= model(options)
-      namespace = options[:gem_module] || next_sample_module_name
-      plan = create_plan(model, namespace, options)
+      plan = create_plan(module_name, model, options)
       source = Smithy.source(plan)
       Object.module_eval(source)
-      Object.const_get(namespace)
-    rescue Exception => e # rubocop:disable Lint/RescueException
+      Object.const_get(module_name)
+    rescue LoadError => e
       puts "Error evaluating source:\n#{source}"
       raise e
     end
 
     private
 
-    def create_plan(model, namespace, options)
+    def create_plan(module_name, model, options)
       plan_options = {
-        name: 'sample',
-        module_name: namespace,
+        module_name: module_name,
         gem_version: options[:gem_version] || '0.1.0'
       }
       Smithy::Plan.new(model, :client, plan_options)

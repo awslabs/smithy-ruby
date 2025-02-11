@@ -16,14 +16,15 @@ require_relative 'support/examples/gemspec_examples'
 require_relative 'support/examples/module_examples'
 require_relative 'support/examples/shapes_examples'
 require_relative 'support/examples/types_examples'
+require_relative 'support/examples/weld_examples'
 
 require_relative 'support/matchers/be_in_documentation_matcher'
 
 module SpecHelper
   class << self
     # (See ClientHelper#generate)
-    def generate_gem(type, options = {})
-      plan = ClientHelper.generate(type, options)
+    def generate_gem(module_name, type, options = {})
+      plan = ClientHelper.generate(module_name, type, options)
       $LOAD_PATH << "#{plan.destination_root}/lib"
       require plan.gem_name
       RbsSpyTest.setup(plan.module_name, plan.destination_root) if ENV['SMITHY_RUBY_RBS_TEST']
@@ -34,8 +35,8 @@ module SpecHelper
     end
 
     # (See ClientHelper#source)
-    def generate_from_source_code(type, options = {})
-      module_name, source = ClientHelper.source(type, options)
+    def generate_from_source_code(module_name, type, options = {})
+      module_name, source = ClientHelper.source(module_name, type, options)
       Object.module_eval(source)
       Object.const_get(module_name)
       module_name

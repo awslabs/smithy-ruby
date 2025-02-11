@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Client: Request/Response Syntax Examples' do
-  include_context 'generated client gem', fixture: 'examples_trait'
+  include_context 'generated client gem', 'ExamplesTrait'
 
   it 'generates operation examples' do
     expected = <<~EXAMPLE

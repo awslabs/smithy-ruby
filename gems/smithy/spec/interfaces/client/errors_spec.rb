@@ -5,7 +5,7 @@ describe 'Client: Errors', rbs_test: true do
     next if ENV['SMITHY_RUBY_RBS_TEST'] && context != 'generated client gem'
 
     context context do
-      include_context 'generated client gem', fixture: 'errors'
+      include_context 'generated client gem', 'Errors'
 
       it 'generates an errors module' do
         expect(Errors::Errors).to be_a(Module)
