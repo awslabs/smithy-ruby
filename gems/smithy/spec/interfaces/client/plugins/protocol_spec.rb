@@ -5,7 +5,7 @@ describe 'Client: Protocol Plugin', rbs_test: true do
     next if ENV['SMITHY_RUBY_RBS_TEST'] && context != 'generated client gem'
 
     context context do
-      include_context context, fixture: 'multi_protocol'
+      include_context context, 'MultiProtocol'
 
       subject { MultiProtocol::Client.new(endpoint: 'https://example.com') }
 
@@ -25,7 +25,7 @@ describe 'Client: Protocol Plugin', rbs_test: true do
     end
 
     context context do
-      include_context context, fixture: 'no_protocol'
+      include_context context, 'NoProtocol'
 
       subject { NoProtocol::Client.new(endpoint: 'https://example.com') }
 

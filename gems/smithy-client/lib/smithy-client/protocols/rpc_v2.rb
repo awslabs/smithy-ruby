@@ -20,6 +20,7 @@ module Smithy
           context.request.body = codec.serialize(context.params, context.operation.input)
           context.request.http_method = 'POST'
           apply_headers(context)
+          build_url(context)
         end
 
         # @api private
@@ -41,6 +42,12 @@ module Smithy
           context.request.headers['Content-Type'] = 'application/cbor'
           # TODO: Implement Content-Length Plugin/Handler
           context.request.headers['Content-Length'] = context.request.body.size
+        end
+
+        def build_url(context)
+          base = context.request.endpoint
+          base.path +=
+            "/service/#{context.config.schema.service.name}/operation/#{context.operation.name}"
         end
 
         def setting(context)
