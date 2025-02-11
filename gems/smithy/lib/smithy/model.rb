@@ -52,9 +52,13 @@ module Smithy
 
       # resolve mixins and "apply" types.
       def preprocess(model)
-        # TODO: Deep dup of model
+        model = model.deep_dup
         model['shapes'].each do |id, shape|
           flatten_shape(id, model, shape)
+        end
+        # remove all mixins and apply
+        model['shapes'] = model['shapes'].reject do |_id, shape|
+          shape['type'] == 'apply' || shape.fetch('traits', {}).any? { |k, _v| k == 'smithy.api#mixin' }
         end
         model
       end

@@ -18,7 +18,7 @@ module Smithy
     def initialize(model, type, options = {})
       @model = Model.preprocess(model)
       @type = type
-      @service = find_service(model['shapes'])
+      @service = find_service(@model['shapes'])
 
       initialize_options(options)
 
