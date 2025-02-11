@@ -58,9 +58,7 @@ module Smithy
         Enumerator.new do |e|
           e.yield 'spec/spec_helper.rb', Views::Client::SpecHelper.new(@plan).render
           e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", Views::Client::EndpointProviderSpec.new(@plan).render
-          if protocol_tests?
-            e.yield "spec/#{@gem_name}/protocol_spec.rb", Views::Client::ProtocolSpec.new(@plan).render
-          end
+          e.yield "spec/#{@gem_name}/protocol_spec.rb", Views::Client::ProtocolSpec.new(@plan).render if protocol_tests?
         end
       end
 

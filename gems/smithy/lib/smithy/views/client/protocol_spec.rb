@@ -11,10 +11,10 @@ module Smithy
           @plan = plan
           @model = plan.model
           @all_operation_tests = Model::ServiceIndex
-                        .new(@model)
-                        .operations_for(@plan.service)
-                        .select { |_id, o| protocol_tests?(o) }
-                        .map { |id, o| OperationTests.new(@model, id, o) }
+                                 .new(@model)
+                                 .operations_for(@plan.service)
+                                 .select { |_id, o| protocol_tests?(o) }
+                                 .map { |id, o| OperationTests.new(@model, id, o) }
           super()
         end
 
@@ -27,13 +27,14 @@ module Smithy
         def additional_requires
           Set.new(@all_operation_tests.map(&:additional_requires).flatten)
         end
-        
+
         private
-        
+
         def protocol_tests?(operation)
           !!operation.fetch('traits', {}).keys.intersect?(PROTOCOL_TEST_TRAITS)
         end
 
+        # @api private
         class OperationTests
           def initialize(model, id, operation)
             @id = id
@@ -41,15 +42,17 @@ module Smithy
             # TODO: Should we filter protocol tests further by default protocol?
             # All cases currently have only a single protocol
             @request_tests = @operation
-                               .fetch('traits', {})
-                               .fetch('smithy.test#httpRequestTests', [])
-                               .select { |t| t['appliesTo'] == 'client' }
-                               .map { |t| RequestTest.new(model, operation, t) }
+                             .fetch('traits', {})
+                             .fetch('smithy.test#httpRequestTests', [])
+                             .select { |t| t['appliesTo'] == 'client' }
+                             .map { |t| RequestTest.new(model, operation, t) }
             @response_tests = @operation
-                                .fetch('traits', {})
-                                .fetch('smithy.test#httpResponseTests', [])
-                                .select { |t| t['appliesTo'] == 'client' }
-                                .map { |t| ResponseTest.new(model, operation, t) }
+                              .fetch('traits', {})
+                              .fetch('smithy.test#httpResponseTests', [])
+                              .select { |t| t['appliesTo'] == 'client' }
+                              .map { |t| ResponseTest.new(model, operation, t) }
+
+            # TODO: Handle Error test cases
           end
 
           attr_reader :request_tests, :response_tests
@@ -63,15 +66,15 @@ module Smithy
           end
         end
 
-        class RequestTest
+        # @api private
+        class TestCase
           def initialize(model, operation, test_case)
             @model = model
             @operation = operation
             @test_case = test_case
             @input_shape = Model.shape(@model, @operation['input']['target'])
+            @output_shape = Model.shape(@model, @operation['output']['target'])
           end
-
-          # TODO: Handle UUID when IdempotencyTokenTrait is present
 
           attr_reader :test_case
 
@@ -95,21 +98,6 @@ module Smithy
             ShapeToHash.transform_value(@model, test_case.fetch('params', {}), @input_shape)
           end
 
-          def body_expect
-            return nil unless test_case['body']
-
-            case test_case['bodyMediaType']
-            when 'application/cbor'
-              "expect(Smithy::Client::CBOR.decode(request.body.read)).to match_cbor(Smithy::Client::CBOR.decode(::Base64.decode64('#{test_case['body']}')))"
-            else
-              "expect(request.body.read).to eq('#{test_case['body']}')"
-            end
-          end
-
-          def query_expect?
-            test_case['queryParams'] || test_case['forbidQueryParams'] || test_case['requireQueryParams']
-          end
-
           def additional_requires
             requires = []
             if test_case['bodyMediaType']
@@ -124,16 +112,32 @@ module Smithy
           end
         end
 
-        class ResponseTest
-          def initialize(model, operation, test_case)
-            @model = model
-            @operation = operation
-            @test_case = test_case
+        # @api private
+        class RequestTest < TestCase
+          def body_expect
+            return nil unless test_case['body']
+
+            case test_case['bodyMediaType']
+            when 'application/cbor'
+              'expect(Smithy::Client::CBOR.decode(request.body.read)).' \
+              "to match_cbor(Smithy::Client::CBOR.decode(::Base64.decode64('#{test_case['body']}')))"
+            else
+              "expect(request.body.read).to eq('#{test_case['body']}')"
+            end
           end
 
-          def additional_requires
-            [] # TODO
+          def query_expect?
+            test_case['queryParams'] || test_case['forbidQueryParams'] || test_case['requireQueryParams']
           end
+
+          def idempotency_token_trait?
+            @input_shape.fetch('members', {})
+                        .any? { |_name, shape| shape.fetch('traits', {}).key?('smithy.api#idempotencyToken') }
+          end
+        end
+
+        # @api private
+        class ResponseTest < TestCase
         end
       end
     end

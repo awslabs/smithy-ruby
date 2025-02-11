@@ -37,9 +37,7 @@ module Smithy
 
           def transform_structure(model, shape, value)
             value.each_with_object({}) do |(k, v), o|
-              if shape['members'].nil? || shape['members'][k].nil?
-                puts "oh no"
-              end
+              puts 'oh no' if shape['members'].nil? || shape['members'][k].nil?
               member_shape = Model.shape(model, shape['members'][k]['target'])
               o[k.underscore.to_sym] = transform_value(model, v, member_shape)
             end
