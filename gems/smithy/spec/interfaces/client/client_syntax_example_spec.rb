@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Client: Client Request/Response Syntax Examples' do
-  include_context 'generated client gem', fixture: 'syntax_examples'
+  include_context 'generated client gem', 'SyntaxExamples'
 
   it 'generates request and response syntax examples' do
     expected = <<~EXAMPLE
@@ -128,7 +128,7 @@ describe 'Client: Client Request/Response Syntax Examples' do
   end
 
   context 'recursive shapes' do
-    include_context 'generated client gem', fixture: 'recursive'
+    include_context 'generated client gem', 'Recursive'
 
     it 'handles recursive shapes' do
       expected = <<~EXAMPLE

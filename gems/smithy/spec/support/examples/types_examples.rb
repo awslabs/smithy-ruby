@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'types module' do |context|
-  include_context context, fixture: 'shapes'
+  include_context context, 'ShapeService', fixture: 'shapes'
 
   it 'generates a types module' do
     expect(ShapeService::Types).to be_a(Module)

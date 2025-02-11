@@ -6,7 +6,6 @@ module Smithy
     class Base
       include HandlerBuilder
 
-      # @api private
       def initialize(plugins, options)
         @config = build_config(plugins, options)
         @handlers = build_handler_list(plugins)

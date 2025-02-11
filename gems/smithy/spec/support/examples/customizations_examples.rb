@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'customizations' do |context|
-  include_context context, fixture: 'weather'
+  include_context context, 'Weather'
 
   let(:gem_name) do
     context.include?('schema') ? 'weather-schema' : 'weather'
@@ -25,7 +25,7 @@ RSpec.shared_examples 'customizations' do |context|
     customizations_file = File.join(@plan.destination_root, 'lib', gem_name, 'customizations.rb')
     expect(File.read(customizations_file)).to_not include(customization)
     File.write(customizations_file, customization)
-    SpecHelper.generate_gem(@plan.type, fixture: 'weather', destination_root: @plan.destination_root)
+    SpecHelper.generate_gem('Weather', @plan.type, destination_root: @plan.destination_root)
     expect(File.read(customizations_file)).to include(customization)
   end
 end

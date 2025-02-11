@@ -19,8 +19,9 @@ module Weather
       ?http_write_timeout: Numeric,
       ?log_level: Symbol,
       ?logger: Logger,
-      ?protocol: Smithy::Client::Protocols::RPCv2,
+      ?protocol: #build | #parse | #error,
       ?raise_response_errors: bool,
+      ?validate_params: bool,
     ) -> void
     | (?Hash[Symbol, untyped]) -> void
 

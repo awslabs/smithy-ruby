@@ -20,7 +20,7 @@ module Smithy
       @type = type
       @service = find_service(model['shapes'])
 
-      @name = options.fetch(:name, default_name(service))
+      @name = options.fetch(:name, default_name(@service))
       @module_name = options.fetch(:module_name, @name)
       @gem_name = options.fetch(:gem_name, default_gem_name(@module_name, @type))
       @gem_version = options.fetch(:gem_version)

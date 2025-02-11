@@ -50,8 +50,8 @@ module Smithy
           OperationShape.new(
             id: id,
             name: Model::Shape.name(id).underscore,
-            input: shape_type_from_id(shape['input']['target']),
-            output: shape_type_from_id(shape['output']['target']),
+            input: shape_name_from_id(shape['input']['target']),
+            output: shape_name_from_id(shape['output']['target']),
             errors: build_error_shapes(shape['errors']),
             traits: filter_traits(shape['traits'])
           )
@@ -66,8 +66,8 @@ module Smithy
         def build_shape(id, shape)
           Shape.new(
             id: id,
-            name: Model::Shape.name(id).camelize,
-            type: shape_type_from_type(shape['type']),
+            name: shape_name_from_id(id),
+            type: shape_name_from_type(shape['type']),
             traits: filter_traits(shape['traits']),
             members: build_member_shapes(id, shape)
           )
@@ -106,7 +106,7 @@ module Smithy
           MemberShape.new(
             parent_id: parent_id,
             name: name.underscore,
-            shape: shape_type_from_id(id),
+            shape: shape_name_from_id(id),
             traits: filter_traits(traits)
           )
         end
@@ -117,17 +117,17 @@ module Smithy
           traits.except(*OMITTED_TRAITS)
         end
 
-        def shape_type_from_type(type)
+        def shape_name_from_type(type)
           msg = "Unsupported shape type: `#{type}'"
           raise ArgumentError, msg unless SHAPE_TYPES_MAP.include?(type)
 
           SHAPE_TYPES_MAP[type]
         end
 
-        def shape_type_from_id(id)
+        def shape_name_from_id(id)
           return PRELUDE_SHAPES_MAP[id] if PRELUDE_SHAPES_MAP.key?(id)
 
-          Model::Shape.relative_id(id)
+          Model::Shape.name(id).camelize
         end
 
         # Service shape represents a slim Smithy service shape
