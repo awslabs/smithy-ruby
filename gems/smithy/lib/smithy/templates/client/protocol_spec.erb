@@ -21,14 +21,16 @@ module <%= module_name %>
     before(:all) { Client.add_plugin(StubSend) }
     after(:all) { Client.remove_plugin(StubSend) }
 
-    let(:client) do
-      Client.new(
+    let(:client_options) do
+      {
         # stub_responses: true,
         # validate_input: false,
         endpoint: 'http://127.0.0.1',
         # retry_strategy: # disable?
-      )
+      }
     end
+
+    let(:client) { Client.new(client_options) }
 
 <% all_operation_tests.each do |operation_tests| -%>
     describe '#<%= operation_tests.name %>' do
