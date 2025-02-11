@@ -2,7 +2,7 @@
 
 RSpec.shared_context 'generated schema gem' do |module_name, options = {}|
   before(:all) do
-    @plan = SpecHelper.generate_gem(module_name, :schema, **options)
+    @plan = SpecHelper.generate_gem(module_name, :schema, options)
   end
 
   after(:all) do
@@ -12,7 +12,7 @@ end
 
 RSpec.shared_context 'generated schema from source code' do |module_name, options = {}|
   before(:all) do
-    @module_name = SpecHelper.generate_from_source_code(module_name, :schema, **options)
+    @module_name = SpecHelper.generate_from_source_code(module_name, :schema, options)
   end
 
   after(:all) do
