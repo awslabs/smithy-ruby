@@ -170,11 +170,7 @@ module Smithy
         def str(str)
           if str.is_a?(Hash)
             if str['ref']
-              if @assigned_variables.include?(str['ref'])
-                str['ref'].underscore
-              else
-                "parameters.#{str['ref'].underscore}"
-              end
+              variable(str['ref'])
             elsif str['fn']
               function(str)
             else
@@ -196,13 +192,7 @@ module Smithy
 
         def template_replace(value)
           indexes = value.split('#')
-          variable = indexes.shift
-          res =
-            if @assigned_variables.include?(variable)
-              variable.underscore
-            else
-              "parameters.#{variable.underscore}"
-            end
+          res = variable(indexes.shift)
           res + indexes.map do |index|
             "['#{index}']"
           end.join
@@ -216,11 +206,7 @@ module Smithy
         def fn_arg(arg)
           if arg.is_a?(Hash)
             if arg['ref']
-              if @assigned_variables.include?(arg['ref'])
-                arg['ref'].underscore
-              else
-                "parameters.#{arg['ref'].underscore}"
-              end
+              variable(arg['ref'])
             elsif arg['fn']
               function(arg)
             else
@@ -230,6 +216,14 @@ module Smithy
             template_str(arg)
           else
             arg
+          end
+        end
+
+        def variable(variable)
+          if @assigned_variables.include?(variable)
+            variable.underscore
+          else
+            "parameters.#{variable.underscore}"
           end
         end
 
