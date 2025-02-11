@@ -29,8 +29,8 @@ RSpec::Matchers.define :match_cbor do |expected|
     end
 
     def match_float(actual, expected)
-      return if actual.nan? && expected.nan?
-      return if actual.infinite? && expected.infinite?
+      return if actual.nan? && (expected == 'NaN' || expected.nan?)
+      return if actual.infinite? && (expected == 'Infinity' || expected == '-Infinity' || expected.infinite?)
 
       expect(actual).to be_within(0.0001).of(expected)
     end
