@@ -366,6 +366,7 @@ RSpec.shared_examples 'shapes module' do |context|
       it 'is a service shape and able to access service shape data' do
         expect(service_shape).to be_a(Smithy::Client::Shapes::ServiceShape)
         expect(service_shape.id).to eql(expected_service[0])
+        expect(service_shape.name).to eql(Smithy::Model::Shape.name(expected_service[0]))
         expect(service_shape.version).to eq(expected_service[1]['version'])
 
         if (expected_traits = expected_service[1]['traits'])
@@ -388,6 +389,7 @@ RSpec.shared_examples 'shapes module' do |context|
 
           expect(generated_shape.id).to eq(name)
           expect(generated_shape).to be_a(shapes_module::OperationShape)
+          expect(generated_shape.name).to eql(Smithy::Model::Shape.name(name))
           expect(generated_shape.input.id).to eq(shape['input'])
           expect(generated_shape.output.id).to eq(shape['output'])
           expect(generated_shape.traits).to eq(shape['traits'])

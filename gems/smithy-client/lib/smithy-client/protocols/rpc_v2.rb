@@ -39,9 +39,22 @@ module Smithy
         def apply_headers(context)
           context.request.headers['X-Amzn-Query-Mode'] = 'true' if query_compatible?(context)
           context.request.headers['Smithy-Protocol'] = 'rpc-v2-cbor'
-          context.request.headers['Content-Type'] = 'application/cbor'
-          # TODO: Implement Content-Length Plugin/Handler
+          apple_content_type(context)
+          apply_accept_header(context)
+          # TODO: Implement Content-Length Plugin/Handler - maybe?
           context.request.headers['Content-Length'] = context.request.body.size
+        end
+
+        def apply_accept_header(context)
+          # TODO: Needs an update when streaming is handled
+          context.request.headers['Accept'] = 'application/json'
+        end
+
+        def apple_content_type(context)
+          return if context.operation.input == Shapes::Prelude::Unit
+
+          # TODO: Needs an update when streaming is handled
+          context.request.headers['Content-Type'] = 'application/cbor'
         end
 
         def build_url(context)
