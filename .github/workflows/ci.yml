@@ -55,6 +55,10 @@ jobs:
   smithy-test-rbs:
     needs: [smithy-test]
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [3.3, 3.4]
 
     steps:
       - uses: actions/checkout@v4
@@ -62,7 +66,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ env.latest_ruby_version }}
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
       - name: Install rbs collection
@@ -84,7 +88,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ env.ruby_version }}
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
       - name: Test
@@ -93,6 +97,10 @@ jobs:
   smithy-client-rbs:
     needs: [smithy-client-test]
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [ 3.3, 3.4 ]
 
     steps:
       - uses: actions/checkout@v4
@@ -100,7 +108,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ env.ruby_version }}
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
       - name: Install rbs collection
