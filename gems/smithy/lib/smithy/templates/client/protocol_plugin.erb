@@ -30,9 +30,9 @@ module <%= module_name %>
            In Smithy, a protocol is a named set of rules that defines the syntax
            and semantics of how a client and server communicate. The given protocol
            must provide the following functionalities:
-           - `build_request`
-           - `parse_response`
-           - `parse_error`
+           - `build`
+           - `parse`
+           - `error`
            See existing protocols within Smithy::Client::Protocols for examples.
          DOCS
 <% end -%>
