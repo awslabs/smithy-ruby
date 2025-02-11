@@ -41,21 +41,46 @@ module <%= module_name %>
         # <%= line %>
 <% end -%>
         it '<%= test.id %>' do
+<% if test['host'] -%>
+          client = Client.new(client_options.merge(endpoint: '<%= test.test_case.fetch('authScheme', 'http') %>://<%= test['host'] %>'))
+<% end -%>
           resp = client.<%= operation_tests.name %>(<%= test.params %>)
           request = resp.context.request
-          expect(request.http_method).to eq('<%= test.test_case['method'] %>')
-          # expect(request.endpoint.path).to eq('<%= test.test_case['uri'] %>')
-          # TODO: query and forbidden query parameters
-<% test.test_case['headers']&.each do |k,v| -%>
-          # expect(request.headers['<%= k %>']).to eq('<%= v %>')
+          expect(request.http_method).to eq('<%= test['method'] %>')
+          expect(request.endpoint.path).to eq('<%= test['uri'] %>')
+<% if test['resolvedHost'] -%>
+          expect(request.endpoint.host).to eq('<%= test['resolvedHost'] %>'
+<% end %>
+<% if test.query_expect? -%>
+          actual_query = CGI.parse(request.endpoint.query)
+<% if test['queryParams'] -%>
+          expected_query = CGI.parse(<%= test['queryParams'].join('&') %>)
+          expected_query.each do |k, v|
+            actual = actual_query[k].map { |s| s.force_encoding('utf-8') }
+            expect(actual).to eq(v)
+          end
 <% end -%>
-<% test.test_case['forbidHeaders']&.each do |k| -%>
+<% if test['forbidQueryParams'] -%>
+          <%= test['forbidQueryParams']%>.each do |query|
+            expect(actual_query.key?(query)).to be false
+          end
+<% end -%>
+<% if test['requireQueryParams'] -%>
+          <%= test['requireQueryParams']%>.each do |query|
+            expect(actual_query.key?(query)).to be true
+          end
+<% end -%>
+<% end -%>
+<% test['headers']&.each do |k,v| -%>
+          expect(request.headers['<%= k %>']).to eq('<%= v %>')
+<% end -%>
+<% test['forbidHeaders']&.each do |k| -%>
           expect(request.headers.key?('<%= k %>')).to be(false)
 <% end -%>
-<% test.test_case['requireHeaders']&.each do |k| -%>
+<% test['requireHeaders']&.each do |k| -%>
           expect(request.headers.key?('<%= k %>')).to be(true)
 <% end -%>
-<% if test.test_case['body'] -%>
+<% if test['body'] -%>
           <%= test.body_expect %>
 <% end -%>
         end

@@ -72,10 +72,12 @@ module Smithy
           end
 
           # TODO: Handle UUID when IdempotencyTokenTrait is present
-          # TODO: Handle setting endpoint override when host is present on test.  This may require operation overrides
-          #
 
           attr_reader :test_case
+
+          def [](key)
+            test_case[key]
+          end
 
           def comments
             if test_case['documentation']
@@ -104,6 +106,10 @@ module Smithy
             end
           end
 
+          def query_expect?
+            test_case['queryParams'] || test_case['forbidQueryParams'] || test_case['requireQueryParams']
+          end
+
           def additional_requires
             requires = []
             if test_case['bodyMediaType']
@@ -113,6 +119,7 @@ module Smithy
                   ['base64', 'smithy-client/cbor/value_matcher']
                 end
             end
+            requires << 'cgi' if query_expect?
             requires
           end
         end
