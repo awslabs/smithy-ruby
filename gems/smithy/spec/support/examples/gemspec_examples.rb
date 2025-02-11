@@ -2,7 +2,7 @@
 
 RSpec.shared_examples 'gemspec' do |context|
   context 'single module' do
-    include_context context, fixture: 'weather'
+    include_context context, 'Weather'
 
     let(:gem_name) do
       if context.include?('schema')
@@ -31,7 +31,7 @@ RSpec.shared_examples 'gemspec' do |context|
   end
 
   context 'nested module' do
-    include_context context, fixture: 'weather', module_name: 'SomeOrganization::Weather'
+    include_context context, 'SomeOrganization::Weather', fixture: 'weather'
 
     let(:gem_name) do
       if context.include?('schema')

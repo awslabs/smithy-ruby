@@ -91,7 +91,30 @@ module Smithy
       class IntegerShape < Shape; end
 
       # Represents an IntEnum shape.
-      class IntEnumShape < EnumShape; end
+      class IntEnumShape < Shape
+        def initialize(options = {})
+          super
+          @members = {}
+        end
+
+        # @return [Hash<Symbol, MemberShape>]
+        attr_accessor :members
+
+        # @return [MemberShape]
+        def add_member(name, shape, traits: {})
+          @members[name] = MemberShape.new(shape, traits: traits)
+        end
+
+        # @return [Boolean]
+        def member?(name)
+          @members.key?(name)
+        end
+
+        # @return [MemberShape, nil]
+        def member(name)
+          @members[name]
+        end
+      end
 
       # Represents both Float and Double shapes.
       class FloatShape < Shape; end
@@ -174,11 +197,19 @@ module Smithy
       class TimestampShape < Shape; end
 
       # Represents both Union and EventStream shapes.
-      class UnionShape < StructureShape
+      class UnionShape < Shape
         def initialize(options = {})
           super
+          @members = {}
+          @type = nil
           @member_types = {}
         end
+
+        # @return [Hash<Symbol, MemberShape>]
+        attr_accessor :members
+
+        # @return [Class]
+        attr_accessor :type
 
         # @return [Symbol, Class]
         attr_accessor :member_types
@@ -186,7 +217,17 @@ module Smithy
         # @return [MemberShape]
         def add_member(name, shape, type, traits: {})
           @member_types[name] = type
-          super(name, shape, traits: traits)
+          @members[name] = MemberShape.new(shape, traits: traits)
+        end
+
+        # @return [Boolean]
+        def member?(name)
+          @members.key?(name)
+        end
+
+        # @return [MemberShape, nil]
+        def member(name)
+          @members[name]
         end
 
         # @return [Class, nil]

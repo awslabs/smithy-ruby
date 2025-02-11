@@ -20,6 +20,7 @@ module Weather
       ?log_level: Symbol,
       ?logger: Logger,
       ?raise_response_errors: bool,
+      ?validate_params: bool,
     ) -> void
     | (?Hash[Symbol, untyped]) -> void
 

@@ -4,6 +4,7 @@ module Smithy
     end
 
     class EmptyStructure
+      include Structure
     end
   end
 end

@@ -6,6 +6,7 @@ require 'jmespath'
 
 require_relative 'smithy-client/block_io'
 require_relative 'smithy-client/configuration'
+require_relative 'smithy-client/endpoint_rules'
 require_relative 'smithy-client/handler'
 require_relative 'smithy-client/handler_builder'
 require_relative 'smithy-client/handler_context'
@@ -23,7 +24,6 @@ require_relative 'smithy-client/output'
 require_relative 'smithy-client/http/headers'
 require_relative 'smithy-client/http/response'
 require_relative 'smithy-client/http/request'
-
 require_relative 'smithy-client/net_http/connection_pool'
 require_relative 'smithy-client/net_http/handler'
 
@@ -34,12 +34,11 @@ require_relative 'smithy-client/errors'
 require_relative 'smithy-client/schema'
 require_relative 'smithy-client/shapes'
 require_relative 'smithy-client/structure'
+require_relative 'smithy-client/param_validator'
 require_relative 'smithy-client/union'
 
-# endpoints
-require_relative 'smithy-client/endpoint_rules'
-
 # codecs
+
 require_relative 'smithy-client/cbor'
 require_relative 'smithy-client/codecs/cbor'
 
