@@ -5,7 +5,7 @@ describe 'Client: EndpointParameters', rbs_test: true do
     next if ENV['SMITHY_RUBY_RBS_TEST'] && context != 'generated client gem'
 
     context context do
-      include_context context, fixture: 'endpoints/endpoint-bindings', module_name: 'EndpointBindings'
+      include_context context, 'EndpointBindings', fixture: 'endpoints/endpoint-bindings'
 
       subject { EndpointBindings::EndpointParameters.new }
 

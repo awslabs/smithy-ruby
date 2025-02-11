@@ -5,7 +5,7 @@ describe 'Client: Client' do
     next if ENV['SMITHY_RUBY_RBS_TEST'] && context != 'generated client gem'
 
     context context do
-      include_context context, fixture: 'weather'
+      include_context context, 'Weather'
 
       subject { Weather::Client.new(endpoint: 'https://example.com') }
 

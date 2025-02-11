@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Model: Mixins' do
-  include_context 'generated client gem', fixture: 'mixins'
+  include_context 'generated client gem', 'Mixins'
   it 'merges traits with correct precedence' do
     expect(Mixins::Shapes::StructD.traits['smithy.ruby.tests#foo']).to be(2)
     # Order is important

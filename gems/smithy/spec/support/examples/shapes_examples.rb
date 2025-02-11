@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'shapes module' do |context|
-  include_context context, fixture: 'shapes'
+  include_context context, 'ShapeService', fixture: 'shapes'
 
   let(:fixture) { JSON.load_file(File.expand_path('../../fixtures/shapes/model.json', __dir__.to_s)) }
 

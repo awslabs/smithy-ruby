@@ -48,50 +48,12 @@ describe 'Integration: Welds' do
     expect(Class.new(Smithy::Weld).ancestors).to include(Thor::Actions)
   end
 
-  context 'generated client gem' do
-    include_context 'generated client gem', { fixture: 'weather' }
-
-    it 'can pre process the model' do
-      weld = Weather::Types::Weld.new
-      expect(weld).to be_a(Struct)
-      expect(weld.members).to be_empty
-      get_forecast_output = Weather::Types::GetForecastOutput.new
-      expect(get_forecast_output.members).to include(:chance_of_welds)
-    end
-
-    it 'can post process files' do
-      other_weld = Weather::Types::OtherWeld.new
-      expect(other_weld).to be_a(Struct)
-    end
-
-    it 'does not apply welds that return false in #for?' do
-      expect(defined?(Weather::Types::WeldShouldNotExist)).to be nil
-      expect(defined?(Weather::Types::OtherWeldShouldNotExist)).to be nil
-    end
-  end
-
-  context 'generated schema gem' do
-    it 'pending'
-  end
-
-  context 'source code' do
-    include_context 'generated client from source code', { fixture: 'weather' }
-
-    it 'can pre process the model' do
-      weld = Weather::Types::Weld.new
-      expect(weld).to be_a(Struct)
-      expect(weld.members).to be_empty
-      get_forecast_output = Weather::Types::GetForecastOutput.new
-      expect(get_forecast_output.members).to include(:chance_of_welds)
-    end
-
-    it 'cannot post process files' do
-      expect(defined?(Weather::Types::OtherWeld)).to be nil
-    end
-
-    it 'does not apply welds that return false in #for?' do
-      expect(defined?(Weather::Types::WeldShouldNotExist)).to be nil
-      expect(defined?(Weather::Types::OtherWeldShouldNotExist)).to be nil
+  ['generated client gem',
+   'generated schema gem',
+   'generated client from source code',
+   'generated schema from source code'].each do |context|
+    context context do
+      include_examples 'welds', context
     end
   end
 end

@@ -176,8 +176,42 @@ module Smithy
       describe IntEnumShape do
         subject { IntEnumShape.new }
 
-        it 'is a subclass of EnumShape' do
-          expect(subject).to be_kind_of(EnumShape)
+        it 'is a subclass of Shape' do
+          expect(subject).to be_kind_of(Shape)
+        end
+
+        describe '#initialize' do
+          context 'members attribute' do
+            it 'defaults to empty hash' do
+              expect(subject.members).to be_empty
+            end
+          end
+        end
+
+        describe '#add_member' do
+          it 'adds a member' do
+            subject.add_member(:foo, StringShape.new)
+            expect(subject.members[:foo]).to be_kind_of(MemberShape)
+          end
+
+          it 'can set traits on the member' do
+            subject.add_member(:foo, StringShape.new, traits: { 'trait' => 'value' })
+            expect(subject.members[:foo].traits).to eq({ 'trait' => 'value' })
+          end
+        end
+
+        describe '#member?' do
+          it 'returns true if member exists' do
+            subject.add_member(:foo, StringShape.new)
+            expect(subject.member?(:foo)).to be(true)
+          end
+        end
+
+        describe '#member' do
+          it 'returns the member' do
+            subject.add_member(:foo, StringShape.new)
+            expect(subject.member(:foo)).to be_kind_of(MemberShape)
+          end
         end
       end
 
@@ -334,6 +368,34 @@ module Smithy
         end
       end
 
+      describe UnionShape do
+        subject { UnionShape.new }
+
+        it 'is a subclass of Shape' do
+          expect(subject).to be_kind_of(Shape)
+        end
+
+        describe '#initialize' do
+          it 'defaults members to empty hash' do
+            expect(subject.members).to be_empty
+          end
+
+          it 'defaults member_types to empty hash' do
+            expect(subject.member_types).to be_empty
+          end
+        end
+
+        describe '#add_member' do
+          let(:member_type) { Class.new }
+
+          it 'adds a member with its type' do
+            subject.add_member(:foo, StringShape.new, member_type)
+            expect(subject.members[:foo]).to be_kind_of(MemberShape)
+            expect(subject.member_types[:foo]).to be(member_type)
+          end
+        end
+      end
+
       describe Prelude do
         it 'is a module' do
           expect(Prelude).to be_kind_of(Module)
@@ -361,34 +423,6 @@ module Smithy
           expect(Prelude::String).to be_kind_of(StringShape)
           expect(Prelude::Timestamp).to be_kind_of(TimestampShape)
           expect(Prelude::Unit).to be_kind_of(StructureShape)
-        end
-      end
-
-      describe UnionShape do
-        subject { UnionShape.new }
-
-        it 'is a subclass of Shape' do
-          expect(subject).to be_kind_of(Shape)
-        end
-
-        describe '#initialize' do
-          it 'defaults members to empty hash' do
-            expect(subject.members).to be_empty
-          end
-
-          it 'defaults member_types to empty hash' do
-            expect(subject.member_types).to be_empty
-          end
-        end
-
-        describe '#add_member' do
-          let(:member_type) { Class.new }
-
-          it 'adds a member with its type' do
-            subject.add_member(:foo, StringShape.new, member_type)
-            expect(subject.members[:foo]).to be_kind_of(MemberShape)
-            expect(subject.member_types[:foo]).to be(member_type)
-          end
         end
       end
     end
