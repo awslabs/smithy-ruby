@@ -16,11 +16,11 @@ module <%= module_name %>
     add_plugin(<%= plugin_class %>)
 <% end -%>
 
-    # @overload initialize(options)
+    # @param options [Hash] Client options
 <% docstrings.each do |docstring| -%>
-    #   <%= docstring %>
+    # <%= docstring %>
 <% end -%>
-    def initialize(*args)
+    def initialize(*options)
       super
     end
 
