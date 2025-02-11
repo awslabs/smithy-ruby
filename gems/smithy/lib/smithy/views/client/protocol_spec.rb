@@ -63,6 +63,10 @@ module Smithy
             @input_shape = Model.shape(@model, @operation['input']['target'])
           end
 
+          # TODO: Handle UUID when IdempotencyTokenTrait is present
+          # TODO: Handle setting endpoint override when host is present on test.  This may require operation overrides
+          #
+
           attr_reader :test_case
 
           def comments

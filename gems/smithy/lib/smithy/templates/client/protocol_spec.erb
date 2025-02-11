@@ -14,6 +14,9 @@ module <%= module_name %>
   end
 
   describe Client do
+    before(:all) { Client.add_plugin(StubSend) }
+    after(:all) { Client.remove_plugin(StubSend) }
+
     let(:client) do
       Client.new(
         # stub_responses: true,
@@ -32,7 +35,10 @@ module <%= module_name %>
         # <%= line %>
 <% end -%>
         it '<%= test.id %>' do
-          client.<%= operation_tests.name %>(<%= test.params %>)
+          resp = client.<%= operation_tests.name %>(<%= test.params %>)
+          request = resp.context.request
+          expect(request.http_method).to eq('<%= test.test_case['method'] %>')
+          expect(request.endpoint.path).to eq('<%= test.test_case['uri'] %>')
         end
 <% end -%>
       end
