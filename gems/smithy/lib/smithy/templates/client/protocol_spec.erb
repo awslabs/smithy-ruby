@@ -37,11 +37,11 @@ module <%= module_name %>
 
     let(:client) { Client.new(client_options) }
 
-<% all_operation_tests.each do |operation_tests| -%>
+<% all_operation_tests.each do |operation_tests| %>
     describe '#<%= operation_tests.name %>' do
 <% unless operation_tests.request_tests.empty? -%>
       describe 'requests' do
-<% operation_tests.request_tests.each do |test| -%>
+<% operation_tests.request_tests.each do |test| %>
 <% test.comments.each do |line| -%>
         # <%= line %>
 <% end -%>
@@ -49,7 +49,7 @@ module <%= module_name %>
 <% if test['host'] -%>
           client = Client.new(client_options.merge(endpoint: '<%= test.test_case.fetch('authScheme', 'http') %>://<%= test['host'] %>'))
 <% end -%>
-<% if test.idempotency_token_trait? %>
+<% if test.idempotency_token_trait? -%>
         allow(SecureRandom).to receive(:uuid).and_return('00000000-0000-4000-8000-000000000000')
 <% end -%>
           resp = client.<%= operation_tests.name %>(<%= test.params %>)
@@ -61,7 +61,7 @@ module <%= module_name %>
 <% end %>
 <% if test.query_expect? -%>
           actual_query = CGI.parse(request.endpoint.query)
-<% if test['queryParams'] -%>
+<% if test['queryParams'] %>
           expected_query = CGI.parse(<%= test['queryParams'].join('&') %>)
           expected_query.each do |k, v|
             actual = actual_query[k].map { |s| s.force_encoding('utf-8') }
@@ -87,18 +87,23 @@ module <%= module_name %>
 <% end -%>
 <% test['requireHeaders']&.each do |k| -%>
           expect(request.headers.key?('<%= k %>')).to be(true)
-<% end -%>
+<% end %>
 <% if test['body'] -%>
           <%= test.body_expect %>
 <% end -%>
         end
 <% end -%>
       end
-<% end -%>
-
+<% end %>
 <% unless operation_tests.response_tests.empty? -%>
-      describe 'requests' do
-      # TODO
+      describe 'responses' do
+<% operation_tests.response_tests.each do |test| %>
+<% test.comments.each do |line| -%>
+        # <%= line %>
+<% end -%>
+        it '<%= test.id %>' do
+        end
+<% end -%>
       end
 <% end -%>
     end

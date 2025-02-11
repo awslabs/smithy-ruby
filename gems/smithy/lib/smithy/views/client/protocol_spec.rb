@@ -107,7 +107,6 @@ module Smithy
                   ['base64', 'smithy-client/cbor/value_matcher']
                 end
             end
-            requires << 'cgi' if query_expect?
             requires
           end
         end
