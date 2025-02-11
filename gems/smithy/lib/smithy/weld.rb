@@ -66,7 +66,7 @@ module Smithy
     # Called to construct the protocol plugin. Any protocols defined here will be
     # merged with other protocols. The key is the protocol trait ID and the value
     # is the fully qualified class name of the protocol.
-    # @return [Hash<String, String>] protocols for use in protocol plugin.
+    # @return [Hash<String, Object>] protocols for use in protocol plugin.
     def protocols
       {}
     end

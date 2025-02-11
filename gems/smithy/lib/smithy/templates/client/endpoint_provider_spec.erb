@@ -40,13 +40,12 @@ module <%= module_name %>
 <% test_case.operation_inputs.each do |operation_input| -%>
       it 'produces the correct output from the client when calling <%= operation_input.operation_name %>' do
         Client.add_plugin(stub_send)
+        Client.remove_plugin(Plugins::Protocol)
         client = Client.new(
 <% operation_input.client_params.each do |p| -%>
           <%= p.param %>: <%= p.value %>,
 <% end -%>
         )
-        # TODO: Revise once spec_helper is finalized
-        client.config.protocol = double(build_request: nil, parse_response: nil)
 <% if test_case.expect_error? -%>
         expect do
           client.<%= operation_input.operation_name %>(
@@ -70,6 +69,7 @@ module <%= module_name %>
           expect(resp.context.request.headers[k]).to eq(v)
         end
         Client.remove_plugin(stub_send)
+        Client.add_plugin(Plugins::Protocol)
 
         # TODO: expect auth
 <% end -%>

@@ -1,0 +1,20 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#MultiProtocol": {
+            "type": "service",
+            "traits": {
+                "smithy.protocols#rpcv2Cbor": {},
+                "smithy.ruby.tests#testProtocol": {}
+            }
+        },
+        "smithy.ruby.tests#testProtocol": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#protocolDefinition": {},
+                "smithy.api#trait": {}
+            }
+        }
+    }
+}

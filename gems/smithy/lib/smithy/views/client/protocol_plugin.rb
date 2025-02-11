@@ -26,15 +26,16 @@ module Smithy
         private
 
         def service_traits
-          @service_traits ||= @plan.service.values.first['traits']
+          @service_traits ||= @plan.service.values.first.fetch('traits', {})
         end
 
+        # TODO: Weld ordering - see Smithy::Welds::Protocols for more info
         def weld_protocols
           @weld_protocols ||= @plan.welds.map(&:protocols).reduce({}, :merge)
         end
 
         def default_protocol
-          return if weld_protocols.empty? && service_traits.nil?
+          return if weld_protocols.empty?
 
           weld_protocols.keys.find { |k| service_traits.key?(k) }
         end

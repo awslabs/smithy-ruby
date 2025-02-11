@@ -91,9 +91,9 @@ module Weather
     # @option options [Smithy::Client::Protocols::RPCv2] :protocol (Smithy::Client::Protocols::RPCv2)
     #  Allows you to overwrite default protocol. The given protocol
     #  must provide the following functionalities:
-    #  - `build_request`
-    #  - `parse_response`
-    #  - `parse_error`
+    #  - `build`
+    #  - `parse`
+    #  - `error`
     #  See existing protocols within Smithy::Client::Protocols for examples.
     # @option options [Boolean] :raise_response_errors (true)
     #  When `true`, response errors are raised. When `false`, the error is placed on the
