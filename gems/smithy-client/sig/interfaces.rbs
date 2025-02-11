@@ -12,9 +12,9 @@ module Smithy
     type endpoint_url = String | URI::HTTP | URI::HTTPS
 
     interface _Protocol
-      def build: (HandlerContext context) -> untyped
-      def parse: (HandlerContext context) -> untyped
-      def error: (HandlerContext context, HTTP::Response response) -> untyped
+      def build: (HandlerContext context) -> void
+      def parse: (HandlerContext context) -> void
+      def error: (HandlerContext context, HTTP::Response response) -> void
     end
   end
 end
