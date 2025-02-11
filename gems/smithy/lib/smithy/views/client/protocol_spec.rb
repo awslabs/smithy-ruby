@@ -23,6 +23,10 @@ module Smithy
         def module_name
           @plan.module_name
         end
+
+        def additional_requires
+          Set.new(@all_operation_tests.map(&:additional_requires).flatten)
+        end
         
         private
         
@@ -52,6 +56,10 @@ module Smithy
 
           def name
             Model::Shape.name(@id).underscore
+          end
+
+          def additional_requires
+            @request_tests.map(&:additional_requires) + @response_tests.map(&:additional_requires)
           end
         end
 
@@ -84,6 +92,29 @@ module Smithy
           def params
             ShapeToHash.transform_value(@model, test_case.fetch('params', {}), @input_shape)
           end
+
+          def body_expect
+            return nil unless test_case['body']
+
+            case test_case['bodyMediaType']
+            when 'application/cbor'
+              "expect(Smithy::Client::CBOR.decode(request.body.read)).to match_cbor(Smithy::Client::CBOR.decode(::Base64.decode64('#{test_case['body']}')))"
+            else
+              "expect(request.body.read).to eq('#{test_case['body']}')"
+            end
+          end
+
+          def additional_requires
+            requires = []
+            if test_case['bodyMediaType']
+              requires +=
+                case test_case['bodyMediaType']
+                when 'application/cbor'
+                  ['base64', 'smithy-client/cbor/value_matcher']
+                end
+            end
+            requires
+          end
         end
 
         class ResponseTest
@@ -91,6 +122,10 @@ module Smithy
             @model = model
             @operation = operation
             @test_case = test_case
+          end
+
+          def additional_requires
+            [] # TODO
           end
         end
       end

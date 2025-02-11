@@ -54,14 +54,14 @@ module Smithy
       # TODO: Deep dup of model
       # handle mixins
       model['shapes'].each do |id, shape|
-        hydrate_shape(id, model, shape)
+        flatten_shape(id, model, shape)
       end
       model
     end
 
-    def self.hydrate_shape(id, model, shape)
+    def self.flatten_shape(id, model, shape)
       shape.fetch('mixins', []).each do |mixin|
-        mixin_shape = hydrate_shape(mixin['target'], model, model['shapes'][mixin['target']])
+        mixin_shape = flatten_shape(mixin['target'], model, model['shapes'][mixin['target']])
         shape['members'] = shape.fetch('members', {}).merge(mixin_shape['members']) if mixin_shape['members']
 
         next unless mixin_shape['traits']

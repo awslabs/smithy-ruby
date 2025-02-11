@@ -26,7 +26,7 @@ module Smithy
         def parse(context)
           output_shape = context.operation.output
           codec = Client::Codecs::CBOR.new(setting(context))
-          codec.deserialize(context.response.body, output_shape, output_shape.type)
+          codec.deserialize(context.response.body.read, output_shape, output_shape.type)
         end
 
         # @api private

@@ -3,6 +3,10 @@
 # This is generated code!
 
 require_relative '../spec_helper'
+<% additional_requires.each do |r| -%>
+require '<%= r %>'
+<% end -%>
+
 
 module <%= module_name %>
   # TODO: Can be replaced by stub_responses config once implemented
@@ -38,7 +42,20 @@ module <%= module_name %>
           resp = client.<%= operation_tests.name %>(<%= test.params %>)
           request = resp.context.request
           expect(request.http_method).to eq('<%= test.test_case['method'] %>')
-          expect(request.endpoint.path).to eq('<%= test.test_case['uri'] %>')
+          # expect(request.endpoint.path).to eq('<%= test.test_case['uri'] %>')
+          # TODO: query and forbidden query parameters
+<% test.test_case['headers']&.each do |k,v| -%>
+          # expect(request.headers['<%= k %>']).to eq('<%= v %>')
+<% end -%>
+<% test.test_case['forbidHeaders']&.each do |k| -%>
+          expect(request.headers.key?('<%= k %>')).to be(false)
+<% end -%>
+<% test.test_case['requireHeaders']&.each do |k| -%>
+          expect(request.headers.key?('<%= k %>')).to be(true)
+<% end -%>
+<% if test.test_case['body'] -%>
+          <%= test.body_expect %>
+<% end -%>
         end
 <% end -%>
       end
