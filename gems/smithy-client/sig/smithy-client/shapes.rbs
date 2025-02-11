@@ -9,10 +9,13 @@ module Smithy
       end
 
       class ServiceShape < Shape
+
+        attr_accessor name: String?
         attr_accessor version: String?
       end
 
       class OperationShape < Shape
+        attr_accessor name: String?
         attr_accessor input: StructureShape?
         attr_accessor output: StructureShape?
         attr_accessor errors: Array[StructureShape]

@@ -1,0 +1,11 @@
+module Smithy
+  module Client
+    module Protocols
+      # A RPC-based protocol over HTTP that sends requests
+      # and responses with CBOR payloads.
+      class RPCv2
+        def initialize: (?::Hash[untyped, untyped] options) -> void
+      end
+    end
+  end
+end

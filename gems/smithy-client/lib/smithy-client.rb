@@ -12,6 +12,7 @@ require_relative 'smithy-client/handler_builder'
 require_relative 'smithy-client/handler_context'
 require_relative 'smithy-client/handler_list'
 require_relative 'smithy-client/handler_list_entry'
+require_relative 'smithy-client/handlers'
 require_relative 'smithy-client/managed_file'
 require_relative 'smithy-client/networking_error'
 require_relative 'smithy-client/plugin'
@@ -40,7 +41,10 @@ require_relative 'smithy-client/union'
 # codecs
 
 require_relative 'smithy-client/cbor'
-require_relative 'smithy-client/codecs/cbor'
+require_relative 'smithy-client/codecs'
+
+# protocols
+require_relative 'smithy-client/protocols'
 
 module Smithy
   # Base module for a generated Smithy gem.

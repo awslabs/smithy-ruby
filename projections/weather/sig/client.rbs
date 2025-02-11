@@ -19,6 +19,7 @@ module Weather
       ?http_write_timeout: Numeric,
       ?log_level: Symbol,
       ?logger: Logger,
+      ?protocol: #build | #parse | #error,
       ?raise_response_errors: bool,
       ?validate_params: bool,
     ) -> void

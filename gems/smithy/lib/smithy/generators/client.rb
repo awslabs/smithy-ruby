@@ -82,6 +82,12 @@ module Smithy
             require_relative: true,
             source: Views::Client::EndpointPlugin.new(@plan).render
           )
+          e.yield "lib/#{@gem_name}/plugins/protocol.rb", Views::Client::Plugin.new(
+            class_name: "#{@plan.module_name}::Plugins::Protocol",
+            require_path: 'plugins/protocol',
+            require_relative: true,
+            source: Views::Client::ProtocolPlugin.new(@plan).render
+          )
         end
       end
 

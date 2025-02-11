@@ -3,6 +3,7 @@
 # This is generated code!
 
 require_relative 'plugins/endpoint'
+require_relative 'plugins/protocol'
 require 'smithy-client/plugins/logging'
 require 'smithy-client/plugins/net_http'
 require 'smithy-client/plugins/param_validator'
@@ -16,6 +17,7 @@ module Weather
     self.schema = Shapes::SCHEMA
 
     add_plugin(Weather::Plugins::Endpoint)
+    add_plugin(Weather::Plugins::Protocol)
     add_plugin(Smithy::Client::Plugins::Logging)
     add_plugin(Smithy::Client::Plugins::NetHTTP)
     add_plugin(Smithy::Client::Plugins::ParamValidator)
@@ -89,6 +91,15 @@ module Weather
     # @option options [Logger] :logger
     #  The Logger instance to send log messages to. If this option is not set,
     #  logging is disabled.
+    # @option options [#build, #parse, #error] :protocol
+    #  This configuration is required to build requests and parse responses.
+    #  In Smithy, a protocol is a named set of rules that defines the syntax
+    #  and semantics of how a client and server communicate. The given protocol
+    #  must provide the following functionalities:
+    #  - `build`
+    #  - `parse`
+    #  - `error`
+    #  See existing protocols within Smithy::Client::Protocols for examples.
     # @option options [Boolean] :raise_response_errors (true)
     #  When `true`, response errors are raised. When `false`, the error is placed on the
     #  output in the {Smithy::Client::Output#error error accessor}.
