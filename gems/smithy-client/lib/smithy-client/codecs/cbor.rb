@@ -98,6 +98,7 @@ module Smithy
         end
 
         def parse_structure(values, shape, target = nil)
+          puts target
           target = shape.type.new if target.nil?
           values.each do |key, value|
             if (member = shape.member(key.to_sym))

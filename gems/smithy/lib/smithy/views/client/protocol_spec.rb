@@ -94,10 +94,6 @@ module Smithy
             test_case['id']
           end
 
-          def params
-            ShapeToHash.transform_value(@model, test_case.fetch('params', {}), @input_shape)
-          end
-
           def additional_requires
             requires = []
             if test_case['bodyMediaType']
@@ -113,6 +109,10 @@ module Smithy
 
         # @api private
         class RequestTest < TestCase
+          def params
+            ShapeToHash.transform_value(@model, test_case.fetch('params', {}), @input_shape)
+          end
+
           def body_expect
             return nil unless test_case['body']
 
@@ -137,6 +137,28 @@ module Smithy
 
         # @api private
         class ResponseTest < TestCase
+          def params
+            ShapeToHash.transform_value(@model, test_case.fetch('params', {}), @output_shape)
+          end
+
+          def stub_body
+            case test_case['bodyMediaType']
+            when 'application/cbor'
+              "::Base64.decode64('#{test_case['body']}')"
+            else
+              "'#{test_case['body']}'"
+            end
+          end
+
+          def data_expect
+            # TODO: Handle streaming operations (need to read the body into a string to allow string compare)
+            case test_case['bodyMediaType']
+            when 'application/cbor'
+              "expect(resp.data.to_h).to match_cbor(#{params})"
+            else
+              "expect(resp.data.to_h).to eq(#{params})"
+            end
+          end
         end
       end
     end

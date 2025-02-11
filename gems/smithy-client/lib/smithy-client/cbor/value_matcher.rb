@@ -12,10 +12,13 @@ RSpec::Matchers.define :match_cbor do |expected|
     expect(actual.class).to eq(expected.class)
 
     def match_hash(actual, expected)
-      actual.each do |key, value|
-        expect(actual).not_to include(key) unless expected.key?(key)
+      expected.each do |key, value|
+        expect(actual).to include(key)
+        match_value(actual[key], value)
+      end
 
-        match_value(value, expected[key])
+      actual.each_key do |key|
+        expect(expected).to include(key)
       end
     end
 

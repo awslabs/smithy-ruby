@@ -15,7 +15,8 @@ module <%= module_name %>
     handle(step: :send) do |context|
       if (stub_response = context.config.stub_response)
         resp = context.response
-        resp.signal_headers(stub_response[:status_code], stub_response[:headers])
+        resp.signal_headers(stub_response[:status_code], stub_response.fetch(:headers, {}))
+        resp.signal_data(stub_response[:body]) if stub_response[:body]
         resp.signal_done
       end
       Smithy::Client::Output.new(context: context)
@@ -102,6 +103,19 @@ module <%= module_name %>
         # <%= line %>
 <% end -%>
         it '<%= test.id %>' do
+          response = { status_code: <%= test['code'] %> }
+<% if test['headers'] -%>
+          response[:headers] = <%= test['headers'] %>
+<% end -%>
+<% if test['body'] -%>
+          response[:body] = <%= test.stub_body %>
+<% end -%>
+
+          client = Client.new(client_options.merge(stub_response: response, validate_params: false))
+          allow(client.config.protocol).to receive(:build)
+          resp = client.<%= operation_tests.name %>
+
+          <%= test.data_expect %>
         end
 <% end -%>
       end
