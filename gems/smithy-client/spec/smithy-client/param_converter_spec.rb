@@ -7,6 +7,14 @@ module Smithy
   module Client
     describe ParamConverter do
       describe '#convert' do
+        let(:union_structure) do
+          Class.new(Union) do
+            def to_h
+              { structure: super(__getobj__) }
+            end
+          end
+        end
+
         it 'performs a deeply nested conversion of values' do
           client_class = ClientHelper.sample_service
           rules = client_class.const_get(:Shapes).const_get(:SCHEMA).operation(:operation).input
@@ -24,7 +32,7 @@ module Smithy
               { integer: 2.0 },
               { integer: '3' }
             ],
-            union: { string: :abc }
+            union: union_structure.new({ string: :abc })
           )
 
           converted = ParamConverter.convert(rules, params)
@@ -40,7 +48,7 @@ module Smithy
               { integer: 2 },
               { integer: 3 }
             ],
-            union: { string: 'abc' }
+            union: { structure: { string: 'abc' } }
           )
         end
       end
