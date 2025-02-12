@@ -339,7 +339,7 @@ module Smithy
       describe '.add' do
         it 'registers a new converter' do
           shape_class = Class.new
-          ParamConverter.add(shape_class, String) { |s| s.to_sym }
+          ParamConverter.add(shape_class, String) { |s, _| s.to_sym }
           expect(ParamConverter.c(shape_class, 'abc')).to eq(:abc)
         end
 
@@ -347,21 +347,21 @@ module Smithy
           shape_class = Class.new
           special_string = Class.new(String)
           str = special_string.new('raw')
-          ParamConverter.add(shape_class, special_string) { |s| 'converted' }
+          ParamConverter.add(shape_class, special_string) { |_s| 'converted' }
           expect(ParamConverter.c(shape_class, str)).to eq('converted')
         end
 
         it 'can convert values based on parent shape classes' do
           base = Class.new
           extended = Class.new(base)
-          ParamConverter.add(base, String) { |s| 'converted' }
+          ParamConverter.add(base, String) { |_s| 'converted' }
           expect(ParamConverter.c(extended, 'raw')).to eq('converted')
         end
 
         it 'replaces an existing converter' do
           shape_class = Class.new
-          ParamConverter.add(shape_class, String) { |s| 'first' }
-          ParamConverter.add(shape_class, String) { |s| 'second' }
+          ParamConverter.add(shape_class, String) { |_s| 'first' }
+          ParamConverter.add(shape_class, String) { |_s| 'second' }
           expect(ParamConverter.c(shape_class, 'value')).to eq('second')
         end
       end

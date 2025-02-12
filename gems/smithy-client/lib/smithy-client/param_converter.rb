@@ -165,7 +165,7 @@ module Smithy
           converter
         end
 
-        def each_base_class(shape_class, &block)
+        def each_base_class(shape_class, &)
           shape_class.ancestors.each do |ancestor|
             yield(ancestor) if @converters.key?(ancestor)
           end
@@ -194,10 +194,10 @@ module Smithy
       end
 
       add(EnumShape, String)
-      add(EnumShape, Symbol) { |sym| sym.to_s }
+      add(EnumShape, Symbol) { |sym, _| sym.to_s }
 
       add(IntegerShape, Integer)
-      add(IntegerShape, Float) { |f| f.to_i }
+      add(IntegerShape, Float) { |f, _| f.to_i }
       add(IntegerShape, String) do |str|
         Integer(str)
       rescue ArgumentError
@@ -205,7 +205,7 @@ module Smithy
       end
 
       add(IntEnumShape, Integer)
-      add(IntEnumShape, Float) { |f| f.to_i }
+      add(IntEnumShape, Float) { |f, _| f.to_i }
       add(IntEnumShape, String) do |str|
         Integer(str)
       rescue ArgumentError
@@ -213,30 +213,30 @@ module Smithy
       end
 
       add(FloatShape, Float)
-      add(FloatShape, Integer) { |i| i.to_f }
+      add(FloatShape, Integer) { |i, _| i.to_f }
       add(FloatShape, String) do |str|
         Float(str)
       rescue ArgumentError
         str
       end
 
-      add(ListShape, Array) { |a| a.dup }
-      add(ListShape, Enumerable) { |value| value.to_a }
+      add(ListShape, Array) { |a, _| a.dup }
+      add(ListShape, Enumerable) { |v, _| v.to_a }
 
-      add(MapShape, Hash) { |h| h.dup }
+      add(MapShape, Hash) { |h, _| h.dup }
       add(MapShape, ::Struct) do |s|
         s.members.each.with_object({}) { |k, h| h[k] = s[k] }
       end
 
       add(StringShape, String)
-      add(StringShape, Symbol) { |sym| sym.to_s }
+      add(StringShape, Symbol) { |sym, _| sym.to_s }
 
-      add(StructureShape, Hash) { |h| h.dup }
+      add(StructureShape, Hash) { |h, _| h.dup }
       add(StructureShape, ::Struct)
 
       add(TimestampShape, Time)
-      add(TimestampShape, Date) { |d| d.to_time }
-      add(TimestampShape, DateTime) { |dt| dt.to_time }
+      add(TimestampShape, Date) { |d, _| d.to_time }
+      add(TimestampShape, DateTime) { |dt, _| dt.to_time }
       add(TimestampShape, Integer) { |i| Time.at(i) }
       add(TimestampShape, Float) { |f| Time.at(f) }
       add(TimestampShape, String) do |str|
@@ -245,7 +245,7 @@ module Smithy
         str
       end
 
-      add(UnionShape, Hash) { |h| h.dup }
+      add(UnionShape, Hash) { |h, _| h.dup }
       add(UnionShape, Union)
     end
   end
