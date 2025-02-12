@@ -13,7 +13,7 @@ module Smithy
           @all_operation_tests = Model::ServiceIndex
                                  .new(@model)
                                  .operations_for(@plan.service)
-                                 .select { |_id, o| protocol_tests?(o) }
+                                 .select { |_id, o| protocol_tests?(_id, o) }
                                  .map { |id, o| OperationTests.new(@model, id, o) }
           super()
         end
@@ -30,13 +30,23 @@ module Smithy
 
         private
 
-        def protocol_tests?(operation)
-          !!operation.fetch('traits', {}).keys.intersect?(PROTOCOL_TEST_TRAITS)
+        def protocol_tests?(id, operation)
+
+          !!operation.fetch('traits', {}).keys.intersect?(PROTOCOL_TEST_TRAITS) || error_tests?(operation)
+        end
+
+        def error_tests?(operation)
+          operation.fetch('errors', []).any? do |e|
+            Model.shape(@model, e['target'])
+                 .fetch('traits', {})
+                 .key?('smithy.test#httpResponseTests')
+          end
         end
 
         # @api private
         class OperationTests
           def initialize(model, id, operation)
+            @model = model
             @id = id
             @operation = operation
             # TODO: Should we filter protocol tests further by default protocol?
@@ -52,10 +62,13 @@ module Smithy
                               .select { |t| t['appliesTo'] == 'client' }
                               .map { |t| ResponseTest.new(model, operation, t) }
 
-            # TODO: Handle Error test cases
+            @error_tests = @operation
+                           .fetch('errors', [])
+                           .map { |e| build_error_tests(e) }
+                           .flatten
           end
 
-          attr_reader :request_tests, :response_tests
+          attr_reader :request_tests, :response_tests, :error_tests
 
           def name
             Model::Shape.name(@id).underscore
@@ -63,6 +76,17 @@ module Smithy
 
           def additional_requires
             @request_tests.map(&:additional_requires) + @response_tests.map(&:additional_requires)
+          end
+
+          private
+
+          def build_error_tests(error)
+            error_shape = Model.shape(@model, error['target'])
+            # Note: error tests do not have a appliesTo that should be checked
+            error_shape
+              .fetch('traits', {})
+              .fetch('smithy.test#httpResponseTests', [])
+              .map { |t| ErrorTest.new(@model, @operation, error['target'], t) }
           end
         end
 
@@ -157,6 +181,31 @@ module Smithy
               "expect(resp.data.to_h).to match_cbor(#{params})"
             else
               "expect(resp.data.to_h).to eq(#{params})"
+            end
+          end
+        end
+
+        class ErrorTest < ResponseTest
+          def initialize(model, operation, error_id, test_case)
+            super(model, operation, test_case)
+            @error_id = error_id
+            @error_shape = Model.shape(@model, error_id)
+          end
+
+          def error_name
+            Model::Shape.name(@error_id)
+          end
+
+          def params
+            ShapeToHash.transform_value(@model, test_case.fetch('params', {}), @error_shape)
+          end
+
+          def data_expect
+            case test_case['bodyMediaType']
+            when 'application/cbor'
+              "expect(e.data.to_h).to match_cbor(#{params})"
+            else
+              "expect(e.data.to_h).to eq(#{params})"
             end
           end
         end

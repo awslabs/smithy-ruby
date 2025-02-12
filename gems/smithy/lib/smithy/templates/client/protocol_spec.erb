@@ -120,6 +120,31 @@ module <%= module_name %>
 <% end -%>
       end
 <% end -%>
+<% unless operation_tests.error_tests.empty? -%>
+      describe 'response errors' do
+<% operation_tests.error_tests.each do |test| %>
+<% test.comments.each do |line| -%>
+        # <%= line %>
+<% end -%>
+        it '<%= test.id %>: <%= test.error_name %>' do
+          response = { status_code: <%= test['code'] %> }
+<% if test['headers'] -%>
+          response[:headers] = <%= test['headers'] %>
+<% end -%>
+<% if test['body'] -%>
+          response[:body] = <%= test.stub_body %>
+<% end -%>
+
+          client = Client.new(client_options.merge(stub_response: response, validate_params: false))
+          allow(client.config.protocol).to receive(:build)
+          expect { client.<%= operation_tests.name %> }.to raise_error do |e|
+            expect(e).to be_a(Errors::<%= test.error_name %>)
+            <%= test.data_expect %>
+          end
+        end
+<% end -%>
+      end
+<% end -%>
     end
 <% end -%>
   end
