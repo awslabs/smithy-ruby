@@ -4,8 +4,8 @@ module Smithy
   module Client
     describe ParamValidator do
       let(:shapes) { ClientHelper.sample_shapes }
-      let(:sample_client) { ClientHelper.sample_client(shapes: shapes) }
-      let(:schema) { sample_client.const_get(:Shapes).const_get(:SCHEMA) }
+      let(:sample_service) { ClientHelper.sample_service(shapes: shapes) }
+      let(:schema) { sample_service.const_get(:Shapes).const_get(:SCHEMA) }
 
       def validate(params, expected_errors = [])
         rules = schema.operation(:operation).input
@@ -273,7 +273,7 @@ module Smithy
         end
 
         it 'accepts a modeled type' do
-          structure = sample_client.const_get(:Types).const_get(:Structure).new({})
+          structure = sample_service.const_get(:Types).const_get(:Structure).new({})
           validate({ structure: structure })
         end
       end
@@ -308,7 +308,7 @@ module Smithy
         end
 
         it 'accepts a modeled type' do
-          structure = sample_client.const_get(:Types).const_get(:Union).const_get(:Structure).new({})
+          structure = sample_service.const_get(:Types).const_get(:Union).const_get(:Structure).new({})
           validate({ union: structure })
         end
       end

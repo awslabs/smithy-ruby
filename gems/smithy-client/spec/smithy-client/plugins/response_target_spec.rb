@@ -7,10 +7,7 @@ module Smithy
     module Plugins
       describe ResponseTarget do
         let(:client_class) do
-          schema = Schema.new
-          schema.add_operation(:operation, Shapes::OperationShape.new)
-          client_class = Class.new(Client::Base)
-          client_class.schema = schema
+          client_class = ClientHelper.sample_service.const_get(:Client)
           client_class.clear_plugins
           client_class.add_plugin(ResponseTarget)
           client_class.add_plugin(DummySendPlugin)
@@ -28,23 +25,24 @@ module Smithy
         end
 
         context 'Block target' do
-          let(:target) { proc { |chunk| } }
-
           it 'streams data' do
             data = []
             expected = client.config.response_body
-            client.operation({}) { |chunk| data << chunk }
+            proc = proc { |chunk| data << chunk }
+            client.operation({}, target: proc)
             expect(data).to eq([expected])
           end
 
           it 'counts the bytes yielded' do
-            output = client.operation({}) { |_chunk| } # empty
+            proc = proc { |chunk| } # empty
+            output = client.operation({}, target: proc)
             expected = client.config.response_body.size
             expect(output.context.response.body.size).to eq(expected)
           end
 
           it 'does not buffer the response chunks' do
-            output = client.operation({}) { |_chunk| } # empty
+            proc = proc { |_chunk| } # empty
+            output = client.operation({}, target: proc)
             body = output.context.response.body
             expect(body.read).to eq('')
             expect(body).not_to respond_to(:truncate)
@@ -52,7 +50,8 @@ module Smithy
 
           it 'passes the headers to the block' do
             headers = nil
-            client.operation({}) { |_chunk, header| headers = header }
+            proc = proc { |_chunk, header| headers = header }
+            client.operation({}, target: proc)
             expect(headers).to be_an_instance_of(HTTP::Headers)
           end
         end

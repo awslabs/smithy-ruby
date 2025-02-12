@@ -2,6 +2,7 @@
 
 require 'smithy-client/plugins/logging'
 require 'smithy-client/plugins/net_http'
+require 'smithy-client/plugins/param_converter'
 require 'smithy-client/plugins/param_validator'
 require 'smithy-client/plugins/raise_response_errors'
 require 'smithy-client/plugins/response_target'
@@ -22,6 +23,9 @@ module Smithy
           },
           Smithy::Client::Plugins::NetHTTP => {
             require_path: 'smithy-client/plugins/net_http'
+          },
+          Smithy::Client::Plugins::ParamConverter => {
+            require_path: 'smithy-client/plugins/param_converter'
           },
           Smithy::Client::Plugins::ParamValidator => {
             require_path: 'smithy-client/plugins/param_validator'

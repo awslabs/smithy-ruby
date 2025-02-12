@@ -4,23 +4,25 @@ module Smithy
   module Client
     module Plugins
       # @api private
-      class ParamValidator < Plugin
+      class ParamConverter < Plugin
         option(
-          :validate_params,
+          :convert_params,
           default: true,
           doc_type: 'Boolean',
           docstring: <<~DOCS)
-            When `true`, request parameters are validated before sending the request.
+            When `true`, request parameters are coerced into the required types.
           DOCS
 
         def add_handlers(handlers, config)
-          handlers.add(Handler, step: :validate) if config.validate_params
+          handlers.add(Handler, step: :initialize) if config.convert_params
         end
 
         # @api private
         class Handler < Client::Handler
           def call(context)
-            Client::ParamValidator.new(context.operation.input).validate!(context.params)
+            converter = Client::ParamConverter.new(context.operation.input)
+            context.params = converter.convert(context.params)
+            context.response.on_done { converter.close_opened_files }
             @handler.call(context)
           end
         end

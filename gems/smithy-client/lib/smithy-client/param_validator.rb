@@ -10,10 +10,6 @@ module Smithy
 
       EXPECTED_GOT = 'expected %s to be %s, got class %s instead.'
 
-      def self.validate!(rules, params)
-        new(rules).validate!(params)
-      end
-
       def initialize(rules)
         @rules = rules
       end

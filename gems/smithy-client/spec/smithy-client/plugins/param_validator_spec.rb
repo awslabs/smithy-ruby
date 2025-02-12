@@ -1,21 +1,15 @@
 # frozen_string_literal: true
 
+require 'smithy-client/plugins/param_validator'
+
 module Smithy
   module Client
     module Plugins
       describe ParamValidator do
-        let(:input) do
-          shape = Shapes::StructureShape.new
-          shape.add_member(:foo, Shapes::StringShape.new)
-          shape
-        end
-        let(:operation_shape) { Shapes::OperationShape.new(input: input) }
+        let(:sample_service) { ClientHelper.sample_service }
 
         let(:client_class) do
-          schema = Schema.new
-          schema.add_operation(:operation, operation_shape)
-          client_class = Class.new(Client::Base)
-          client_class.schema = schema
+          client_class = sample_service.const_get(:Client)
           client_class.clear_plugins
           client_class.add_plugin(ParamValidator)
           client_class.add_plugin(DummySendPlugin)
@@ -42,10 +36,12 @@ module Smithy
           expect(client.handlers).to include(ParamValidator::Handler)
         end
 
-        it 'validates params' do
+        it 'calls the param validator' do
           client = client_class.new
           params = { foo: 'bar' }
-          expect(Client::ParamValidator).to receive(:validate!).with(input, params)
+          input = sample_service.const_get(:Shapes).const_get(:SCHEMA).operation(:operation).input
+          expect(Client::ParamValidator).to receive(:new).with(input).and_call_original
+          expect_any_instance_of(Client::ParamValidator).to receive(:validate!).with(params)
           client.operation(params)
         end
       end
