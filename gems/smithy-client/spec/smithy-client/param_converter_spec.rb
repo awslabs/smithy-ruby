@@ -20,8 +20,9 @@ module Smithy
             structure_list: [
               { integer: 1 },
               { integer: 2.0 },
-              { integer: '3' },
-            ]
+              { integer: '3' }
+            ],
+            union: { string: :abc }
           )
 
           converted = ParamConverter.convert(rules, params)
@@ -34,7 +35,8 @@ module Smithy
               { integer: 1 },
               { integer: 2 },
               { integer: 3 }
-            ]
+            ],
+            union: { string: 'abc' }
           )
         end
       end
@@ -300,7 +302,7 @@ module Smithy
             expect(ParamConverter.c(shape_class, time)).to eq(Time.at(time))
           end
 
-          it 'parses strings as time objets' do
+          it 'parses strings as time objects' do
             t1 = Time.now.utc.iso8601
             t2 = Time.now.rfc822
             t3 = Time.now.to_s
@@ -313,6 +315,23 @@ module Smithy
 
           it 'returns strings unmodified if they can not be parsed' do
             expect(ParamConverter.c(shape_class, 'abc')).to eq('abc')
+          end
+        end
+
+        describe 'unions' do
+          let(:shape_class) { Shapes::UnionShape }
+
+          it 'returns duplicate hashes' do
+            value = { a: 1 }
+            converted = ParamConverter.c(shape_class, value)
+            expect(converted).to eq(value)
+            expect(converted).not_to be(value)
+          end
+
+          it 'does not modify unions' do
+            value = Union.new(string: 'abc')
+            converted = ParamConverter.c(shape_class, value)
+            expect(converted).to be(value)
           end
         end
       end

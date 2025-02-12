@@ -35,45 +35,60 @@ module Smithy
 
       private
 
-      def structure(ref, values)
-        values = c(ref, values)
+      def structure(shape, values)
+        values = c(shape, values)
         if values.is_a?(::Struct) || values.is_a?(Hash)
           values.each_pair do |k, v|
             next if v.nil?
-            next unless ref.member?(k)
+            next unless shape.member?(k)
 
-            values[k] = member(ref.member(k), v)
+            values[k] = member(shape.member(k), v)
           end
         end
         values
       end
 
-      def list(ref, values)
-        values = c(ref, values)
+      def union(shape, values)
+        values = c(shape, values)
+        if values.is_a?(Union) || values.is_a?(Hash)
+          values.each_pair do |k, v|
+            next if v.nil?
+            next unless shape.member?(k)
+
+            values[k] = member(shape.member(k), v)
+          end
+        end
+        values
+      end
+
+      def list(shape, values)
+        values = c(shape, values)
         if values.is_a?(Array)
-          values.map { |v| member(ref.member, v) }
+          values.map { |v| member(shape.member, v) }
         else
           values
         end
       end
 
-      def map(ref, values)
-        values = c(ref, values)
+      def map(shape, values)
+        values = c(shape, values)
         if values.is_a?(Hash)
           values.each.with_object({}) do |(key, value), hash|
-            hash[member(ref.key, key)] = member(ref.value, value)
+            hash[member(shape.key, key)] = member(shape.value, value)
           end
         else
           values
         end
       end
 
-      def member(ref, value)
-        case ref.shape
-        when StructureShape then structure(ref.shape, value)
-        when ListShape then list(ref.shape, value)
-        when MapShape then map(ref.shape, value)
-        else c(ref.shape, value)
+      def member(member_shape, value)
+        shape = member_shape.shape
+        case shape
+        when StructureShape then structure(shape, value)
+        when UnionShape then union(shape, value)
+        when ListShape then list(shape, value)
+        when MapShape then map(shape, value)
+        else c(shape, value)
         end
       end
 
@@ -230,7 +245,8 @@ module Smithy
         str
       end
 
-      # TODO: union shape
+      add(UnionShape, Hash) { |h| h.dup }
+      add(UnionShape, Union)
     end
   end
 end
