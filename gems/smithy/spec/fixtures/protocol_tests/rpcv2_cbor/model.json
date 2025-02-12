@@ -182,15 +182,6 @@
         },
         "smithy.protocoltests.rpcv2Cbor#Defaults": {
             "type": "structure",
-            "mixins": [
-                {
-                    "target": "smithy.protocoltests.rpcv2Cbor#DefaultsMixin"
-                }
-            ],
-            "members": {}
-        },
-        "smithy.protocoltests.rpcv2Cbor#DefaultsMixin": {
-            "type": "structure",
             "members": {
                 "defaultString": {
                     "target": "smithy.api#String",
@@ -330,9 +321,6 @@
                         "smithy.api#default": 0.0
                     }
                 }
-            },
-            "traits": {
-                "smithy.api#mixin": {}
             }
         },
         "smithy.protocoltests.rpcv2Cbor#DenseBooleanMap": {
@@ -1123,12 +1111,146 @@
         },
         "smithy.protocoltests.rpcv2Cbor#OperationWithDefaultsOutput": {
             "type": "structure",
-            "mixins": [
-                {
-                    "target": "smithy.protocoltests.rpcv2Cbor#DefaultsMixin"
+            "members": {
+                "defaultString": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#default": "hi"
+                    }
+                },
+                "defaultBoolean": {
+                    "target": "smithy.api#Boolean",
+                    "traits": {
+                        "smithy.api#default": true
+                    }
+                },
+                "defaultList": {
+                    "target": "smithy.protocoltests.rpcv2Cbor#TestStringList",
+                    "traits": {
+                        "smithy.api#default": []
+                    }
+                },
+                "defaultTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
+                },
+                "defaultBlob": {
+                    "target": "smithy.api#Blob",
+                    "traits": {
+                        "smithy.api#default": "YWJj"
+                    }
+                },
+                "defaultByte": {
+                    "target": "smithy.api#Byte",
+                    "traits": {
+                        "smithy.api#default": 1
+                    }
+                },
+                "defaultShort": {
+                    "target": "smithy.api#Short",
+                    "traits": {
+                        "smithy.api#default": 1
+                    }
+                },
+                "defaultInteger": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#default": 10
+                    }
+                },
+                "defaultLong": {
+                    "target": "smithy.api#Long",
+                    "traits": {
+                        "smithy.api#default": 100
+                    }
+                },
+                "defaultFloat": {
+                    "target": "smithy.api#Float",
+                    "traits": {
+                        "smithy.api#default": 1.0
+                    }
+                },
+                "defaultDouble": {
+                    "target": "smithy.api#Double",
+                    "traits": {
+                        "smithy.api#default": 1.0
+                    }
+                },
+                "defaultMap": {
+                    "target": "smithy.protocoltests.rpcv2Cbor#TestStringMap",
+                    "traits": {
+                        "smithy.api#default": {}
+                    }
+                },
+                "defaultEnum": {
+                    "target": "smithy.protocoltests.rpcv2Cbor#TestEnum",
+                    "traits": {
+                        "smithy.api#default": "FOO"
+                    }
+                },
+                "defaultIntEnum": {
+                    "target": "smithy.protocoltests.rpcv2Cbor#TestIntEnum",
+                    "traits": {
+                        "smithy.api#default": 1
+                    }
+                },
+                "emptyString": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#default": ""
+                    }
+                },
+                "falseBoolean": {
+                    "target": "smithy.api#Boolean",
+                    "traits": {
+                        "smithy.api#default": false
+                    }
+                },
+                "emptyBlob": {
+                    "target": "smithy.api#Blob",
+                    "traits": {
+                        "smithy.api#default": ""
+                    }
+                },
+                "zeroByte": {
+                    "target": "smithy.api#Byte",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
+                },
+                "zeroShort": {
+                    "target": "smithy.api#Short",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
+                },
+                "zeroInteger": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
+                },
+                "zeroLong": {
+                    "target": "smithy.api#Long",
+                    "traits": {
+                        "smithy.api#default": 0
+                    }
+                },
+                "zeroFloat": {
+                    "target": "smithy.api#Float",
+                    "traits": {
+                        "smithy.api#default": 0.0
+                    }
+                },
+                "zeroDouble": {
+                    "target": "smithy.api#Double",
+                    "traits": {
+                        "smithy.api#default": 0.0
+                    }
                 }
-            ],
-            "members": {},
+            },
             "traits": {
                 "smithy.api#output": {}
             }

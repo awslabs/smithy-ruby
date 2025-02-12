@@ -16,7 +16,7 @@ module Smithy
     #  If not provided, source code will be generated to STDOUT.
     # @option options [Boolean] :quiet Whether to suppress output.
     def initialize(model, type, options = {})
-      @model = Model.preprocess(model)
+      @model = model
       @type = type
       @service = find_service(model['shapes'])
 
