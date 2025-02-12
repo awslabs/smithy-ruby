@@ -14,9 +14,11 @@ module Smithy
 
           params = structure.new(
             structure: structure.new(boolean: 'true'),
+            map: 'not a map',
             structure_map: {
               'key' => structure.new(map: { color: :blue })
             },
+            list: 'not a list',
             structure_list: [
               { integer: 1 },
               { integer: 2.0 },
@@ -28,9 +30,11 @@ module Smithy
           converted = ParamConverter.convert(rules, params)
           expect(converted.to_h).to eq(
             structure: { boolean: true },
+            map: 'not a map',
             structure_map: {
               'key' => { map: { 'color' => 'blue' } }
             },
+            list: 'not a list',
             structure_list: [
               { integer: 1 },
               { integer: 2 },

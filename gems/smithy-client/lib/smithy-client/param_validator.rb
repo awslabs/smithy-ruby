@@ -165,8 +165,6 @@ module Smithy
               )
             end
           end
-        else
-          raise "unhandled shape type: #{shape.class.name}"
         end
       end
       # rubocop:enable Metrics
