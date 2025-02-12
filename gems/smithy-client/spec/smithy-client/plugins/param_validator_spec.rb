@@ -38,10 +38,10 @@ module Smithy
 
         it 'calls the param validator' do
           client = client_class.new
-          params = { foo: 'bar' }
+          params = {}
           input = sample_service.const_get(:Shapes).const_get(:SCHEMA).operation(:operation).input
           expect(Client::ParamValidator).to receive(:new).with(input).and_call_original
-          expect_any_instance_of(Client::ParamValidator).to receive(:validate!).with(params)
+          expect_any_instance_of(Client::ParamValidator).to receive(:validate!).with(params).and_call_original
           client.operation(params)
         end
       end

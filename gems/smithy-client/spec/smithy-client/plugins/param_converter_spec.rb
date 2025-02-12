@@ -38,16 +38,16 @@ module Smithy
 
         it 'calls the param converter' do
           client = client_class.new
-          params = { foo: 'bar' }
+          params = {}
           input = sample_service.const_get(:Shapes).const_get(:SCHEMA).operation(:operation).input
           expect(Client::ParamConverter).to receive(:new).with(input).and_call_original
-          expect_any_instance_of(Client::ParamConverter).to receive(:convert).with(params)
+          expect_any_instance_of(Client::ParamConverter).to receive(:convert).with(params).and_call_original
           client.operation(params)
         end
 
         it 'closes files opened by the param converter' do
           client = client_class.new
-          params = { foo: 'bar' }
+          params = {}
           expect_any_instance_of(Client::ParamConverter).to receive(:close_opened_files)
           client.operation(params)
         end
