@@ -47,7 +47,7 @@ module Smithy
 
         def apply_accept_header(context)
           # TODO: Needs an update when streaming is handled
-          context.request.headers['Accept'] = 'application/json'
+          context.request.headers['Accept'] = 'application/cbor'
         end
 
         def apple_content_type(context)
