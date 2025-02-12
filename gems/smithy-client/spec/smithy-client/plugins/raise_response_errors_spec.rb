@@ -7,10 +7,7 @@ module Smithy
     module Plugins
       describe RaiseResponseErrors do
         let(:client_class) do
-          schema = Schema.new
-          schema.add_operation(:operation, Shapes::OperationShape.new)
-          client_class = Class.new(Client::Base)
-          client_class.schema = schema
+          client_class = ClientHelper.sample_service.const_get(:Client)
           client_class.clear_plugins
           client_class.add_plugin(RaiseResponseErrors)
           client_class.add_plugin(DummySendPlugin)

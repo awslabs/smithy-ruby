@@ -34,8 +34,9 @@ require_relative 'smithy-client/errors'
 require_relative 'smithy-client/schema'
 require_relative 'smithy-client/shapes'
 require_relative 'smithy-client/structure'
-require_relative 'smithy-client/param_validator'
 require_relative 'smithy-client/union'
+require_relative 'smithy-client/param_converter'
+require_relative 'smithy-client/param_validator'
 
 # codecs
 

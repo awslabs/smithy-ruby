@@ -394,6 +394,28 @@ module Smithy
             expect(subject.member_types[:foo]).to be(member_type)
           end
         end
+
+        describe '#member?' do
+          it 'returns true if member exists' do
+            subject.add_member(:foo, StringShape.new, Class.new)
+            expect(subject.member?(:foo)).to be(true)
+          end
+        end
+
+        describe '#member' do
+          it 'returns the member' do
+            subject.add_member(:foo, StringShape.new, Class.new)
+            expect(subject.member(:foo)).to be_kind_of(MemberShape)
+          end
+        end
+
+        describe '#member_type' do
+          it 'returns the member type' do
+            member_type = Class.new
+            subject.add_member(:foo, StringShape.new, member_type)
+            expect(subject.member_type(:foo)).to be(member_type)
+          end
+        end
       end
 
       describe Prelude do

@@ -95,7 +95,7 @@ module ClientHelper
       }
     end
 
-    def sample_client(options = {})
+    def sample_service(options = {})
       module_name = options[:module_name] || next_sample_module_name
       model = options[:model] ||= model(options)
       plan = create_plan(module_name, model, options)
@@ -133,9 +133,9 @@ module ClientHelper
     end
 
     def next_sample_module_name
-      @sample_client_count ||= 0
-      @sample_client_count += 1
-      "SampleClient#{@sample_client_count}"
+      @sample_service_count ||= 0
+      @sample_service_count += 1
+      "SampleClient#{@sample_service_count}"
     end
   end
 end
