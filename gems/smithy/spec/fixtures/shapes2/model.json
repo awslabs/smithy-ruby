@@ -1,0 +1,33 @@
+{
+  "smithy": "2.0",
+  "shapes": {
+    "smithy.ruby.tests#Bar": {
+      "type": "structure",
+      "members": {
+        "value": {
+          "target": "smithy.api#String"
+        },
+        "structure": {
+          "target": "smithy.ruby.tests#Foo"
+        },
+        "structure2": {
+          "target": "smithy.ruby.tests#Bar"
+        }
+      }
+    },
+    "smithy.ruby.tests#Foo": {
+      "type": "structure",
+      "members": {
+        "value": {
+          "target": "smithy.api#String"
+        },
+        "structure": {
+          "target": "smithy.ruby.tests#Foo"
+        },
+        "structure2": {
+          "target": "smithy.ruby.tests#Bar"
+        }
+      }
+    }
+  }
+}
