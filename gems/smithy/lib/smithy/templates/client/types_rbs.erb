@@ -4,7 +4,7 @@ module <%= module_name %>
 
 <% if type.type == 'structure' -%>
     class <%= type.name %>
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
 
       def initialize: (
 <% type.members.each do |member| -%>
@@ -18,7 +18,7 @@ module <%= module_name %>
 <% end -%>
     end
 <% elsif type.type == 'union' -%>
-    class <%= type.name %> < Smithy::Client::Union
+    class <%= type.name %> < Smithy::Model::Union
 <% type.members.each do |member| %>
       class <%= member.name.camelize  %> < <%= type.name %>
       end

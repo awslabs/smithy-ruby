@@ -5,6 +5,7 @@
 require_relative 'plugins/endpoint'
 require 'smithy-client/plugins/logging'
 require 'smithy-client/plugins/net_http'
+require 'smithy-client/plugins/param_converter'
 require 'smithy-client/plugins/param_validator'
 require 'smithy-client/plugins/raise_response_errors'
 require 'smithy-client/plugins/response_target'
@@ -18,11 +19,14 @@ module Weather
     add_plugin(Weather::Plugins::Endpoint)
     add_plugin(Smithy::Client::Plugins::Logging)
     add_plugin(Smithy::Client::Plugins::NetHTTP)
+    add_plugin(Smithy::Client::Plugins::ParamConverter)
     add_plugin(Smithy::Client::Plugins::ParamValidator)
     add_plugin(Smithy::Client::Plugins::RaiseResponseErrors)
     add_plugin(Smithy::Client::Plugins::ResponseTarget)
 
     # @param options [Hash] Client options
+    # @option options [Boolean] :convert_params (true)
+    #  When `true`, request parameters are coerced into the required types.
     # @option options [String] :endpoint
     #  Custom Endpoint
     # @option options [Weather::EndpointProvider] :endpoint_provider

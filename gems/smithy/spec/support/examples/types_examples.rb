@@ -9,11 +9,11 @@ RSpec.shared_examples 'types module' do |context|
 
   it 'has structures as structs that include Structure' do
     expect(ShapeService::Types::Structure).to be < Struct
-    expect(ShapeService::Types::Structure).to include(Smithy::Client::Structure)
+    expect(ShapeService::Types::Structure).to include(Smithy::Model::Structure)
   end
 
   it 'has unions that define member subclasses' do
-    expect(ShapeService::Types::Union).to be < Smithy::Client::Union
+    expect(ShapeService::Types::Union).to be < Smithy::Model::Union
     expect(ShapeService::Types::Union::Structure).to be < ShapeService::Types::Union
   end
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Client
+  module Model
     # Represents shape types from the Smithy Model.
     module Shapes
       # A base shape that all shapes inherits from.

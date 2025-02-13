@@ -4,29 +4,29 @@ module Smithy
   module Client
     module Codecs
       describe CBOR do
-        let(:string_shape) { Shapes::StringShape.new(id: 'string') }
+        let(:string_shape) { Model::Shapes::StringShape.new(id: 'string') }
 
         let(:list_shape) do
-          shape = Shapes::ListShape.new(id: 'list')
-          shape.set_member(Shapes::Prelude::String)
+          shape = Model::Shapes::ListShape.new(id: 'list')
+          shape.set_member(Model::Shapes::Prelude::String)
           shape
         end
 
         let(:map_shape) do
-          shape = Shapes::MapShape.new(id: 'map')
-          shape.set_key(Shapes::Prelude::String)
-          shape.set_value(Shapes::Prelude::Blob)
+          shape = Model::Shapes::MapShape.new(id: 'map')
+          shape.set_key(Model::Shapes::Prelude::String)
+          shape.set_value(Model::Shapes::Prelude::Blob)
           shape
         end
 
         let(:typed_struct) do
           Struct.new(:s, :l, :m, keyword_init: true) do
-            include Smithy::Client::Structure
+            include Model::Structure
           end
         end
 
         let(:structure_shape) do
-          struct = Shapes::StructureShape.new(id: 'structure')
+          struct = Model::Shapes::StructureShape.new(id: 'structure')
           struct.add_member(:s, string_shape)
           struct.add_member(:l, list_shape)
           struct.add_member(:m, map_shape)
@@ -35,7 +35,7 @@ module Smithy
         end
 
         it 'serializes returns nil when given shape is Prelude::Unit' do
-          expect(subject.serialize('', Shapes::Prelude::Unit)).to be_nil
+          expect(subject.serialize('', Model::Shapes::Prelude::Unit)).to be_nil
         end
 
         it 'deserializes returns an empty hash when given bytes are empty' do

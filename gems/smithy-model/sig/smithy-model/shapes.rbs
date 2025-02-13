@@ -1,5 +1,5 @@
 module Smithy
-  module Client
+  module Model
     module Shapes
       class Shape
         def initialize: (?Hash[Symbol, untyped]) ?{ (self) -> void } -> void

@@ -4,10 +4,9 @@ module Smithy
       class CBOR
         def initialize: (?::Hash[untyped, untyped] options) -> void
 
-        def serialize: (untyped data, Shapes::Shape shape) -> (nil | String)
+        def serialize: (untyped data, Model::Shapes::Shape shape) -> (nil | String)
 
-        def deserialize: (String bytes, Shapes::Shape shape, ?Struct[untyped] target) -> (Hash[untyped, untyped] | Object)
-
+        def deserialize: (String bytes, Model::Shapes::Shape shape, ?Struct[untyped] target) -> (Hash[untyped, untyped] | Object)
       end
     end
   end

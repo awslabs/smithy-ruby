@@ -150,9 +150,9 @@ module Smithy
           Array(@plugins).freeze
         end
 
-        # @return [Schema]
+        # @return [Model::Schema]
         def schema
-          @schema ||= Schema.new
+          @schema ||= Model::Schema.new
         end
 
         # @param [Schema] schema

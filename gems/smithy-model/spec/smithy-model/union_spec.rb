@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Client
+  module Model
     describe Union do
       let(:union_class) { Class.new(Union) }
       let(:string_value_class) do

@@ -8,7 +8,7 @@ module Smithy
     describe ParamConverter do
       describe '#convert' do
         let(:union_structure) do
-          Class.new(Union) do
+          Class.new(Model::Union) do
             def to_h
               { structure: super(__getobj__) }
             end
@@ -62,14 +62,14 @@ module Smithy
           end
 
           it 'returns the value unmodified if the value class is unknown' do
-            shape_class = Shapes::StringShape
+            shape_class = Model::Shapes::StringShape
             value = double('raw')
             expect(ParamConverter.c(shape_class, value)).to be(value)
           end
         end
 
         describe 'big decimals' do
-          let(:shape_class) { Shapes::BigDecimalShape }
+          let(:shape_class) { Model::Shapes::BigDecimalShape }
 
           it 'returns big decimals unmodified' do
             value = BigDecimal('123.456')
@@ -94,7 +94,7 @@ module Smithy
         end
 
         describe 'blobs' do
-          let(:shape_class) { Shapes::BlobShape }
+          let(:shape_class) { Model::Shapes::BlobShape }
 
           it 'accepts io objects' do
             rd, wr = IO.pipe
@@ -134,7 +134,7 @@ module Smithy
         end
 
         describe 'booleans' do
-          let(:shape_class) { Shapes::BooleanShape }
+          let(:shape_class) { Model::Shapes::BooleanShape }
 
           it 'accepts true and false' do
             expect(ParamConverter.c(shape_class, true)).to be(true)
@@ -152,7 +152,7 @@ module Smithy
         end
 
         describe 'enums' do
-          let(:shape_class) { Shapes::StringShape }
+          let(:shape_class) { Model::Shapes::StringShape }
 
           it 'returns strings unmodified' do
             expect(ParamConverter.c(shape_class, 'abc')).to eq('abc')
@@ -164,7 +164,7 @@ module Smithy
         end
 
         describe 'integers' do
-          let(:shape_class) { Shapes::IntegerShape }
+          let(:shape_class) { Model::Shapes::IntegerShape }
 
           it 'returns integers unmodified' do
             expect(ParamConverter.c(shape_class, 123)).to eq(123)
@@ -184,7 +184,7 @@ module Smithy
         end
 
         describe 'int enums' do
-          let(:shape_class) { Shapes::IntEnumShape }
+          let(:shape_class) { Model::Shapes::IntEnumShape }
 
           it 'returns integers unmodified' do
             expect(ParamConverter.c(shape_class, 123)).to eq(123)
@@ -204,7 +204,7 @@ module Smithy
         end
 
         describe 'floats' do
-          let(:shape_class) { Shapes::FloatShape }
+          let(:shape_class) { Model::Shapes::FloatShape }
 
           it 'returns floats unmodified' do
             expect(ParamConverter.c(shape_class, 12.34)).to eq(12.34)
@@ -224,7 +224,7 @@ module Smithy
         end
 
         describe 'lists' do
-          let(:shape_class) { Shapes::ListShape }
+          let(:shape_class) { Model::Shapes::ListShape }
 
           it 'returns duplicates arrays' do
             value = [1, 2, 3]
@@ -241,7 +241,7 @@ module Smithy
         end
 
         describe 'maps' do
-          let(:shape_class) { Shapes::MapShape }
+          let(:shape_class) { Model::Shapes::MapShape }
 
           it 'returns duplicate hashes' do
             value = { a: 1 }
@@ -258,7 +258,7 @@ module Smithy
         end
 
         describe 'strings' do
-          let(:shape_class) { Shapes::StringShape }
+          let(:shape_class) { Model::Shapes::StringShape }
 
           it 'returns strings unmodified' do
             expect(ParamConverter.c(shape_class, 'abc')).to eq('abc')
@@ -270,7 +270,7 @@ module Smithy
         end
 
         describe 'structures' do
-          let(:shape_class) { Shapes::StructureShape }
+          let(:shape_class) { Model::Shapes::StructureShape }
 
           it 'returns duplicate structs' do
             value = { a: 1 }
@@ -287,7 +287,7 @@ module Smithy
         end
 
         describe 'timestamps' do
-          let(:shape_class) { Shapes::TimestampShape }
+          let(:shape_class) { Model::Shapes::TimestampShape }
 
           it 'returns Time objects unmodified' do
             time = Time.now
@@ -331,7 +331,7 @@ module Smithy
         end
 
         describe 'unions' do
-          let(:shape_class) { Shapes::UnionShape }
+          let(:shape_class) { Model::Shapes::UnionShape }
 
           it 'returns duplicate hashes' do
             value = { a: 1 }
@@ -341,7 +341,7 @@ module Smithy
           end
 
           it 'does not modify unions' do
-            value = Union.new(string: 'abc')
+            value = Model::Union.new(string: 'abc')
             converted = ParamConverter.c(shape_class, value)
             expect(converted).to be(value)
           end
