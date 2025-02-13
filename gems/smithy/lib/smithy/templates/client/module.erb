@@ -2,7 +2,9 @@
 
 # This is generated code!
 
-require 'smithy-client'
+<% requires.each do |require| -%>
+require '<%= require %>'
+<% end %>
 
 <% module_names.each_with_index do |module_name, i| -%>
 <%= '  ' * i %>module <%= module_name %>
@@ -12,6 +14,6 @@ require 'smithy-client'
 <%= '  ' * i %>end
 <% end -%>
 
-<% requires.each do |require| -%>
+<% relative_requires.each do |require| -%>
 require_relative '<%= gem_name %>/<%= require %>'
 <% end -%>

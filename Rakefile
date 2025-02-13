@@ -20,7 +20,7 @@ namespace :smithy do
     include_paths = []
     plans = []
     rbs_targets = %w[Smithy Smithy::* Smithy::Client]
-    sig_paths = ['gems/smithy-client/sig']
+    sig_paths = %w[gems/smithy-client/sig gems/smithy-model/sig]
     Dir.glob('gems/smithy/spec/fixtures/endpoints/*/model.json') do |model_path|
       test_name = model_path.split('/')[-2]
       test_module = test_name.gsub('-', '').camelize
