@@ -16,11 +16,17 @@ module Smithy
     #  If not provided, source code will be generated to STDOUT.
     # @option options [Boolean] :quiet Whether to suppress output.
     def initialize(model, type, options = {})
-      @model = Model.preprocess(model)
+      @model = model
       @type = type
-      @service = find_service(@model['shapes'])
+      @service = find_service(model['shapes'])
 
-      initialize_options(options)
+      @name = options.fetch(:name, default_name(@service))
+      @module_name = options.fetch(:module_name, @name)
+      @gem_name = options.fetch(:gem_name, default_gem_name(@module_name, @type))
+      @gem_version = options.fetch(:gem_version)
+
+      @destination_root = options.fetch(:destination_root, nil)
+      @quiet = options.fetch(:quiet, false)
 
       Welds.load!(self)
       @welds = Welds.for(@service)
@@ -57,16 +63,6 @@ module Smithy
     attr_reader :welds
 
     private
-
-    def initialize_options(options)
-      @name = options.fetch(:name, default_name(@service))
-      @module_name = options.fetch(:module_name, @name)
-      @gem_name = options.fetch(:gem_name, default_gem_name(@module_name, @type))
-      @gem_version = options.fetch(:gem_version)
-
-      @destination_root = options.fetch(:destination_root, nil)
-      @quiet = options.fetch(:quiet, false)
-    end
 
     def find_service(shapes)
       service = shapes.select { |_, shape| shape['type'] == 'service' }

@@ -42,25 +42,12 @@ module Smithy
       # @return [Hash] The shape
       def shape(model, target)
         if model['shapes'].key?(target)
-          model['shapes'][target]
+          flatten_shape(target, model, model['shapes'][target])
         elsif PRELUDE_SHAPES.key?(target)
           PRELUDE_SHAPES[target]
         else
           raise ArgumentError, "Shape not found: #{target}"
         end
-      end
-
-      # resolve mixins and "apply" types.
-      def preprocess(model)
-        model = model.deep_dup
-        model['shapes'].each do |id, shape|
-          flatten_shape(id, model, shape)
-        end
-        # remove all mixins and apply
-        model['shapes'] = model['shapes'].reject do |_id, shape|
-          shape['type'] == 'apply' || shape.fetch('traits', {}).any? { |k, _v| k == 'smithy.api#mixin' }
-        end
-        model
       end
 
       private
