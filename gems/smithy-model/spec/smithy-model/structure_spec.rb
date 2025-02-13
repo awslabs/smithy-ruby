@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Client
+  module Model
     describe Structure do
       let(:structure) do
         Struct.new(

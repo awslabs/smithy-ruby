@@ -5,7 +5,7 @@
 module Weather
   # This module contains the shapes used by the client.
   module Shapes
-    include Smithy::Client::Shapes
+    include Smithy::Model::Shapes
 
     CityCoordinates = StructureShape.new(id: 'example.weather#CityCoordinates')
     CityId = StringShape.new(id: 'example.weather#CityId', traits: { 'smithy.api#pattern' => '^[A-Za-z0-9 ]+$' })
@@ -57,7 +57,7 @@ module Weather
     NoSuchResource.add_member(:resource_type, Prelude::String, traits: { 'smithy.api#required' => {} })
     NoSuchResource.type = Types::NoSuchResource
 
-    SCHEMA = Smithy::Client::Schema.new do |schema|
+    SCHEMA = Smithy::Model::Schema.new do |schema|
       schema.service = ServiceShape.new(
         id: 'example.weather#Weather',
         version: '2006-03-01',

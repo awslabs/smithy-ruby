@@ -12,7 +12,7 @@ module Smithy
       #   * Update implementation to handle event streams
       #   * Handle query_compatible trait
       class CBOR
-        include Shapes
+        include Model::Shapes
 
         def initialize(options = {}); end
 

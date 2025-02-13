@@ -3,7 +3,7 @@ module Smithy
     class HandlerContext
       def initialize: (?::Hash[untyped, untyped] options) -> void
       attr_accessor operation_name: (Symbol | String)?
-      attr_accessor operation: Shapes::OperationShape?
+      attr_accessor operation: Model::Shapes::OperationShape?
       attr_accessor client: Base?
       attr_accessor params: Hash[Symbol | String, untyped]
       attr_accessor config: Struct[untyped]?

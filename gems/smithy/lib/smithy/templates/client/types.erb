@@ -15,10 +15,10 @@ module <%= module_name %>
 <% end -%>
       keyword_init: true
     ) do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
 <% elsif type.type == 'union' -%>
-    class <%= type.name %> < Smithy::Client::Union
+    class <%= type.name %> < Smithy::Model::Union
 <% type.members.each do |member| -%>
       class <%= member.name.camelize  %> < <%= type.name %>
         def to_h

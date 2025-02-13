@@ -5,7 +5,7 @@
 module <%= module_name %>
   # This module contains the shapes used by the client.
   module Shapes
-    include Smithy::Client::Shapes
+    include Smithy::Model::Shapes
 
 <% shapes.each do |shape| -%>
     <%= shape.name %> = <%= shape.type %>.<%= shape.new_method %>
@@ -20,7 +20,7 @@ module <%= module_name %>
 <% end -%>
 
 <% end -%>
-    SCHEMA = Smithy::Client::Schema.new do |schema|
+    SCHEMA = Smithy::Model::Schema.new do |schema|
       schema.service = ServiceShape.new(
         id: "<%= service_shape.id %>",
         version: "<%= service_shape.version %>",

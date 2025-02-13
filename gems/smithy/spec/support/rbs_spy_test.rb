@@ -38,6 +38,7 @@ module RbsSpyTest
 
       loader = RBS::EnvironmentLoader.new(core_root: RBS::EnvironmentLoader::DEFAULT_CORE_ROOT)
       loader.add(path: Pathname(File.join(__dir__.to_s, '../../../smithy-client/sig')))
+      loader.add(path: Pathname(File.join(__dir__.to_s, '../../../smithy-model/sig')))
       loader.add(path: Pathname(File.join(sdk_dir, '/sig')))
 
       load_collection(loader) if load_collection

@@ -22,7 +22,7 @@ module Smithy
         end
 
         it 'can be set in the constructor' do
-          operation = Shapes::OperationShape.new
+          operation = Model::Shapes::OperationShape.new
           context = HandlerContext.new(operation: operation)
           expect(context.operation).to be(operation)
         end

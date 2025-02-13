@@ -1,6 +1,7 @@
 module Weather
   class Client < Smithy::Client::Base
     def self.new: (
+      ?convert_params: bool,
       ?endpoint: String,
       ?endpoint_provider: Weather::EndpointProvider,
       ?http_ca_file: String,

@@ -40,6 +40,7 @@ Naming/FileName:
     - '**/spec/**/*.rb'
     - 'gems/smithy-client/lib/smithy-client.rb'
     - 'gems/smithy-server/lib/smithy-server.rb'
+    - 'gems/smithy-model/lib/smithy-model.rb'
 
 Style/BlockComments:
   Exclude:

@@ -2,7 +2,7 @@ module Weather
   module Types
 
     class CityCoordinates
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
 
       def initialize: (
         ?latitude: Float,
@@ -15,7 +15,7 @@ module Weather
     end
 
     class CitySummary
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
 
       def initialize: (
         ?city_id: String,
@@ -28,7 +28,7 @@ module Weather
     end
 
     class GetCityInput
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
 
       def initialize: (
         ?city_id: String,
@@ -39,7 +39,7 @@ module Weather
     end
 
     class GetCityOutput
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
 
       def initialize: (
         ?name: String,
@@ -52,7 +52,7 @@ module Weather
     end
 
     class GetCurrentTimeOutput
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
 
       def initialize: (
         ?time: Time,
@@ -63,7 +63,7 @@ module Weather
     end
 
     class GetForecastInput
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
 
       def initialize: (
         ?city_id: String,
@@ -74,7 +74,7 @@ module Weather
     end
 
     class GetForecastOutput
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
 
       def initialize: (
         ?chance_of_rain: Float,
@@ -85,7 +85,7 @@ module Weather
     end
 
     class ListCitiesInput
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
 
       def initialize: (
         ?next_token: String,
@@ -98,7 +98,7 @@ module Weather
     end
 
     class ListCitiesOutput
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
 
       def initialize: (
         ?next_token: String,
@@ -111,7 +111,7 @@ module Weather
     end
 
     class NoSuchResource
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
 
       def initialize: (
         ?resource_type: String,

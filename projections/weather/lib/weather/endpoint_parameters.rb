@@ -13,7 +13,7 @@ module Weather
     :endpoint,
     keyword_init: true
   ) do
-    include Smithy::Client::Structure
+    include Smithy::Model::Structure
 
     def initialize(options = {})
       self[:endpoint] = options.fetch(:endpoint, nil)

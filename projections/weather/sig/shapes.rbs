@@ -1,16 +1,16 @@
 module Weather
   module Shapes
-    CityCoordinates: Smithy::Client::Shapes::StructureShape
-    CityId: Smithy::Client::Shapes::StringShape
-    CitySummaries: Smithy::Client::Shapes::ListShape
-    CitySummary: Smithy::Client::Shapes::StructureShape
-    GetCityInput: Smithy::Client::Shapes::StructureShape
-    GetCityOutput: Smithy::Client::Shapes::StructureShape
-    GetCurrentTimeOutput: Smithy::Client::Shapes::StructureShape
-    GetForecastInput: Smithy::Client::Shapes::StructureShape
-    GetForecastOutput: Smithy::Client::Shapes::StructureShape
-    ListCitiesInput: Smithy::Client::Shapes::StructureShape
-    ListCitiesOutput: Smithy::Client::Shapes::StructureShape
-    NoSuchResource: Smithy::Client::Shapes::StructureShape
+    CityCoordinates: Smithy::Model::Shapes::StructureShape
+    CityId: Smithy::Model::Shapes::StringShape
+    CitySummaries: Smithy::Model::Shapes::ListShape
+    CitySummary: Smithy::Model::Shapes::StructureShape
+    GetCityInput: Smithy::Model::Shapes::StructureShape
+    GetCityOutput: Smithy::Model::Shapes::StructureShape
+    GetCurrentTimeOutput: Smithy::Model::Shapes::StructureShape
+    GetForecastInput: Smithy::Model::Shapes::StructureShape
+    GetForecastOutput: Smithy::Model::Shapes::StructureShape
+    ListCitiesInput: Smithy::Model::Shapes::StructureShape
+    ListCitiesOutput: Smithy::Model::Shapes::StructureShape
+    NoSuchResource: Smithy::Model::Shapes::StructureShape
   end
 end

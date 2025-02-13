@@ -11,7 +11,7 @@ module Weather
       :longitude,
       keyword_init: true
     ) do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
 
     # TODO!
@@ -20,7 +20,7 @@ module Weather
       :name,
       keyword_init: true
     ) do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
 
     # TODO!
@@ -28,7 +28,7 @@ module Weather
       :city_id,
       keyword_init: true
     ) do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
 
     # TODO!
@@ -37,7 +37,7 @@ module Weather
       :coordinates,
       keyword_init: true
     ) do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
 
     # TODO!
@@ -45,7 +45,7 @@ module Weather
       :time,
       keyword_init: true
     ) do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
 
     # TODO!
@@ -53,7 +53,7 @@ module Weather
       :city_id,
       keyword_init: true
     ) do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
 
     # TODO!
@@ -61,7 +61,7 @@ module Weather
       :chance_of_rain,
       keyword_init: true
     ) do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
 
     # TODO!
@@ -70,7 +70,7 @@ module Weather
       :page_size,
       keyword_init: true
     ) do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
 
     # TODO!
@@ -79,7 +79,7 @@ module Weather
       :items,
       keyword_init: true
     ) do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
 
     # TODO!
@@ -87,7 +87,7 @@ module Weather
       :resource_type,
       keyword_init: true
     ) do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
   end
 end

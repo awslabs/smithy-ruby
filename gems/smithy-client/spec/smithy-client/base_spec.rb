@@ -3,7 +3,7 @@
 module Smithy
   module Client
     describe Base do
-      let(:schema) { Schema.new }
+      let(:schema) { Model::Schema.new }
       let(:client_class) { Base.define(schema: schema) }
       let(:plugin_a) { Plugin.new }
       let(:plugin_b) { Plugin.new }
@@ -46,7 +46,7 @@ module Smithy
         let(:input) { subject.build_input(:operation) }
 
         before(:each) do
-          schema.add_operation(:operation, Shapes::OperationShape.new)
+          schema.add_operation(:operation, Model::Shapes::OperationShape.new)
         end
 
         it 'returns an Input' do
@@ -101,7 +101,7 @@ module Smithy
         let(:input) { Input.new }
 
         before(:each) do
-          schema.add_operation(:operation, Shapes::OperationShape.new)
+          schema.add_operation(:operation, Model::Shapes::OperationShape.new)
           allow(subject).to receive(:build_input).and_return(input)
           allow(input).to receive(:send_request)
         end
@@ -237,13 +237,13 @@ module Smithy
 
       describe '.schema' do
         it 'defaults to a Schema' do
-          expect(client_class.schema).to be_kind_of(Schema)
+          expect(client_class.schema).to be_kind_of(Model::Schema)
         end
       end
 
       describe '.schema=' do
         it 'can be set' do
-          schema = Schema.new
+          schema = Model::Schema.new
           client_class.schema = schema
           expect(client_class.schema).to be(schema)
         end
@@ -256,7 +256,7 @@ module Smithy
         end
 
         it 'sets the schema on the client class' do
-          schema = Schema.new
+          schema = Model::Schema.new
           client_class = Base.define(schema: schema)
           expect(client_class.schema).to be(schema)
         end

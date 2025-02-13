@@ -20,7 +20,7 @@ namespace :smithy do
     include_paths = []
     plans = []
     rbs_targets = %w[Smithy Smithy::* Smithy::Client]
-    sig_paths = ['gems/smithy-client/sig']
+    sig_paths = %w[gems/smithy-client/sig gems/smithy-model/sig]
     Dir.glob('gems/smithy/spec/fixtures/endpoints/*/model.json') do |model_path|
       test_name = model_path.split('/')[-2]
       test_module = test_name.gsub('-', '').camelize
@@ -108,7 +108,38 @@ namespace 'smithy-client' do
 
   desc 'Run RBS validation.'
   task 'rbs:validate' do
-    sh('bundle exec rbs -I gems/smithy-client/sig validate')
+    sh('bundle exec rbs -I gems/smithy-client/sig -I gems/smithy-model/sig validate')
+  end
+
+  desc 'Run RBS spy tests on all unit tests.'
+  task 'rbs:test' do
+    env = {
+      'RUBYOPT' => '-r bundler/setup -r rbs/test/setup',
+      'RBS_TEST_RAISE' => 'true',
+      'RBS_TEST_LOGLEVEL' => 'error',
+      'RBS_TEST_OPT' => '-I gems/smithy-client/sig -I gems/smithy-model/sig',
+      'RBS_TEST_TARGET' => '"Smithy::Client,Smithy::Client::*"',
+      'RBS_TEST_DOUBLE_SUITE' => 'rspec'
+    }
+    sh(env,
+       'bundle exec rspec gems/smithy-client/spec -I gems/smithy-client/lib -I gems/smithy-client/spec ' \
+       "--require spec_helper --tag '~rbs_test:skip'")
+  end
+
+  desc 'Run RBS validation and spy tests.'
+  task 'rbs' => %w[rbs:validate rbs:test]
+end
+
+namespace 'smithy-model' do
+  RSpec::Core::RakeTask.new do |t|
+    t.pattern = 'gems/smithy-model/spec/**/*_spec.rb'
+    t.ruby_opts = '-I gems/smithy-model/spec'
+    t.rspec_opts = '--format documentation'
+  end
+
+  desc 'Run RBS validation.'
+  task 'rbs:validate' do
+    sh('bundle exec rbs -I gems/smithy-model/sig validate')
   end
 
   desc 'Run RBS spy tests on all unit tests.'
@@ -118,14 +149,14 @@ namespace 'smithy-client' do
       'RBS_TEST_RAISE' => 'true',
       'RBS_TEST_LOGLEVEL' => 'error',
       'RBS_TEST_OPT' => '-I gems/smithy-client/sig',
-      'RBS_TEST_TARGET' => '"Smithy,Smithy::*,Smithy::Client"',
+      'RBS_TEST_TARGET' => '"Smithy::Model,Smithy::Model::*"',
       'RBS_TEST_DOUBLE_SUITE' => 'rspec'
     }
     sh(env,
-       'bundle exec rspec gems/smithy-client/spec -I gems/smithy-client/lib -I gems/smithy-client/spec ' \
+       'bundle exec rspec gems/smithy-model/spec -I gems/smithy-model/lib -I gems/smithy-model/spec ' \
        "--require spec_helper --tag '~rbs_test:skip'")
   end
 
   desc 'Run RBS validation and spy tests.'
-  task 'rbs' => ['rbs:validate', 'rbs:test']
+  task 'rbs' => %w[rbs:validate rbs:test]
 end

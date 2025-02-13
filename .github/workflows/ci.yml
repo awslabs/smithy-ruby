@@ -52,7 +52,7 @@ jobs:
       - name: Test
         run: bundle exec rake smithy:spec
 
-  smithy-test-rbs:
+  smithy-rbs:
     needs: [smithy-test]
     runs-on: ubuntu-latest
 

@@ -9,7 +9,9 @@ Gem::Specification.new do |s|
   s.authors     = ['Smithy Ruby']
   s.files       = Dir['lib/**/*.rb', base: __dir__]
 
-  s.add_dependency('smithy-client', '~> 1')
+<% dependencies.each do |dependency, version| -%>
+  s.add_dependency('<%= dependency %>', '<%= version %>')
+<% end -%>
 
   s.required_ruby_version = '>= 3.3'
 end

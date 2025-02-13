@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Client
+  module Model
     # A module mixed into Structs that provides utility methods.
     module Structure
       # Deeply converts the Struct into a hash. Structure members that
@@ -45,7 +45,7 @@ module Smithy
 
     # An empty Struct that includes the {Client::Structure} module.
     EmptyStructure = Struct.new do
-      include Smithy::Client::Structure
+      include Smithy::Model::Structure
     end
   end
 end

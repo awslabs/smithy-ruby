@@ -39,7 +39,7 @@ module <%= module_name %>
       # @param [Smithy::Client::HandlerContext] context
       # @param [String] message
       # @param [<%= module_name %>::Types::<%= error.name %>] data
-      def initialize(context, message, data = Smithy::Client::EmptyStructure.new)
+      def initialize(context, message, data = Smithy::Model::EmptyStructure.new)
         super(context, message, data)
       end
 <% error.members.each do |member| -%>

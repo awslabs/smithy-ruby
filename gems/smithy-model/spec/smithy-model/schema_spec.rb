@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Smithy
-  module Client
+  module Model
     describe Schema do
       subject { Schema.new }
       let(:operation_shape) { Shapes::OperationShape.new }
@@ -45,7 +45,7 @@ module Smithy
       describe '#inspect' do
         it 'returns the class name' do
           expect(subject.inspect)
-            .to eq('#<Smithy::Client::Schema>')
+            .to eq('#<Smithy::Model::Schema>')
         end
       end
 

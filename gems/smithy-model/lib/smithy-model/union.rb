@@ -3,7 +3,7 @@
 require 'delegate'
 
 module Smithy
-  module Client
+  module Model
     #  Top level class for all generated Union types
     class Union < ::SimpleDelegator
       include Structure
