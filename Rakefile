@@ -61,7 +61,8 @@ namespace :smithy do
   task 'sync-fixtures' do
     Dir.glob('gems/smithy/spec/fixtures/**/model.smithy') do |model_path|
       out_path = model_path.sub('.smithy', '.json')
-      sh("smithy ast --aut #{model_path} > #{out_path}")
+      ignore_unknown = '--aut ' if model_path.include?('endpoints/')
+      sh("smithy ast #{ignore_unknown}#{model_path} > #{out_path}")
     end
   end
 
@@ -71,7 +72,8 @@ namespace :smithy do
     failures = []
     Dir.glob('gems/smithy/spec/fixtures/**/model.smithy') do |model_path|
       old = JSON.load_file(model_path.sub('.smithy', '.json'))
-      new = JSON.parse(`smithy ast --aut #{model_path}`)
+      ignore_unknown = '--aut ' if model_path.include?('endpoints/')
+      new = JSON.parse(`smithy ast #{ignore_unknown}#{model_path}`)
       failures << model_path if old != new
     end
     if failures.any?

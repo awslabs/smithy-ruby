@@ -1,0 +1,89 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#StructA": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#documentation": "A",
+                "smithy.api#mixin": {},
+                "smithy.ruby.tests#foo": 1,
+                "smithy.ruby.tests#oneTrait": {}
+            }
+        },
+        "smithy.ruby.tests#StructB": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#documentation": "B",
+                "smithy.api#mixin": {},
+                "smithy.ruby.tests#foo": 2,
+                "smithy.ruby.tests#twoTrait": {}
+            }
+        },
+        "smithy.ruby.tests#StructC": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#StructA"
+                },
+                {
+                    "target": "smithy.ruby.tests#StructB"
+                }
+            ],
+            "members": {},
+            "traits": {
+                "smithy.api#documentation": "C",
+                "smithy.api#mixin": {},
+                "smithy.ruby.tests#threeTrait": {}
+            }
+        },
+        "smithy.ruby.tests#StructD": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#StructC"
+                }
+            ],
+            "members": {},
+            "traits": {
+                "smithy.api#documentation": "D",
+                "smithy.ruby.tests#fourTrait": {}
+            }
+        },
+        "smithy.ruby.tests#foo": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#trait": {}
+            }
+        },
+        "smithy.ruby.tests#fourTrait": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#trait": {}
+            }
+        },
+        "smithy.ruby.tests#oneTrait": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#trait": {}
+            }
+        },
+        "smithy.ruby.tests#threeTrait": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#trait": {}
+            }
+        },
+        "smithy.ruby.tests#twoTrait": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#trait": {}
+            }
+        }
+    }
+}

@@ -1,0 +1,46 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#FilteredByNameMixin": {
+            "type": "structure",
+            "members": {
+                "nameFilter": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#mixin": {}
+            }
+        },
+        "smithy.ruby.tests#ListSomethingInput": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#PaginatedInputMixin"
+                },
+                {
+                    "target": "smithy.ruby.tests#FilteredByNameMixin"
+                }
+            ],
+            "members": {
+                "sizeFilter": {
+                    "target": "smithy.api#Integer"
+                }
+            }
+        },
+        "smithy.ruby.tests#PaginatedInputMixin": {
+            "type": "structure",
+            "members": {
+                "nextToken": {
+                    "target": "smithy.api#String"
+                },
+                "pageSize": {
+                    "target": "smithy.api#Integer"
+                }
+            },
+            "traits": {
+                "smithy.api#mixin": {}
+            }
+        }
+    }
+}

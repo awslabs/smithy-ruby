@@ -1,0 +1,77 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#GetUsername": {
+            "type": "operation",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#ValidatedOperation"
+                }
+            ],
+            "input": {
+                "target": "smithy.ruby.tests#GetUsernameInput"
+            },
+            "output": {
+                "target": "smithy.ruby.tests#GetUsernameOutput"
+            },
+            "errors": [
+                {
+                    "target": "smithy.ruby.tests#NotFoundError"
+                }
+            ]
+        },
+        "smithy.ruby.tests#GetUsernameInput": {
+            "type": "structure",
+            "members": {
+                "id": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "smithy.ruby.tests#GetUsernameOutput": {
+            "type": "structure",
+            "members": {
+                "name": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "smithy.ruby.tests#NotFoundError": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#error": "client"
+            }
+        },
+        "smithy.ruby.tests#ValidatedOperation": {
+            "type": "operation",
+            "input": {
+                "target": "smithy.api#Unit"
+            },
+            "output": {
+                "target": "smithy.api#Unit"
+            },
+            "errors": [
+                {
+                    "target": "smithy.ruby.tests#ValidationError"
+                }
+            ],
+            "traits": {
+                "smithy.api#mixin": {}
+            }
+        },
+        "smithy.ruby.tests#ValidationError": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#error": "client"
+            }
+        }
+    }
+}

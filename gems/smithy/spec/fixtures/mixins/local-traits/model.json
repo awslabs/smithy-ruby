@@ -1,0 +1,30 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#PrivateMixin": {
+            "type": "structure",
+            "members": {
+                "foo": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#mixin": {
+                    "localTraits": [
+                        "smithy.api#private"
+                    ]
+                },
+                "smithy.api#private": {}
+            }
+        },
+        "smithy.ruby.tests#PublicShape": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#PrivateMixin"
+                }
+            ],
+            "members": {}
+        }
+    }
+}

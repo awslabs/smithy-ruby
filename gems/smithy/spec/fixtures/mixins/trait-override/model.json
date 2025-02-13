@@ -1,0 +1,35 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#UserInfoMixin": {
+            "type": "structure",
+            "members": {
+                "userId": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "Generic mixin documentation.",
+                "smithy.api#mixin": {},
+                "smithy.api#tags": [
+                    "a"
+                ]
+            }
+        },
+        "smithy.ruby.tests#UserSummary": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#UserInfoMixin"
+                }
+            ],
+            "members": {},
+            "traits": {
+                "smithy.api#documentation": "Specific documentation",
+                "smithy.api#tags": [
+                    "replaced-tags"
+                ]
+            }
+        }
+    }
+}
