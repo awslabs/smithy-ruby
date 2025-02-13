@@ -105,7 +105,7 @@ module Smithy
             end
           end
           target
-        endadd_cbor_protocol
+        end
       end
     end
   end
