@@ -14,7 +14,7 @@ module Smithy
                                  .new(@model)
                                  .operations_for(@plan.service)
                                  .map { |id, o| OperationTests.new(@model, id, o) }
-                                 .reject { |operation_tests| operation_tests.empty?}
+                                 .reject(&:empty?)
           super()
         end
 
@@ -136,14 +136,14 @@ module Smithy
             @operation
               .fetch('traits', {})
               .fetch('smithy.ruby#skipTests', [])
-              .any? { |skip| skip['id'] == id}
+              .any? { |skip| skip['id'] == id }
           end
 
           def skip_reason
             @operation
               .fetch('traits', {})
               .fetch('smithy.ruby#skipTests', [])
-              .find { |skip| skip['id'] == id}
+              .find { |skip| skip['id'] == id }
               &.fetch('reason', 'skipped')
           end
         end

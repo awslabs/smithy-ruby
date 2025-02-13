@@ -55,13 +55,61 @@ namespace :smithy do
     plans.each { |plan| SpecHelper.cleanup_gem(plan) }
   end
 
-  task 'spec' => %w[spec:unit spec:endpoints]
+  task 'spec:protocols', [:rbs_test] do |_t, args|
+    require_relative 'gems/smithy/spec/spec_helper'
+
+    spec_paths = []
+    include_paths = []
+    plans = []
+    rbs_targets = %w[Smithy Smithy::* Smithy::Client]
+    sig_paths = ['gems/smithy-client/sig']
+    Dir.glob('gems/smithy/spec/fixtures/protocol_tests/*/model.json') do |model_path|
+      test_name = model_path.split('/')[-2]
+      test_module = test_name.gsub('-', '').camelize
+      plan = SpecHelper.generate_gem(test_module, :client, fixture: "protocol_tests/#{test_name}")
+      plans << plan
+      tmpdir = plan.destination_root
+      spec_paths << "#{tmpdir}/spec"
+      include_paths << "#{tmpdir}/lib"
+      include_paths << "#{tmpdir}/spec"
+      sig_paths << "#{tmpdir}/sig"
+      rbs_targets += [test_module, "#{test_module}::*"]
+    end
+    specs = spec_paths.join(' ')
+    includes = include_paths.map { |p| "-I #{p}" }.join(' ')
+
+    env =
+      if args[:rbs_test]
+        {
+          'RUBYOPT' => '-r bundler/setup -r rbs/test/setup',
+          'RBS_TEST_RAISE' => 'true',
+          'RBS_TEST_LOGLEVEL' => 'error',
+          'RBS_TEST_OPT' => sig_paths.map { |p| "-I #{p}" }.join(' '),
+          'RBS_TEST_TARGET' => "\"#{rbs_targets.join(',')}\"",
+          'RBS_TEST_DOUBLE_SUITE' => 'rspec'
+        }
+      else
+        {}
+      end
+
+    sh(env, "bundle exec rspec #{specs} #{includes}")
+  ensure
+    plans.each { |plan| SpecHelper.cleanup_gem(plan) }
+  end
+
+  task 'spec' => %w[spec:unit spec:endpoints spec:protocols]
 
   desc 'Convert all fixture smithy models to JSON AST representation.'
   task 'sync-fixtures' do
     Dir.glob('gems/smithy/spec/fixtures/**/model.smithy') do |model_path|
       out_path = model_path.sub('.smithy', '.json')
       sh("smithy ast --aut #{model_path} > #{out_path}")
+    end
+
+    Dir.glob('gems/smithy/spec/fixtures/protocol_tests/**/smithy-build.json') do |smithy_build_path|
+      Dir.chdir(File.dirname(smithy_build_path)) do
+        sh('smithy ast --flatten > model.json')
+      end
     end
   end
 
@@ -95,8 +143,13 @@ namespace :smithy do
     task('smithy:spec:endpoints').invoke('rbs_test')
   end
 
+  desc 'Run RBS spy tests for all generated protocol test specs.'
+  task 'rbs:protocol_tests' do
+    task('smithy:spec:protocols').invoke('rbs_test')
+  end
+
   desc 'Run RBS spy tests for unit tests and generated endpoint provider specs.'
-  task 'rbs' => %w[rbs:unit rbs:endpoints]
+  task 'rbs' => %w[rbs:unit rbs:endpoints rbs:protocol_tests]
 end
 
 namespace 'smithy-client' do
