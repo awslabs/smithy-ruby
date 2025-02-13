@@ -13,7 +13,7 @@ module Smithy
           @all_operation_tests = Model::ServiceIndex
                                  .new(@model)
                                  .operations_for(@plan.service)
-                                 .select { |_id, o| protocol_tests?(_id, o) }
+                                 .select { |_id, o| protocol_tests?(o) }
                                  .map { |id, o| OperationTests.new(@model, id, o) }
           super()
         end
@@ -30,8 +30,7 @@ module Smithy
 
         private
 
-        def protocol_tests?(id, operation)
-
+        def protocol_tests?(operation)
           !!operation.fetch('traits', {}).keys.intersect?(PROTOCOL_TEST_TRAITS) || error_tests?(operation)
         end
 
@@ -51,21 +50,9 @@ module Smithy
             @operation = operation
             # TODO: Should we filter protocol tests further by default protocol?
             # All cases currently have only a single protocol
-            @request_tests = @operation
-                             .fetch('traits', {})
-                             .fetch('smithy.test#httpRequestTests', [])
-                             .select { |t| t['appliesTo'] == 'client' }
-                             .map { |t| RequestTest.new(model, operation, t) }
-            @response_tests = @operation
-                              .fetch('traits', {})
-                              .fetch('smithy.test#httpResponseTests', [])
-                              .select { |t| t['appliesTo'] == 'client' }
-                              .map { |t| ResponseTest.new(model, operation, t) }
-
-            @error_tests = @operation
-                           .fetch('errors', [])
-                           .map { |e| build_error_tests(e) }
-                           .flatten
+            @request_tests = build_request_tests
+            @response_tests = build_response_tests
+            @error_tests = build_error_tests
           end
 
           attr_reader :request_tests, :response_tests, :error_tests
@@ -80,9 +67,32 @@ module Smithy
 
           private
 
-          def build_error_tests(error)
+          def build_response_tests
+            @operation
+              .fetch('traits', {})
+              .fetch('smithy.test#httpResponseTests', [])
+              .select { |t| t['appliesTo'] == 'client' }
+              .map { |t| ResponseTest.new(@model, @operation, t) }
+          end
+
+          def build_request_tests
+            @operation
+              .fetch('traits', {})
+              .fetch('smithy.test#httpRequestTests', [])
+              .select { |t| t['appliesTo'] == 'client' }
+              .map { |t| RequestTest.new(@model, @operation, t) }
+          end
+
+          def build_error_tests
+            @operation
+              .fetch('errors', [])
+              .map { |e| tests_for_error(e) }
+              .flatten
+          end
+
+          def tests_for_error(error)
             error_shape = Model.shape(@model, error['target'])
-            # Note: error tests do not have a appliesTo that should be checked
+            # NOTE: error tests do not have a appliesTo that should be checked
             error_shape
               .fetch('traits', {})
               .fetch('smithy.test#httpResponseTests', [])
@@ -175,7 +185,6 @@ module Smithy
           end
 
           def data_expect
-            # TODO: Handle streaming operations (need to read the body into a string to allow string compare)
             case test_case['bodyMediaType']
             when 'application/cbor'
               "expect(resp.data.to_h).to match_cbor(#{params})"
@@ -183,8 +192,16 @@ module Smithy
               "expect(resp.data.to_h).to eq(#{params})"
             end
           end
+
+          def streaming_member
+            @output_shape
+              .fetch('members', {})
+              .map { |name, member| [name, Model.shape(@model, member['target'])] }
+              .find { |_name, shape| shape.fetch('traits', {}).key?('smithy.api#streaming') }
+          end
         end
 
+        # @api private
         class ErrorTest < ResponseTest
           def initialize(model, operation, error_id, test_case)
             super(model, operation, test_case)

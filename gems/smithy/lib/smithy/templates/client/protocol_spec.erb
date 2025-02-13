@@ -115,6 +115,11 @@ module <%= module_name %>
           allow(client.config.protocol).to receive(:build)
           resp = client.<%= operation_tests.name %>
 
+<% if (member_name, _shape = test.streaming_member) -%>
+          resp.data.<%= member_name.underscore %>.rewind
+          resp.data.<%= member_name.underscore %> = resp.data.<%= member_name.underscore %>.read
+          resp.data.<%= member_name.underscore %> = nil if resp.data.<%= member_name.underscore %>.empty?
+<% end -%>
           <%= test.data_expect %>
         end
 <% end -%>
