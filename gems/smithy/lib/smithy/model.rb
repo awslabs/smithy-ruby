@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'model/flattener'
 require_relative 'model/rbs'
 require_relative 'model/shape'
 require_relative 'model/operation_parser'
@@ -37,15 +38,15 @@ module Smithy
     }.freeze
 
     # @param [Hash] model Model
-    # @param [String] target Target shape
-    # @return [Hash] The shape
-    def self.shape(model, target)
-      if model['shapes'].key?(target)
-        model['shapes'][target]
-      elsif PRELUDE_SHAPES.key?(target)
-        PRELUDE_SHAPES[target]
+    # @param [String] id Shape ID
+    # @return [Hash]
+    def self.shape(model, id)
+      if model['shapes'].key?(id)
+        Flattener.new(model).flatten_shape(id, model['shapes'][id])
+      elsif PRELUDE_SHAPES.key?(id)
+        PRELUDE_SHAPES[id]
       else
-        raise ArgumentError, "Shape not found: #{target}"
+        raise ArgumentError, "Shape not found: #{id}"
       end
     end
   end

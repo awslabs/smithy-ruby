@@ -1,0 +1,26 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#AlphaNumericMixin": {
+            "type": "string",
+            "traits": {
+                "smithy.api#mixin": {},
+                "smithy.api#pattern": "[a-zA-Z0-1]*"
+            }
+        },
+        "smithy.ruby.tests#Username": {
+            "type": "string",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#AlphaNumericMixin"
+                }
+            ],
+            "traits": {
+                "smithy.api#length": {
+                    "min": 8,
+                    "max": 32
+                }
+            }
+        }
+    }
+}

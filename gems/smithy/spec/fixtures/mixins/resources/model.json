@@ -1,0 +1,20 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#MixedResource": {
+            "type": "resource",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#MixinResource"
+                }
+            ]
+        },
+        "smithy.ruby.tests#MixinResource": {
+            "type": "resource",
+            "traits": {
+                "smithy.api#internal": {},
+                "smithy.api#mixin": {}
+            }
+        }
+    }
+}

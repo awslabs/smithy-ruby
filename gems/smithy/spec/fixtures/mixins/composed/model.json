@@ -1,0 +1,45 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#C": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#MixinB"
+                }
+            ],
+            "members": {
+                "c": {
+                    "target": "smithy.api#String"
+                }
+            }
+        },
+        "smithy.ruby.tests#MixinA": {
+            "type": "structure",
+            "members": {
+                "a": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#mixin": {}
+            }
+        },
+        "smithy.ruby.tests#MixinB": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#MixinA"
+                }
+            ],
+            "members": {
+                "b": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#mixin": {}
+            }
+        }
+    }
+}

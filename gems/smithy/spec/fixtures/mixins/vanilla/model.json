@@ -1,0 +1,29 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "smithy.ruby.tests#UserDetails": {
+            "type": "structure",
+            "mixins": [
+                {
+                    "target": "smithy.ruby.tests#UserIdentifiersMixin"
+                }
+            ],
+            "members": {
+                "alias": {
+                    "target": "smithy.api#String"
+                }
+            }
+        },
+        "smithy.ruby.tests#UserIdentifiersMixin": {
+            "type": "structure",
+            "members": {
+                "id": {
+                    "target": "smithy.api#String"
+                }
+            },
+            "traits": {
+                "smithy.api#mixin": {}
+            }
+        }
+    }
+}
