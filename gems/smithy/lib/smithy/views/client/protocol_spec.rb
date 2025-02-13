@@ -13,8 +13,8 @@ module Smithy
           @all_operation_tests = Model::ServiceIndex
                                  .new(@model)
                                  .operations_for(@plan.service)
-                                 .select { |_id, o| protocol_tests?(o) }
                                  .map { |id, o| OperationTests.new(@model, id, o) }
+                                 .reject { |operation_tests| operation_tests.empty?}
           super()
         end
 
@@ -26,20 +26,6 @@ module Smithy
 
         def additional_requires
           Set.new(@all_operation_tests.map(&:additional_requires).flatten)
-        end
-
-        private
-
-        def protocol_tests?(operation)
-          !!operation.fetch('traits', {}).keys.intersect?(PROTOCOL_TEST_TRAITS) || error_tests?(operation)
-        end
-
-        def error_tests?(operation)
-          operation.fetch('errors', []).any? do |e|
-            Model.shape(@model, e['target'])
-                 .fetch('traits', {})
-                 .key?('smithy.test#httpResponseTests')
-          end
         end
 
         # @api private
@@ -65,13 +51,17 @@ module Smithy
             @request_tests.map(&:additional_requires) + @response_tests.map(&:additional_requires)
           end
 
+          def empty?
+            request_tests.empty? && response_tests.empty? && error_tests.empty?
+          end
+
           private
 
           def build_response_tests
             @operation
               .fetch('traits', {})
               .fetch('smithy.test#httpResponseTests', [])
-              .select { |t| t['appliesTo'] == 'client' }
+              .select { |t| t.fetch('appliesTo', 'client') == 'client' }
               .map { |t| ResponseTest.new(@model, @operation, t) }
           end
 
@@ -79,7 +69,7 @@ module Smithy
             @operation
               .fetch('traits', {})
               .fetch('smithy.test#httpRequestTests', [])
-              .select { |t| t['appliesTo'] == 'client' }
+              .select { |t| t.fetch('appliesTo', 'client') == 'client' }
               .map { |t| RequestTest.new(@model, @operation, t) }
           end
 
@@ -135,9 +125,26 @@ module Smithy
                 case test_case['bodyMediaType']
                 when 'application/cbor'
                   ['base64', 'smithy-client/cbor/value_matcher']
+                else
+                  []
                 end
             end
             requires
+          end
+
+          def skip?
+            @operation
+              .fetch('traits', {})
+              .fetch('smithy.ruby#skipTests', [])
+              .any? { |skip| skip['id'] == id}
+          end
+
+          def skip_reason
+            @operation
+              .fetch('traits', {})
+              .fetch('smithy.ruby#skipTests', [])
+              .find { |skip| skip['id'] == id}
+              &.fetch('reason', 'skipped')
           end
         end
 

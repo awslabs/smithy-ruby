@@ -777,6 +777,13 @@
                 }
             ],
             "traits": {
+                "smithy.ruby#skipTests": [
+                    {
+                        "id": "RpcV2CborClientPopulatesDefaultValuesInInput",
+                        "reason": "Defaults not Implemented yet.",
+                        "type": "request"
+                    }
+                ],
                 "smithy.test#httpRequestTests": [
                     {
                         "id": "RpcV2CborClientPopulatesDefaultValuesInInput",
@@ -3446,6 +3453,51 @@
             },
             "traits": {
                 "smithy.api#uniqueItems": {}
+            }
+        },
+        "smithy.ruby#TestType": {
+            "type": "enum",
+            "members": {
+                "REQUEST": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "request"
+                    }
+                },
+                "RESPONSE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "response"
+                    }
+                }
+            }
+        },
+        "smithy.ruby#skipTest": {
+            "type": "structure",
+            "members": {
+                "id": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                },
+                "reason": {
+                    "target": "smithy.api#String"
+                },
+                "type": {
+                    "target": "smithy.ruby#TestType"
+                }
+            }
+        },
+        "smithy.ruby#skipTests": {
+            "type": "list",
+            "member": {
+                "target": "smithy.ruby#skipTest"
+            },
+            "traits": {
+                "smithy.api#trait": {
+                    "selector": ":test(operation, structure[trait|error])"
+                }
             }
         },
         "smithy.test#AppliesTo": {

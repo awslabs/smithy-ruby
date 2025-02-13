@@ -46,24 +46,28 @@ module <%= module_name %>
 <% test.comments.each do |line| -%>
         # <%= line %>
 <% end -%>
+<% if test.skip? -%>
+        it '<%= test.id %>', skip: '<%= test.skip_reason %>' do
+<% else -%>
         it '<%= test.id %>' do
+<% end -%>
 <% if test['host'] -%>
           client = Client.new(client_options.merge(endpoint: '<%= test.test_case.fetch('authScheme', 'http') %>://<%= test['host'] %>'))
 <% end -%>
 <% if test.idempotency_token_trait? -%>
-        allow(SecureRandom).to receive(:uuid).and_return('00000000-0000-4000-8000-000000000000')
+          allow(SecureRandom).to receive(:uuid).and_return('00000000-0000-4000-8000-000000000000')
 <% end -%>
           resp = client.<%= operation_tests.name %>(<%= test.params %>)
           request = resp.context.request
           expect(request.http_method).to eq('<%= test['method'] %>')
           expect(request.endpoint.path).to eq('<%= test['uri'] %>')
 <% if test['resolvedHost'] -%>
-          expect(request.endpoint.host).to eq('<%= test['resolvedHost'] %>'
+          expect(request.endpoint.host).to eq('<%= test['resolvedHost'] %>')
 <% end %>
 <% if test.query_expect? -%>
           actual_query = CGI.parse(request.endpoint.query)
 <% if test['queryParams'] %>
-          expected_query = CGI.parse(<%= test['queryParams'].join('&') %>)
+          expected_query = CGI.parse("<%= test['queryParams'].join('&') %>")
           expected_query.each do |k, v|
             actual = actual_query[k].map { |s| s.force_encoding('utf-8') }
             expect(actual).to eq(v)
@@ -102,7 +106,11 @@ module <%= module_name %>
 <% test.comments.each do |line| -%>
         # <%= line %>
 <% end -%>
+<% if test.skip? -%>
+        it '<%= test.id %>', skip: '<%= test.skip_reason %>' do
+<% else -%>
         it '<%= test.id %>' do
+<% end -%>
           response = { status_code: <%= test['code'] %> }
 <% if test['headers'] -%>
           response[:headers] = <%= test['headers'] %>

@@ -1,5 +1,6 @@
 {
   "version": "1.0",
+  "sources": ["../skip_tests.smithy", "skipped_tests.smithy"],
   "maven": {
     "dependencies": [
       "software.amazon.smithy:smithy-protocol-traits:1.54.0",
