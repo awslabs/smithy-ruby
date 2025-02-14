@@ -1,0 +1,164 @@
+# frozen_string_literal: true
+
+# This is generated code!
+
+require_relative '../spec_helper'
+<% additional_requires.each do |r| -%>
+require '<%= r %>'
+<% end -%>
+
+
+module <%= module_name %>
+  # TODO: Can be replaced by stub_responses config once implemented
+  class StubSend < Smithy::Client::Plugin
+    option(:stub_response)
+    handle(step: :send) do |context|
+      if (stub_response = context.config.stub_response)
+        resp = context.response
+        resp.signal_headers(stub_response[:status_code], stub_response.fetch(:headers, {}))
+        resp.signal_data(stub_response[:body]) if stub_response[:body]
+        resp.signal_done
+      end
+      Smithy::Client::Output.new(context: context)
+    end
+  end
+
+  describe Client do
+    before(:all) { Client.add_plugin(StubSend) }
+    after(:all) { Client.remove_plugin(StubSend) }
+
+    let(:client_options) do
+      {
+        # stub_responses: true,
+        # validate_input: false,
+        endpoint: 'http://127.0.0.1',
+        # retry_strategy: # disable?
+      }
+    end
+
+    let(:client) { Client.new(client_options) }
+
+<% all_operation_tests.each do |operation_tests| %>
+    describe '#<%= operation_tests.name %>' do
+<% unless operation_tests.request_tests.empty? -%>
+      describe 'requests' do
+<% operation_tests.request_tests.each do |test| %>
+<% test.comments.each do |line| -%>
+        # <%= line %>
+<% end -%>
+<% if test.skip? -%>
+        it '<%= test.id %>', skip: '<%= test.skip_reason %>' do
+<% else -%>
+        it '<%= test.id %>' do
+<% end -%>
+<% if test['host'] -%>
+          client = Client.new(client_options.merge(endpoint: '<%= test.endpoint %>'))
+<% end -%>
+<% if test.idempotency_token_trait? -%>
+          allow(SecureRandom).to receive(:uuid).and_return('00000000-0000-4000-8000-000000000000')
+<% end -%>
+          resp = client.<%= operation_tests.name %>(<%= test.params %>)
+          request = resp.context.request
+          expect(request.http_method).to eq('<%= test['method'] %>')
+          expect(request.endpoint.path).to eq('<%= test['uri'] %>')
+<% if test['resolvedHost'] -%>
+          expect(request.endpoint.host).to eq('<%= test['resolvedHost'] %>')
+<% end %>
+<% if test.query_expect? -%>
+          actual_query = CGI.parse(request.endpoint.query)
+<% if test['queryParams'] %>
+          expected_query = CGI.parse("<%= test['queryParams'].join('&') %>")
+          expected_query.each do |k, v|
+            actual = actual_query[k].map { |s| s.force_encoding('utf-8') }
+            expect(actual).to eq(v)
+          end
+<% end -%>
+<% if test['forbidQueryParams'] -%>
+          <%= test['forbidQueryParams']%>.each do |query|
+            expect(actual_query.key?(query)).to be false
+          end
+<% end -%>
+<% if test['requireQueryParams'] -%>
+          <%= test['requireQueryParams']%>.each do |query|
+            expect(actual_query.key?(query)).to be true
+          end
+<% end -%>
+<% end -%>
+<% test['headers']&.each do |k,v| -%>
+          expect(request.headers['<%= k %>']).to eq('<%= v %>')
+<% end -%>
+<% test['forbidHeaders']&.each do |k| -%>
+          expect(request.headers.key?('<%= k %>')).to be(false)
+<% end -%>
+<% test['requireHeaders']&.each do |k| -%>
+          expect(request.headers.key?('<%= k %>')).to be(true)
+<% end %>
+<% if test['body'] -%>
+          <%= test.body_expect %>
+<% end -%>
+        end
+<% end -%>
+      end
+<% end %>
+<% unless operation_tests.response_tests.empty? -%>
+      describe 'responses' do
+<% operation_tests.response_tests.each do |test| %>
+<% test.comments.each do |line| -%>
+        # <%= line %>
+<% end -%>
+<% if test.skip? -%>
+        it '<%= test.id %>', skip: '<%= test.skip_reason %>' do
+<% else -%>
+        it '<%= test.id %>' do
+<% end -%>
+          response = { status_code: <%= test['code'] %> }
+<% if test['headers'] -%>
+          response[:headers] = <%= test['headers'] %>
+<% end -%>
+<% if test['body'] -%>
+          response[:body] = <%= test.stub_body %>
+<% end -%>
+
+          client = Client.new(client_options.merge(stub_response: response, validate_params: false))
+          allow(client.config.protocol).to receive(:build)
+          resp = client.<%= operation_tests.name %>
+
+<% if (member_name, _shape = test.streaming_member) -%>
+          resp.data.<%= member_name.underscore %>.rewind
+          resp.data.<%= member_name.underscore %> = resp.data.<%= member_name.underscore %>.read
+          resp.data.<%= member_name.underscore %> = nil if resp.data.<%= member_name.underscore %>.empty?
+<% end -%>
+          <%= test.data_expect %>
+        end
+<% end -%>
+      end
+<% end -%>
+<% unless operation_tests.error_tests.empty? -%>
+      describe 'response errors' do
+<% operation_tests.error_tests.each do |test| %>
+<% test.comments.each do |line| -%>
+        # <%= line %>
+<% end -%>
+        it '<%= test.id %>: <%= test.error_name %>' do
+          response = { status_code: <%= test['code'] %> }
+<% if test['headers'] -%>
+          response[:headers] = <%= test['headers'] %>
+<% end -%>
+<% if test['body'] -%>
+          response[:body] = <%= test.stub_body %>
+<% end -%>
+
+          client = Client.new(client_options.merge(stub_response: response, validate_params: false))
+          allow(client.config.protocol).to receive(:build)
+          expect { client.<%= operation_tests.name %> }.to raise_error do |e|
+            expect(e).to be_a(Errors::<%= test.error_name %>)
+            <%= test.data_expect %>
+          end
+        end
+<% end -%>
+      end
+<% end -%>
+    end
+<% end -%>
+  end
+end

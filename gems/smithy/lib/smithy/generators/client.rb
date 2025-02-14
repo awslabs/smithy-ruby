@@ -58,6 +58,7 @@ module Smithy
         Enumerator.new do |e|
           e.yield 'spec/spec_helper.rb', Views::Client::SpecHelper.new(@plan).render
           e.yield "spec/#{@gem_name}/endpoint_provider_spec.rb", Views::Client::EndpointProviderSpec.new(@plan).render
+          e.yield "spec/#{@gem_name}/protocol_spec.rb", Views::Client::ProtocolSpec.new(@plan).render if protocol_tests?
         end
       end
 
@@ -93,6 +94,12 @@ module Smithy
 
       def should_skip_customizations?
         Dir["#{destination_root}/**/*"].any? { |f| f.include?('/customizations.rb') }
+      end
+
+      def protocol_tests?
+        operations = Model::ServiceIndex.new(@plan.model).operations_for(@plan.service)
+        protocol_test_traits = ['smithy.test#httpRequestTests', 'smithy.test#httpResponseTests']
+        operations.any? { |_id, o| !!o.fetch('traits', {}).keys.intersect?(protocol_test_traits) }
       end
     end
   end
