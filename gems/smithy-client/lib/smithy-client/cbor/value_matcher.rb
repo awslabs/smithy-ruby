@@ -2,14 +2,6 @@
 
 require 'rspec/expectations'
 
-def expected_nan?(expected)
-  expected == 'NaN' || expected.nan?
-end
-
-def expected_infinite?(expected)
-  expected == 'Infinity' || expected == '-Infinity' || expected.infinite?
-end
-
 # Provides an rspec matcher for CBOR encoded values
 # rubocop:disable Metrics/BlockLength
 RSpec::Matchers.define :match_cbor do |expected|
@@ -37,8 +29,8 @@ RSpec::Matchers.define :match_cbor do |expected|
     end
 
     def match_float(actual, expected)
-      return if actual.nan? && expected_nan?(expected)
-      return if actual.infinite? && expected_infinite?(expected)
+      return if actual.nan? && expected.nan?
+      return if actual.infinite? && expected.infinite?
 
       expect(actual).to be_within(0.0001).of(expected)
     end

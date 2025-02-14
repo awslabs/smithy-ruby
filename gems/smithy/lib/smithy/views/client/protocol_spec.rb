@@ -107,11 +107,7 @@ module Smithy
           end
 
           def comments
-            if test_case['documentation']
-              test_case['documentation'].split("\n")
-            else
-              []
-            end
+            test_case.fetch('documentation', '').split("\n")
           end
 
           def id
@@ -152,6 +148,10 @@ module Smithy
         class RequestTest < TestCase
           def params
             ShapeToHash.transform_value(@model, test_case.fetch('params', {}), @input_shape)
+          end
+
+          def endpoint
+            "#{test_case.fetch('authScheme', 'http')}://#{test_case.fetch('host', '127.0.0.1')}"
           end
 
           def body_expect

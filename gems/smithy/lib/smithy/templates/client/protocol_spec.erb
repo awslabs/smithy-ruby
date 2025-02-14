@@ -52,7 +52,7 @@ module <%= module_name %>
         it '<%= test.id %>' do
 <% end -%>
 <% if test['host'] -%>
-          client = Client.new(client_options.merge(endpoint: '<%= test.test_case.fetch('authScheme', 'http') %>://<%= test['host'] %>'))
+          client = Client.new(client_options.merge(endpoint: '<%= test.endpoint %>'))
 <% end -%>
 <% if test.idempotency_token_trait? -%>
           allow(SecureRandom).to receive(:uuid).and_return('00000000-0000-4000-8000-000000000000')
