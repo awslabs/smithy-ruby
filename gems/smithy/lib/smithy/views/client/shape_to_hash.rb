@@ -60,6 +60,7 @@ module Smithy
           def initialize(value)
             @value = value
           end
+
           def inspect
             if @value.nan?
               "Float::NAN"
